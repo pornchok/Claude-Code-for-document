@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossary — RF Control Flow</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Robot Framework</div>
+    <div class="sidebar-subtitle">Control Flow · v2</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">เนื้อหา</div>
+    <a href="index.html">🏠 Overview</a>
+    <a href="01-if-else.html">🔀 บทที่ 1 — IF / ELSE</a>
+    <a href="02-for-loop.html">🔁 บทที่ 2 — FOR Loop</a>
+    <a href="03-while-loop.html">⏳ บทที่ 3 — WHILE + BREAK</a>
+    <a href="04-selenium.html">🌐 บทที่ 4 — Selenium จริง</a>
+    <div class="nav-label">ฝึกหัด</div>
+    <a href="exercises.html">✏️ แบบฝึกหัด</a>
+    <a href="glossary.html" class="active">📖 Glossary</a>
+  </nav>
+  <div class="sidebar-footer">RF 7.3.2 · Python 3.14</div>
+</aside>
+
+<div class="main">
+<div class="content">
+
+  <div class="chapter-label">อ้างอิง</div>
+  <h1>Glossary</h1>
+  <p style="color:#64748b;margin-bottom:28px;">คำศัพท์ทุกคำในเอกสารนี้ พร้อม version requirement</p>
+
+  <h2>Control Flow Keywords</h2>
+  <div class="glossary-grid">
+
+    <div class="glossary-item">
+      <div class="glossary-term">IF</div>
+      <div class="glossary-def">
+        เริ่ม conditional block — ต้องตามด้วย condition และปิดด้วย END
+        <div class="glossary-source">RF 4.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">ELSE IF</div>
+      <div class="glossary-def">
+        Branch เพิ่มเติมใน IF block ตรวจสอบเฉพาะเมื่อ condition ก่อนหน้าเป็น False
+        <div class="glossary-source">RF 4.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">ELSE</div>
+      <div class="glossary-def">
+        Branch สุดท้ายที่ทำงานเมื่อทุก condition ก่อนหน้าเป็น False
+        <div class="glossary-source">RF 4.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">Inline IF</div>
+      <div class="glossary-def">
+        IF แบบบรรทัดเดียว ไม่ต้องมี END เหมาะกับ keyword เดียว / condition เดียว — รับค่า return ได้ด้วย
+        <div class="glossary-source">RF 5.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">FOR</div>
+      <div class="glossary-def">
+        เริ่ม loop — ต้องระบุ loop variable, รูปแบบ (IN/IN RANGE/...) และปิดด้วย END
+        <div class="glossary-source">RF 4.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">FOR IN</div>
+      <div class="glossary-def">
+        วน loop ผ่าน list ทีละ item — ใช้ @{} เพื่อ unpack list variable
+        <div class="glossary-source">RF 4.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">FOR IN RANGE</div>
+      <div class="glossary-def">
+        วน loop ตามช่วงตัวเลข — <code>IN RANGE [start=0] end [step=1]</code> ค่า end ไม่ถูกรวม (เหมือน Python range())
+        <div class="glossary-source">RF 4.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">FOR IN ENUMERATE</div>
+      <div class="glossary-def">
+        วน loop ได้ทั้ง index และ item — <code>start=N</code> เพื่อเริ่ม index จากเลขอื่น (default: 0)
+        <div class="glossary-source">RF 4.0+ (start=: RF 6.0+) · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">FOR IN ZIP</div>
+      <div class="glossary-def">
+        วน loop ผ่าน 2+ list คู่ขนาน — ต้องเป็น list variable ไม่ใช่ literal, หยุดเมื่อ list ที่สั้นที่สุดหมด
+        <div class="glossary-source">RF 4.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">WHILE</div>
+      <div class="glossary-def">
+        วน loop ตราบที่ condition เป็น True — เช็ค condition ก่อนทุก iteration (ถ้า False ตั้งแต่แรก loop body ไม่ทำงานเลย)
+        <div class="glossary-source">RF 5.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">limit</div>
+      <div class="glossary-def">
+        Parameter ของ WHILE กำหนดจำนวนรอบสูงสุด (default: 10,000) — ถ้าเกิน FAIL ทันที รองรับ: <code>limit=100</code>, <code>limit=10 seconds</code>, <code>limit=NONE</code>
+        <div class="glossary-source">RF 5.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">BREAK</div>
+      <div class="glossary-def">
+        หยุด loop ทันที ออกจาก loop ไปรัน keyword ถัดจาก END — ใช้ได้ทั้งใน FOR และ WHILE
+        <div class="glossary-source">RF 5.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">CONTINUE</div>
+      <div class="glossary-def">
+        ข้าม iteration ปัจจุบัน วนกลับไปเช็ค condition ใหม่ — ใช้ได้ทั้งใน FOR และ WHILE
+        <div class="glossary-source">RF 5.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">END</div>
+      <div class="glossary-def">
+        ปิด block ของ IF, FOR, WHILE — ขาดไม่ได้ (ยกเว้น Inline IF ที่ไม่มี END)
+        <div class="glossary-source">RF 4.0+ · <a href="https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html" target="_blank">RF User Guide</a></div>
+      </div>
+    </div>
+
+  </div>
+
+  <h2>คำศัพท์ทั่วไป</h2>
+  <div class="glossary-grid">
+
+    <div class="glossary-item">
+      <div class="glossary-term">Condition</div>
+      <div class="glossary-def">Python expression ที่ประเมินผลเป็น True/False — ใช้ใน IF และ WHILE เช่น <code>${x} > 10</code>, <code>'${name}' == 'Alice'</code></div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">iteration</div>
+      <div class="glossary-def">การวนหนึ่งรอบของ loop เช่น FOR loop วน 5 รอบ = 5 iterations</div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">infinite loop</div>
+      <div class="glossary-def">Loop ที่ condition ไม่เคยเป็น False และไม่มี BREAK — ใน RF จะ FAIL เมื่อถึง limit (ไม่ค้างตลอดไป)</div>
+    </div>
+
+    <div class="glossary-item">
+      <div class="glossary-term">unpack</div>
+      <div class="glossary-def">การแตก list ออกเป็น item ย่อยๆ — ทำด้วย <code>@{}</code> ใน FOR loop เช่น <code>FOR    ${x}    IN    @{myList}</code></div>
+    </div>
+
+  </div>
+
+  <div class="page-nav">
+    <a href="exercises.html">← แบบฝึกหัด</a>
+    <a href="index.html" class="next">
+      <div><span class="label">กลับหน้าแรก</span>Overview →</div>
+    </a>
+  </div>
+
+</div>
+</div>
+
+</body>
+</html>

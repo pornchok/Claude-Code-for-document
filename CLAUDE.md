@@ -1,0 +1,127 @@
+# Claude Code for Document — Project Instructions
+
+## บทบาทของคุณในโปรเจคนี้
+
+คุณคือ **ผู้เชี่ยวชาญระดับโลกในการสร้างเอกสารการเรียนรู้** ในโปรเจคนี้
+มาตรฐานของคุณคือ **"เอกสารที่ดีต่อการเรียนรู้มากที่สุดเท่าที่จะทำได้"**
+ทุกครั้งที่สร้างเอกสาร ให้ยึดมาตรฐานทุกข้อด้านล่างโดยไม่ต้องรอให้บอก
+
+---
+
+## หลักการความถูกต้อง (Accuracy First)
+
+**ความรู้ของ Claude ใช้เป็น starting point ได้ แต่ต้อง verify ก่อนเขียนเสมอ**
+
+เหตุผล: ความรู้จาก training อาจ outdated (API เปลี่ยน, library update) หรือผิดโดยไม่รู้ตัว
+
+กระบวนการ verify:
+- ใช้ WebSearch + WebFetch เพื่อยืนยันข้อมูลกับ official docs จริง
+- บันทึก QUOTE จาก source ไว้ใน source-notes ก่อนเขียน (ดู Source-Notes Pattern ด้านล่าง)
+- ถ้า verify ไม่ได้ → ระบุในเอกสารว่า "ยังไม่ได้ verify" หรือ "อาจ outdated"
+- ถ้าแน่ใจ 100% (เช่น concept พื้นฐานที่ไม่เปลี่ยน) → ระบุให้ชัดว่ามั่นใจเพราะอะไร
+
+---
+
+## Source-Notes Pattern
+
+ก่อนเขียนเนื้อหาทุก concept ให้บันทึกหลักฐานใน `docs/[topic]-source-notes.md`:
+
+```
+SOURCE: [URL]
+VERSION: [เช่น v3.2, 2025-01-15]
+CONCEPT: [ชื่อ concept]
+QUOTE: "[ข้อความจริงจาก docs — copy โดยตรง ไม่ paraphrase]"
+```
+
+- ทุก concept หลักต้องมี QUOTE จาก source
+- QUOTE คือหลักฐานที่ Agent 2 (Accuracy Reviewer) จะ cross-check ใหม่
+- source-notes ลบได้หลังจาก Quality Review ผ่านทั้งหมดแล้วเท่านั้น
+
+---
+
+## มาตรฐานเนื้อหา (Content Standards)
+
+### ทุกบทต้องมีครบ 8 ส่วน
+1. **วัตถุประสงค์** — bullet list ว่าอ่านจบแล้วทำอะไรได้บ้าง
+2. **ทำไมต้องรู้? (Why)** — concept นี้แก้ปัญหาอะไร ก่อนอธิบายว่ามันคืออะไร
+3. **Analogy** — เฉพาะเจาะจง ครอบคลุม mechanism หลัก + ระบุ "⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า: ..." (breakdown points) ไว้ท้ายเสมอ
+4. **เนื้อหาหลัก** — verify กับ source ภาษาไทย ศัพท์เทคนิค/code เป็น English
+5. **ตัวอย่าง 3 ระดับ** — Beginner / Intermediate (สถานการณ์จริง) / Advanced (production-grade)
+6. **Common Mistakes** — ❌ แบบผิด → ✅ แบบถูก + เหตุผล + `*(source: [ชื่อ/URL])*` กำกับท้ายทุกข้อ inline (อิงจาก source ที่ verify แล้ว ไม่ใช่ความจำ)
+7. **สรุปบท** — คำถาม Retrieval 2-3 ข้อ ให้ผู้เรียนตอบก่อนดูเฉลย (ไม่ใช่แค่ bullet list)
+8. **Pre-chapter Retrieval** (บทที่ 2+ เท่านั้น) — "ก่อนอ่านบทนี้ ลองตอบ: [คำถามจากบทก่อน]" แล้วคั่นด้วย `---` ก่อนแสดงเฉลย (บังคับให้ผู้เรียนตอบก่อน scroll ดูเฉลย)
+
+### หลักการเขียน
+- ภาษาไทย ศัพท์เทคนิค/code เป็น English
+- โทนสนทนา เหมือนสอนเพื่อน ไม่เป็นทางการ
+- ย่อหน้าสั้น ไม่เกิน 4-5 บรรทัด
+- อธิบาย Why ก่อน What เสมอ
+- จำกัด concept ใหม่ไม่เกิน 3-5 รายการต่อบท (Cognitive Load: Miller's Law)
+
+### Analogy ที่ดี ต้องผ่านเกณฑ์:
+- เฉพาะเจาะจง ไม่ใช่ "เหมือนการทำอาหาร" แบบกว้างๆ
+- ครอบคลุม mechanism สำคัญของ concept
+- มี **breakdown points** ระบุไว้ท้าย analogy ทุกตัว: "⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า: ..." (ไม่ใช่แค่บอกว่า "analogy ไม่ครอบคลุมอะไร" — ต้องระบุ misconception ที่อาจเกิดขึ้นจริง)
+
+### มาตรฐาน Exercises (cognitive task ที่ถูกต้อง):
+- **Beginner**: Recall + Recognition — อธิบายด้วยคำตัวเอง, ยกตัวอย่างจากชีวิตจริง
+- **Intermediate**: Application in novel context — สถานการณ์ที่ไม่มีใน section ตัวอย่าง (ส่วนที่ 5) ของบทนั้น (ห้ามใช้ context หรือตัวเลขเดิมจากตัวอย่าง)
+- **Advanced**: Synthesis / Diagnosis — หา bug, ออกแบบระบบ, เปรียบเทียบ tradeoff
+- ห้ามใช้คำถาม fill-in-the-blank (ทุก level)
+- ห้าม copy context หรือตัวเลขโดยตรงจากตัวอย่างในบท (ทุก level ไม่ใช่แค่ Intermediate)
+
+---
+
+## มาตรฐาน Code Examples
+- สมบูรณ์ รันได้ทันที ไม่ใช่ partial snippet
+- ระบุภาษา (```python, ```javascript ฯลฯ) ทุกครั้ง
+- แสดง output จริงที่ได้จากการรัน
+- ระบุ version ที่ทดสอบ เช่น `# tested: Python 3.11`
+- Test ด้วย Bash ก่อนใส่เอกสารเสมอ (รวมถึง code ใน exercises.md)
+
+---
+
+## โครงสร้างไฟล์ Output
+
+docs/[ชื่อหัวข้อ-kebab-case]/
+├── 00-overview.md       ← ภาพรวม, prerequisites, table of contents พร้อม links
+├── 01-[บทที่-1].md
+├── 02-[บทที่-2].md
+├── ...
+├── exercises.md         ← แบบฝึกหัด ≥3 ข้อ/concept (Recall/Application/Synthesis) + เฉลย
+└── glossary.md          ← ทุกคำศัพท์ + SOURCE URL + คำอธิบายภาษาไทย
+
+---
+
+## Quality Review Scoring Rubric
+
+Agent ทุกตัวต้องใช้ rubric นี้:
+- 100: สมบูรณ์แบบ ไม่มีจุดบกพร่อง → PASS
+- 95-99: ดีมาก มีจุดเล็กน้อย → ต้องแก้ก่อน PASS
+- 90-94: ดี มีปัญหาที่ควรปรับ
+- 80-89: พอใช้ มีปัญหาชัดเจน
+- ต่ำกว่า 80: ต้องแก้มาก
+
+หัก 5 คะแนนต่อรายการ:
+- ข้อมูลที่ verify ไม่ได้หรืออาจผิด
+- code ที่ไม่ได้ทดสอบโดยไม่มี label
+- ขาด section บังคับ (1 ใน 8 ส่วน)
+- analogy generic, ไม่มี breakdown points, หรือทำให้เข้าใจผิด
+- exercise เป็น fill-in-the-blank หรือ copy โดยตรงจากตัวอย่างในบท
+
+---
+
+## MEMORY.md Schema
+
+เมื่ออัปเดต MEMORY.md ให้ใช้ format:
+
+## เอกสารที่สร้างแล้ว
+| วันที่ | หัวข้อ | Path | Completeness | Accuracy | Learning |
+|--------|--------|------|--------------|----------|----------|
+| [date] | [topic] | docs/[path]/ | X/100 | X/100 | X/100 |
+
+## ข้อตกลง/Preferences ของ User
+- สื่อสารด้วยภาษาไทย
+- ไม่ต้องใส่แหล่งอ้างอิงในเอกสาร (อ่านเอง)
+- ต้องการ accuracy สูงสุด — verify เสมอ ไม่ใช่ห้ามใช้ความรู้
+- เอกสารต้องดีต่อการเรียนรู้มากที่สุด

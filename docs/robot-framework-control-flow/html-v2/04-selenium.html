@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 4: Loop + Selenium จริง — RF Control Flow</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<style>
+.pattern-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-top: 3px solid var(--primary);
+  border-radius: 10px;
+  padding: 24px 28px;
+  margin-bottom: 32px;
+}
+.pattern-card h3 { margin-top: 0; }
+.pattern-num {
+  display: inline-block;
+  background: var(--primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+  letter-spacing: 0.05em;
+}
+.new-keyword {
+  background: #fdf4ff;
+  border: 1px solid #e9d5ff;
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 10px 0 14px;
+  font-size: 13.5px;
+}
+.new-keyword .kw-label { color: #7c3aed; font-size: 10px; font-weight: 700; text-transform: uppercase; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Robot Framework</div>
+    <div class="sidebar-subtitle">Control Flow · v2</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">เนื้อหา</div>
+    <a href="index.html">🏠 Overview</a>
+    <a href="01-if-else.html">🔀 บทที่ 1 — IF / ELSE</a>
+    <a href="02-for-loop.html">🔁 บทที่ 2 — FOR Loop</a>
+    <a href="03-while-loop.html">⏳ บทที่ 3 — WHILE + BREAK</a>
+    <a href="04-selenium.html" class="active">🌐 บทที่ 4 — Selenium จริง</a>
+    <div class="nav-label">ฝึกหัด</div>
+    <a href="exercises.html">✏️ แบบฝึกหัด</a>
+    <a href="glossary.html">📖 Glossary</a>
+  </nav>
+  <div class="sidebar-footer">RF 7.3.2 · Python 3.14</div>
+</aside>
+
+<div class="main">
+<div class="content">
+
+  <div class="chapter-label">บทที่ 4</div>
+  <h1>Loop + Selenium หน้างานจริง</h1>
+  <span class="version-badge">✅ SeleniumLibrary 6.x</span>
+
+  <div class="objective-box">
+    <h4>🎯 บทนี้จะได้อะไร</h4>
+    <ul>
+      <li>วน loop ผ่าน element บนหน้าเว็บที่จำนวนไม่แน่นอน</li>
+      <li>ตรวจ table ทีละแถวโดยไม่ต้อง hardcode locator</li>
+      <li>กรอก form หลายแถวจาก data</li>
+      <li>รอ spinner / loading ด้วย WHILE แทน Sleep แบบ fixed</li>
+      <li>วน pagination จนหมดทุกหน้า</li>
+    </ul>
+  </div>
+
+  <p>ถ้าเรียน 3 บทก่อนมาแล้ว บทนี้ไม่มีอะไรใหม่ด้านภาษา — แค่เอา FOR/WHILE ไปใช้กับ Selenium จริงๆ keyword ใหม่ที่เจอมีแค่ 2-3 ตัว จะอธิบายตรงจุดที่ใช้</p>
+
+  <!-- PATTERN 1 -->
+  <div class="pattern-card">
+    <span class="pattern-num">Pattern 1</span>
+    <h3>วน element ที่ไม่รู้ว่ามีกี่ตัว</h3>
+    <p>ใช้บ่อยสุดเลย — เมื่อหน้าเว็บ render list หรือ card ที่จำนวนขึ้นอยู่กับ data เช่น รายการสินค้า, notification, ผลการค้นหา</p>
+
+    <div class="new-keyword">
+      <div class="kw-label">keyword ใหม่</div>
+      <strong>Get WebElements</strong> <code>locator</code> — คืน list ของ element ทุกตัวที่ match locator นั้น แต่ละตัวเป็น WebElement object ที่เอาไปใช้กับ keyword อื่นต่อได้เลย
+    </div>
+
+    <pre><code class="language-robotframework">*** Keywords ***
+Verify All Products Have Name
+    # ดึง element ทุกตัวที่ match ออกมาเป็น list
+    @{cards}=    Get WebElements    css=.product-card .name
+
+    # ถ้า list ว่าง loop จะไม่ทำงานเลย → test ผ่านโดยไม่ตรวจอะไร
+    # ป้องกันด้วยการเช็คก่อน
+    Should Not Be Empty    ${cards}    ไม่เจอ product card เลย
+
+    FOR    ${card}    IN    @{cards}
+        ${name}=    Get Text    ${card}
+        Should Not Be Empty    ${name}    เจอ card ที่ไม่มีชื่อ
+    END</code></pre>
+
+    <div class="analogy-box" style="background:#fff7ed;border-color:#fed7aa;border-left-color:#f97316;margin-top:0;">
+      <div class="analogy-title" style="color:#c2410c;">⚠️ จุดที่พลาดบ่อย</div>
+      <p><code>Get WebElements</code> ไม่ fail ถ้าไม่เจอ element — คืน list ว่างเงียบๆ ถ้าไม่เช็ค <code>Should Not Be Empty</code> ก่อน loop test จะผ่านทั้งที่ไม่ได้ตรวจอะไรเลย</p>
+    </div>
+  </div>
+
+  <!-- PATTERN 2 -->
+  <div class="pattern-card">
+    <span class="pattern-num">Pattern 2</span>
+    <h3>ตรวจ Table ทีละแถว</h3>
+    <p>โจทย์ที่เจอบ่อย: ตาราง order, user list, report — ต้องการตรวจว่าทุกแถว status ถูกต้องหรือเปล่า</p>
+
+    <div class="new-keyword">
+      <div class="kw-label">keyword ใหม่</div>
+      <strong>Get Element Count</strong> <code>locator</code> — นับจำนวน element ที่ match คืนเป็น integer ใช้กับ IN RANGE เพื่อวนตาม index
+    </div>
+
+    <pre><code class="language-robotframework">*** Keywords ***
+All Orders Should Be Completed
+    [Documentation]    ตรวจทุกแถวใน #order-table ว่า status = Completed
+    ${row_count}=    Get Element Count    xpath=//table[@id='order-table']//tbody/tr
+    Should Be True    ${row_count} > 0    ตารางว่างเปล่า
+
+    # IN RANGE ไม่รองรับ expression โดยตรง ต้อง Evaluate ก่อน
+    ${end}=    Evaluate    ${row_count} + 1
+    FOR    ${i}    IN RANGE    1    ${end}
+        ${status}=    Get Text
+        ...    xpath=//table[@id='order-table']//tbody/tr[${i}]/td[3]
+        Should Be Equal    ${status}    Completed
+        ...    แถวที่ ${i}: status เป็น "${status}" ไม่ใช่ "Completed"
+    END</code></pre>
+
+    <p>XPath ที่ใช้ที่นี่คือ <code>tr[${i}]</code> — xpath index เริ่มที่ 1 เสมอ ซึ่งตรงกับ <code>IN RANGE    1    ${end}</code> พอดี</p>
+  </div>
+
+  <!-- PATTERN 3 -->
+  <div class="pattern-card">
+    <span class="pattern-num">Pattern 3</span>
+    <h3>กรอก Form หลาย Row จาก Data</h3>
+    <p>ใน app ที่ให้ add item เป็น row เช่น invoice, shopping list, batch upload — แทนที่จะ hardcode ทีละ row ให้เอา data มา loop กรอก</p>
+
+    <pre><code class="language-robotframework">*** Test Cases ***
+Add Multiple Invoice Items
+    Open Invoice Page
+    Fill Invoice Items    แอปเปิ้ล    5    20.00
+    ...                   กล้วย       3    15.00
+    ...                   ส้ม         8    12.50
+    Submit Invoice
+
+*** Keywords ***
+Fill Invoice Items
+    [Arguments]    @{items}
+    # items มาเป็น flat list: name, qty, price, name, qty, price, ...
+    # ใช้ IN RANGE step=3 เพื่อจับทีละกลุ่ม
+    ${total}=    Get Length    ${items}
+    FOR    ${i}    IN RANGE    0    ${total}    3
+        ${name}=     Set Variable    ${items}[${i}]
+        ${qty}=      Set Variable    ${items}[${i+1}]
+        ${price}=    Set Variable    ${items}[${i+2}]
+
+        Click Element    css=button#add-row
+        Wait Until Element Is Visible    css=.row-input:last-child
+
+        ${row_num}=    Evaluate    ${i} // 3 + 1
+        Input Text    xpath=//tbody/tr[${row_num}]/td[1]/input    ${name}
+        Input Text    xpath=//tbody/tr[${row_num}]/td[2]/input    ${qty}
+        Input Text    xpath=//tbody/tr[${row_num}]/td[3]/input    ${price}
+    END</code></pre>
+
+    <div class="analogy-box" style="background:#f0fdf4;border-color:#bbf7d0;border-left-color:#22c55e;margin-top:0;">
+      <div class="analogy-title" style="color:#166534;">💡 ถ้า data ชัดเจนอยู่แล้ว</div>
+      <p>ถ้า data เป็น list of dict หรือ CSV ให้ใช้ Data-Driven Testing แทน — แต่ถ้าแค่ fill form ในระหว่าง test ไม่ต้องการ file แยก รูปแบบนี้ตอบโจทย์กว่า</p>
+    </div>
+  </div>
+
+  <!-- PATTERN 4 -->
+  <div class="pattern-card">
+    <span class="pattern-num">Pattern 4</span>
+    <h3>รอ Loading / Spinner หายก่อนทำต่อ</h3>
+    <p><code>Sleep    5s</code> แบบ fixed คือ anti-pattern — ถ้า load เร็วกว่านั้นก็เสียเวลาเปล่า ถ้า slow กว่านั้นก็ยัง fail อยู่ดี WHILE แก้ได้ตรงๆ</p>
+
+    <pre><code class="language-robotframework">*** Keywords ***
+Wait For Spinner To Disappear
+    [Arguments]    ${timeout}=30 seconds
+    WHILE    True    limit=${timeout}
+        ${still_loading}=    Run Keyword And Return Status
+        ...    Element Should Be Visible    css=.loading-spinner
+        IF    not ${still_loading}    BREAK
+        Sleep    0.5s
+    END
+
+Wait For Table To Load
+    [Arguments]    ${table_locator}    ${timeout}=15 seconds
+    WHILE    True    limit=${timeout}
+        ${ready}=    Run Keyword And Return Status
+        ...    Element Should Be Visible    ${table_locator}
+        IF    ${ready}    BREAK
+        Sleep    0.5s
+    END</code></pre>
+
+    <p>keyword นี้ reusable — เรียกจาก feature keyword ไหนก็ได้ แค่ส่ง locator กับ timeout ที่ต้องการ</p>
+
+    <div class="mistakes-section">
+      <div class="mistake-item">
+        <div class="wrong">❌ วิธีที่คนทำผิดบ่อย</div>
+        <pre><code class="language-robotframework">Click Element    css=button#submit
+Sleep    5s    # hardcode — ไม่รู้จะพอไหม
+Element Should Be Visible    css=.result</code></pre>
+        <div class="correct">✅ วิธีที่ถูก</div>
+        <pre><code class="language-robotframework">Click Element    css=button#submit
+Wait For Spinner To Disappear
+Element Should Be Visible    css=.result</code></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- PATTERN 5 -->
+  <div class="pattern-card">
+    <span class="pattern-num">Pattern 5</span>
+    <h3>วน Pagination จนหมดทุกหน้า</h3>
+    <p>ใช้ตอนที่ต้องตรวจข้อมูลทั้งหมด หรือหา item ที่อยู่หน้าไหนก็ไม่รู้</p>
+
+    <pre><code class="language-robotframework">*** Keywords ***
+Find Product Across Pages
+    [Arguments]    ${product_name}
+    ${found}=    Set Variable    ${False}
+
+    WHILE    True    limit=50
+        # ตรวจทุก item ในหน้าปัจจุบัน
+        @{items}=    Get WebElements    css=.product-list .item-name
+        FOR    ${item}    IN    @{items}
+            ${text}=    Get Text    ${item}
+            IF    '${text}' == '${product_name}'
+                ${found}=    Set Variable    ${True}
+                BREAK
+            END
+        END
+
+        # ถ้าเจอแล้ว ออกจาก WHILE ได้เลย
+        IF    ${found}    BREAK
+
+        # เช็คว่ามีหน้าถัดไปไหม
+        ${has_next}=    Run Keyword And Return Status
+        ...    Element Should Be Visible    css=button.btn-next:not([disabled])
+        IF    not ${has_next}    BREAK
+
+        Click Element    css=button.btn-next
+        Wait Until Element Is Visible    css=.product-list
+    END
+
+    Should Be True    ${found}    ไม่พบ "${product_name}" ในทุกหน้า</code></pre>
+
+    <div class="analogy-box" style="background:#fff7ed;border-color:#fed7aa;border-left-color:#f97316;margin-top:0;">
+      <div class="analogy-title" style="color:#c2410c;">⚠️ ตั้ง limit ไว้เสมอ</div>
+      <p>ถ้า pagination มี bug แล้วปุ่ม Next ไม่ disabled ทั้งที่หมดแล้ว WHILE จะวนไม่หยุด — <code>limit=50</code> ทำให้ test fail แทนที่จะค้างค้างตลอดกาล</p>
+    </div>
+  </div>
+
+  <!-- PATTERN 6 -->
+  <div class="pattern-card">
+    <span class="pattern-num">Pattern 6</span>
+    <h3>Retry Action ที่ Flaky</h3>
+    <p>บาง element เปิดมาแล้ว click ไม่ติดครั้งแรก เช่น dropdown ที่ต้อง hover ก่อน หรือ button ที่ load ช้ากว่า DOM ready แทนที่จะปล่อยให้ fail ทันที ให้ retry ก่อนสัก 3 ครั้ง</p>
+
+    <pre><code class="language-robotframework">*** Keywords ***
+Click With Retry
+    [Arguments]    ${locator}    ${max_retry}=3
+    FOR    ${attempt}    IN RANGE    ${max_retry}
+        ${ok}=    Run Keyword And Return Status
+        ...    Click Element    ${locator}
+        IF    ${ok}    BREAK
+        Sleep    1s
+    END
+    Should Be True    ${ok}
+    ...    Click ไม่สำเร็จหลังลอง ${max_retry} ครั้ง: ${locator}
+
+*** Test Cases ***
+Submit Order With Retry
+    Open Order Page
+    Fill Order Form
+    Click With Retry    css=button#submit-order    max_retry=3
+    Wait Until Element Is Visible    css=.order-success</code></pre>
+  </div>
+
+  <div class="quiz-section">
+    <h3>🧠 เช็คความเข้าใจ</h3>
+
+    <div class="quiz-item">
+      <p class="question"><span>ข้อ 1.</span> <code>Get WebElements</code> ต่างจาก <code>Wait Until Element Is Visible</code> ยังไงในแง่ของการทำงาน ถ้าไม่เจอ element?</p>
+      <details class="answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-body">
+          <p><code>Get WebElements</code> ไม่ fail — คืน list ว่าง เงียบๆ</p>
+          <p><code>Wait Until Element Is Visible</code> รอจนถึง timeout แล้ว fail พร้อม error message</p>
+          <p>ดังนั้นถ้าใช้ <code>Get WebElements</code> ต้อง <code>Should Not Be Empty</code> เองถ้าอยากให้ fail เมื่อไม่เจอ</p>
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz-item">
+      <p class="question"><span>ข้อ 2.</span> ทำไมต้อง <code>Evaluate    ${row_count} + 1</code> แทนที่จะใส่ <code>IN RANGE    1    ${row_count} + 1</code> ตรงๆ?</p>
+      <details class="answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-body">
+          <code>FOR IN RANGE</code> รับแค่ตัวเลขหรือ variable เดี่ยว ไม่ evaluate expression — ต้องคำนวณให้เสร็จก่อนด้วย <code>Evaluate</code> แล้วค่อยส่ง variable เข้าไป
+        </div>
+      </details>
+    </div>
+
+    <div class="quiz-item">
+      <p class="question"><span>ข้อ 3.</span> Pattern WHILE + Spinner กับ <code>Wait Until Element Is Not Visible</code> ต่างกันยังไง? แบบไหนควรใช้เมื่อไหร่?</p>
+      <details class="answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-body">
+          <p><code>Wait Until Element Is Not Visible</code> ง่ายกว่า ใช้เมื่อต้องการแค่รอ element หายไป — ควรใช้ก่อน</p>
+          <p>WHILE เหมาะเมื่อต้องทำอะไรบางอย่างระหว่างรอด้วย เช่น log สถานะแต่ละรอบ, เช็คหลาย condition พร้อมกัน, หรือ fallback เมื่อ timeout</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="03-while-loop.html">← บทที่ 3 — WHILE</a>
+    <a href="exercises.html" class="next">
+      <div><span class="label">ถัดไป</span>แบบฝึกหัด →</div>
+    </a>
+  </div>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-robotframework.min.js"></script>
+</body>
+</html>

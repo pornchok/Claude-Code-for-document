@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit(*)",
+      "Write(*)",
+      "Read(*)",
+      "Bash(*)",
+      "Glob(*)",
+      "Grep(*)",
+      "WebSearch",
+      "WebFetch(domain:jmeter.apache.org)",
+      "WebFetch(domain:k6.io)",
+      "WebFetch(domain:grafana.com)",
+      "Bash(wc -l \"/Users/vasup/Desktop/Work/Pornchok/Learn/Claude Code for document/docs/jmeter-performance-testing\"/*.md)",
+      "Bash(rm \"02-jmeter-installation-and-ui.md\" \"03-first-test-plan.md\" \"04-professional-test-plan-design.md\" \"05-parameterization.md\" \"06-assertions-and-validation.md\" \"07-running-and-analyzing-results.md\" \"08-advanced-distributed-and-cicd.md\")",
+      "Bash(ls *.md)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:github.com)",
+      "Bash(gh api:*)",
+      "Bash(python3 -c \"import json,sys; [print\\(f[''''name'''']\\) for f in json.load\\(sys.stdin\\)]\")",
+      "WebFetch(domain:www.redline13.com)",
+      "WebFetch(domain:martkos-it.co.uk)",
+      "WebFetch(domain:owasp.org)",
+      "WebFetch(domain:cheatsheetseries.owasp.org)",
+      "Bash(python3 -c \":*)",
+      "WebFetch(domain:user.jmeter.apache.narkive.com)",
+      "WebFetch(domain:www.blazemeter.com)",
+      "WebFetch(domain:jmetervn.com)",
+      "Bash(curl -s https://raw.githubusercontent.com/apache/jmeter/master/src/components/src/main/java/org/apache/jmeter/visualizers/StatVisualizer.java)",
+      "Bash(curl -s https://raw.githubusercontent.com/apache/jmeter/master/src/components/src/main/java/org/apache/jmeter/visualizers/StatGraphVisualizer.java)",
+      "Bash(curl -s https://raw.githubusercontent.com/apache/jmeter/master/src/core/src/main/resources/org/apache/jmeter/resources/messages.properties)",
+      "Bash(curl -s https://raw.githubusercontent.com/apache/jmeter/master/src/core/src/main/java/org/apache/jmeter/samplers/SamplingStatCalculator.java)",
+      "Bash(curl -s https://raw.githubusercontent.com/apache/jmeter/master/src/core/src/main/java/org/apache/jmeter/visualizers/SamplingStatCalculator.java)",
+      "Bash(curl -s https://raw.githubusercontent.com/apache/jmeter/master/src/jorphan/src/main/java/org/apache/jorphan/math/StatCalculator.java)",
+      "WebFetch(domain:robotframework.org)",
+      "WebFetch(domain:docs.robotframework.org)"
+    ],
+    "defaultMode": "bypassPermissions"
+  }
+}
