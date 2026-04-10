@@ -59,10 +59,7 @@ Distributed testing แก้ปัญหานี้โดยกระจาย
 - **RMI** = วิทยุสื่อสารระหว่าง HQ กับสายลับ — ถ้าช่องสัญญาณถูกบล็อก (firewall) สั่งงานไม่ถึง
 - **Test Plan ที่ส่งให้ทุกคน** = mission brief ฉบับเดียวกันทุกใบ — ทุกคนทำ **ภารกิจเดียวกัน** ไม่ใช่แบ่งงานกัน
 
-> ⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:
-> - **"Worker แต่ละคนรับส่วนต่างกัน เหมือนแบ่งงาน"** — ผิดทั้งหมด official docs ระบุชัดว่า *"The same test plan is run by all the servers. JMeter does not distribute the load between servers, each runs the full test plan."* — ถ้ามี 3 Workers ที่ตั้ง 100 threads แต่ละตัว load จริงที่ระบบรับคือ 300 concurrent requests ไม่ใช่ 100
-> - **"Controller ส่งคำสั่งแบบ real-time ทุกวินาที"** — ผิด Controller ส่ง Test Plan ครั้งเดียวตอนเริ่ม แล้ว Workers รันด้วยตัวเอง ส่ง results กลับมาเรื่อยๆ
-> - **"Workers อยู่ที่ไหนก็ได้บน internet"** — มีข้อจำกัด RMI ต้องการ network connectivity ระหว่าง Controller และ Workers โดยตรง และ *"RMI cannot communicate across subnets without a proxy"*
+> ⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า: **"Worker แต่ละคนรับส่วนต่างกัน เหมือนแบ่งงาน"** — ผิดทั้งหมด official docs ระบุชัดว่า *"The same test plan is run by all the servers. JMeter does not distribute the load between servers, each runs the full test plan."* — ถ้ามี 3 Workers ที่ตั้ง 100 threads แต่ละตัว load จริงที่ระบบรับคือ 300 concurrent requests ไม่ใช่ 100
 
 ---
 
@@ -351,92 +348,17 @@ jmeter -n -t fund_transfer_test.jmx -r \
 
 ---
 
-### Advanced: Containerized JMeter Workers ด้วย Docker
+### Advanced: Containerized JMeter Workers
 
-**Trade-off Analysis: Containers vs Bare Metal**
+สำหรับ CI/CD environments ที่ต้องการ spin up Workers อย่างรวดเร็ว Docker เป็นตัวเลือกที่น่าสนใจ — แต่มี trade-off สำคัญที่ต้องรู้ก่อน
 
-| ด้าน | Docker Containers | Bare Metal |
-|------|-------------------|-----------|
-| **Provisioning** | เร็ว — `docker run` ครั้งเดียว | ช้า — ต้องติดตั้ง Java + JMeter ทีละเครื่อง |
-| **Version consistency** | ง่าย — ใช้ image เดียวกัน | ต้องตรวจด้วยตัวเอง |
-| **Performance overhead** | ~5-10% overhead จาก container layer | ไม่มี overhead |
-| **Network** | container networking มี complexity เพิ่ม | straightforward |
-| **Scale up/down** | ง่าย — เพิ่ม container ได้ทันที | ต้อง provision server ใหม่ |
-| **ใช้ resource เต็มที่** | ขึ้นอยู่กับ container limits | ใช้ resource เต็ม 100% |
+**Container networking อาจทำให้ JMeter RMI มีปัญหา:** container มี internal IP ที่ต่างจาก host IP ทำให้ Workers report ตัวเองด้วย IP ผิดเมื่อ Controller พยายาม connect กลับมา — ต้องตั้ง `java.rmi.server.hostname` ให้ตรงกับ host IP เสมอ
 
-**Dockerfile สำหรับ JMeter Worker:**
+**Trade-off สรุป:**
+- Docker: provisioning เร็ว, version consistent แต่มี networking complexity และ ~5-10% performance overhead
+- Bare metal: ใช้ resource เต็ม 100%, RMI ทำงานตรงกว่า แต่ setup ช้ากว่า
 
-```dockerfile
-# Dockerfile.jmeter-worker
-# ยังไม่ได้ทดสอบ — ต้องการ Docker + JMeter 5.6.3
-FROM eclipse-temurin:11-jre-jammy
-
-ARG JMETER_VERSION=5.6.3
-ENV JMETER_HOME=/opt/apache-jmeter-${JMETER_VERSION}
-ENV PATH=${JMETER_HOME}/bin:${PATH}
-
-# ดาวน์โหลด JMeter
-RUN apt-get update && apt-get install -y wget && \
-    wget -q https://archive.apache.org/dist/jmeter/binaries/apache-jmeter-${JMETER_VERSION}.tgz \
-         -O /tmp/jmeter.tgz && \
-    tar -xzf /tmp/jmeter.tgz -C /opt && \
-    rm /tmp/jmeter.tgz
-
-# เปิด port ที่ JMeter server ใช้
-EXPOSE 1099 4000
-
-# รัน jmeter-server เมื่อ container start
-CMD ["jmeter-server", \
-     "-Dserver.rmi.ssl.disable=true", \
-     "-Dserver.rmi.port=4000", \
-     "-Dserver_port=1099"]
-```
-
-**Docker Compose สำหรับ test environment:**
-
-```yaml
-# docker-compose.yml
-# ยังไม่ได้ทดสอบ — ต้องการ Docker Compose v2
-version: '3.8'
-
-services:
-  jmeter-worker-1:
-    build:
-      context: .
-      dockerfile: Dockerfile.jmeter-worker
-    networks:
-      - jmeter-net
-    # เปิด port ให้ Controller connect ได้
-    ports:
-      - "1099:1099"
-      - "4000:4000"
-
-  jmeter-worker-2:
-    build:
-      context: .
-      dockerfile: Dockerfile.jmeter-worker
-    networks:
-      - jmeter-net
-    ports:
-      - "1199:1099"
-      - "4001:4000"
-
-networks:
-  jmeter-net:
-    driver: bridge
-```
-
-**ข้อควรระวัง:**
-
-Container networking อาจทำให้ JMeter RMI มีปัญหา เพราะ container มี internal IP ที่ต่างจาก host IP — ต้องตั้ง `RMI_HOST` ให้ถูกต้อง:
-
-```bash
-# บน Worker container — ระบุ IP ที่ Controller จะ connect กลับมา
-# ยังไม่ได้ทดสอบ — ต้องการ Docker + JMeter 5.6.3
-jmeter-server -Djava.rmi.server.hostname=<HOST_IP>
-```
-
-**สรุป trade-off:** Docker เหมาะสำหรับ CI/CD environments ที่ต้องการ spin up Workers อย่างรวดเร็ว แต่ถ้าต้องการ performance สูงสุดและ load ที่ accurate บน bare metal ยังเป็นตัวเลือกที่ดีกว่าสำหรับ production load tests
+สำหรับ production load tests ที่ต้องการ accuracy สูงสุด bare metal ยังเป็นตัวเลือกที่ดีกว่า รายละเอียดการ setup Docker สำหรับ JMeter ดูได้ที่ [JMeter distributed testing guide](https://jmeter.apache.org/usermanual/jmeter_distributed_testing_step_by_step.html)
 
 ---
 

@@ -1146,4 +1146,127 @@ Smoke Test → Load Test → Stress Test → Spike Test → Endurance Test
 
 > ไม่มีเฉลยสำหรับ exercise นี้ — เป้าหมายคือ process ไม่ใช่ผลลัพธ์ ถ้าขั้นตอนที่ 2 บอกว่า "ไม่มีจุดสะดุดเลย" นั่นคือสัญญาณว่าคุณอาจไม่ได้ลองจริงๆ
 
+---
+
+### Advanced 4: Performance Regression Detection
+
+**สถานการณ์:** ทีมพัฒนาเพิ่ง refactor database layer ของ API ระบบ HR (`GET /api/employees`, `POST /api/timesheets`) เพื่อเพิ่ม connection pooling คุณรัน load test ก่อนและหลัง refactor แล้วได้ผลดังนี้:
+
+**Aggregate Report — ก่อน Refactor (Baseline)**
+
+| Label | Samples | Average | 90th % | Error% | Throughput |
+|-------|---------|---------|--------|--------|------------|
+| GET /api/employees | 10,000 | 180ms | 380ms | 0.1% | 166/s |
+| POST /api/timesheets | 5,000 | 420ms | 890ms | 0.3% | 83/s |
+
+**Aggregate Report — หลัง Refactor**
+
+| Label | Samples | Average | 90th % | Error% | Throughput |
+|-------|---------|---------|--------|--------|------------|
+| GET /api/employees | 10,000 | 145ms | 310ms | 0.1% | 168/s |
+| POST /api/timesheets | 5,000 | 510ms | 1,420ms | 2.1% | 79/s |
+
+วิเคราะห์ว่า:
+1. Refactor นี้สำเร็จหรือล้มเหลว? — ต้องอธิบายทีละ endpoint ไม่ใช่สรุปรวม
+2. `POST /api/timesheets` เกิดอะไรขึ้น — สาเหตุที่เป็นไปได้คืออะไร?
+3. ถ้าต้องสรุปให้ทีม go/no-go สำหรับ deployment คุณจะแนะนำอย่างไร?
+
+<details>
+<summary>ดูเฉลย</summary>
+
+**1. วิเคราะห์ทีละ endpoint:**
+
+**GET /api/employees → Improved ✅**
+- Average ลดจาก 180ms → 145ms (−19%) — connection pooling ช่วยลด overhead
+- p90 ลดจาก 380ms → 310ms (−18%) — consistent improvement
+- Error% และ Throughput แทบไม่เปลี่ยน — ไม่มี regression
+
+**POST /api/timesheets → Regression ❌**
+- Average เพิ่มจาก 420ms → 510ms (+21%)
+- p90 เพิ่มจาก 890ms → 1,420ms (+60%) — นี่คือ red flag ใหญ่ percentile สูงขึ้นมากกว่า average มาก บ่งชี้ว่ามี long-tail requests ที่ช้าผิดปกติ
+- Error% เพิ่มจาก 0.3% → 2.1% (+7 เท่า) — ระบบมีปัญหาจริง
+
+**2. สาเหตุที่เป็นไปได้ของ POST regression:**
+
+Connection pooling อาจทำให้เกิดปัญหากับ write operations เพราะ:
+- **Connection contention:** Write transactions ใช้เวลานาน + pool size เล็กเกินไป → threads รอ connection ว่าง (p90 พุ่งสูง)
+- **Transaction isolation:** Connection ที่ reuse อาจ carry state จาก transaction ก่อนหน้า → race condition ใน write
+- **Pool exhaustion สำหรับ long transactions:** POST มักต้องการ transaction ที่นานกว่า GET — ถ้า pool size เท่าเดิมแต่ average hold time นานขึ้น คิวยาวขึ้น
+
+**3. Go/No-Go Recommendation:**
+
+**→ NO-GO** สำหรับ deployment ในสภาพนี้
+
+Reasoning: GET endpoint ดีขึ้น แต่ POST endpoint มี regression ที่ critical — Error rate เพิ่ม 7 เท่าและ p90 เพิ่ม 60% สำหรับ write operation (timesheets) ซึ่งมักเป็น critical business function
+
+Action items ก่อน re-deploy:
+1. ตรวจสอบ pool configuration สำหรับ write path — อาจต้องมี separate pool สำหรับ read/write
+2. ตรวจ error type จาก JMeter (ดู Response Body ของ errors) — เป็น timeout หรือ exception อะไร
+3. Profile database ขณะ test — ดู lock waits, connection queue depth
+
+</details>
+
+---
+
+### Advanced 5: Debug Flaky Test
+
+**สถานการณ์:** Test plan สำหรับระบบ food ordering API (`POST /orders`, `GET /orders/{id}`, `PUT /orders/{id}/cancel`) รันซ้ำ 5 ครั้งได้ผลไม่สม่ำเสมอ:
+
+| Run | POST /orders Error% | GET /orders/{id} Error% | PUT /cancel Error% |
+|-----|---------------------|-------------------------|--------------------|
+| 1 | 0% | 15% | 0% |
+| 2 | 0% | 22% | 0% |
+| 3 | 0% | 0% | 0% |
+| 4 | 0% | 31% | 0% |
+| 5 | 0% | 0% | 0% |
+
+ข้อมูลเพิ่มเติม:
+- Error ที่เกิดบน `GET /orders/{id}` คือ HTTP 404
+- Test plan ใช้ User Defined Variable: `order_id = 12345` (hardcode)
+- Thread Group: 20 threads, Loop 10 ครั้ง, ไม่มี Think Time
+- sequence: POST → GET → PUT cancel
+
+ระบุ root cause ของ flaky test นี้ (อาจมีมากกว่า 1 สาเหตุ) และเสนอวิธีแก้ที่ถูกต้อง
+
+<details>
+<summary>ดูเฉลย</summary>
+
+**Root Cause 1 (Primary): Hardcoded order_id ทำให้ test ขึ้นอยู่กับ state ของ database**
+
+`order_id = 12345` เป็น static value — ถ้า order นี้ถูก cancel ใน run ก่อนหน้า (โดย PUT /cancel) แล้ว run ถัดไป GET /orders/12345 จะได้ 404 หรือ "cancelled" order ที่ไม่สามารถ cancel ซ้ำได้
+
+นี่คือเหตุผลที่ error เกิดสุ่มๆ: ขึ้นอยู่กับว่า order 12345 อยู่ใน state ไหนตอนที่ run นั้นเริ่ม
+
+**Root Cause 2: ไม่มี JSON Extractor — ใช้ order_id จาก POST response**
+
+ทุก virtual user ใช้ `order_id = 12345` เดิม ซึ่งหมายความว่า:
+- Thread 1-20 ทำ POST → สร้าง order ใหม่ทุกคน (แต่ละคนได้ order_id ต่างกัน)
+- แต่ GET และ PUT ทุก thread ใช้ id 12345 ซึ่งไม่ใช่ order ที่ตัวเองสร้าง
+
+**Root Cause 3: ไม่มี Think Time — Race condition**
+
+20 threads ยิงพร้อมกัน POST สร้าง order แล้วทั้งหมด GET order_id เดิม + PUT cancel เดิม พร้อมกัน → race condition บน database write
+
+**วิธีแก้:**
+
+```
+แทนที่ User Defined Variable: order_id = 12345
+
+เพิ่ม JSON Extractor ใต้ POST /orders:
+  Names of created variables: created_order_id
+  JSON Path expressions: $.id
+  (หรือ $.order_id ตาม response format จริง)
+
+แก้ GET request:
+  Path: /orders/${created_order_id}
+
+แก้ PUT request:
+  Path: /orders/${created_order_id}/cancel
+```
+
+ผลลัพธ์: แต่ละ virtual user สร้าง order ของตัวเอง (POST) แล้ว GET และ PUT cancel เฉพาะ order ของตัวเอง — ไม่มี collision และไม่มี dependency กับ state ของ database จาก run ก่อนหน้า
+
+**เพิ่ม setUp Thread Group สำหรับ cleanup:**
+สร้าง setUp Thread Group ที่ clean test orders ก่อน run ใหม่ หรือใช้ test-specific prefix ใน order data เพื่อ identify และลบได้ง่าย
+
 </details>

@@ -3,9 +3,9 @@
 ## โปรเจคนี้คืออะไร
 เป้าหมาย: สร้าง Claude Code Skills สำหรับสร้างและ review เอกสารการเรียนรู้ระดับ world-class อัตโนมัติ
 
-## Skills ที่สร้างแล้ว
-- `.claude/skills/new-doc/SKILL.md` — สร้างเอกสารการเรียนรู้ใหม่ (review loop จนได้ 100 ทุก dimension)
-- `.claude/skills/review/SKILL.md` — review เอกสารที่มีอยู่แล้ว (3 agents parallel, loop จนได้ 100)
+## Skills ที่สร้างแล้ว (v2.0 — renamed 2026-04-10)
+- `.claude/skills/craft-mastery/SKILL.md` — สร้างเอกสารการเรียนรู้ใหม่ (v2.0: checkpoint/resume system, adaptive review cap) [เดิมชื่อ new-doc]
+- `.claude/skills/quality-audit/SKILL.md` — review เอกสารที่มีอยู่แล้ว (v2.0: adaptive global cap by series size, Agent 2 revision efficiency) [เดิมชื่อ review]
 
 ## กฏการทำงาน
 - Claude บันทึก memory ไฟล์นี้อัตโนมัติทุกครั้งที่มีความคืบหน้า
@@ -21,7 +21,7 @@
 ## เอกสารที่สร้างแล้ว
 | วันที่ | หัวข้อ | Path | Completeness | Accuracy | Learning |
 |--------|--------|------|--------------|----------|----------|
-| 2026-03-18 | JMeter Performance Testing Series (10 บท + exercises + glossary) | docs/jmeter-performance-testing/ | 100/100 (manual fix verified) | 100/100 | 100/100 |
+| 2026-03-18 (updated 2026-04-10) | JMeter Performance Testing Series (10 บท + exercises + glossary) | docs/jmeter-performance-testing/ | 100/100 | 100/100 | 100/100 — quality-audit pass (2026-04-10): added JSON Extractor section + login flow example (ch04), simplified JSR223 to concept-level (ch07), added Error% formula (ch08), reduced breakdown points to 1 (ch09), added Gotchas section (ch10), added Advanced 4+5 to exercises.md, added Keep-Alive + JSON Extractor to glossary |
 | 2026-03-20 | Robot Framework for QA Manual (8 บท + exercises + glossary) | docs/robot-framework-for-qa/ | 100/100 | 100/100 (RF 7.4.2 verified + code tested) | 100/100 |
 | 2026-03-21 (updated 2026-04-02) | English for Beginners — Thai-language ESL series (00-overview + 01~08 + exercises + glossary ครบแล้ว) | docs/english-for-beginners/ | 100/100 (10/10 files) | 100/100 | 100/100 — review loop final: Struggling Learner 8/10, Expert ESL 92/100 Pedagogical + 95/100 Completeness. Fixes: exercises.md chapter mapping (added Mindset Ch1), Articles mini-section in Ch5, Can/Can't + self-check in Ch6, audio guidance + Optional roadmap in Ch2 |
 | 2026-03-26 | RF Control Flow: IF/ELSE, FOR (IN/RANGE/ENUMERATE/ZIP), WHILE, BREAK, CONTINUE (00-overview + 01~03 + exercises + glossary) | docs/robot-framework-control-flow/ | 100/100 (7/7 files) | 100/100 (RF 7.3.2 tested locally, syntax verified, FOR IN ZIP bug found+fixed) | 100/100 |
@@ -39,6 +39,7 @@
 | 2026-02-26 | new-doc + review SKILL.md (v6) | 100/100 | 100/100 | 100/100 | **FINAL v6 — ผ่านทุก dimension ทุก expert** (fixes: Agent 1 STEP 6 expanded checklist ~12 items + "quote before tick", Agent 2 retry cap per URL + [OUTDATED-UPDATE] verdict, STEP 8 manual-fix edge case, Generation effect element 3 ใน STEP 5 checklist + Agent 1 spec, sequential fallback global cap + double-penalty reconciliation ใน review/SKILL.md) |
 | 2026-02-26 | new-doc + review SKILL.md (v7) | 100/100 | 100/100 | 100/100 | **FINAL v7 — ผ่านทุก dimension ทุก expert** (fixes: new-doc STEP 6 offline fallback scope clarification "(ใช้กับทุก escalation path รวมถึง per-agent cap และ global cap)", review STEP 5 manual-fix edge case when user picks manual fix without re-invoking skill) |
 | 2026-03-17 | new-doc + review SKILL.md (v8) | — | — | — | meta-review พบ 6 issues จากการเพิ่ม best practice feature — fixes: (1) STEP 1.1 best practice search fallback เมื่อ results เป็น banned sources, (2) STEP 0 นิยาม "advanced domain", (3) STEP 3 section 4 verify-from-source-notes clarity + no-consensus format, (4) Agent 1 checklist เพิ่ม best practice check ทั้ง new-doc และ review, (5) new-doc Agent 3 Practitioner lens แยก parenthetical → bullet structure |
+| 2026-04-10 | craft-mastery + quality-audit SKILL.md (v2.0) | — | — | — | **Renamed** new-doc → craft-mastery, review → quality-audit. Major v2.0 features: (1) craft-mastery: checkpoint/resume system สำหรับกรณี session ถูกตัด, adaptive review cap; (2) quality-audit: adaptive global cap based on series size (max(6, ceil(N×0.75))), Agent 2 revision efficiency improvements |
 
 ## การปรับปรุง SKILL v2 (2026-02-23)
 **new-doc SKILL.md:**

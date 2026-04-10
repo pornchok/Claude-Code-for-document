@@ -176,6 +176,8 @@ Aggregate Report แสดงสถิติสรุปของทุก HTTP 
 
 **Error%** — สัดส่วน requests ที่ fail
 
+`Error% = (HTTP errors + Assertion failures) / Total requests × 100` — นับทั้ง HTTP error (4xx, 5xx) และ Assertion failures ที่ตั้งไว้ในบทที่ 7 ดังนั้นถ้า server return 200 แต่ Assertion fail → request นั้นนับเป็น error ด้วย
+
 > *"Returns the raw double value of the percentage of samples with errors that were recorded. (Between 0.0 and 1.0)"*
 > *(source: https://jmeter.apache.org/api/org/apache/jmeter/util/Calculator.html)*
 

@@ -1,8 +1,9 @@
 ---
-name: review
-description: ตรวจสอบคุณภาพเอกสารการเรียนรู้ด้วย 3 review agents พร้อมกัน วนแก้ไขจนได้ 100 ทุก dimension. Use when asked to review, check, or improve a learning document.
+name: quality-audit
+description: ตรวจสอบและยกระดับคุณภาพเอกสารการเรียนรู้ด้วย 3 review agents ขนาน — Completeness, Accuracy, และ Learning Quality — วนแก้ไขจนได้ 100 ทุก dimension. ใช้เมื่อต้องการ audit เอกสารที่สร้างด้วย /craft-mastery หรือเอกสารเรียนรู้ใดก็ตาม. Use when asked to review, check, audit, or improve a learning document.
 argument-hint: "[path to document folder]"
 disable-model-invocation: true
+# v2.0 — adaptive global cap based on series size, Agent 2 revision efficiency
 ---
 
 # ตรวจสอบคุณภาพเอกสาร: $ARGUMENTS
@@ -44,6 +45,10 @@ disable-model-invocation: true
 - ถ้า path valid: ตรวจว่า folder มีไฟล์ที่จำเป็น ได้แก่ 00-overview.md, exercises.md, glossary.md — ถ้าขาดไฟล์ใด → แจ้ง user ก่อน proceed (reviewer ยังสามารถ review ไฟล์ที่มีได้ แต่จะหักคะแนน sections ที่ขาด)
 - อ่านทุกไฟล์ใน $ARGUMENTS ด้วย Read tool (ไม่ใช่แค่ list ชื่อไฟล์)
 
+⚠️ **Adaptive global cap** — หลังอ่านไฟล์ทั้งหมด: นับ N_chapters = จำนวนไฟล์ที่ขึ้นต้นด้วย 01- ถึง 09- (หรือมากกว่า) ในโฟลเดอร์ (ไม่นับ 00-overview.md, exercises.md, glossary.md)
+**adaptive_cap = max(6, ceil(N_chapters × 0.75))**
+บันทึกค่านี้ไว้ใช้ใน STEP 4 แทน hard cap 6 ตัวอย่าง: 4 chapters → cap=6 | 8 chapters → cap=6 | 10 chapters → cap=8 | 14 chapters → cap=11
+
 ---
 
 ## STEP 2 — Launch 3 Review Agents พร้อมกัน (Task tool)
@@ -53,7 +58,7 @@ disable-model-invocation: true
 2. Accuracy review → แสดง score + issue list → แก้ไข
 3. Learning Quality review → แสดง score + issue list → แก้ไข
 แต่ละ dimension ทำซ้ำได้ไม่เกิน 3 รอบ (initial + 2 revision) ถ้า fail หลังรอบที่ 3 → แจ้ง user พร้อม (a) feedback ทั้งหมดจาก dimension นั้น, (b) options: ลด scope / ยอมรับ score ที่ได้ / manual fix
-⚠️ Global cap ใน sequential mode: นับ total dimension-runs รวมกัน (แต่ละ dimension-run = 1 รอบ) — ถ้า total dimension-runs > 6 → escalate ทันที เช่น Completeness 3 รอบ + Accuracy 2 รอบ + Learning 2 รอบ = 7 → trigger global cap
+⚠️ Global cap ใน sequential mode: ใช้ adaptive_cap เดียวกับ parallel mode (คำนวณใน STEP 1) — ถ้า total dimension-runs เกิน adaptive_cap → escalate ทันที
 ⚠️ Double-penalty reconciliation ใน sequential mode: logic เดียวกับ parallel mode (ดู Anti-double-penalty rule ด้านล่าง) — ก่อน report คะแนนรวม → cross-check ว่ามี item ใดถูกหักทั้งใน Completeness review และ Learning Quality review — ถ้ามี: ใช้ deduction สูงสุดเพียงครั้งเดียว (ไม่นับซ้ำ)
 
 ⚠️ เมื่อ launch Task agents: ต้อง include actual resolved path จาก STEP 1 (ไม่ใช่ raw '$ARGUMENTS') ใน prompt ของแต่ละ agent โดยตรง เพราะ sub-agents เป็น independent context ที่ไม่มี access ต่อ variable นี้ — ตัวอย่าง: ใช้ "/actual/path/to/docs/" แทน "$ARGUMENTS" ใน prompt
@@ -141,6 +146,8 @@ disable-model-invocation: true
 ---
 
 ### Agent 2 — Accuracy Reviewer
+
+⚠️ **Revision mode efficiency**: ถ้านี่คือ revision round (ไม่ใช่ initial run) — ให้ re-fetch เฉพาะ URL ที่มี verdict mismatch/outdated/unverifiable จาก round ก่อนเท่านั้น (ข้าม URL ที่มี verdict match/[STALE-URL] แล้ว) — re-run เฉพาะ code ที่ fail จาก round ก่อน (ข้าม code ที่ pass แล้ว) — ประหยัด token สูงสุด 80% สำหรับ series ขนาดใหญ่
 
 อ่านเอกสารใน $ARGUMENTS แล้ว:
 
@@ -236,7 +243,7 @@ Learning:      [X]/100
 **กรณี main agent disagree กับ feedback ข้อใดข้อหนึ่ง:**
 → ห้ามแก้หรือ ignore ทันที — ต้องทำ **Agent Discussion Round** ก่อน:
 1. สรุป: (a) feedback ของ review agent, (b) ข้อโต้แย้งของ main agent + เหตุผล, (c) quote ส่วนที่พิพาทจากเอกสารจริง
-2. Launch **Dispute Arbiter Agent** (ผ่าน Task tool) ด้วย context ทั้ง 3 ข้อนั้น + ให้ arbiter ประเมินว่า feedback ถูกต้องตาม SKILL goals ไหม พร้อมเหตุผล
+2. Launch **Dispute Arbiter Agent** (ผ่าน Task tool) ด้วย context ทั้ง 3 ข้อนั้น + **ต้อง pass Scoring Rubric และ deduction rules ด้านบนของ SKILL นี้ทั้งหมดไปใน prompt ของ arbiter โดยตรง** (เพราะ arbiter เป็น independent context ที่ไม่มี access ต่อ SKILL file) + ให้ arbiter ประเมินว่า feedback ถูกต้องตาม criteria ที่ให้ไปไหม พร้อมเหตุผล
 3. ถ้า arbiter sides with reviewer → main agent แก้ไขตาม feedback
 4. ถ้า arbiter sides with main agent → feedback item นั้น waived (บันทึกไว้ในสรุป)
 5. ถ้า arbiter ให้ verdict "unclear" หรือ main agent ยังไม่เห็นด้วยหลัง arbiter verdict → main agent ตัดสินใจเอง: ใช้ review agent's feedback เป็น default (conservative approach) + บันทึก "[Autonomously resolved: deferred to reviewer feedback]" ใน report ห้าม launch Arbiter ซ้ำ
@@ -261,16 +268,19 @@ Learning:      [X]/100
 
 ⚠️ **Loop cap (2 independent triggers — whichever hits first escalates):**
 - Per-agent cap: นับต่อ agent — initial run = รอบ 1 ถ้า agent นั้น fail แล้วแก้และ re-run อีก 2 รอบ (รวมเป็นรอบที่ 3) ยังไม่ผ่าน → escalate agent นั้นทันที
-- Global cap: นับรวมทุก agent — initial parallel run ของ 3 agents = 3 รอบ ถ้ารวมทุก agent **มากกว่า 6 รอบ** (> 6 ไม่ใช่ ≥ 6) แล้วยังไม่ผ่านครบ → หยุดและ escalate ทันที
+- Global cap (adaptive): ใช้ค่า adaptive_cap ที่คำนวณไว้ใน STEP 1 — นับรวมทุก agent ถ้ารวมทุก agent เกิน adaptive_cap แล้วยังไม่ผ่านครบ → หยุดและ escalate ทันที
+  ถ้า STEP 1 ไม่ได้คำนวณ adaptive_cap ไว้ (เช่น skip): ใช้ค่า default = max(6, N_chapters) โดยนับ N_chapters จากจำนวนไฟล์ 01-*.md ในโฟลเดอร์นั้น
 
-ตัวอย่างการนับ: initial 3 agents (รวม=3) → Agent 2 fail → re-run Agent 2 (รวม=4) → Agent 3 fail → re-run Agent 3 (รวม=5) → Agent 3 fail อีก → re-run Agent 3 รอบ 3 (รวม=6, ไม่ trigger เพราะ 6 ไม่ > 6) → Agent 3 fail อีก → รอบที่ 4 ของ Agent 3 (รวม=7, trigger global cap: > 6) → escalate ทันที
+ตัวอย่างการนับ (adaptive_cap=6): initial 3 agents (รวม=3) → Agent 2 fail → re-run Agent 2 (รวม=4) → Agent 3 fail → re-run Agent 3 (รวม=5) → Agent 3 fail อีก → re-run Agent 3 รอบ 3 (รวม=6, ไม่ trigger เพราะ 6 ไม่ > 6) → Agent 3 fail อีก → รอบที่ 4 ของ Agent 3 (รวม=7, trigger global cap: > 6) → escalate ทันที
 
 ถ้า agent ใดได้ต่ำกว่า 100:
 1. Main agent (ไม่ใช่ review sub-agent) แก้ไขตาม feedback — ระบุ "แก้อะไร ที่ไหน ด้วยเหตุผลอะไร" ก่อน re-run
 2. Run review agent นั้นใหม่ (ไม่ต้อง run ทั้ง 3 ใหม่ถ้าบางตัวผ่านแล้ว)
 3. นับรอบแยกต่างหากต่อ agent
 
-เมื่อ escalate → แจ้ง user พร้อม (a) feedback ทั้งหมดจาก agent นั้น, (b) options ให้ user เลือก: ลด scope / ยอมรับ score ที่ได้ / manual fix — ถ้า user ไม่ respond ภายใน session (async/offline) → autonomous default: accept score ล่าสุด + บันทึก MEMORY.md + หยุด process (ใช้กับทุก escalation path)
+⚠️ **Re-research path**: ถ้า feedback ระบุว่า "เนื้อหาขาดข้อมูลสำคัญ" หรือ "claim ไม่มี source รองรับ" (ไม่ใช่ format/structure issue) → options เมื่อ escalate ต้องรวม "re-research: invoke /craft-mastery เพื่อ fetch ข้อมูลเพิ่มและ update เนื้อหาก่อน review รอบใหม่" ด้วย — ไม่ใช่แค่ "ยอมรับ score" อย่างเดียว
+
+เมื่อ escalate → แจ้ง user พร้อม (a) feedback ทั้งหมดจาก agent นั้น, (b) options ให้ user เลือก: ลด scope / ยอมรับ score ที่ได้ / manual fix / re-research (ถ้า feedback เป็น content gap) — ถ้า user ไม่ respond ภายใน session (async/offline) → autonomous default: accept score ล่าสุด + บันทึก MEMORY.md + หยุด process (ใช้กับทุก escalation path)
 
 ---
 

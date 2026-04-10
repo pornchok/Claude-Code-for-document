@@ -1,13 +1,39 @@
 ---
-name: new-doc
-description: สร้างเอกสารการเรียนรู้ระดับมืออาชีพสำหรับหัวข้อที่กำหนด ด้วย research จาก official docs จริง, verification โดยรัน code จริง, และ quality review loop จนได้ 100. Use when asked to create, write, or make a learning document about any topic.
+name: craft-mastery
+description: สร้างเอกสารการเรียนรู้ระดับ world-class สำหรับหัวข้อใดก็ได้ — research จาก official docs, verification โดยรัน code จริง, quality review loop จนได้ 100 ทุก dimension, และ learning science ครบถ้วน (retrieval practice, spaced repetition, Generation effect). ใช้เมื่อต้องการเรียนรู้หัวข้อใหม่อย่างลึกซึ้งและได้เอกสารที่จะช่วย retention ระยะยาว. Use when asked to create, write, or make a learning document about any topic.
 argument-hint: "[topic] | [level: beginner/intermediate/advanced] | [scope: brief description]"
 disable-model-invocation: true
+# v2.0 — checkpoint/resume system, adaptive review cap, Agent 2 revision efficiency
 ---
 
 # สร้างเอกสารการเรียนรู้: $ARGUMENTS
 
 ทำตามทุกขั้นตอนโดยไม่ข้ามแม้แต่ขั้นเดียว
+
+---
+
+## CHECKPOINT SYSTEM — ตรวจก่อนเริ่มทุกครั้ง
+
+**ถ้ามีไฟล์ `docs/[topic-slug]-checkpoint.md` อยู่แล้ว (session ก่อนถูกตัด):**
+1. Read ไฟล์นั้น
+2. แจ้ง user: "พบ checkpoint จาก session ก่อน — กำลังดำเนินต่อจาก [NEXT ใน checkpoint]"
+3. ข้ามไปยัง STEP ที่ NEXT ระบุได้เลย — ไม่ต้องทำ STEP ที่ COMPLETED ซ้ำ
+
+**ถ้าไม่มี checkpoint → เริ่ม STEP 0 ตามปกติ**
+
+**Checkpoint format** (บันทึกหลัง STEP 1, STEP 2, แต่ละบทใน STEP 3, STEP 4, STEP 5 เสร็จ):
+```
+SKILL: craft-mastery v2
+TOPIC: [topic]
+SLUG: [topic-slug]
+LEVEL: [level]
+COMPLETED: [STEP list เช่น "STEP 0, STEP 1, STEP 2, 01-intro.md, 02-basics.md"]
+CURRENT_STATUS: [สิ่งที่ทำล่าสุด]
+NEXT: STEP [N] — [สิ่งที่ต้องทำต่อ เช่น "เขียน 03-advanced.md"]
+FILES_WRITTEN: [list ไฟล์ที่สร้างแล้ว]
+```
+บันทึกด้วย Write tool ไปที่ `docs/[topic-slug]-checkpoint.md` (overwrite ได้)
+ลบไฟล์นี้ใน STEP 7 พร้อมกับ source-notes
 
 ---
 
@@ -29,12 +55,19 @@ disable-model-invocation: true
 WebSearch: "[topic] overview key concepts"
 WebSearch: "[topic] beginner guide what to learn"
 
-⚠️ Scope anchor: WebSearch ใช้เพื่อ verify ว่า concept ที่วางไว้มีจริงไหม — ไม่ใช่เพื่อขยาย scope ใหม่ ถ้าพบ concept เพิ่มเติมให้ note ว่า "out of scope" ห้ามเพิ่มเข้า outline โดยไม่มาจาก $ARGUMENTS — rule นี้ใช้กับ WebSearch ใน STEP 0 เท่านั้น (ถ้าพบ concept สำคัญที่ขาดหายในขั้น STEP 1 fetch ภายหลัง → ดู STEP 1.3 ซึ่งต้องถาม user ก่อน)
+⚠️ Scope anchor: WebSearch ใช้เพื่อ verify ว่า concept ที่วางไว้มีจริงไหม — ไม่ใช่เพื่อขยาย scope ใหม่ ถ้าพบ concept เพิ่มเติมให้ note ว่า "out of scope" ห้ามเพิ่มเข้า outline โดยไม่มาจาก $ARGUMENTS — rule นี้ใช้กับ WebSearch ใน STEP 0 เท่านั้น (ถ้าพบ concept สำคัญที่ขาดหายในขั้น STEP 1 fetch ภายหลัง → ดู STEP 1.3 ซึ่งมี autonomous default สำหรับกรณีนี้ (ไม่เพิ่มเข้า scope หรือเพิ่มเป็น prerequisite note เท่านั้น))
 ถ้า WebSearch พบว่า concept ใน $ARGUMENTS deprecated หรือ removed จาก version ปัจจุบัน → ถ้า $ARGUMENTS ระบุ version เก่าชัดเจน: สอน version นั้นตามที่ขอ + เพิ่ม callout "⚠️ concept นี้ deprecated ใน version [Y] — replacement คือ [Z]" ไว้ต้นเอกสาร — ถ้า $ARGUMENTS ไม่ระบุ version: สอน replacement ล่าสุด + เพิ่ม note ในเอกสารว่า "[X] deprecated ใน version [Y] แทนด้วย [Z]" — ไม่ต้องถาม user ทั้งสองกรณี
+
+⚠️ **Domain adaptation** — ปรับ approach ตาม domain type โดยอัตโนมัติ ไม่ต้องถาม user:
+- **Visual/GUI-heavy topics** (Figma, CSS layout, chart libraries): code examples ต้องมี text-based output description เช่น "# output: กล่องสีน้ำเงิน 200×100px ตรงกลางหน้าจอ" แทน screenshot — ระบุไว้ใน 00-overview ว่า "เอกสารนี้ใช้ text description แทน visual output"
+- **Math-heavy topics** (statistics, ML math, cryptography): ถ้า target environment รองรับ LaTeX (เช่น GitHub, Obsidian, Docusaurus) ใช้ LaTeX notation ได้ตามปกติ — ถ้าไม่แน่ใจ environment: fallback เป็น plain text notation เช่น `E = mc^2` หรือ code block แสดง calculation แทน (universal compatibility)
+- **Rapidly-changing APIs** (cloud services, 3rd-party APIs): เพิ่ม `# API version tested: [version], [date]` ใน code examples ทุกชิ้น + เพิ่ม callout ใต้ code: "⚠️ API นี้อาจเปลี่ยนแปลง — verify กับ official docs ก่อนใช้งานจริง"
+- **Niche/proprietary tools** ที่ไม่มี official public docs: community source (GitHub, StackOverflow upvote > 100) เป็น primary source ได้ + ระบุใน 00-overview ว่า "เอกสารนี้ใช้ community sources เพราะไม่มี official docs สาธารณะ"
+- **Conceptual/non-code topics** (soft skills, methodology, design patterns): ไม่มี code ก็ได้ — ใช้ scenario/case study แทน code examples ใน STEP 3 ส่วนที่ 5
 
 ถ้า level = beginner และ topic เป็น advanced domain → แจ้ง user ว่า "กำลังสมมติ prerequisites ดังนี้: [...] ถูกต้องไหม?" ก่อนดำเนิน STEP 1 — "advanced domain" = domain ที่ต้องการ formal background หรือ industry experience ก่อน เช่น cryptography, distributed systems, ML/AI model internals, financial derivatives, compiler design, operating system internals (เทียบ: "basic topic" ที่นิยามไว้ในบรรทัดถัดไป)
 ถ้า level = advanced และ topic ดู basic มาก (เช่น "Python variables | advanced") → interpret ว่า user ต้องการสำรวจ topic นั้นในเชิง advanced (เช่น internals, edge cases, production patterns) — ไม่ต้อง block แต่ระบุใน scope draft ว่า "สอน X ในแง่ [ชื่อ aspect] สำหรับผู้ที่รู้ basics แล้ว" พร้อมแจ้ง user เพื่อยืนยันทิศทาง — หลักการ: "topic ที่ดู basic มาก" = topic ที่ปรากฏในหลักสูตร beginner ทั่วไป เช่น variables, loops, basic syntax, basic data types
-ถ้า user confirm prerequisites: ประเมินว่า prerequisites ที่ระบุ non-trivial ไหม (ต้องใช้เวลาเรียน > 2 ชั่วโมง) — ถ้าใช่ → แนะนำ "ควรสร้าง prerequisite document ก่อน หรือต้องการให้เพิ่ม 'prerequisite recap' สั้นๆ ใน 00-overview.md ไหม?"
+ถ้า user confirm prerequisites: ประเมินว่า prerequisites ที่ระบุ non-trivial ไหม (ต้องใช้เวลาเรียน > 2 ชั่วโมง) — ถ้าใช่ → **autonomous default**: เพิ่ม prerequisite recap สั้นๆ ใน 00-overview.md แล้ว proceed STEP 1 ได้เลย — ไม่ต้องถาม user
 
 ประมาณ reading time: 15-20 นาทีต่อบท + 5 นาทีต่อ code example + 20-30 นาทีสำหรับ exercises — ใช้ตัวเลขนี้คำนวณ estimated total hours
 ⚠️ Complexity multiplier: ถ้า topic ต้องการ prior abstract knowledge สูง (เช่น cryptography, distributed systems, type theory) หรือ concept มี many interdependencies → ใช้ 1.5x-2x ของ estimate ปกติ — ระบุในคำเตือนให้ user ทราบ
@@ -121,7 +154,7 @@ Fetch เพิ่มจนครบทุก Concept ใน STEP 0
 ⚠️ scope revision ใน STEP 1.3 ≠ ขยาย scope — เป็นแค่การ trim หรือ adjust prerequisites เท่านั้น — ถ้า trim > 1 concept หรือ prerequisites เปลี่ยนมีนัยสำคัญ → แจ้ง user ใน scope summary ว่า trim อะไรและเหตุผล + proceed STEP 2 ได้เลย (สอดคล้องกับ STEP 0 scope anchor) — ไม่ต้องรอ confirm
 
 ### 1.4 ถ้าหา Official Docs ไม่ได้
-- แจ้ง user ก่อนว่าจะใช้ community source ประเภทใดแทน และขอ approval ก่อนดำเนิน — ถ้า user ไม่ respond → autonomous default: ไม่ใช้ community source + ตัด concept นั้นออกจาก scope + proceed ต่อด้วย concept ที่มี verified source เท่านั้น
+- **Autonomous default**: ลอง community source ก่อนตัดทิ้ง — แหล่งที่ยอมรับตามลำดับ: GitHub official repo → official blog → MDN → StackOverflow (upvote > 100) ไม่ต้องถาม user ก่อน
 - แหล่งที่ยอมรับ: GitHub official repo, official blog, MDN, StackOverflow (upvote > 100)
 - Fetch อ่าน community source แล้วตรวจว่า content ตอบ concept ที่ต้องการจริง — ไม่ใช่แค่ mention topic แบบผ่านๆ (เกณฑ์ qualify: source ต้อง explain หรือ demonstrate concept โดยตรง — ถ้าพูดถึงแบบ peripheral โดยไม่อธิบาย = ไม่ qualify)
 - ถ้า qualify: บันทึก QUOTE พร้อม [COMMUNITY] prefix + ระบุใน callout ในเอกสารว่า "> ข้อมูลส่วนนี้มาจาก community source — verify ก่อนใช้งานจริง"
@@ -146,15 +179,34 @@ docs/[topic-kebab]/
 
 ⚠️ Formative checkpoint ก่อน STEP 3 — ทำเป็น internal self-check (ไม่ต้องแสดงให้ user เห็น) ตอบ 3 คำถามนี้ก่อนเริ่มเขียน:
 1. ทุก concept ในบทใดๆ มี QUOTE จาก source-notes รองรับไหม? ถ้าไม่ → กลับ STEP 1
-2. บทแรกสุดสามารถเรียนได้โดยใช้แค่ prerequisites ที่ระบุใน STEP 0 ไหม? ถ้าไม่ → ตรวจว่า prerequisites เปลี่ยนมีนัยสำคัญไหม: ถ้าใช่ → แจ้ง user และรอ confirm ก่อนแก้ (ตาม STEP 1.3) ถ้าไม่ → เพิ่ม prerequisite recap สั้นๆ ใน overview ได้เลย
+2. บทแรกสุดสามารถเรียนได้โดยใช้แค่ prerequisites ที่ระบุใน STEP 0 ไหม? ถ้าไม่ → เพิ่ม prerequisite recap สั้นๆ ใน overview ได้เลย + แจ้ง user ใน scope summary ว่าปรับ prerequisites อะไร — ไม่ต้องรอ confirm (ตาม STEP 1.3)
 3. ลำดับบท A→B→C สมเหตุสมผลไหม — concept ในบท B build on บท A จริงไหม? ถ้าไม่ → เรียงลำดับใหม่ก่อน
 ถ้าตอบ "ไม่" ข้อใดข้อหนึ่ง → แก้ก่อนแล้วค่อยเดิน STEP 3
+
+---
+
+## ⚓ CORE INVARIANTS — อ่านทุกครั้งก่อนเริ่ม STEP 3
+
+กฎด้านล่างนี้เป็นสรุปของ rule ที่มีอยู่แล้วในสกิลนี้ ใส่ไว้เป็น anchor ป้องกัน instruction drift ในการเขียน series ยาว — ถ้า rule ใดขัดแย้งกับ STEP อื่น ให้อ่าน STEP นั้นโดยตรงเสมอ:
+
+1. **Source first** — ทุก claim ต้องมี QUOTE ใน source-notes ก่อนเขียน ห้าม rely ความจำโดยไม่มีหลักฐาน
+2. **Threshold = 100** — review loop จบได้เมื่อทุก agent ได้ 100 เท่านั้น ไม่มีข้อยกเว้น
+3. **Analogy = optional แต่ถ้าใส่ ต้องมี breakdown point 1 ข้อ** — ขาดแล้วถือว่า fail checklist ทันที
+4. **Exercise domain** — Intermediate exercises ต้องใช้ domain ที่ต่างจากตัวอย่างในบทอย่างชัดเจน ห้าม copy context หรือตัวเลขจากตัวอย่าง (ทุก level)
+5. **Self-check ⏸ = 3 elements ของ Generation Effect** — (1) pause + retrieve, (2) เขียนคำตอบก่อนดูเฉลย, (3) เขียนเหตุผลที่ตอบแบบนั้น — ขาด element ใด = fail
+6. **Code = tested** — code ที่ไม่มี label "ยังไม่ได้ทดสอบ" ต้องรันผ่านจริงด้วย Bash ก่อน insert เท่านั้น
 
 ---
 
 ## STEP 3 — WRITE
 
 เขียนแต่ละ section โดยอิงจาก QUOTE ใน source-notes เป็นหลัก — ถ้าใช้ความรู้ที่มี ต้อง cross-check กับ source-notes ก่อนทุกครั้ง
+
+⚠️ **Pre-chapter checkpoint**: ก่อนเริ่มเขียนแต่ละบท (ไม่ใช่หลังเขียนเสร็จ) — บันทึก checkpoint ทันที:
+```
+NEXT: กำลังเขียน [filename] — ยังไม่เสร็จ
+```
+เหตุผล: ถ้า context หมดระหว่างเขียนบท checkpoint จะระบุว่า session ใหม่ต้องเขียนบทนี้ใหม่ตั้งแต่ต้น (ดีกว่าไม่รู้ว่าค้างอยู่ที่ไหน) — เมื่อเขียนบทเสร็จแล้ว update NEXT เป็นบทถัดไป
 
 ทุกบทต้องมี sections บังคับครบ (section 3 Analogy เป็น optional — ไม่มีเลยก็ผ่าน):
 - **บทที่ 1**: sections 1,2,4,5,6,7 บังคับ (6 mandatory — ไม่มี Analogy บังคับ, ไม่มี Pre-chapter Retrieval)
@@ -372,13 +424,15 @@ Launch 3 agents พร้อมกันผ่าน Task tool:
 2. Accuracy review → แสดง score + issue list → แก้ไข
 3. Learning Quality review → แสดง score + issue list → แก้ไข
 ถ้า dimension ใดได้คะแนนต่ำกว่า 100 ใน sequential mode → แก้ไขและทำ dimension นั้นซ้ำก่อน จากนั้นค่อย proceed dimension ถัดไป — ไม่ต้องทำทั้ง 3 dimension ซ้ำ — แต่ละ dimension ทำซ้ำได้ไม่เกิน 3 รอบ (initial + 2 revision) ถ้า fail หลังรอบที่ 3 → แจ้ง user พร้อม feedback ทั้งหมดและ options เหมือน per-agent escalation
-⚠️ Global cap ใน sequential mode: นับ total dimension-runs รวมกัน (แต่ละ dimension-run = 1 รอบ) — ถ้า total dimension-runs > 6 → escalate ทันที เช่น Completeness 3 รอบ + Accuracy 2 รอบ + Learning 2 รอบ = 7 → trigger global cap
+⚠️ Global cap ใน sequential mode: ใช้ adaptive_cap เดียวกับ parallel mode (max(6, ceil(N_chapters × 0.75)) — ถ้ายังไม่ได้คำนวณ N_chapters: นับจากจำนวนไฟล์ 01-*.md ใน output folder) — ถ้า total dimension-runs เกิน adaptive_cap → escalate ทันที
 
 ⚠️ Loop cap (2 independent triggers — whichever hits first escalates):
 - Per-agent cap: นับต่อ agent — initial run = รอบ 1 ถ้า agent นั้น fail แล้วแก้และ re-run อีก 2 รอบ (รวมเป็นรอบที่ 3) ยังไม่ผ่าน → escalate agent นั้นทันที
-- Global cap: นับรวมทุก agent — initial parallel run ของ 3 agents = 3 รอบ (แต่ละ agent นับ 1 รอบ) ถ้ารวมทุก agent **มากกว่า 6 รอบ (> 6 ไม่ใช่ ≥ 6)** แล้วยังไม่ผ่านครบ → หยุดและ escalate ทันที แม้ไม่ครบ per-agent cap
-  (global cap = 6 agent-runs รวม: initial 3 + revision runs ≤ 3 more — ตั้งใจให้ต่ำกว่า per-agent cap รวม (3×3=9) เพื่อ escalate เร็วขึ้นถ้า revision ไม่ converge)
-  ตัวอย่างการนับ: initial 3 agents (รวม=3) → Agent 2 fail → re-run Agent 2 (รวม=4) → Agent 3 fail → re-run Agent 3 (รวม=5) → Agent 3 fail อีก → re-run Agent 3 รอบ 3 (รวม=6, ไม่ trigger เพราะ 6 ไม่ > 6) → Agent 3 fail อีก → รอบที่ 4 ของ Agent 3 (รวม=7, trigger global cap: > 6) → escalate ทันที
+- Global cap (adaptive): นับรวมทุก agent — initial parallel run ของ 3 agents = 3 รอบ
+  **adaptive_cap = max(6, ceil(N_chapters × 0.75))** โดยที่ N_chapters = จำนวนไฟล์ 01-*.md ถึง 0X-*.md ใน output folder (ไม่นับ 00-overview, exercises, glossary)
+  ตัวอย่าง: series 3 บท → cap = max(6, 3) = 6 | series 8 บท → cap = max(6, 6) = 6 | series 10 บท → cap = max(6, 8) = 8 | series 14 บท → cap = max(6, 11) = 11
+  ถ้ารวมทุก agent เกิน adaptive_cap แล้วยังไม่ผ่านครบ → หยุดและ escalate ทันที แม้ไม่ครบ per-agent cap
+  ตัวอย่างการนับ (series 5 บท, cap=6): initial 3 agents (รวม=3) → Agent 2 fail → re-run Agent 2 (รวม=4) → Agent 3 fail → re-run Agent 3 (รวม=5) → Agent 3 fail อีก → re-run Agent 3 รอบ 3 (รวม=6, ไม่ trigger เพราะ 6 ไม่ > 6) → Agent 3 fail อีก → รอบที่ 4 ของ Agent 3 (รวม=7, trigger global cap: > 6) → escalate ทันที
 แจ้ง user พร้อม options เมื่อ escalate — ถ้า user ไม่ respond ภายใน session (async/offline) → autonomous default: accept score ล่าสุด + บันทึก MEMORY.md + หยุด process (ใช้กับทุก escalation path รวมถึง per-agent cap และ global cap)
 
 Agent 1 — Completeness Reviewer
@@ -400,6 +454,9 @@ Agent 1 — Completeness Reviewer
 ให้คะแนน 0-100 ตาม rubric + bullet list จุดแก้ไขพร้อมระบุไฟล์
 
 Agent 2 — Accuracy Reviewer
+⚠️ **Revision mode efficiency**: ถ้านี่คือ revision round (ไม่ใช่ initial run) — ให้ re-fetch เฉพาะ URL ที่มี verdict mismatch/outdated/unverifiable จาก round ก่อน เท่านั้น (ข้าม URL ที่มี verdict match/[STALE-URL] แล้ว) — re-run เฉพาะ code ที่ fail จาก round ก่อนเท่านั้น (ข้าม code ที่ pass แล้ว) — ประหยัด token สูงสุด 80% สำหรับ series ขนาดใหญ่
+
+**Initial run:**
 1. อ่าน source-notes ดู URL ทั้งหมด
 2. Fetch URL เหล่านั้นใหม่จริงๆ
 3. สำหรับแต่ละ URL ที่ fetch: แสดง (a) URL ที่ fetch, (b) QUOTE จาก source-notes, (c) ข้อความที่พบใน URL ปัจจุบัน, (d) verdict: match / mismatch / [OUTDATED-UPDATE] / [STALE-URL] / [UNVERIFIABLE]
@@ -436,6 +493,9 @@ Agent 3 — Learning Quality + Practitioner Reviewer
 - ทุก agent ได้ 100 → เดินหน้า STEP 7
 - ถ้า agent ใดได้ต่ำกว่า 100:
   1. Main agent ทบทวน feedback ของ agent นั้น — ระบุ "แก้อะไร ที่ไหน ด้วยเหตุผลอะไร" ก่อน re-run
+
+  ⚠️ **Re-research path**: ถ้า feedback ระบุว่า "เนื้อหาขาดข้อมูลสำคัญ" หรือ "ไม่มี source รองรับ" (ไม่ใช่แค่ format/structure issue) → กลับ STEP 1 เพื่อ fetch ข้อมูลเพิ่ม → update source-notes → แก้เนื้อหา → re-run review agent เดิม — **ไม่นับ STEP 1 loop นี้เป็น review round** เพราะเป็น research ไม่ใช่ revision
+
   2. Run review agent นั้นใหม่ (ไม่ต้อง run ทั้ง 3 ใหม่ถ้าบางตัวผ่านแล้ว)
   3. นับรอบแยกต่างหากต่อ agent — ถ้า agent นั้น fail หลังรอบที่ 3 (initial run + 2 revision rounds) ยังไม่ผ่าน → แจ้ง user ว่าติดปัญหาอะไร พร้อม (a) feedback ทั้งหมดจาก agent นั้น, (b) options ให้ user เลือก: ลด scope / ยอมรับ score ที่ได้ / manual fix
 
@@ -464,7 +524,9 @@ Launch **Dispute Arbiter Agent** (ผ่าน Task tool) ด้วย (a) feedb
 ## STEP 7 — CLEAN UP
 
 (ทำหลังจากทุก agent ผ่าน 100 แล้วเท่านั้น)
-ลบไฟล์ชั่วคราว: docs/[topic]-source-notes.md
+ลบไฟล์ชั่วคราว:
+- `docs/[topic]-source-notes.md`
+- `docs/[topic-slug]-checkpoint.md`
 
 ---
 

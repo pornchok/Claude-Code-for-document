@@ -140,6 +140,15 @@
 
 ---
 
+## Keep-Alive
+
+**Keep-Alive** คือ HTTP mechanism ที่ให้ TCP connection เดิมถูก reuse สำหรับหลาย requests แทนที่จะเปิด connection ใหม่ทุกครั้ง (ควบคุมด้วย `Connection: keep-alive` header) เพราะการเปิด TCP connection มี overhead (3-way handshake) ที่เพิ่ม latency อย่างมีนัยสำคัญ — อย่าสับสนกับ **connection pooling** ซึ่งคือการ maintain pool ของ connections ที่พร้อมใช้งาน (JMeter เปิด Keep-Alive by default; ปิดได้ใน HTTP Request Sampler advanced tab)
+
+*SOURCE:* https://jmeter.apache.org/usermanual/component_reference.html#HTTP_Request (field "Use KeepAlive")
+*First seen in:* `10-anti-patterns-best-practices.md` — section 4.8 Gotchas
+
+---
+
 ## JMeter
 
 **JMeter** คือ open-source load testing tool ที่พัฒนาโดย Apache Software Foundation รันบน JVM ใช้สำหรับ performance testing ของ web applications, APIs, databases, และ services อื่นๆ เพราะออกแบบมาให้ extensible ผ่าน plugins และรองรับ distributed testing สำหรับ high-load scenarios — อย่าสับสนกับ **Gatling**, **k6**, หรือ **Locust** ซึ่งเป็น load testing tools ทางเลือก (JMeter มี GUI ที่ click-based ซึ่งต่างจาก code-based tools)
@@ -155,6 +164,15 @@
 
 *SOURCE:* https://jmeter.apache.org/usermanual/generating-dashboard.html
 *First seen in:* `08-running-reports.md` — section CLI Command
+
+---
+
+## JSON Extractor
+
+**JSON Extractor** คือ Post Processor ใน JMeter ที่ดึง value ออกจาก JSON response body โดยใช้ JSON Path expression แล้วเก็บเป็น variable สำหรับใช้ใน requests ถัดไป เพราะ real-world API มักมี dynamic values (เช่น auth token, session ID, resource ID) ที่เปลี่ยนทุก request และต้องส่งต่อระหว่าง steps — อย่าสับสนกับ **Regular Expression Extractor** (ดึง value จาก raw text) หรือ **Response Assertion** (ตรวจค่า ไม่ได้เก็บค่า)
+
+*SOURCE:* https://jmeter.apache.org/usermanual/component_reference.html#JSON_Extractor
+*First seen in:* `04-first-test-plan.md` (บทที่ 4) — section 4.6 JSON Extractor
 
 ---
 

@@ -92,29 +92,17 @@ jmeter -n -t test.jmx -l results.jtl -e -o report/
 > *"Use as few Listeners as possible; if using the -l flag as above they can all be deleted or disabled."*
 > — Apache JMeter best practices (best-practices.html)
 
-> *"Don't use 'View Results Tree' or 'View Results in Table' listeners during the load test, use them only during scripting phase to debug your scripts."*
-> — Apache JMeter best practices (best-practices.html)
+**แนวปฏิบัติ:** ระหว่างรัน load test — disable Listeners ทุกตัวใน test plan แล้วใช้ `-l results.jtl` แทน เพราะ Listeners เก็บ response body ทุก request ไว้ใน memory เมื่อ load สูงขึ้น JMeter อาจ crash ด้วย OutOfMemoryError
 
-**แนวปฏิบัติ:**
-- ระหว่างรัน load test — disable Listeners ทุกตัวใน test plan หรือลบออก แล้วใช้ `-l results.jtl` แทน
-- ระหว่าง debug — เปิด View Results Tree ได้ แต่ต้องปิดก่อน run load test
-
-⚠️ **ควรเลี่ยง:** เปิด Listeners หลายตัวพร้อมกันระหว่าง load test — แต่ละ Listener บันทึกข้อมูลซ้ำกัน ทำให้ JMeter ใช้ memory สูงโดยไม่จำเป็น
+*(รายละเอียดเรื่อง Listeners และ scope ดูที่บทที่ 3 และบทที่ 8)*
 
 ---
 
 ### 4.3 ✅ Use Think Time (Timers) to Simulate Real User Behavior
 
-Real users ไม่ได้ยิง request ติดกันทันที — พวกเขาอ่านหน้า, กรอก form, คิดก่อนคลิก Test plan ที่ไม่มี Think Time จะสร้าง **unrealistically high load** ที่ไม่ตรงกับ real-world usage pattern
+Test plan ที่ไม่มี Think Time จะสร้าง **unrealistically high load** — 50 threads ยิงติดกันทันทีไม่ได้สะท้อน 50 concurrent users จริง แต่เหมือน 50 users ที่ไม่หยุดพักเลย ทำให้ load สูงกว่าความเป็นจริงมาก
 
-ใช้ **Uniform Random Timer** เพื่อ simulate realistic think time:
-
-```
-Random delay maximum: 3000 ms
-Constant delay offset: 1000 ms
-```
-
-ผลลัพธ์: delay สุ่มระหว่าง 1,000–4,000 ms ต่อ sampler — ใกล้เคียงกับ behavior จริงมากกว่า constant 0ms
+ใช้ **Uniform Random Timer** เพื่อ simulate realistic think time (1,000–4,000 ms) *(รายละเอียดการคำนวณ Think Time ดูที่บทที่ 5)*
 
 ---
 
@@ -229,6 +217,96 @@ jobs:
 ---
 
 > **แนวทางตอบ:** ช่องโหว่ของ argument: (1) Error rate 0% อาจหมายความว่า test plan ไม่มี Assertion เลย ทำให้ JMeter นับทุก response ว่า success แม้ server ตอบ error messages ก็ตาม (2) ไม่รู้ว่า load ที่ test เป็นเท่าไหร่ — ถ้ารัน 10 threads แต่ production รับ 5,000 concurrent users ผล 30 นาทีนั้นไม่มีความหมาย (3) ไม่รู้ response time — system อาจ "ไม่ error" แต่ slow อย่างไม่ยอมรับได้ | ต้องดูเพิ่ม: (1) มี Assertion ครอบคลุมทุก endpoint ไหม (2) load level ตรงกับ production expectation ไหม (3) response time percentiles เป็นอย่างไร (4) server-side metrics (CPU, memory, DB) ขณะ test
+
+---
+
+### 4.8 ⚡ Gotchas & Debugging Tips — ปัญหาที่มักเจอในทางปฏิบัติ
+
+นี่คือ gotchas ที่ JMeter users เจอบ่อยแต่มักไม่มีใน tutorial ทั่วไป — รู้ไว้ก่อนจะช่วยประหยัดเวลาหลายชั่วโมง
+
+---
+
+**Gotcha 1: JMeter Cache DNS — อาจไม่ Load Balance**
+
+JMeter cache ผลของ DNS lookup ไว้ตลอด test session ถ้า API ของคุณอยู่หลัง load balancer ที่ใช้ DNS round-robin (เช่น AWS ALB) — JMeter request ทั้งหมดอาจไปยัง instance เดิมทุก request ทำให้ผลการทดสอบไม่สะท้อน production traffic distribution
+
+```bash
+# วิธีแก้: ปิด DNS caching ใน JVM
+# เพิ่มใน jmeter.properties หรือ system.properties
+networkaddress.cache.ttl=0
+networkaddress.cache.negative.ttl=0
+```
+
+---
+
+**Gotcha 2: HTTP Keep-Alive ส่งผลต่อ Throughput อย่างมาก**
+
+JMeter เปิด Keep-Alive (`Connection: keep-alive`) ไว้ by default — หมายความว่า TCP connection จะถูก reuse ระหว่าง requests แทนที่จะเปิดใหม่ทุกครั้ง ซึ่งดีสำหรับ throughput แต่อาจทำให้ผลต่างจากความเป็นจริงถ้า real client ของคุณใช้ connection ใหม่ทุกครั้ง (เช่น serverless functions บางตัว)
+
+ตรวจสอบ behavior ของ real client ก่อน ถ้าต้องการ simulate no-reuse ให้ปิด Keep-Alive ใน HTTP Request Sampler:
+
+```
+Advanced tab → Implementation: HTTPClient4 → 
+Timeouts: Connect: 5000 | Response: 10000
+ปิด "Use KeepAlive"
+```
+
+ความแตกต่างของ throughput ระหว่าง Keep-Alive on/off อาจสูงถึง 30-50% — ดังนั้นต้องรู้ว่า real client ทำอะไรก่อน compare ผล
+
+---
+
+**Gotcha 3: CSV File Encoding — UTF-8 vs Windows-1252**
+
+ถ้า CSV file มีภาษาไทย, ญี่ปุ่น, หรือ character พิเศษ และ JMeter อ่านออกมาเป็น "???" หรือ garbled text — ปัญหาคือ encoding ไม่ตรงกัน
+
+CSV ที่สร้างจาก Windows Excel มักบันทึกเป็น Windows-1252 (ANSI) แต่ JMeter อ่านเป็น UTF-8 by default
+
+```
+วิธีแก้ใน CSV Data Set Config:
+  Filename: users.csv
+  File Encoding: UTF-8   ← ระบุ encoding ชัดเจนเสมอ
+
+วิธีแก้ที่ต้นทาง:
+  Excel → Save As → เลือก "CSV UTF-8 (comma delimited)" *(*.csv)
+  (ไม่ใช่แค่ CSV ธรรมดา)
+```
+
+---
+
+**Gotcha 4: Regular Expression ใน Assertion ต้องระวัง Special Characters**
+
+Response Assertion ที่ใช้ Contains หรือ Matches mode จะ interpret ค่าที่ใส่เป็น Java Regex ถ้า response มี character พิเศษเช่น `.`, `(`, `)`, `[`, `{`, `*`, `+`, `?` — ต้องใส่ backslash นำหน้า
+
+```
+ตัวอย่าง:
+  ต้องการ match: "price": 19.99
+  ❌ Pattern: "price": 19.99    ← . หมายถึง "any character" ใน regex จะ match มากเกินไป
+  ✅ Pattern: "price": 19\.99   ← escape ให้ถูกต้อง
+
+ทางเลือกที่ง่ายกว่า:
+  ใช้ Pattern Matching Rule = "Substring" แทน "Contains"
+  → Substring ไม่ interpret เป็น regex จึงไม่ต้อง escape
+```
+
+---
+
+**Gotcha 5: Sample Label ต้องไม่ซ้ำกันใน Report**
+
+Aggregate Report รวม results จาก Samplers ที่มี **Name เดียวกัน** เข้าเป็น row เดียว ถ้ามี HTTP Request 2 ตัวที่ชื่อ "HTTP Request" เหมือนกัน (ค่า default) results จะถูกรวมกัน และคุณไม่สามารถแยกออกได้ว่า endpoint ไหนช้าหรือ error
+
+```
+❌ แบบผิด:
+   Sampler 1: Name = "HTTP Request"  (POST /login)
+   Sampler 2: Name = "HTTP Request"  (GET /profile)
+   → Report แสดง row เดียว รวม 2 endpoints เข้าด้วยกัน
+
+✅ แบบถูก:
+   Sampler 1: Name = "POST /login"
+   Sampler 2: Name = "GET /profile"
+   → Report แสดง 2 rows แยกกัน ดู per-endpoint performance ได้
+```
+
+Best practice: ตั้งชื่อ Sampler ด้วย HTTP method + path เสมอ เช่น `POST /api/orders`, `GET /api/products`
 
 ---
 

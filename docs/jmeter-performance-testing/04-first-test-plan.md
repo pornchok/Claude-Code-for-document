@@ -209,6 +209,60 @@ View Results Tree
 
 ---
 
+### 4.6 JSON Extractor — ดึง Dynamic Value จาก Response
+
+Real API ส่วนใหญ่ใช้ token-based authentication — ผู้ใช้ login แล้วได้ token กลับมา แล้วส่ง token นั้นในทุก request ถัดไป ปัญหาคือ token เปลี่ยนทุก session และต่างกันทุก virtual user ดังนั้นการ hardcode token ไม่ได้ — ต้องใช้ **JSON Extractor** ดึงค่าจาก response แล้วเก็บเป็น variable อัตโนมัติ
+
+**วิธีทำงาน:**
+
+```
+POST /auth/login  →  server return: {"token": "eyJhbGciOi..."}
+         ↓
+   JSON Extractor อ่าน response body
+   ดึงค่า token ด้วย JSON Path: $.token
+   เก็บไว้ใน variable: ${auth_token}
+         ↓
+GET /api/profile  →  Authorization: Bearer ${auth_token}  ← ใช้ค่าที่เพิ่งดึงมา
+```
+
+**วิธีเพิ่ม JSON Extractor:**
+
+Right-click ที่ HTTP Request (Sampler ที่ return token) → Add → **Post Processors** → JSON Extractor
+
+**Fields ที่ต้องตั้งค่า:**
+
+| Field | ค่า | ความหมาย |
+|-------|-----|-----------|
+| Names of created variables | `auth_token` | ชื่อ variable ที่จะสร้าง ใช้ด้วย `${auth_token}` |
+| JSON Path expressions | `$.token` | JSON Path บอก path ของค่าที่ต้องการ |
+| Match No. | `0` | 0 = random, 1 = first match, -1 = all matches |
+| Default Values | `NOT_FOUND` | ค่า fallback ถ้าไม่เจอ path ที่กำหนด |
+
+**ตัวอย่าง JSON Path expressions ที่ใช้บ่อย:**
+
+```
+Response:  {"data": {"user": {"id": 42, "token": "abc123"}}}
+
+$.token                    ← ❌ ไม่เจอ (token อยู่ใน nested object)
+$.data.user.token          ← ✅ ได้ "abc123"
+$.data.user.id             ← ✅ ได้ 42
+$.data.user.token          ← เก็บใน ${auth_token}
+```
+
+**ใช้ token ที่ดึงมาใน request ถัดไป:**
+
+ใน HTTP Header Manager ของ Sampler ถัดไปใส่:
+
+| Name | Value |
+|------|-------|
+| Authorization | Bearer ${auth_token} |
+
+JMeter จะแทนค่า `${auth_token}` ด้วยค่าที่ JSON Extractor ดึงมาจาก login response อัตโนมัติ — แต่ละ thread มี variable แยกกัน ดังนั้น virtual user แต่ละคนใช้ token ของตัวเองอย่างถูกต้อง
+
+> ⚠️ **สังเกต scope:** variable ที่สร้างจาก JSON Extractor มีอายุอยู่ใน thread เดียวกัน ข้าม thread ไม่ได้ — นี่คือพฤติกรรมที่ถูกต้องและต้องการ เพราะ token ของ user แต่ละคนต้องแยกกัน
+
+---
+
 ## ส่วนที่ 5: ตัวอย่าง 3 ระดับ
 
 ### ตัวอย่าง Beginner: GET Request ไปที่ Public API
@@ -373,58 +427,68 @@ View Results Tree
 
 ---
 
-### ตัวอย่าง Intermediate: POST Request สำหรับ E-Learning API
+### ตัวอย่าง Intermediate: Login Flow ด้วย Token-based Authentication
 
-**Scenario:** ระบบ e-learning มี API endpoint สำหรับ instructor submit บทเรียนใหม่ ต้องการทดสอบว่า endpoint รับ POST request พร้อม JSON body และ Authorization header ถูกต้อง
+**Scenario:** ระบบ e-learning มี API 2 ขั้นตอน — ต้อง login ก่อนเพื่อรับ JWT token แล้วจึงเรียก `/api/v1/courses` พร้อม token นั้นได้ ต้องการ load test flow นี้กับ instructor 50 คนพร้อมกัน
+
+**ทำไม scenario นี้สำคัญ:** นี่คือ pattern ที่พบมากที่สุดใน real-world API — ถ้าทดสอบแค่ step เดียวโดยไม่มี login flow จริง ผลการทดสอบจะไม่สะท้อน production
 
 **Test Plan structure:**
 
 ```
-Test Plan: E-Learning Instructor API Test
+Test Plan: E-Learning Auth + Course API Test
 └── Thread Group: Instructor Users (50 threads, Ramp-Up 30s)
     ├── HTTP Request Defaults
     │   └── Server: api.elearning-platform.example
     │       Port: 443, Protocol: https
-    ├── HTTP Header Manager (สำหรับทุก request)
-    │   ├── Content-Type: application/json
-    │   ├── Authorization: Bearer ${__P(auth_token,test-token-placeholder)}
-    │   └── Accept: application/json
-    ├── HTTP Cookie Manager
-    ├── HTTP Request: POST /api/v1/courses
-    │   └── Body Data: JSON payload
-    └── Aggregate Report
+    ├── HTTP Cookie Manager              ← เก็บ cookies อัตโนมัติ
+    ├── HTTP Header Manager              ← Content-Type + Accept (ทุก request)
+    │
+    ├── HTTP Request: POST /auth/login   ← Step 1: Login
+    │   ├── Body Data: {"email": "${email}", "password": "${password}"}
+    │   └── [JSON Extractor]             ← Post Processor: ดึง token จาก response
+    │       variables: auth_token
+    │       JSON Path: $.token
+    │
+    └── HTTP Request: GET /api/v1/courses  ← Step 2: ใช้ token ที่ดึงมา
+        └── HTTP Header Manager (local)
+            └── Authorization: Bearer ${auth_token}
 ```
 
-**HTTP Header Manager configuration:**
+**ทำไมต้อง JSON Extractor ตรงนั้น:** server return `{"token": "eyJhbGci..."}` หลัง login สำเร็จ — JSON Extractor อ่านค่า `$.token` จาก response แล้วเก็บเป็น `${auth_token}` ซึ่ง Sampler ถัดไปจะดึงไปใส่ใน Authorization header ให้อัตโนมัติ
+
+**HTTP Header Manager (global — ใต้ Thread Group):**
 
 | Name | Value | ทำไม |
 |------|-------|------|
-| Content-Type | application/json | บอก server ว่า body เป็น JSON |
-| Authorization | Bearer ${__P(auth_token,placeholder)} | ส่ง token — ใช้ JMeter property แทน hardcode |
-| Accept | application/json | บอก server ว่าต้องการรับ JSON กลับมา |
+| Content-Type | application/json | ทุก request ส่ง JSON body |
+| Accept | application/json | ต้องการรับ JSON response |
 
-**Body Data ของ POST request:**
+**HTTP Header Manager (local — ใต้ GET /api/v1/courses เท่านั้น):**
 
-```json
-{
-  "title": "Introduction to Python Programming",
-  "description": "Beginner course covering Python fundamentals",
-  "category": "programming",
-  "duration_hours": 20,
-  "price": 1500,
-  "published": false
-}
-```
+| Name | Value | ทำไม |
+|------|-------|------|
+| Authorization | Bearer ${auth_token} | ส่ง token ที่ดึงมาจาก login response |
 
-**ทำไม Cookie Manager จำเป็นที่นี่:** ถ้า API ใช้ session-based auth (ไม่ใช่ stateless JWT) Cookie Manager จะเก็บ session cookie หลัง authenticate และส่งในทุก request ถัดไป ทำให้ virtual user ทำงานเหมือน real instructor ที่ login แล้ว
+**JSON Extractor configuration:**
+
+| Field | ค่า |
+|-------|-----|
+| Names of created variables | `auth_token` |
+| JSON Path expressions | `$.token` |
+| Match No. | `1` (first match) |
+| Default Values | `LOGIN_FAILED` |
+
+> ถ้า `${auth_token}` เท่ากับ `LOGIN_FAILED` ใน request ถัดไป → แสดงว่า login ล้มเหลวหรือ JSON Path ผิด — ให้ดู Response Body ของ POST /auth/login ใน View Results Tree
 
 **ผลที่ควรได้จาก Aggregate Report:**
 
 | Label | # Samples | Average | 90th % | Error% |
 |-------|-----------|---------|--------|--------|
-| POST /api/v1/courses | 500 | <500ms | <1000ms | <1% |
+| POST /auth/login | 50 | <300ms | <600ms | 0% |
+| GET /api/v1/courses | 50 | <500ms | <1000ms | 0% |
 
-ถ้า Error% > 1% → ดู View Results Tree (ใน debug run) เพื่อหาว่า server ตอบ error อะไร
+ถ้า Error% ของ GET courses สูงแต่ login เป็น 0% → ปัญหาอยู่ที่ authorization หรือ endpoint นั้นโดยตรง ไม่ใช่ login
 
 ---
 
