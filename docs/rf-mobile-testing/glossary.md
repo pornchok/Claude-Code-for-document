@@ -131,8 +131,8 @@ SOURCE: https://appium.io/docs/en/2.0/guides/caps/
 ## P
 
 **Page Object Model (POM)**
-Design pattern ที่แยก locators และ UI interactions ออกจาก test cases — เพื่อให้ maintain ง่ายเมื่อ UI เปลี่ยน
-SOURCE: Robot Framework Best Practices
+Design pattern ที่แยก locators และ UI interactions ออกจาก test cases — เพื่อให้ maintain ง่ายเมื่อ UI เปลี่ยน (ดู [Series 2 WDIO: Page Objects](../wdio-mobile-testing/06-page-objects-wdio.md) สำหรับ implementation ใน JavaScript)
+SOURCE: https://webdriver.io/docs/pageobjects/
 
 **platformName**
 Capability ที่ระบุ OS platform เช่น `Android` หรือ `iOS` — เป็น W3C standard capability ไม่ต้องมี `appium:` prefix
@@ -186,3 +186,22 @@ SOURCE: https://appium.io/docs/en/2.0/
 **xpath**
 Locator strategy ที่ใช้ XML Path expression เพื่อหา element — ยืดหยุ่นที่สุดแต่ช้าที่สุด ใช้เป็น fallback
 SOURCE: https://www.browserstack.com/guide/locators-in-appium
+
+---
+
+## ข้ามไปยัง Series 2 (WDIO)
+
+คำศัพท์ด้านล่างนี้มีใน Series 2 แต่ไม่ได้ใช้ใน Series 1 นี้ — ดูรายละเอียดใน [WDIO Glossary](../wdio-mobile-testing/glossary.md)
+
+| คำศัพท์ RF (Series 1) | คำศัพท์ WDIO เทียบเท่า (Series 2) |
+|----------------------|-----------------------------------|
+| `accessibility_id=btn` | `$('~btn')` |
+| `id=com.app:id/btn` | `$('android=new UiSelector().resourceId("com.app:id/btn")')` |
+| `Open Application` | capabilities ใน `wdio.conf.js` |
+| `Close Application` | driver session จบหลัง test suite |
+| `Wait Until Element Is Visible` | `$('~el').waitForDisplayed()` |
+| `Click Element` | `$('~el').click()` |
+| `Input Text` | `$('~el').setValue()` |
+| `Get Text` | `$('~el').getText()` |
+| `Swipe` | `driver.execute('mobile: swipe', {...})` |
+| `Hide Keyboard` | `driver.hideKeyboard()` |

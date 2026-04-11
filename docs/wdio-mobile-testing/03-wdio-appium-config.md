@@ -93,13 +93,19 @@ export const config = {
     // Mocha options
     mochaOpts: {
         ui: 'bdd',
-        timeout: 60000  // 60 วินาที — mobile app ใช้เวลา load นานกว่า web
+        timeout: 60000  // 60 วินาที ต่อ test case (ดูคำอธิบายด้านล่าง)
     }
 };
 ```
 
 > "Add to your wdio.conf.js: export const config = { port: 4723, services: ['appium'] };"
 > *(webdriver.io/docs/appium-service)*
+
+**ทำไม `timeout: 60000` (60 วินาที)?**
+
+Mobile app ใช้เวลานานกว่า web เพราะ: (1) app launch time — 3-10 วินาที (2) screen transition พร้อม animation — 1-3 วินาทีต่อ transition (3) API calls — banking app มี network latency (4) emulator ช้ากว่า real device
+
+test case ที่ต้อง login → navigate → กรอก form → submit อาจใช้เวลา 30-50 วินาที — ถ้า timeout สั้นกว่านี้ test จะ fail ทั้งที่ app ยังทำงานอยู่ปกติ
 
 ### ความแตกต่างของ Capabilities Syntax: RF vs WDIO
 
@@ -186,6 +192,7 @@ capabilities: [
         'appium:platformVersion': '12',
         'appium:appPackage': 'com.example.app',
         'appium:appActivity': '.MainActivity',
+        'appium:systemPort': 8200,  // ต้องต่างกันต่อ instance
     },
     // Device 2: Android 13
     {
@@ -195,10 +202,18 @@ capabilities: [
         'appium:platformVersion': '13',
         'appium:appPackage': 'com.example.app',
         'appium:appActivity': '.MainActivity',
+        'appium:systemPort': 8201,  // port ต่างกัน ป้องกัน conflict
     }
 ],
-maxInstances: 2,  // รัน parallel 2 instances
+maxInstances: 2,  // รัน parallel 2 instances พร้อมกัน
 ```
+
+**ข้อควรระวังเรื่อง port สำหรับ parallel testing:**
+- `appium:systemPort` — UIAutomator2 ใช้ port นี้คุยกับ Appium ต้องต่างกันทุก instance (default: 8200)
+- emulator port — `emulator-5554` และ `emulator-5556` ต้องเปิดไว้ก่อนรัน test
+- ถ้า port conflict → error "Could not find a connected Android device" หรือ "Address already in use"
+
+**Performance:** การรัน parallel บน 2 devices ลดเวลาได้ ~40-50% แต่ต้องการ RAM เพิ่ม (emulator ละ ~2-3GB)
 
 ### Advanced: Config ที่ดึงค่าจาก Environment Variables
 

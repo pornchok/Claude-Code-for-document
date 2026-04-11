@@ -142,20 +142,30 @@ await $('~submit_btn').waitForEnabled({ timeout: 10000 });
 
 #### Swipe
 
-```javascript
-// Swipe ทั้งหน้าจอ
-await driver.touchAction([
-    { action: 'press', x: 540, y: 1400 },
-    { action: 'moveTo', x: 540, y: 600 },
-    { action: 'release' }
-]);
+ใช้ `mobile: swipe` command ซึ่งเป็น recommended approach สำหรับ Appium 2.x:
 
-// WDIO v9 — ใช้ mobile commands
+```javascript
+// Swipe ทั้งหน้าจอ (แนะนำ — Appium 2.x)
 await driver.execute('mobile: swipe', {
-    direction: 'up',      // 'up', 'down', 'left', 'right'
-    element: elementRef,  // optional: swipe บน element เฉพาะ
+    direction: 'up',    // 'up' = scroll down, 'down' = scroll up
+                        // 'left' = next page, 'right' = prev page
+});
+
+// Swipe บน element เฉพาะ (scroll ใน scrollable container)
+await driver.execute('mobile: swipe', {
+    direction: 'up',
+    element: await $('~scroll_container'),
+});
+
+// Swipe left บน element เฉพาะ (เช่น swipe to delete)
+const item = await $('~recipient_john');
+await driver.execute('mobile: swipe', {
+    direction: 'left',
+    element: item,
 });
 ```
+
+> **หมายเหตุ:** `touchAction` API ยังใช้ได้แต่เป็น legacy pattern — แนะนำ `mobile: swipe` สำหรับ Appium 2.x เป็นต้นไป
 
 #### Scroll หา Element
 
@@ -260,35 +270,29 @@ describe('Transaction List', () => {
 
 ```javascript
 // test/specs/recipients.test.js
-// tested: WDIO v9
+// tested: WDIO v9, Appium 2.x
 
 describe('Saved Recipients', () => {
     it('should delete recipient by swiping left', async () => {
         await $('~recipients_tab').click();
         await $('~recipient_john').waitForDisplayed({ timeout: 10000 });
 
-        // หา element location
+        // Swipe left บน element ด้วย mobile: swipe (Appium 2.x recommended)
         const recipient = await $('~recipient_john');
-        const location = await recipient.getLocation();
-        const size = await recipient.getSize();
-
-        // Swipe left บน element
-        const startX = location.x + size.width - 10;
-        const startY = location.y + size.height / 2;
-        const endX = location.x + 10;
-
-        await driver.touchAction([
-            { action: 'press', x: startX, y: startY },
-            { action: 'wait', ms: 200 },
-            { action: 'moveTo', x: endX, y: startY },
-            { action: 'release' }
-        ]);
+        await driver.execute('mobile: swipe', {
+            direction: 'left',
+            element: recipient,
+        });
 
         // กด Delete ที่ปรากฏ
         await $('~delete_button').waitForDisplayed({ timeout: 5000 });
         await $('~delete_button').click();
 
         // ตรวจว่า recipient หายไป
+        await $('~recipient_john').waitForDisplayed({
+            timeout: 5000,
+            reverse: true,  // รอให้หายไป
+        });
         await expect(await $('~recipient_john')).not.toBeDisplayed();
     });
 });

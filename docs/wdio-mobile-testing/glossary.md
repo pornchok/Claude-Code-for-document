@@ -171,3 +171,24 @@ SOURCE: https://webdriver.io/docs/configurationfile/
 **W3C WebDriver Protocol**
 Standard HTTP protocol ที่ทั้ง WDIO และ RF ใช้คุยกับ Appium server — เหตุผลที่ทั้งสองใช้ Appium server ตัวเดียวกันได้
 SOURCE: https://w3c.github.io/webdriver/
+
+---
+
+## ข้ามไปยัง Series 1 (RF)
+
+คำศัพท์ด้านล่างนี้มีใน Series 1 แต่ไม่ได้ใช้ใน Series 2 นี้ — ดูรายละเอียดใน [RF Glossary](../rf-mobile-testing/glossary.md)
+
+| คำศัพท์ WDIO (Series 2) | คำศัพท์ RF เทียบเท่า (Series 1) |
+|------------------------|----------------------------------|
+| `$('~btn')` | `accessibility_id=btn` |
+| `$('android=new UiSelector()...')` | `id=com.app:id/btn` |
+| capabilities ใน `wdio.conf.js` | `Open Application` keyword |
+| `$('~el').waitForDisplayed()` | `Wait Until Element Is Visible` |
+| `$('~el').click()` | `Click Element` |
+| `$('~el').setValue()` | `Input Text` |
+| `$('~el').getText()` | `Get Text` |
+| `driver.execute('mobile: swipe', {...})` | `Swipe` |
+| `driver.hideKeyboard()` | `Hide Keyboard` |
+| `describe / it` | `*** Test Cases ***` |
+| `before / after` | `Suite Setup / Suite Teardown` |
+| `beforeEach / afterEach` | `Test Setup / Test Teardown` |

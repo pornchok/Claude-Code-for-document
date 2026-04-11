@@ -232,6 +232,76 @@ reporters: [
 }
 ```
 
+**วิธีดู Allure report:**
+```bash
+# รัน test ก่อน (สร้าง allure-results/)
+npm test
+
+# Generate HTML report แล้วเปิด browser
+npm run report
+# หรือแยกเป็น 2 commands
+npx allure generate allure-results --clean -o allure-report
+npx allure open allure-report
+```
+
+Browser จะเปิดขึ้นอัตโนมัติที่ `http://localhost:PORT` แสดง Allure dashboard
+
+---
+
+### ขั้นตอน Optional: Setup สำหรับ CI/CD
+
+**GitHub Actions** — รัน WDIO mobile test แบบอัตโนมัติ:
+
+```yaml
+# .github/workflows/wdio-mobile.yml
+name: WDIO Mobile Tests
+
+on: [push, pull_request]
+
+jobs:
+  mobile-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm install -g appium
+          appium driver install uiautomator2
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run Tests with Emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          arch: x86_64
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          disable-animations: true
+          script: npx wdio run wdio.conf.js
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results/
+```
+
+> **หมายเหตุ CI:** `@wdio/appium-service` auto-start Appium ได้ แต่ใน CI ต้องแน่ใจว่า `appium` อยู่ใน PATH ก่อน (`npm install -g appium`) และ emulator boot ครบก่อน test รัน
+
 ---
 
 ## Common Mistakes
@@ -252,13 +322,16 @@ reporters: [
 
 ❌ **ใช้ CommonJS `require()` ใน project ที่ตั้ง `"type": "module"` ใน package.json**
 ```javascript
-const { config } = require('./wdio.conf.js'); // ❌ Error
+const { config } = require('./wdio.conf.js'); // ❌ Error ใน ESM project
 ```
 ✅ **ตรวจ package.json ก่อน — ถ้ามี `"type": "module"` ให้ใช้ `import`**
 ```javascript
 import { config } from './wdio.conf.js'; // ✅
 ```
 *(source: Node.js docs)*
+
+> **ESM vs CommonJS คืออะไร?**
+> Node.js มี 2 module system: **CommonJS** (เก่ากว่า) ใช้ `require()` / `module.exports`, **ESM** (ECMAScript Modules) ใช้ `import` / `export` — WDIO v9 รองรับทั้งสอง แต่ต้องเลือกให้ consistent ทั้ง project ถ้า `package.json` มี `"type": "module"` ทุกไฟล์ใช้ ESM, ถ้าไม่มีจะ default เป็น CommonJS
 
 ---
 

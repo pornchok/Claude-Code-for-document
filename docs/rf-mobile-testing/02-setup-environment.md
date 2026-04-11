@@ -330,6 +330,87 @@ adb devices
 
 ---
 
+### ขั้นตอนที่ 10 (Optional): รัน Test บน CI/CD Pipeline
+
+สำหรับทีมที่ต้องการรัน mobile test อัตโนมัติบน GitHub Actions หรือ GitLab CI
+
+**ปัญหาหลักของ emulator บน CI:** CI server ไม่มี display — ต้องรัน emulator แบบ headless
+
+#### GitHub Actions
+
+```yaml
+# .github/workflows/mobile-test.yml
+name: Mobile Tests
+
+on: [push, pull_request]
+
+jobs:
+  mobile-test:
+    runs-on: ubuntu-latest   # รองรับ KVM hardware acceleration
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Robot Framework + AppiumLibrary
+        run: pip install robotframework robotframework-appiumlibrary
+
+      - name: Install Node.js + Appium
+        run: |
+          npm install -g appium
+          appium driver install uiautomator2
+
+      - name: Enable KVM (hardware acceleration)
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run Android Emulator + Tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 33
+          arch: x86_64
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim
+          disable-animations: true
+          script: |
+            appium --log-level error &
+            sleep 5
+            robot --outputdir results/ tests/
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: robot-results
+          path: results/
+```
+
+> "The `android-emulator-runner` action handles the full emulator lifecycle — setup, boot, and teardown."
+> *(github.com/ReactiveCircus/android-emulator-runner)*
+
+**ข้อควรระวังใน CI:**
+
+| ปัญหา | สาเหตุ | วิธีแก้ |
+|-------|--------|---------|
+| Emulator boot timeout | CI server ช้ากว่า local | เพิ่ม `emulator-boot-timeout: 300` |
+| `appium: command not found` | PATH ใน CI ต่างจาก local | ใช้ `npm install -g appium` ใน step แยก |
+| Animation ทำให้ test flaky | emulator มี animation ช้า | ตั้ง `disable-animations: true` |
+| x86 vs ARM emulator | CI server เป็น x86_64 | ใช้ `arch: x86_64` ไม่ใช่ ARM |
+
+---
+
 ## Checklist ก่อนไปบทถัดไป
 
 ทำ checklist นี้ให้ครบก่อน:
