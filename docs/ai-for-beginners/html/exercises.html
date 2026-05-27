@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบฝึกหัด | เข้าใจ AI & Claude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* ── Exercise-specific styles ── */
+  .exercise-section {
+    margin-bottom: 48px;
+  }
+  .exercise-section-header {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    border-radius: var(--radius);
+    padding: 18px 24px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .exercise-section-icon { font-size: 28px; }
+  .exercise-section-title { font-size: 17px; font-weight: 800; }
+  .exercise-section-sub { font-size: 13px; opacity: 0.85; margin-top: 2px; }
+
+  .exercise-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 26px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow);
+  }
+  .exercise-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .exercise-num {
+    font-size: 12px;
+    color: #64748b;
+    margin-left: auto;
+  }
+  .exercise-q {
+    margin-bottom: 14px;
+    font-size: 15px;
+    line-height: 1.75;
+  }
+  .exercise-answer summary {
+    cursor: pointer;
+    color: #6366f1;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 0;
+    user-select: none;
+    list-style: none;
+  }
+  .exercise-answer summary::-webkit-details-marker { display: none; }
+  .exercise-answer summary::before { content: "▶ "; }
+  details[open] .exercise-answer summary::before { content: "▼ "; }
+  .answer-content {
+    margin-top: 14px;
+    font-size: 14.5px;
+    line-height: 1.75;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+  }
+  .answer-content strong { color: var(--primary-dark); }
+
+  .level-label {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 99px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .level-recall   { background: #dcfce7; color: #166534; }
+  .level-app      { background: #fef3c7; color: #92400e; }
+  .level-synth    { background: #ede9fe; color: #5b21b6; }
+
+  .progress-bar {
+    background: #e2e8f0;
+    border-radius: 99px;
+    height: 6px;
+    margin-bottom: 40px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    border-radius: 99px;
+    width: 100%;
+  }
+
+  .ex-intro {
+    background: linear-gradient(135deg, #f5f3ff, #eef2ff);
+    border: 1px solid #c7d2fe;
+    border-radius: var(--radius);
+    padding: 24px 28px;
+    margin-bottom: 36px;
+  }
+  .ex-intro h2 { color: #4338ca; margin-top: 0; margin-bottom: 12px; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">🤖</div>
+    <div>
+      <div class="sidebar-title">เข้าใจ AI & Claude</div>
+      <div class="sidebar-subtitle">สำหรับผู้เริ่มต้น</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">เริ่มต้น</div>
+    <a href="index.html">🏠 หน้าหลัก</a>
+    <div class="nav-section">เนื้อหา</div>
+    <a href="01-what-is-ai.html">🤖 บทที่ 1 — AI คืออะไร?</a>
+    <a href="02-how-llm-works.html">🧠 บทที่ 2 — LLM ทำงานอย่างไร?</a>
+    <a href="03-prompting.html">✍️ บทที่ 3 — ศิลปะการ Prompt</a>
+    <a href="04-claude-superpowers.html">⚡ บทที่ 4 — Claude Superpowers</a>
+    <a href="05-ai-ethics.html">🛡️ บทที่ 5 — AI อย่างปลอดภัย</a>
+    <div class="nav-section">ฝึกหัด</div>
+    <a href="exercises.html" class="active">✏️ แบบฝึกหัด</a>
+    <a href="glossary.html">📖 Glossary</a>
+  </nav>
+  <div class="sidebar-footer">เวอร์ชัน 1.0 · 2026-05-28</div>
+</aside>
+
+<div class="main">
+<div class="content">
+
+  <div class="ch-label">✏️ ฝึกหัด</div>
+  <h1>แบบฝึกหัดทบทวน<br><span style="font-size:1.3rem; font-weight:600; color:#6366f1;">ครบทุก 5 บท — 15 ข้อ</span></h1>
+
+  <div class="badges fade-up">
+    <span class="badge badge-green">🟢 5 ข้อ Recall</span>
+    <span class="badge badge-amber">🟡 5 ข้อ Application</span>
+    <span class="badge badge-indigo">🟣 5 ข้อ Synthesis</span>
+  </div>
+
+  <div class="ex-intro fade-up">
+    <h2>📋 วิธีใช้แบบฝึกหัดนี้</h2>
+    <p>ทำแต่ละข้อโดย<strong>คิดคำตอบด้วยตัวเองก่อน</strong> แล้วค่อยกด "ดูเฉลย" — การทำแบบนี้ช่วยให้ความรู้ติดทนกว่าการอ่านเฉลยโดยตรง 3-4 เท่า (Retrieval Practice Effect)</p>
+    <ul style="margin-bottom:0;">
+      <li><span class="level-label level-recall">Recall</span> — อธิบายด้วยคำตัวเอง, ยกตัวอย่างจากชีวิตจริง</li>
+      <li><span class="level-label level-app" style="margin:0 4px;">Application</span> — สถานการณ์ใหม่ที่ไม่มีในตัวอย่างของบท</li>
+      <li><span class="level-label level-synth" style="margin:0 4px;">Synthesis</span> — หา bug, เปรียบเทียบ tradeoff, ออกแบบระบบ</li>
+    </ul>
+  </div>
+
+  <!-- ════════════════════════════════
+       บทที่ 1 — AI คืออะไร
+  ════════════════════════════════ -->
+  <div class="exercise-section">
+    <div class="exercise-section-header">
+      <div class="exercise-section-icon">🤖</div>
+      <div>
+        <div class="exercise-section-title">บทที่ 1 — AI คืออะไร?</div>
+        <div class="exercise-section-sub">ประวัติ, Taxonomy, ข้อจำกัด</div>
+      </div>
+    </div>
+
+    <!-- ข้อ 1 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-recall">Recall</span>
+        <span class="exercise-num">บทที่ 1 — ข้อ 1</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> อธิบาย AI ให้ผู้สูงอายุ 70 ปีที่ไม่เคยใช้ smartphone ฟัง โดยไม่ใช้คำว่า "คอมพิวเตอร์" หรือ "โปรแกรม" เลย ใช้ภาษาและอุปมาจากชีวิตประจำวันที่ผู้สูงอายุคุ้นเคย</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>แนวคำตอบ:</strong> AI เหมือน "ลูกศิษย์ที่เรียนหนังสือมาทั้งชีวิตแต่ไม่เคยออกจากห้อง" — ครูได้สอนให้มันดูตัวอย่างนับล้านๆ ตัวอย่าง เช่น ภาพสุนัขนับแสนใบ แล้วมันก็เรียนรู้จนจำได้เองว่าอะไรดูเหมือนสุนัข อะไรดูเหมือนแมว โดยไม่มีใครเขียนกฎให้<br><br>
+          เหมือนกับที่เราเรียนรู้ว่า "นี่คือผัดไทย" โดยการกินมาหลายครั้ง ไม่ใช่เพราะมีคนบอกว่า "ถ้ามีเส้น มีกุ้ง มีถั่วงอก ก็คือผัดไทย" — เราแค่รู้เอง AI ก็ทำแบบนั้น แต่เร็วกว่าและดูตัวอย่างได้มากกว่ามนุษย์มาก
+        </div>
+      </details>
+    </div>
+
+    <!-- ข้อ 2 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-app">Application</span>
+        <span class="exercise-num">บทที่ 1 — ข้อ 2</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> บริษัทของคุณกำลังพิจารณาใช้ AI คัดเรซูเม่ผู้สมัครงานเพื่อลดเวลา HR จาก 200 ใบ เหลือ 20 ใบที่จะโทรนัด interview ยกข้อดีอย่างน้อย 3 ข้อ และข้อเสียอย่างน้อย 3 ข้อ พร้อมอธิบายว่าคุณจะตัดสินใจอย่างไรในฐานะ HR Manager</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>ข้อดี:</strong><br>
+          1. ลดเวลาและแรงงานในการคัดกรองขั้นต้นได้มาก เหมาะกับรับสมัครงานจำนวนมาก<br>
+          2. ลด fatigue bias จากการที่ HR อ่าน CV หลายร้อยใบแล้วเริ่มตัดสินแบบ autopilot<br>
+          3. สามารถ standardize criteria การคัดกรองให้ consistent กว่าการที่ HR หลายคนอ่านเอง<br><br>
+          <strong>ข้อเสีย:</strong><br>
+          1. AI อาจมี bias ต่อ demographic บางกลุ่ม เช่น ผู้ที่จบจากมหาวิทยาลัยเล็กกว่า หรือผู้หญิง<br>
+          2. AI ไม่สามารถอ่าน "ศักยภาพ" จาก CV ได้ดีเท่ามนุษย์ที่มีประสบการณ์<br>
+          3. ผู้สมัครที่ดีมากแต่เขียน CV ไม่เก่งอาจถูก filter ออกโดยไม่ยุติธรรม<br><br>
+          <strong>คำตัดสินใจ:</strong> ใช้ AI เป็น "first filter" เท่านั้น ไม่ใช่ final decision HR ยังต้อง review ผลลัพธ์ บวกกับ audit ผลทุกไตรมาสว่า demographic ของคนที่ผ่านมีความหลากหลายเหมาะสมไหม
+        </div>
+      </details>
+    </div>
+
+    <!-- ข้อ 3 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-synth">Synthesis</span>
+        <span class="exercise-num">บทที่ 1 — ข้อ 3</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> นักข่าวเขียนหัวข่าวว่า <em>"AI ตัวใหม่ฉลาดกว่าคน — ทำข้อสอบ IQ ได้ 140 คะแนน!"</em> วิเคราะห์ว่าประโยคนี้ถูกหรือผิดอย่างไร มีอะไรที่ซ่อนอยู่ที่ผู้อ่านอาจเข้าใจผิด และควรเขียนให้แม่นยำกว่านี้อย่างไร</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>ปัญหาของประโยคนี้:</strong><br>
+          1. "ฉลาดกว่าคน" เป็นคำที่กำกวมมาก — ฉลาดกว่าในมิติไหน? IQ ทดสอบ ability บางอย่าง แต่ไม่ใช่ทั้งหมดของ intelligence<br>
+          2. AI ที่ทำ IQ test ได้ดีอาจถูก "train" ด้วย IQ test โดยเฉพาะ — นั่นไม่ใช่ general intelligence<br>
+          3. AI ที่ทำ IQ ได้ 140 อาจยังทำงานง่ายๆ ที่เด็ก 5 ขวบทำได้ไม่ได้ เช่น จับของ, เข้าใจ sarcasm, navigate บ้านใหม่<br><br>
+          <strong>เขียนแม่นยำกว่านี้:</strong> "AI ตัวใหม่ทำข้อสอบ IQ ได้คะแนนสูง แต่ยังขาด common sense และ physical reasoning ที่มนุษย์มี — นักวิจัยยังถกเถียงว่านี่คือ 'ความฉลาด' จริงหรือแค่ pattern matching ที่ซับซ้อน"
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       บทที่ 2 — LLM ทำงานอย่างไร
+  ════════════════════════════════ -->
+  <div class="exercise-section">
+    <div class="exercise-section-header">
+      <div class="exercise-section-icon">🧠</div>
+      <div>
+        <div class="exercise-section-title">บทที่ 2 — LLM ทำงานอย่างไร?</div>
+        <div class="exercise-section-sub">Token, Embedding, Context Window, Transformer</div>
+      </div>
+    </div>
+
+    <!-- ข้อ 4 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-recall">Recall</span>
+        <span class="exercise-num">บทที่ 2 — ข้อ 4</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> อธิบาย context window คืออะไร และมันส่งผลต่อการใช้ Claude ในชีวิตประจำวันของคุณอย่างไรบ้าง ให้ตัวอย่างสถานการณ์ที่คุณจะรู้สึกถึง limitation นี้จริงๆ</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>Context Window</strong> คือ "ความจำระยะสั้น" ของ AI — มันคือขนาดสูงสุดของข้อมูลที่ Claude สามารถ "มองเห็น" และ process ได้พร้อมกันในการสนทนาหนึ่งครั้ง วัดเป็น tokens<br><br>
+          <strong>ผลต่อการใช้งาน:</strong> ถ้าการสนทนายาวเกินขีดจำกัด AI จะ "ลืม" สิ่งที่คุยกันตอนต้น เหมือนกระดาษที่เต็มแล้วต้องลบบรรทัดแรกออกก่อนจะเขียนบรรทัดใหม่ได้<br><br>
+          <strong>ตัวอย่างที่รู้สึกได้:</strong> คุณ paste เอกสาร 50 หน้า แล้วถามคำถามเรื่องเนื้อหาในหน้าแรก Claude อาจตอบผิดหรือบอกว่าไม่มีข้อมูลนั้น เพราะ document ยาวเกินไปจนข้อมูลตอนต้นถูก "ดัน" ออกจาก context
+        </div>
+      </details>
+    </div>
+
+    <!-- ข้อ 5 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-app">Application</span>
+        <span class="exercise-num">บทที่ 2 — ข้อ 5</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> นักเรียนแลกเปลี่ยนจากเมียนมาถามว่า "ทำไม AI แปลภาษาเยอรมันได้ดีกว่าภาษาพม่ามาก ทั้งที่ภาษาพม่ามีคนใช้หลายล้านคน?" — อธิบายโดยใช้ความรู้เรื่อง tokenization และ training data ในแบบที่เขาเข้าใจได้</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          คุณภาพของ AI ไม่ได้ขึ้นกับว่า "มีคนพูดภาษานั้นกี่คน" แต่ขึ้นกับว่า "มีข้อมูลดิจิทัลของภาษานั้นมากแค่ไหนใน internet"<br><br>
+          <strong>เรื่อง Training Data:</strong> ภาษาเยอรมันมีวิกิพีเดียขนาดใหญ่, หนังสือดิจิทัลล้านเล่ม, บทความวิชาการ, เว็บไซต์ — ภาษาพม่าแม้จะมีผู้พูดหลายล้านคน แต่ content ออนไลน์น้อยกว่ามาก เพราะ internet penetration และการ digitize ต่ำกว่า<br><br>
+          <strong>เรื่อง Tokenization:</strong> ภาษาที่มี script ไม่ใช่ Latin (เช่น ภาษาพม่าที่ใช้อักษรพม่า) มักถูก tokenize แบบ byte-level ซึ่งใช้ token มากกว่า ทำให้ AI เห็น "chunks" ของภาษาน้อยกว่า และเรียนรู้ pattern ได้ยากกว่า<br><br>
+          <strong>สรุป:</strong> AI มี "digital divide" — ภาษาที่มีทรัพยากรดิจิทัลมากกว่าจะได้คุณภาพดีกว่าเสมอ
+        </div>
+      </details>
+    </div>
+
+    <!-- ข้อ 6 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-synth">Synthesis</span>
+        <span class="exercise-num">บทที่ 2 — ข้อ 6</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> ระบบ customer support chatbot ของบริษัทใช้ LLM ในการตอบลูกค้า พบปัญหาว่าเวลา conversation ยาวมากๆ (ลูกค้าคุยต่อเนื่อง 2-3 ชั่วโมงกับหลายปัญหา) chatbot บางครั้ง "ลืม" ว่าลูกค้าบอกชื่อตัวเองไปตอนต้น หรือ "ลืม" ว่า resolve ปัญหาแรกไปแล้ว วิเคราะห์ว่าเกิดจากอะไร และเสนอวิธีแก้ที่ feasible 2-3 วิธี</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>สาเหตุ:</strong> Context window มีจำกัด — เมื่อ conversation ยาวเกินขีดจำกัด (เช่น 200K tokens สำหรับ Claude) ข้อมูลตอนต้นจะถูก "ดัน" ออก ชื่อลูกค้าและปัญหาแรกที่ resolve แล้วอยู่ในส่วนต้นของ conversation จึงหายไป<br><br>
+          <strong>วิธีแก้ที่ feasible:</strong><br>
+          1. <strong>Conversation Summary:</strong> ทุกๆ N turns ให้ AI สร้าง "summary" ของ key facts ที่พูดมา แล้วใส่ summary นั้นไว้ต้น context ใหม่แทนที่จะเก็บ full history — ลดการใช้ token แต่รักษา context สำคัญไว้<br>
+          2. <strong>Structured Memory:</strong> Extract ข้อมูลสำคัญ (ชื่อลูกค้า, ปัญหาที่รับเรื่องไปแล้ว, สถานะการแก้) ใส่ database แยก และ inject เข้า system prompt ทุก turn — ไม่ขึ้นกับ context window<br>
+          3. <strong>Session Restart with Handoff:</strong> เมื่อ conversation ยาวเกิน threshold ให้บอกลูกค้าอย่างสุภาพและ start session ใหม่พร้อม pass summary ของปัญหาที่ค้างอยู่ไปให้
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       บทที่ 3 — Prompting
+  ════════════════════════════════ -->
+  <div class="exercise-section">
+    <div class="exercise-section-header">
+      <div class="exercise-section-icon">✍️</div>
+      <div>
+        <div class="exercise-section-title">บทที่ 3 — ศิลปะการ Prompt</div>
+        <div class="exercise-section-sub">RCTFC, Few-shot, Chain-of-thought, Iteration</div>
+      </div>
+    </div>
+
+    <!-- ข้อ 7 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-recall">Recall</span>
+        <span class="exercise-num">บทที่ 3 — ข้อ 7</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> เขียน Prompt ขอให้ Claude ช่วยเตรียมสคริปต์นำเสนองานต่อคณะกรรมการบริษัท 7 นาที เรื่อง "ผลการดำเนินงานประจำปี 2025 ของแผนก Marketing" โดยใช้ RCTFC framework ครบทุกส่วน (Role, Context, Task, Format, Constraint)</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>ตัวอย่าง Prompt ที่ดี:</strong><br><br>
+          <em>[Role]</em> คุณคือ speechwriter มืออาชีพที่เชี่ยวชาญการนำเสนอในระดับ C-suite<br><br>
+          <em>[Context]</em> ฉันเป็นหัวหน้า Marketing แผนกของบริษัท FMCG ขนาดกลาง กำลังจะนำเสนอผลงานปี 2025 ต่อ CEO และ Board 8 คน ซึ่งส่วนใหญ่ไม่ได้ติดตามงาน Marketing ในรายละเอียด ผลงานปีนี้โดยรวมดี แต่มี 1 ไตรมาสที่ต่ำกว่าเป้า<br><br>
+          <em>[Task]</em> ช่วยเขียนสคริปต์นำเสนอ 7 นาที ที่ทำให้ Board เข้าใจ highlight และบริบทของผลงาน รวมถึง plan ปี 2026<br><br>
+          <em>[Format]</em> แบ่งเป็น: Opening (30 วินาที) → Key Achievements (2 นาที) → Challenge & Recovery (1.5 นาที) → 2026 Plan (2 นาที) → Closing (1 นาที) พร้อมระบุ time marker แต่ละส่วน<br><br>
+          <em>[Constraint]</em> ใช้ภาษาที่ professional แต่ไม่เป็นทางการเกินไป หลีกเลี่ยง jargon Marketing ที่ Board อาจไม่รู้จัก และไม่ควรดูเหมือนแก้ตัวในส่วน challenge
+        </div>
+      </details>
+    </div>
+
+    <!-- ข้อ 8 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-app">Application</span>
+        <span class="exercise-num">บทที่ 3 — ข้อ 8</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> คุณ prompt ว่า "สรุปรายงานนี้เป็น 3 bullet points" แต่ Claude ตอบมายาว 8 bullet points และใช้ศัพท์เทคนิคที่คนทั่วไปไม่เข้าใจ เขียน Prompt ใหม่ที่แก้ปัญหาทั้งสองข้อนี้ให้ชัดเจน</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>Prompt ที่แก้ปัญหาทั้งสอง:</strong><br><br>
+          "สรุปรายงานนี้ให้ได้ <strong>ตรง 3 bullet points เท่านั้น</strong> — ห้ามมากกว่าหรือน้อยกว่า ถ้าต้องเลือก ให้เลือก 3 ข้อที่สำคัญที่สุด<br><br>
+          แต่ละ bullet point ต้องสั้นไม่เกิน 2 ประโยค และเขียนให้คนที่ไม่ได้อยู่ในวงการนี้เลยอ่านแล้วเข้าใจทันที — ห้ามใช้ jargon หรือคำย่อโดยไม่อธิบาย"<br><br>
+          <strong>ทำไม Prompt ใหม่ดีกว่า:</strong> กำหนด constraint เป็น "ตรง 3 ข้อเท่านั้น", กำหนดความยาวต่อ point, และระบุ target audience ที่ชัด (คนที่ไม่อยู่ในวงการ) แทนการปล่อยให้ AI ตีความเอง
+        </div>
+      </details>
+    </div>
+
+    <!-- ข้อ 9 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-synth">Synthesis</span>
+        <span class="exercise-num">บทที่ 3 — ข้อ 9</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> เปรียบเทียบว่าควรใช้ Few-shot prompting หรือ Chain-of-thought prompting สำหรับงานต่อไปนี้ พร้อมอธิบายเหตุผล: (a) แยกประเภทรีวิวสินค้าออนไลน์เป็น positive / negative / neutral (b) ตรวจสอบว่าข้อโต้แย้งทางตรรกะมีจุดอ่อนหรือ logical fallacy ตรงไหน</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>(a) แยกประเภทรีวิว → ใช้ Few-shot prompting</strong><br>
+          เหตุผล: งานนี้ต้องการ output ที่ consistent (แค่ 3 category) และมี pattern ที่ชัดเจน การให้ตัวอย่าง 3-5 ชุด (รีวิว → category) จะทำให้ AI เรียนรู้ว่า "tone" แบบไหนจัดเป็น positive/negative/neutral ตาม standard ของเรา ไม่ต้องการ reasoning ยาว<br><br>
+          <strong>(b) หา logical fallacy → ใช้ Chain-of-thought prompting</strong><br>
+          เหตุผล: งานนี้ต้องการ reasoning ที่ลึก ต้องวิเคราะห์ structure ของข้อโต้แย้ง ตรวจสอบ premise, ดู logical flow และ identify จุดที่ reasoning ขาดหาย การบอกให้ AI "คิดทีละขั้นตอน" จะทำให้มันตรวจสอบแต่ละส่วนอย่างเป็นระบบ และลด chance ที่จะ miss logical gap<br><br>
+          <strong>หลักการทั่วไป:</strong> Few-shot ดีกับงาน classification ที่มี clear pattern, Chain-of-thought ดีกับงานที่ต้องการ reasoning หลายขั้นตอน
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       บทที่ 4 — Claude Superpowers
+  ════════════════════════════════ -->
+  <div class="exercise-section">
+    <div class="exercise-section-header">
+      <div class="exercise-section-icon">⚡</div>
+      <div>
+        <div class="exercise-section-title">บทที่ 4 — Claude Superpowers</div>
+        <div class="exercise-section-sub">Priority Order, Skills System, System Prompt</div>
+      </div>
+    </div>
+
+    <!-- ข้อ 10 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-recall">Recall</span>
+        <span class="exercise-num">บทที่ 4 — ข้อ 10</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> อธิบาย priority order ของ Claude Superpowers และยกตัวอย่างกรณีที่แต่ละ level "ชนะ" ในการกำหนด behavior ของ Claude ในการใช้งานจริง</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>Priority Order (จากสูงสุดถึงต่ำสุด):</strong><br><br>
+          1. <strong>User (สูงสุด)</strong> — สิ่งที่คุณพิมพ์ใน chat ชนะเสมอ<br>
+          <em>ตัวอย่างที่ชนะ:</em> Skill บอกว่า "ตอบเป็นภาษาอังกฤษ" แต่คุณพิมพ์ว่า "ตอบภาษาไทยด้วย" — Claude จะตอบภาษาไทย<br><br>
+          2. <strong>Skill (กลาง)</strong> — configuration ที่ตั้งไว้สำหรับ workflow นั้นๆ<br>
+          <em>ตัวอย่างที่ชนะ:</em> Default behavior ของ Claude คือตอบทุกภาษา แต่ Skill กำหนดว่า "ตอบแค่เรื่อง HR" — Claude จะ focus เฉพาะ HR และปฏิเสธคำถามอื่นตาม Skill นั้น<br><br>
+          3. <strong>Default System Prompt (ต่ำสุด)</strong> — behavior พื้นฐานของ Claude<br>
+          <em>ตัวอย่างที่ชนะ:</em> ถ้าไม่มี User หรือ Skill override ใดๆ Claude จะทำงานตาม default: helpful, harmless, honest
+        </div>
+      </details>
+    </div>
+
+    <!-- ข้อ 11 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-app">Application</span>
+        <span class="exercise-num">บทที่ 4 — ข้อ 11</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> ผู้จัดการทีม developer 15 คนต้องการให้ทุกคนใช้ Claude ในการ code review ด้วยมาตรฐานเดียวกัน — เช่น ตรวจสอบ security vulnerabilities, ใช้ภาษาไทยในการอธิบาย, และ focus ที่ production-ready code เท่านั้น ออกแบบว่าจะใช้ Skills System จัดการเรื่องนี้อย่างไร</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>การออกแบบ Skill สำหรับ Code Review:</strong><br><br>
+          สร้าง Skill ชื่อ "Code Review — Security Focus" ที่ประกอบด้วย:<br><br>
+          <em>System Prompt ของ Skill:</em><br>
+          - Role: "คุณคือ Senior Security Engineer ที่ review code สำหรับ production"<br>
+          - Standard: ตรวจสอบ OWASP Top 10, SQL injection, authentication issues, data validation<br>
+          - Language: "อธิบายทุกอย่างเป็นภาษาไทย แม้ว่า code จะเป็นภาษาอังกฤษ"<br>
+          - Focus: "concentrate บน production-ready issues ไม่ใช่ style preferences"<br>
+          - Format: ระบุ Severity (Critical/High/Medium/Low) สำหรับทุกประเด็น<br><br>
+          <strong>ประโยชน์:</strong> developer ทุกคน activate Skill เดียวกัน → ได้ standard เดียวกัน → ลด inconsistency จากการ prompt ต่างกันไปเอง → ง่ายต่อการ update standard ใหม่ (แก้ที่ Skill เดียว)
+        </div>
+      </details>
+    </div>
+
+    <!-- ข้อ 12 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-synth">Synthesis</span>
+        <span class="exercise-num">บทที่ 4 — ข้อ 12</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> เปรียบเทียบข้อดีข้อเสียระหว่าง (a) เขียน Prompt ยาวๆ ที่มี instruction ครบในทุกครั้งที่ใช้ กับ (b) สร้าง Skill ที่ตั้งค่าไว้แล้วแค่ activate — ในสถานการณ์ใดแต่ละวิธีดีกว่า?</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>(a) Prompt ยาวๆ ทุกครั้ง</strong><br>
+          ข้อดี: ยืดหยุ่นสูง ปรับได้ทันทีสำหรับสถานการณ์เฉพาะ ไม่ต้องตั้งค่าล่วงหน้า<br>
+          ข้อเสีย: เสียเวลาเขียนทุกครั้ง, ผิดพลาดได้ถ้าลืมใส่ instruction บางส่วน, ไม่ consistent ระหว่างคนในทีม<br>
+          <em>เหมาะกับ:</em> งาน one-off ที่ต้องการ customization สูง, การทดลอง idea ใหม่, สถานการณ์ที่แต่ละครั้งแตกต่างกันมาก<br><br>
+          <strong>(b) Skill</strong><br>
+          ข้อดี: Consistent ทุกครั้ง, ประหยัดเวลา, ง่ายต่อการ share ทั้งทีม, อัปเดต standard ที่จุดเดียวได้<br>
+          ข้อเสีย: ต้องใช้เวลาตั้งค่าล่วงหน้า, ยืดหยุ่นน้อยกว่าสำหรับ edge cases, ต้องมีคนดูแล maintain<br>
+          <em>เหมาะกับ:</em> งาน recurring ที่ทำบ่อย, workflow ที่ทีมทุกคนต้องใช้เหมือนกัน, มาตรฐานที่ต้องการ enforce
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════
+       บทที่ 5 — AI Ethics
+  ════════════════════════════════ -->
+  <div class="exercise-section">
+    <div class="exercise-section-header">
+      <div class="exercise-section-icon">🛡️</div>
+      <div>
+        <div class="exercise-section-title">บทที่ 5 — ใช้ AI อย่างปลอดภัย</div>
+        <div class="exercise-section-sub">Hallucination, Bias, Privacy, Human Oversight</div>
+      </div>
+    </div>
+
+    <!-- ข้อ 13 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-recall">Recall</span>
+        <span class="exercise-num">บทที่ 5 — ข้อ 13</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> อธิบายความแตกต่างระหว่าง hallucination กับ bias ใน AI — ทั้งสองมีที่มาต่างกันอย่างไร และส่งผลต่อการใช้ AI แตกต่างกันอย่างไรในทางปฏิบัติ</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>Hallucination</strong> คือการที่ AI สร้างข้อมูลที่ไม่มีอยู่จริง — เกิดจากกระบวนการ generation ที่ optimize สำหรับ "plausible" ไม่ใช่ "true" มันเป็น probabilistic error ที่เกิดแบบ random ไม่มี pattern ชัดเจน<br>
+          <em>ผลในทางปฏิบัติ:</em> ต้อง verify ทุก specific claim (ตัวเลข, citation, fact) ก่อนใช้<br><br>
+          <strong>Bias</strong> คือความลำเอียงที่ AI เรียนมาจาก training data ที่มีอยู่แล้ว — เกิดจากการที่ข้อมูลใน internet reflect อคติของสังคมมนุษย์ มันเป็น systematic error ที่มี pattern สม่ำเสมอ<br>
+          <em>ผลในทางปฏิบัติ:</em> ต้อง audit ผลลัพธ์เป็นกลุ่ม ดูว่ามี systematic skew ต่อ demographic ใดไหม<br><br>
+          <strong>สรุปความต่าง:</strong> Hallucination = AI แต่งข้อมูลขึ้นมาเอง (random), Bias = AI มีความลำเอียงที่ consistent จาก pattern ใน data
+        </div>
+      </details>
+    </div>
+
+    <!-- ข้อ 14 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-app">Application</span>
+        <span class="exercise-num">บทที่ 5 — ข้อ 14</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> หมอที่โรงพยาบาลต้องการใช้ Claude ช่วย draft รายงานสรุปอาการผู้ป่วยเพื่อส่งต่อระหว่างแผนก โดยวางแผนจะ paste ชื่อ-นามสกุลผู้ป่วย, เลขประกันสังคม, และผลตรวจโรคโดยตรงใน prompt — อธิบายความเสี่ยงที่เกิดขึ้น และเสนอ approach ที่ดีกว่า</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>ความเสี่ยงที่เกิดขึ้น:</strong><br>
+          1. <strong>PDPA / HIPAA violation:</strong> ข้อมูลสุขภาพเป็น sensitive personal data ที่มีกฎหมายคุ้มครองเฉพาะ การส่งไปยัง cloud AI provider โดยไม่มีสัญญา data processing ที่ถูกต้องอาจผิดกฎหมาย<br>
+          2. <strong>Data retention:</strong> Provider บางรายเก็บ conversation history ซึ่งอาจรวมถึงข้อมูลผู้ป่วยจริงๆ<br>
+          3. <strong>Training data risk:</strong> ตามเงื่อนไข default บางอย่าง ข้อมูลอาจถูกนำไป train model ต่อ<br><br>
+          <strong>Approach ที่ดีกว่า:</strong><br>
+          1. ใช้ข้อมูล anonymized: แทน "นาย สมชาย อายุ 45 ปี" → "[ผู้ป่วยชาย อายุ 45 ปี]" แทน diagnosis ใส่ข้อมูล clinical โดยไม่มีชื่อ<br>
+          2. ถ้าต้องใช้ข้อมูลจริง: ใช้ enterprise plan ที่มี BAA (Business Associate Agreement) หรือ on-premise deployment ที่ข้อมูลไม่ออกจากโรงพยาบาล<br>
+          3. ให้ Claude ช่วย draft template และ structure ของรายงาน แล้วหมอกรอกข้อมูลจริงเอง
+        </div>
+      </details>
+    </div>
+
+    <!-- ข้อ 15 -->
+    <div class="exercise-item fade-up">
+      <div class="exercise-header">
+        <span class="level-label level-synth">Synthesis</span>
+        <span class="exercise-num">บทที่ 5 — ข้อ 15</span>
+      </div>
+      <p class="exercise-q"><strong>คำถาม:</strong> บริษัท Fintech กำลังจะ deploy AI system ที่ช่วย "แนะนำ" การอนุมัติหรือปฏิเสธสินเชื่อส่วนบุคคลสำหรับผู้สมัคร 10,000 คน/เดือน ระบุความเสี่ยงที่สำคัญอย่างน้อย 3 ด้าน และเสนอ safeguard ที่เฉพาะเจาะจงสำหรับแต่ละด้าน</p>
+      <details class="exercise-answer">
+        <summary>ดูเฉลย</summary>
+        <div class="answer-content">
+          <strong>ความเสี่ยงที่ 1: Discriminatory Bias</strong><br>
+          AI อาจเรียนจาก historical data ที่มี systemic bias — เช่น กลุ่มรายได้น้อยที่เคยถูกปฏิเสธสินเชื่อเยอะๆ อาจถูก AI ปฏิเสธต่อเนื่อง แม้จะมี creditworthiness จริง<br>
+          <em>Safeguard:</em> Fairness audit รายไตรมาส วัด approval rate แยกตาม demographic (เพศ, อายุ, ภูมิภาค) และมี threshold ที่ถ้า disparity เกินระดับหนึ่งต้อง trigger review โดยมนุษย์<br><br>
+          <strong>ความเสี่ยงที่ 2: Hallucination / Error ในการประเมิน</strong><br>
+          AI อาจประเมิน creditworthiness ผิดพลาดในกรณีที่ข้อมูลผู้สมัครไม่ตรง pattern ที่เคยเรียน<br>
+          <em>Safeguard:</em> AI เป็นเพียง "recommendation" ไม่ใช่ final decision สำหรับกรณีที่ AI confidence ต่ำกว่า threshold หรือ borderline cases ทั้งหมดต้องผ่าน human credit officer<br><br>
+          <strong>ความเสี่ยงที่ 3: Accountability Gap</strong><br>
+          ถ้าผู้สมัครถูกปฏิเสธและอยากอุทธรณ์ ต้องการคำอธิบายว่าถูกปฏิเสธเพราะอะไร แต่ AI อาจไม่สามารถอธิบาย reasoning ที่ชัดเจนได้ (black box)<br>
+          <em>Safeguard:</em> ใช้ explainable AI model ที่ให้ top factors ที่ใช้ตัดสิน, บันทึก audit trail ทุกการตัดสินใจ, และมี human officer ที่รับผิดชอบและอธิบายได้เสมอ
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-bar fade-up">
+    <div class="progress-fill"></div>
+  </div>
+
+  <!-- Nav -->
+  <div style="text-align:center; margin-top:20px;">
+    <a href="glossary.html" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;box-shadow:0 4px 16px rgba(99,102,241,.4);">
+      📖 ดู Glossary คำศัพท์ →
+    </a>
+  </div>
+
+</div><!-- content -->
+</div><!-- main -->
+
+<script src="anim.js"></script>
+</body>
+</html>

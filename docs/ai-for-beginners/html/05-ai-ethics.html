@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 5 — AI อย่างปลอดภัย | เข้าใจ AI & Claude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">🤖</div>
+    <div>
+      <div class="sidebar-title">เข้าใจ AI & Claude</div>
+      <div class="sidebar-subtitle">สำหรับผู้เริ่มต้น</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">เริ่มต้น</div>
+    <a href="index.html">🏠 หน้าหลัก</a>
+    <div class="nav-section">เนื้อหา</div>
+    <a href="01-what-is-ai.html">🤖 บทที่ 1 — AI คืออะไร?</a>
+    <a href="02-how-llm-works.html">🧠 บทที่ 2 — LLM ทำงานอย่างไร?</a>
+    <a href="03-prompting.html">✍️ บทที่ 3 — ศิลปะการ Prompt</a>
+    <a href="04-claude-superpowers.html">⚡ บทที่ 4 — Claude Superpowers</a>
+    <a href="05-ai-ethics.html" class="active">🛡️ บทที่ 5 — AI อย่างปลอดภัย</a>
+    <div class="nav-section">ฝึกหัด</div>
+    <a href="exercises.html">✏️ แบบฝึกหัด</a>
+    <a href="glossary.html">📖 Glossary</a>
+  </nav>
+  <div class="sidebar-footer">เวอร์ชัน 1.0 · 2026-05-28</div>
+</aside>
+
+<div class="main">
+<div class="content">
+
+  <!-- CHAPTER HEADER -->
+  <div class="ch-label">🛡️ บทที่ 5</div>
+  <h1>ใช้ AI อย่างปลอดภัย<br><span style="font-size:1.3rem; font-weight:600; color:#6366f1;">Hallucination, Bias, Privacy และขีดจำกัดของ AI</span></h1>
+
+  <div class="badges fade-up">
+    <span class="badge badge-green">⏱ 25 นาที</span>
+    <span class="badge badge-indigo">🎯 4 concepts</span>
+    <span class="badge badge-amber">🧩 1 Quiz</span>
+    <span class="badge badge-slate">📖 บทที่ 5 / 5</span>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 8: Pre-chapter Retrieval (จากบทที่ 4)
+  ═════════════════════════════════════════ -->
+  <div class="pre-chapter fade-up">
+    <h3>🔄 ก่อนอ่านบทนี้ — ทบทวนจากบทที่ 4</h3>
+    <p>ลองตอบก่อนดูเฉลย:</p>
+    <p><strong>"ถ้า user บอกให้ทำอะไรบางอย่าง แต่ Skill บอกว่าห้ามทำ — ใครชนะ?"</strong></p>
+    <details>
+      <summary>ดูเฉลย</summary>
+      <div class="answer">User ชนะเสมอ — priority order คือ User &gt; Skill &gt; Default system prompt การออกแบบนี้ตั้งใจเพื่อให้ user มีอำนาจควบคุมสูงสุดเสมอ</div>
+    </details>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 1: วัตถุประสงค์
+  ═════════════════════════════════════════ -->
+  <div class="objective-box fade-up">
+    <h3>🎯 อ่านจบบทนี้แล้ว คุณจะทำได้</h3>
+    <ul>
+      <li>อธิบาย hallucination คืออะไร และทำไมมันอันตรายกว่าแค่ "ข้อมูลเก่า"</li>
+      <li>ระบุ bias ใน AI ได้และเข้าใจว่ามาจากไหน</li>
+      <li>รู้ว่าข้อมูลประเภทใด <em>ห้าม</em> ใส่ใน prompt เด็ดขาด</li>
+      <li>แยกแยะได้ว่าสถานการณ์ไหนเหมาะสำหรับ AI และสถานการณ์ไหนต้องมี human oversight</li>
+      <li>มี workflow สำหรับ verify ข้อมูลที่ได้จาก AI ก่อนนำไปใช้จริง</li>
+    </ul>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 2: ทำไมต้องรู้?
+  ═════════════════════════════════════════ -->
+  <h2>🤔 ทำไมต้องรู้เรื่องนี้?</h2>
+
+  <div class="why-box fade-up">
+    <div class="why-label">💡 Why ก่อน What</div>
+    <p>ผ่านมา 4 บทแล้ว คุณรู้ว่า AI คืออะไร ทำงานอย่างไร Prompt อย่างไร และ Claude มีระบบอะไรบ้าง — แต่ยังมีสิ่งหนึ่งที่ขาดไป: รู้ว่าเมื่อไหร่ <em>ไม่ควร</em> เชื่อ AI</p>
+    <p>มีกรณีจริงที่ทนายความในสหรัฐฯ ส่ง brief ขึ้นศาลโดยอ้างคดีที่ ChatGPT แต่งขึ้น — คดีเหล่านั้นไม่มีอยู่จริง เขาถูกปรับและขอโทษต่อศาล นั่นคือ hallucination ที่ทำให้อาชีพเสียหาย</p>
+    <p>บทสุดท้ายนี้จึงสำคัญที่สุด เพราะมันคือ "ความปลอดภัยของคุณในฐานะผู้ใช้ AI"</p>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 3: Analogy
+  ═════════════════════════════════════════ -->
+  <h2>💡 Analogy: AI เหมือน Google Maps</h2>
+
+  <div class="analogy-box fade-up">
+    <div class="analogy-label">🎭 อุปมา</div>
+    <p>ใช้ AI เหมือนใช้ <strong>Google Maps</strong> — ช่วยนำทางได้ดีมาก แต่ต้องดูถนนจริงด้วย เพราะ Maps อาจล้าหลัง ผิดพลาด หรือไม่รู้เรื่องที่เกิดใหม่</p>
+    <p>Maps บอกว่า "เลี้ยวขวาที่นี่" คุณก็เลี้ยว — แต่ถ้าหน้าคุณคือทะเลสาบ คุณต้องหยุดเองด้วย AI ก็เช่นกัน: มันให้ทิศทางที่ดีมาก แต่คุณต้องเป็นคนตัดสินใจขั้นสุดท้ายเสมอ</p>
+
+    <div class="breakdown-box">
+      <strong>⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า...</strong>
+      <ul style="margin-top:10px; margin-bottom:0;">
+        <li><strong>AI ผิดน้อยมากเหมือน Maps ที่มักถูก</strong> — จริงๆ แล้ว AI ผิดได้บ่อยกว่ามาก และที่น่ากลัวกว่าคือผิดแบบ confident (บอกผิดด้วยน้ำเสียงมั่นใจ 100%) — Maps ไม่ค่อยแต่งข้อมูลขึ้นมาเอง แต่ AI ทำสิ่งนั้นได้</li>
+        <li><strong>AI แค่ "ข้อมูลเก่า" เหมือน Maps ที่ไม่ update</strong> — จริงๆ ปัญหา hallucination ลึกกว่านั้น: AI สร้างข้อมูลใหม่ที่ไม่มีอยู่จริงเลยตั้งแต่ต้น ไม่ใช่แค่ให้ข้อมูลเก่าที่ถูกอยู่แล้ว</li>
+        <li><strong>แค่ใช้ AI อีกตัว verify ก็พอ</strong> — Maps อีกตัวอาจถูกต้องกว่า แต่ AI อีกตัวอาจ hallucinate เหมือนกัน ต้องใช้ primary source เสมอ</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 4: เนื้อหาหลัก
+  ═════════════════════════════════════════ -->
+  <h2>📚 เนื้อหาหลัก — 4 เรื่องที่ต้องรู้</h2>
+
+  <!-- ─── 4.1 Hallucination ─── -->
+  <h3>🔴 1. Hallucination (ภาษาทางการ: Confabulation)</h3>
+
+  <div class="callout callout-danger fade-up">
+    <div class="callout-icon">⚡</div>
+    <div><strong>คำนิยาม:</strong> AI สร้างข้อมูลที่ "ฟังดูน่าเชื่อ" แต่ไม่มีอยู่จริง — และมักบอกด้วยน้ำเสียงมั่นใจเหมือนเป็นความจริงที่แน่นอน</div>
+  </div>
+
+  <p>Hallucination เกิดจากกระบวนการ generation ของ LLM ที่ optimize สำหรับสิ่งที่ "ฟังดูสมจริง" (plausible) ไม่ใช่สิ่งที่ "เป็นความจริง" (true) — มันเป็นความแตกต่างที่สำคัญมาก</p>
+
+  <p>ลองนึกภาพว่าคุณถามเพื่อนซึ่งเป็น "นักพูดเก่ง" — เขาจะตอบคุณด้วยความมั่นใจเสมอ แม้ว่าจะไม่รู้คำตอบ เพราะเขา optimize สำหรับ "ฟังดูน่าเชื่อ" ในสถานการณ์นั้น AI ทำแบบเดียวกัน</p>
+
+  <div class="card fade-up">
+    <div class="card-title">🔬 ตัวอย่าง Hallucination ที่พบบ่อย</div>
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th>ประเภท</th><th>ตัวอย่าง</th><th>ทำไมน่ากลัว</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Citation ปลอม</strong></td>
+          <td>AI cite งานวิจัย "Smith et al. (2021), Harvard" ที่ไม่มีอยู่จริง</td>
+          <td>Title และ author ดูสมจริงมาก ยากตรวจจับ</td>
+        </tr>
+        <tr>
+          <td><strong>ตัวเลขที่แต่งขึ้น</strong></td>
+          <td>AI บอก "GDP ของประเทศ X ปี 2024 คือ 1.23 ล้านล้าน" แต่ตัวเลขผิด</td>
+          <td>ฟังดูเฉพาะเจาะจง จึงน่าเชื่อถือ</td>
+        </tr>
+        <tr>
+          <td><strong>ชีวประวัติเพี้ยน</strong></td>
+          <td>AI บอกว่า "นาย ก. เป็น CEO ของบริษัท B ตั้งแต่ปี 2019" ซึ่งผิด</td>
+          <td>ข้อมูลส่วนตัวของคนจริงๆ ที่ผิดพลาด</td>
+        </tr>
+        <tr>
+          <td><strong>กฎหมาย/นโยบายที่ไม่มีจริง</strong></td>
+          <td>AI อธิบายมาตราในกฎหมายที่ไม่มีอยู่ในฉบับจริง</td>
+          <td>อาจทำให้ตัดสินใจทางกฎหมายผิดพลาด</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info fade-up">
+    <div class="callout-icon">💡</div>
+    <div><strong>วิธีรับมือ Hallucination:</strong> verify ข้อมูลสำคัญเสมอ โดยเฉพาะ facts, numbers, citations — อย่า Google จาก title ที่ AI ให้ แต่ค้นหาจาก primary database (เช่น Google Scholar, PubMed, เว็บทางการ)</div>
+  </div>
+
+  <!-- ─── 4.2 Bias ─── -->
+  <h3>🟡 2. Bias ใน Training Data</h3>
+
+  <p>AI เรียนรู้จาก internet → internet มี bias → AI มี bias ด้วย นี่ไม่ใช่ bug แต่เป็น feature ที่หลีกเลี่ยงไม่ได้ของการเรียนรู้จากข้อมูลมนุษย์</p>
+
+  <div class="card-grid fade-up">
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <div class="card-title">Representation Bias</div>
+      <div class="card-desc">ภาษาที่มีข้อมูลน้อยใน internet (เช่น ภาษาลาว, ภาษาแอฟริกัน) ได้คุณภาพแย่กว่าภาษาอังกฤษอย่างเห็นได้ชัด เพราะ AI เรียนจากข้อมูลที่มี</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">👤</div>
+      <div class="card-title">Stereotype Bias</div>
+      <div class="card-desc">AI อาจมี assumption ว่า "นักวิทยาศาสตร์" เป็นผู้ชาย หรือ "พยาบาล" เป็นผู้หญิง เพราะข้อมูลที่ train มามี pattern นั้นอยู่มาก</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🗺️</div>
+      <div class="card-title">Cultural Bias</div>
+      <div class="card-desc">ข้อมูล internet ส่วนใหญ่เป็น Western-centric คำแนะนำ AI บางอย่างอาจไม่เหมาะกับบริบทไทยหรือเอเชีย</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📰</div>
+      <div class="card-title">Selection Bias</div>
+      <div class="card-desc">ข้อมูลที่ถูก post online ไม่ได้ represent ทุกคนอย่างเท่าเทียม คนที่มี internet access และเวลาเขียน content มากกว่าจะ dominate training data</div>
+    </div>
+  </div>
+
+  <div class="callout callout-warn fade-up">
+    <div class="callout-icon">⚠️</div>
+    <div><strong>สิ่งสำคัญ:</strong> อย่า assume ว่า AI เป็นกลาง 100% ทุกครั้งที่ได้คำแนะนำ ให้ถามตัวเองว่า "มี bias อะไรซ่อนอยู่ในคำตอบนี้บ้าง?"</div>
+  </div>
+
+  <!-- ─── 4.3 Privacy ─── -->
+  <h3>🔵 3. Privacy — ข้อมูลที่ห้ามใส่ใน Prompt</h3>
+
+  <p>นี่คือเรื่องที่คนมักมองข้าม แต่อาจมีผลกระทบรุนแรงที่สุด</p>
+
+  <div class="card fade-up">
+    <div class="card-title">🚫 ข้อมูลที่ห้ามใส่ใน AI Prompt เด็ดขาด</div>
+    <table style="margin-top:14px;">
+      <thead>
+        <tr><th>ประเภทข้อมูล</th><th>ตัวอย่าง</th><th>ความเสี่ยง</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>ข้อมูลระบุตัวตน</strong></td>
+          <td>เลขบัตรประชาชน, passport, เลขประกันสังคม</td>
+          <td>Identity theft</td>
+        </tr>
+        <tr>
+          <td><strong>รหัสผ่าน / credentials</strong></td>
+          <td>password, API key, database connection string</td>
+          <td>Account compromise</td>
+        </tr>
+        <tr>
+          <td><strong>ข้อมูลทางการแพทย์</strong></td>
+          <td>ผลตรวจโรค, ประวัติการรักษา, ชื่อ-นามสกุลคนไข้</td>
+          <td>PDPA violation, privacy breach</td>
+        </tr>
+        <tr>
+          <td><strong>ข้อมูลลับบริษัท</strong></td>
+          <td>source code ที่เป็นความลับ, strategy ภายใน, ข้อมูลลูกค้า</td>
+          <td>Data leak, NDA breach</td>
+        </tr>
+        <tr>
+          <td><strong>ข้อมูลการเงิน</strong></td>
+          <td>เลขบัตรเครดิต, รหัส OTP, ข้อมูล banking</td>
+          <td>Financial fraud</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info fade-up">
+    <div class="callout-icon">💡</div>
+    <div><strong>หลักการง่ายๆ:</strong> ใช้ข้อมูล anonymized แทน real data เสมอ — แทนที่จะใส่ "นาย สมชาย เลขบัตร 1-1234-56789-01-2" ให้ใช้ "[ชื่อลูกค้า]" และ "[เลขบัตร]" แทน ผลลัพธ์ที่ได้จะดีเท่ากัน แต่ปลอดภัยกว่ามาก</div>
+  </div>
+
+  <!-- ─── 4.4 เมื่อไรใช้/ไม่ควรใช้ ─── -->
+  <h3>🟢 4. เมื่อไรใช้ / ไม่ควรใช้ AI เพียงอย่างเดียว</h3>
+
+  <p>AI ไม่ใช่เครื่องมือที่เหมาะกับทุกงาน การรู้ว่า "เมื่อไหร่ใช้ได้" และ "เมื่อไหร่ต้องระวัง" คือทักษะสำคัญ</p>
+
+  <div class="card-grid fade-up">
+    <div class="card" style="border-left: 4px solid #10b981;">
+      <div class="card-title" style="color:#065f46;">✅ ใช้ได้ดี</div>
+      <ul style="font-size:14px; color:var(--text-muted);">
+        <li>Brainstorming ไอเดียใหม่ๆ</li>
+        <li>Draft writing และแก้ไขต้นฉบับ</li>
+        <li>Code assistance และ debugging</li>
+        <li>Summarizing เอกสารยาวๆ</li>
+        <li>อธิบาย concept ซับซ้อนให้เข้าใจง่าย</li>
+        <li>แปลภาษา (ควร review อีกครั้ง)</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left: 4px solid #f59e0b;">
+      <div class="card-title" style="color:#92400e;">⚠️ ระวัง — ต้อง verify</div>
+      <ul style="font-size:14px; color:var(--text-muted);">
+        <li>ข้อมูลทางการแพทย์ (ยืนยันกับหมอ)</li>
+        <li>คำแนะนำทางกฎหมาย (ยืนยันกับทนาย)</li>
+        <li>ข้อมูลทางการเงิน (ยืนยันกับแหล่งทางการ)</li>
+        <li>Fact-checking เรื่องสำคัญ</li>
+        <li>ตัวเลขและสถิติ</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left: 4px solid #ef4444;">
+      <div class="card-title" style="color:#991b1b;">❌ ไม่ควรใช้ AI เพียงอย่างเดียว</div>
+      <ul style="font-size:14px; color:var(--text-muted);">
+        <li>การวินิจฉัยโรคและรักษา</li>
+        <li>การตัดสินคดีความ</li>
+        <li>การตัดสินใจปล่อยกู้หรือ deny คน</li>
+        <li>การตัดสินใจที่กระทบชีวิตคน</li>
+        <li>งานที่ต้องการ accountability สูง</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout callout-warn fade-up">
+    <div class="callout-icon">🧭</div>
+    <div><strong>หลักคิด:</strong> AI เป็น assistant ไม่ใช่ decision maker — ยิ่งผลกระทบของการตัดสินใจสูง ยิ่งต้องมี human oversight มากขึ้น AI ช่วยให้คุณตัดสินใจได้ดีขึ้น ไม่ใช่ตัดสินใจแทนคุณ</div>
+  </div>
+
+  <!-- QUIZ -->
+  <div data-anim="quiz"
+    data-q="AI บอกว่า 'งานวิจัยจาก Harvard (2023) พิสูจน์ว่า X' — คุณควรทำอะไร?"
+    data-options='[
+      {"text":"เชื่อได้เลย เพราะ Harvard น่าเชื่อถือมาก","correct":false,"feedback":"อันตราย! AI อาจ hallucinate ชื่อ Harvard และปีที่วิจัย ทั้งที่งานวิจัยนั้นไม่มีอยู่จริง สถาบันที่น่าเชื่อถือไม่ได้รับประกันความถูกต้องของสิ่งที่ AI อ้างถึง"},
+      {"text":"ค้นหา paper นั้นโดยตรงบน Google Scholar หรือ PubMed ก่อน","correct":true,"feedback":"ถูกต้อง! เสมอต้อง verify citations โดยเฉพาะ academic papers ที่ AI cite มา เพราะ hallucination ที่พบบ่อยที่สุดคือการ cite งานวิจัยที่ไม่มีจริง ค้นหาจาก DOI หรือชื่อ paper โดยตรงใน database ทางการ"},
+      {"text":"ถาม AI อีกครั้งว่า paper นี้มีจริงไหม","correct":false,"feedback":"AI อาจยืนยันข้อมูลที่ผิดซ้ำอีกรอบ เพราะมัน generate สิ่งที่ฟังดูสมจริงอยู่เสมอ ไม่ว่าจะถามกี่รอบ"},
+      {"text":"ใช้ AI อีกตัวหนึ่ง verify แทน","correct":false,"feedback":"AI ตัวอื่นก็อาจ hallucinate เช่นเดียวกัน เพราะกระบวนการ generation คล้ายกัน ต้องใช้แหล่งข้อมูลแบบ primary source ที่เชื่อถือได้เท่านั้น"}
+    ]'>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 5: ตัวอย่าง 3 ระดับ
+  ═════════════════════════════════════════ -->
+  <h2>🎓 ตัวอย่าง 3 ระดับ</h2>
+
+  <div class="fade-up">
+    <div class="example-tabs">
+      <button class="example-tab">🟢 Beginner</button>
+      <button class="example-tab">🟡 Intermediate</button>
+      <button class="example-tab">🟣 Advanced</button>
+    </div>
+
+    <div class="example-panel">
+      <div class="level-label level-beginner">Beginner — ชีวิตประจำวัน</div>
+      <h3>นักศึกษาค้นคว้าโดยใช้ AI แล้วส่งรายงาน</h3>
+      <p>มินต์เป็นนักศึกษาปริญญาตรีกำลังเขียนรายงานเรื่อง "ผลกระทบของ Social Media ต่อสุขภาพจิตวัยรุ่น" เธอถาม Claude: "ขอสถิติเกี่ยวกับ depression ในวัยรุ่นที่เกี่ยวข้องกับ social media"</p>
+      <p>Claude ตอบมาพร้อมตัวเลขและอ้างงานวิจัยหลายชิ้น มินต์ copy ตัวเลขเหล่านั้นใส่รายงานทันที</p>
+      <div class="callout callout-danger">
+        <div class="callout-icon">❌</div>
+        <div><strong>ปัญหา:</strong> ตัวเลขที่ Claude ให้อาจถูก อาจผิด หรืออาจเป็นการสังเคราะห์จากหลาย source ที่ทำให้ตัวเลข "ดูถูก" แต่ไม่ใช่ quote ที่แม่นยำ</div>
+      </div>
+      <p><strong>วิธีถูกต้อง:</strong></p>
+      <ol>
+        <li>ให้ Claude สรุป <em>ทิศทาง</em> ของงานวิจัย (ไม่ใช่ตัวเลขเป๊ะ) เช่น "งานวิจัยส่วนใหญ่พบว่า..."</li>
+        <li>ค้นหา paper จาก Google Scholar ด้วยคำที่ได้จาก Claude</li>
+        <li>อ่าน paper จริงและ cite ตัวเลขจาก original source</li>
+      </ol>
+      <div class="callout callout-info">
+        <div class="callout-icon">💡</div>
+        <div>AI เป็น "นักสืบ" ที่ดี — ช่วยให้รู้ว่าควรค้นหาอะไรและที่ไหน แต่ไม่ควรเป็น "แหล่งข้อมูล" โดยตรง</div>
+      </div>
+    </div>
+
+    <div class="example-panel">
+      <div class="level-label level-intermediate">Intermediate — สถานการณ์จริง</div>
+      <h3>HR Manager ใช้ AI สร้างระบบ screening CV อัตโนมัติ</h3>
+      <p>บริษัทขนาดกลางแห่งหนึ่งให้ Claude screen CV ผู้สมัครงาน โดย HR prompt ว่า "วิเคราะห์ CV นี้และให้คะแนน 1-10 ว่าเหมาะสมกับตำแหน่ง Software Engineer ไหม"</p>
+      <p>หลังใช้ไปสักพัก พบว่าผู้สมัครที่ผ่านส่วนใหญ่เป็นผู้ชายที่จบจากมหาวิทยาลัยชั้นนำ ในขณะที่ผู้หญิงที่มีประสบการณ์ดีกว่าแต่จบจากมหาวิทยาลัยในต่างจังหวัดมักได้คะแนนต่ำ</p>
+      <div class="callout callout-warn">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Bias ที่เกิดขึ้น:</strong> AI อาจ encode bias จาก training data ที่มีข้อมูล "Software Engineer ที่ประสบความสำเร็จ" ส่วนใหญ่เป็นผู้ชายจากมหาวิทยาลัยดัง</div>
+      </div>
+      <p><strong>Safeguards ที่ควรมี:</strong></p>
+      <ul>
+        <li>Audit ผลลัพธ์สม่ำเสมอ: ดูว่า demographic ของคนที่ผ่านมีความหลากหลายไหม</li>
+        <li>ให้ AI เป็น "first filter" ไม่ใช่ "final decision" — Human ต้อง review ขั้นสุดท้าย</li>
+        <li>Test prompt กับ CV ที่ชื่อถูก anonymize เพื่อตรวจ bias</li>
+      </ul>
+    </div>
+
+    <div class="example-panel">
+      <div class="level-label level-advanced">Advanced — Production Grade</div>
+      <h3>ทีม Legal ใช้ AI ช่วย draft สัญญา — Privacy + Hallucination Risk</h3>
+      <p>บริษัทกฎหมายต้องการใช้ LLM ช่วย draft สัญญาและอ่านเอกสาร 200+ หน้าเพื่อหาจุดเสี่ยง นี่คือ use case ที่ดีมากของ AI แต่มีความเสี่ยงที่ต้องจัดการ:</p>
+      <p><strong>Risk 1 — Privacy:</strong> สัญญามีชื่อบริษัทคู่ค้า, ตัวเลขสำคัญ, เงื่อนไขลับ — ข้อมูลเหล่านี้ไม่ควรเข้า shared cloud AI โดยตรง</p>
+      <p><strong>วิธีจัดการ:</strong> ใช้ enterprise version ที่มี data privacy agreement (เช่น Claude for Enterprise ที่ไม่ใช้ข้อมูลลูกค้า train model) หรือใช้ self-hosted model</p>
+      <p><strong>Risk 2 — Hallucination ในกฎหมาย:</strong> AI อาจอ้างมาตราหรือคำพิพากษาที่ไม่มีอยู่จริง</p>
+      <p><strong>วิธีจัดการ:</strong> ให้ AI ทำ "outline และ flag จุดเสี่ยง" แต่ทนายความต้อง verify ทุกการอ้างอิงกับ legal database จริง (เช่น Thai Laws, ราชกิจจานุเบกษา)</p>
+      <p><strong>Risk 3 — Over-reliance:</strong> Junior staff อาจเชื่อ AI มากเกินไปเพราะ output ดูมืออาชีพ</p>
+      <p><strong>วิธีจัดการ:</strong> สร้าง workflow ที่บังคับให้ Senior review ก่อน sign off, document ว่าอะไรที่ AI ช่วยและอะไรที่ human verify แล้ว</p>
+      <div class="callout callout-info">
+        <div class="callout-icon">🔬</div>
+        <div><strong>สรุป Pattern ที่ดี:</strong> AI → Draft + Flag → Human Expert Review → Verify Sources → Final Decision เสมอ — ยิ่ง stakes สูง ยิ่งต้องมี human ใน loop มากขึ้น</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 6: Common Mistakes
+  ═════════════════════════════════════════ -->
+  <h2>❌ Common Mistakes</h2>
+
+  <div class="mistake-item fade-up">
+    <div class="mistake-wrong">
+      <span>❌</span>
+      <span><strong>Copy ข้อมูลจาก AI ไปใช้โดยไม่ verify</strong> — โดยเฉพาะ stats, citations, ตัวเลข หรือข้อมูลที่ใช้ตัดสินใจสำคัญ</span>
+    </div>
+    <div class="mistake-right">
+      <span>✅</span>
+      <span><strong>ตรวจสอบ facts สำคัญกับแหล่งข้อมูล primary source เสมอ</strong> — ใช้ AI เป็น "road map" ว่าควรค้นที่ไหน แล้ว verify จากแหล่งนั้นด้วยตัวเอง</span>
+    </div>
+    <div class="mistake-reason">เหตุผล: AI generate สิ่งที่ "ฟังดูถูก" ไม่ใช่สิ่งที่ "ถูกต้องจริง" — การ confident ของ AI ไม่ได้ correlate กับความถูกต้องของข้อมูล</div>
+    <div class="mistake-source">*(source: Anthropic hallucination documentation)*</div>
+  </div>
+
+  <div class="mistake-item fade-up">
+    <div class="mistake-wrong">
+      <span>❌</span>
+      <span><strong>ใส่ข้อมูลลับบริษัทหรือข้อมูลส่วนตัวใน prompt</strong> — เช่น paste source code ลับ, ชื่อ-นามสกุลคนไข้, หรือ credential ต่างๆ</span>
+    </div>
+    <div class="mistake-right">
+      <span>✅</span>
+      <span><strong>ใช้ข้อมูล anonymized แทน real data</strong> — ถ้าต้องการใช้ AI กับข้อมูลสำคัญ ตรวจสอบ privacy policy ของ provider ก่อน และพิจารณา enterprise plan ที่มี data privacy guarantee</span>
+    </div>
+    <div class="mistake-reason">เหตุผล: ข้อมูลที่ส่งให้ AI provider อาจถูกนำไปใช้ต่อตามเงื่อนไข default ของ service บาง plan (เช่น Claude.ai free tier) มีเงื่อนไขต่างจาก enterprise plan ที่มีสัญญา data privacy เพิ่มเติม — ต้องอ่านและเข้าใจ Terms of Service ก่อนใช้งาน และเลือก plan ที่เหมาะกับระดับความลับของข้อมูล</div>
+    <div class="mistake-source">*(source: Anthropic usage policies)*</div>
+  </div>
+
+  <div class="mistake-item fade-up">
+    <div class="mistake-wrong">
+      <span>❌</span>
+      <span><strong>ใช้ AI ตัดสินใจสำคัญโดยไม่มี human oversight</strong> — เช่น ให้ AI approve สินเชื่อ, วินิจฉัยโรค, หรือตัดสินคดีความโดยตรง</span>
+    </div>
+    <div class="mistake-right">
+      <span>✅</span>
+      <span><strong>AI เป็น assistant ไม่ใช่ decision maker</strong> — ให้ AI ช่วยวิเคราะห์ข้อมูล หา pattern และ draft ตัวเลือก แต่ human ต้องเป็นคนตัดสินใจขั้นสุดท้ายเสมอ</span>
+    </div>
+    <div class="mistake-reason">เหตุผล: ยิ่งผลกระทบของการตัดสินใจต่อชีวิตคนสูง ยิ่งต้องมีความรับผิดชอบที่ชัดเจน AI ยังไม่สามารถรับผิดชอบต่อผลลัพธ์ได้ในทางกฎหมายและจริยธรรม</div>
+    <div class="mistake-source">*(source: Anthropic responsible AI principles)*</div>
+  </div>
+
+  <div class="mistake-item fade-up">
+    <div class="mistake-wrong">
+      <span>❌</span>
+      <span><strong>"AI เป็นกลาง 100% ไม่มี bias"</strong> — เพราะมันเป็นแค่คอมพิวเตอร์ ไม่มีอคติแบบคน</span>
+    </div>
+    <div class="mistake-right">
+      <span>✅</span>
+      <span><strong>AI มี bias จาก training data เสมอ</strong> — เพราะเรียนจากข้อมูลที่คนสร้าง ซึ่ง reflect bias ของสังคมนั้นๆ การรับรู้ว่า bias มีอยู่และ audit ผลลัพธ์สม่ำเสมอคือสิ่งจำเป็น</span>
+    </div>
+    <div class="mistake-reason">เหตุผล: Algorithmic bias ถูกพิสูจน์ซ้ำแล้วซ้ำเล่าในงานวิจัย เช่น ระบบจดจำใบหน้าที่แม่นยำน้อยกว่าสำหรับผิวคล้ำ, ระบบ NLP ที่มี gender stereotype ฝังอยู่</div>
+    <div class="mistake-source">*(source: AI bias research, ACM FAccT conference)*</div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 7: สรุปบท + Retrieval Questions
+  ═════════════════════════════════════════ -->
+  <div class="summary-box fade-up">
+    <h2>📌 สรุปบทที่ 5</h2>
+    <p style="color:#94a3b8; margin-bottom:20px;">ลองตอบคำถามด้านล่างด้วยตัวเองก่อนดูเฉลย — บทสุดท้ายนี้สำคัญที่สุด เพราะมันคือสิ่งที่ปกป้องคุณจาก AI จริงๆ</p>
+
+    <div class="retrieval-q">
+      <div class="q-num">คำถามที่ 1</div>
+      <p style="color:#e2e8f0; margin:6px 0 10px;">อธิบาย hallucination คืออะไร และทำไมมันอันตรายกว่าการ "ให้ข้อมูลเก่า" — ยกตัวอย่างประกอบ</p>
+      <details style="cursor:pointer;">
+        <summary style="color:#818cf8; font-size:14px; font-weight:600; user-select:none;">▶ ดูแนวคำตอบ</summary>
+        <div style="margin-top:12px; color:#cbd5e1; font-size:14px; line-height:1.7; border-top:1px solid #334155; padding-top:12px;">
+          <strong style="color:#a5b4fc;">Hallucination</strong> คือการที่ AI <em>สร้างข้อมูลใหม่ที่ไม่มีอยู่จริง</em> — ไม่ใช่แค่ให้ข้อมูลเก่า "ข้อมูลเก่า" ยังถูกต้องอยู่เพียงแค่ outdated แต่ hallucination คือข้อมูลที่ผิดพลาดตั้งแต่ต้น เช่น cite งานวิจัยที่ไม่มีอยู่จริง, อ้างกฎหมายมาตราที่ไม่มี ที่อันตรายกว่าคือ AI บอกด้วยน้ำเสียงมั่นใจ 100% โดยไม่มีสัญญาณเตือน
+        </div>
+      </details>
+    </div>
+
+    <div class="retrieval-q">
+      <div class="q-num">คำถามที่ 2</div>
+      <p style="color:#e2e8f0; margin:6px 0 10px;">คุณจะ verify ข้อมูลที่ได้จาก AI อย่างไร? ออกแบบ workflow ง่ายๆ 3-4 ขั้นตอน</p>
+      <details style="cursor:pointer;">
+        <summary style="color:#818cf8; font-size:14px; font-weight:600; user-select:none;">▶ ดูแนวคำตอบ</summary>
+        <div style="margin-top:12px; color:#cbd5e1; font-size:14px; line-height:1.7; border-top:1px solid #334155; padding-top:12px;">
+          <strong style="color:#a5b4fc;">Workflow สำหรับ verify:</strong><br>
+          1. รับข้อมูลจาก AI → แยกแยะว่าอะไรคือ "concept ทั่วไป" (ไม่ค่อยมีปัญหา) กับ "specific facts/numbers/citations" (ต้อง verify)<br>
+          2. สำหรับ citations → ค้นบน Google Scholar / PubMed / ราชกิจจาฯ ตรง — อย่า Google จาก title ที่ AI ให้<br>
+          3. สำหรับตัวเลข → หาจากแหล่งทางการ เช่น WHO, สถิติแห่งชาติ, annual report บริษัท<br>
+          4. ถ้า verify ไม่ได้ → ระบุชัดว่า "ยังไม่ verify" หรือไม่ใช้ข้อมูลนั้น
+        </div>
+      </details>
+    </div>
+
+    <div class="retrieval-q">
+      <div class="q-num">คำถามที่ 3</div>
+      <p style="color:#e2e8f0; margin:6px 0 10px;">บอก 3 สถานการณ์ที่คุณจะ ไม่ ใช้ AI เพียงอย่างเดียวในการตัดสินใจ — พร้อมอธิบายว่าทำไม</p>
+      <details style="cursor:pointer;">
+        <summary style="color:#818cf8; font-size:14px; font-weight:600; user-select:none;">▶ ดูแนวคำตอบ</summary>
+        <div style="margin-top:12px; color:#cbd5e1; font-size:14px; line-height:1.7; border-top:1px solid #334155; padding-top:12px;">
+          <strong style="color:#a5b4fc;">ตัวอย่าง:</strong><br>
+          1. <strong>วินิจฉัยอาการป่วย</strong> — AI อาจ hallucinate หรือไม่รู้บริบทสุขภาพส่วนตัวครบ และผลกระทบจากการตัดสินใจผิดคือชีวิต<br>
+          2. <strong>ตัดสินใจเลิกจ้างพนักงาน</strong> — AI อาจมี bias ต่อ demographic บางกลุ่ม และการตัดสินใจแบบนี้ต้องการ context ที่ AI ไม่มี<br>
+          3. <strong>ลงทุนเงินก้อนใหญ่</strong> — AI ไม่รู้สถานการณ์การเงินส่วนตัวครบ และอาจให้ข้อมูลตลาดที่ outdated หรือผิดพลาด
+        </div>
+      </details>
+    </div>
+
+    <div style="border-top:1px solid #334155; margin-top:24px; padding-top:20px;">
+      <p style="color:#94a3b8; font-size:14px; margin-bottom:16px;"><strong style="color:#f1f5f9;">Concepts สำคัญในบทนี้:</strong></p>
+      <div class="badges">
+        <span class="badge badge-red">Hallucination</span>
+        <span class="badge badge-red">Confabulation</span>
+        <span class="badge badge-amber">Bias</span>
+        <span class="badge badge-amber">Training Data</span>
+        <span class="badge badge-indigo">Privacy</span>
+        <span class="badge badge-indigo">Anonymization</span>
+        <span class="badge badge-green">Human Oversight</span>
+        <span class="badge badge-slate">Verify Workflow</span>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:28px;">
+      <a href="exercises.html" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;box-shadow:0 4px 16px rgba(99,102,241,.4);">
+        ✏️ ทำแบบฝึกหัดทบทวน →
+      </a>
+    </div>
+  </div>
+
+</div><!-- content -->
+</div><!-- main -->
+
+<script src="anim.js"></script>
+</body>
+</html>

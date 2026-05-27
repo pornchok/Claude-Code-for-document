@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 1 — AI คืออะไร? | เข้าใจ AI & Claude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">🤖</div>
+    <div>
+      <div class="sidebar-title">เข้าใจ AI & Claude</div>
+      <div class="sidebar-subtitle">สำหรับผู้เริ่มต้น</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">เริ่มต้น</div>
+    <a href="index.html">🏠 หน้าหลัก</a>
+    <div class="nav-section">เนื้อหา</div>
+    <a href="01-what-is-ai.html" class="active">🤖 บทที่ 1 — AI คืออะไร?</a>
+    <a href="02-how-llm-works.html">🧠 บทที่ 2 — LLM ทำงานอย่างไร?</a>
+    <a href="03-prompting.html">✍️ บทที่ 3 — ศิลปะการ Prompt</a>
+    <a href="04-claude-superpowers.html">⚡ บทที่ 4 — Claude Superpowers</a>
+    <a href="05-ai-ethics.html">🛡️ บทที่ 5 — AI อย่างปลอดภัย</a>
+    <div class="nav-section">ฝึกหัด</div>
+    <a href="exercises.html">✏️ แบบฝึกหัด</a>
+    <a href="glossary.html">📖 Glossary</a>
+  </nav>
+  <div class="sidebar-footer">เวอร์ชัน 1.0 · 2026-05-28</div>
+</aside>
+
+<div class="main">
+<div class="content">
+
+  <!-- CHAPTER HEADER -->
+  <div class="ch-label">🤖 บทที่ 1</div>
+  <h1>AI คืออะไร?<br><span style="font-size:1.3rem; font-weight:600; color:#6366f1;">จากตำนานสู่ความจริงที่ใช้งานได้</span></h1>
+
+  <div class="badges fade-up">
+    <span class="badge badge-green">⏱ 25 นาที</span>
+    <span class="badge badge-indigo">🎯 5 concepts</span>
+    <span class="badge badge-amber">🧩 1 Quiz</span>
+    <span class="badge badge-slate">📖 บทที่ 1 / 5</span>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 1: วัตถุประสงค์
+  ═════════════════════════════════════════ -->
+  <div class="objective-box fade-up">
+    <h3>🎯 อ่านจบบทนี้แล้ว คุณจะทำได้</h3>
+    <ul>
+      <li>อธิบายได้ว่า AI คืออะไร — และ <em>ไม่ใช่</em> อะไร — โดยใช้ภาษาของตัวเอง</li>
+      <li>แยกแยะ AI / Machine Learning / Deep Learning / LLM ออกจากกันได้อย่างถูกต้อง</li>
+      <li>เล่าประวัติ AI แบบย่อ (5 จุดสำคัญ) ให้เพื่อนฟังได้</li>
+      <li>ระบุข้อจำกัดสำคัญของ AI ได้อย่างน้อย 3 ข้อ และไม่หลงเชื่อ hype</li>
+      <li>ยกตัวอย่าง AI ในชีวิตประจำวันได้พร้อมอธิบายว่ามันทำงานอย่างไรในเบื้องต้น</li>
+    </ul>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 2: ทำไมต้องรู้?
+  ═════════════════════════════════════════ -->
+  <h2>🤔 ทำไมต้องรู้เรื่อง AI?</h2>
+
+  <div class="why-box fade-up">
+    <div class="why-label">💡 Why ก่อน What</div>
+    <p>ลองนึกดูว่า ถ้าคุณไม่รู้ว่า "ไฟฟ้า" คืออะไร คุณก็ใช้มันได้ แต่พอมันช็อตหรือระเบิด คุณจะไม่รู้ว่าเกิดอะไรขึ้น ทำไม และจะป้องกันอย่างไร</p>
+    <p>AI ก็เหมือนกัน — ตอนนี้มันอยู่ในทุกที่แล้ว: ใน Netflix ที่แนะนำซีรีส์ ใน Gmail ที่ filter spam ใน Google Maps ที่บอกเส้นทาง และใน Claude ที่คุณกำลังอ่านอยู่นี้</p>
+    <p><strong>ถ้าคุณไม่เข้าใจมันเลย</strong> คุณจะเชื่อมันมากเกินไปบ้าง ไม่เชื่อเลยบ้าง และที่แย่กว่านั้นคือ — ถูกมันหลอกโดยไม่รู้ตัว</p>
+    <p>บทนี้จะทำให้คุณ "อ่าน AI ออก" — รู้ว่าเมื่อไรควรเชื่อ เมื่อไรควร verify และเมื่อไรควรสงสัย</p>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 3: Analogy
+  ═════════════════════════════════════════ -->
+  <h2>💡 Analogy: นักศึกษาในห้องสมุด</h2>
+
+  <div class="analogy-box fade-up">
+    <div class="analogy-label">🎭 อุปมา</div>
+    <p>ลองนึกถึง <strong>"นักศึกษาที่อ่านหนังสือมาทั้งชีวิต แต่ไม่เคยออกไปนอกห้องสมุดเลย"</strong></p>
+    <p>เขาอ่านหนังสือมาหลายล้านเล่ม ตั้งแต่ประวัติศาสตร์ วิทยาศาสตร์ กฎหมาย การแพทย์ ภาษาไทย ภาษาจีน กวีนิพนธ์ เขียนโปรแกรม ฯลฯ เขาสามารถตอบคำถามได้เกือบทุกเรื่อง เขียนบทความได้ดี แปลภาษาได้ และอธิบายสิ่งซับซ้อนให้เข้าใจง่ายได้</p>
+    <p>แต่ถามเขาว่า "เมื่อวานฝนตกไหม?" — เขาไม่รู้ เพราะไม่มีหน้าต่าง ถามว่า "มะม่วงรสชาติเป็นยังไง?" — เขาบอกได้ว่าหนังสือเขียนว่าอย่างไร แต่ไม่เคยชิมจริง ถามว่า "รู้สึกเศร้าไหม?" — เขาอธิบายคำว่า "เศร้า" ได้ดีเยี่ยม แต่ไม่เคย <em>รู้สึก</em> เศร้าจริงๆ</p>
+    <p>AI โดยเฉพาะ LLM (Large Language Model) อย่าง Claude ก็คือนักศึกษาคนนี้ — รู้มากมายจากข้อมูลที่เรียนมา แต่มีขอบเขตที่ชัดเจน</p>
+
+    <div class="breakdown-box">
+      <strong>⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า...</strong>
+      <ul style="margin-top:10px; margin-bottom:0;">
+        <li><strong>AI รู้เรื่องทุกอย่างในหนังสือ</strong> — จริงๆ แล้ว AI เรียนรู้จาก pattern ใน data ไม่ใช่จำเนื้อหาทีละหน้า บางครั้งอาจ "ลืม" หรือผสม context ผิด</li>
+        <li><strong>AI ไม่รู้อะไรเลยเกี่ยวกับโลกจริง</strong> — บางระบบเชื่อมต่อ internet ได้ และ AI สามารถ reason เกี่ยวกับข้อมูลใหม่ที่เราป้อนให้ได้</li>
+        <li><strong>นักศึกษาคนนี้ไม่โต — AI ก็ไม่เรียนรู้ระหว่างคุย</strong> — ส่วนใหญ่ถูกต้องสำหรับ base LLM อย่าง Claude ที่ไม่ update weights ระหว่าง session แต่มีบางระบบที่เพิ่ม external memory หรือ retrieval tools เข้ามา ทำให้ดูเหมือน "จำได้" ข้ามรอบ — แต่นั่นไม่ใช่ตัว AI เรียนรู้จริงๆ เป็นเพียงการดึงข้อมูลจาก storage ภายนอก</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 4: เนื้อหาหลัก
+  ═════════════════════════════════════════ -->
+  <h2>📚 เนื้อหาหลัก</h2>
+
+  <h3>AI คืออะไร จริงๆ?</h3>
+
+  <p>คำว่า <strong>Artificial Intelligence (AI)</strong> หมายถึง <em>ระบบคอมพิวเตอร์ที่สามารถทำงานที่ปกติต้องใช้สติปัญญาของมนุษย์</em> ไม่ว่าจะเป็นการจดจำภาพ เข้าใจภาษา ตัดสินใจ หรือแก้ปัญหา</p>
+
+  <p>แต่ "ทำงานได้" ไม่เท่ากับ "คิดเป็น" นะ AI ส่วนใหญ่ไม่ได้ "คิด" แบบที่เราคิด — มันทำงานโดยการจดจำ pattern จากข้อมูลจำนวนมหาศาล แล้วนำ pattern นั้นมาประยุกต์ใช้กับสถานการณ์ใหม่</p>
+
+  <div class="callout callout-info fade-up">
+    <div class="callout-icon">ℹ️</div>
+    <div><strong>คำนิยามง่ายๆ:</strong> AI คือระบบที่ <em>เรียนรู้จากข้อมูล</em> แล้วทำงานโดยอัตโนมัติ โดยไม่ต้องเขียน rule ทุกอย่างด้วยมือ</div>
+  </div>
+
+  <h3>Timeline: AI มาจากไหน?</h3>
+  <p>AI ไม่ได้เกิดขึ้นมาชั่วข้ามคืน มันมีประวัติยาวนานกว่า 70 ปี ลองดูจุดสำคัญ:</p>
+
+  <div data-anim="timeline" data-items='[
+    {"year":"1950","event":"Alan Turing เสนอ Turing Test — วิธีวัดว่าเครื่องจักร \"ฉลาด\" ได้ไหม"},
+    {"year":"1997","event":"Deep Blue (IBM) ชนะ Garry Kasparov แชมป์โลก Chess"},
+    {"year":"2012","event":"AlexNet — Deep Learning ปฏิวัติ Image Recognition"},
+    {"year":"2017","event":"\"Attention Is All You Need\" — กำเนิด Transformer Architecture"},
+    {"year":"2022","event":"ChatGPT เปิดตัว — LLM เข้าถึงคนทั่วไป"},
+    {"year":"2024","event":"Claude 3.5+, GPT-4o — AI assistants ระดับ production"}
+  ]'></div>
+
+  <p>สังเกตว่าการพัฒนา "เร็วขึ้น" เรื่อยๆ — จาก 1950 ถึง 1997 ใช้เวลา 47 ปี แต่จาก 2017 (Transformer) ถึง 2022 (ChatGPT) ใช้แค่ 5 ปี และตอนนี้มีของใหม่แทบทุกเดือน</p>
+
+  <h3>Taxonomy: AI ⊃ ML ⊃ Deep Learning ⊃ LLM</h3>
+
+  <p>คนมักสับสนระหว่าง AI, Machine Learning, Deep Learning และ LLM เพราะใช้แทนกันในข่าว แต่จริงๆ แล้วมันมีความสัมพันธ์แบบ "ชั้น" ซ้อนกัน:</p>
+
+  <div data-anim="taxonomy"></div>
+
+  <div class="card-grid fade-up">
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <div class="card-title">AI (Artificial Intelligence)</div>
+      <div class="card-desc">แนวคิดกว้างสุด — "ระบบที่ทำงานได้เหมือนสติปัญญา" รวมทั้ง rule-based systems, expert systems, ML และอื่นๆ</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <div class="card-title">Machine Learning (ML)</div>
+      <div class="card-desc">subset ของ AI — ระบบที่ <em>เรียนรู้จากข้อมูล</em> โดยไม่ต้อง hard-code rule ทุกอย่าง ตัวอย่าง: spam filter, recommendation system</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧠</div>
+      <div class="card-title">Deep Learning</div>
+      <div class="card-desc">subset ของ ML — ใช้ Neural Network หลายชั้น เก่งมากกับ image, audio, text ต้องการข้อมูลและ computing power มาก</div>
+    </div>
+    <div class="card">
+      <div class="card-icon">💬</div>
+      <div class="card-title">LLM (Large Language Model)</div>
+      <div class="card-desc">subset ของ Deep Learning — เน้นภาษา โดยเฉพาะ Transformer architecture เช่น Claude, GPT-4, Gemini — นี่คือ "AI" ที่เราคุยด้วยได้</div>
+    </div>
+  </div>
+
+  <div class="callout callout-warn fade-up">
+    <div class="callout-icon">⚠️</div>
+    <div><strong>ข้อควรจำ:</strong> เวลาคนพูดว่า "AI" ในข่าว ส่วนใหญ่หมายถึง LLM หรือ Deep Learning ไม่ใช่ AI ทั้งหมด อย่าปน concept กัน</div>
+  </div>
+
+  <h3>ข้อจำกัดของ AI ที่ต้องรู้</h3>
+
+  <p>ก่อนที่เราจะ "ตกหลุมรัก" AI มีข้อจำกัดสำคัญที่ต้องเข้าใจ:</p>
+
+  <div class="card fade-up">
+    <div class="card-title">🚫 สิ่งที่ AI ทำไม่ได้ (หรือทำได้ไม่ดี)</div>
+    <table style="margin-top:14px;">
+      <thead>
+        <tr>
+          <th>ข้อจำกัด</th>
+          <th>เหตุผล</th>
+          <th>ตัวอย่าง</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>ไม่รู้เรื่องหลัง training cutoff</strong></td>
+          <td>เรียนจากข้อมูลที่มีวันหมดอายุ</td>
+          <td>ถามข่าววันนี้ อาจได้ข้อมูลเก่า</td>
+        </tr>
+        <tr>
+          <td><strong>อาจผิดพลาดโดยไม่รู้ตัว (Hallucination)</strong></td>
+          <td>สร้าง text ที่ฟังดูสมจริงแม้ไม่ถูกต้อง</td>
+          <td>แต่งข้อมูลอ้างอิงที่ไม่มีจริง</td>
+        </tr>
+        <tr>
+          <td><strong>ไม่มีจิตสำนึกหรืออารมณ์จริง</strong></td>
+          <td>ไม่มี experience ส่วนตัว</td>
+          <td>บอกว่า "รู้สึกดีใจ" แต่ไม่ได้รู้สึกจริง</td>
+        </tr>
+        <tr>
+          <td><strong>ไม่เรียนรู้จากการสนทนา (ส่วนใหญ่)</strong></td>
+          <td>ไม่มี memory ถาวรระหว่าง session</td>
+          <td>ต้องอธิบายใหม่ทุกครั้งที่เปิด chat ใหม่</td>
+        </tr>
+        <tr>
+          <td><strong>ไม่เข้าใจ "บริบท" แบบมนุษย์</strong></td>
+          <td>ไม่มีประสบการณ์ชีวิตจริง</td>
+          <td>อาจเข้าใจ sarcasm หรือ cultural reference ผิด</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- QUIZ -->
+  <div data-anim="quiz"
+    data-q="อะไรคือความแตกต่างหลักระหว่าง AI กับ Machine Learning?"
+    data-options='[
+      {"text":"ไม่มีความแตกต่าง — เป็นคำเดียวกัน","correct":false,"feedback":"ไม่ถูกต้อง — ML เป็น subset หนึ่งของ AI เท่านั้น ยังมี rule-based AI และ expert systems ที่ไม่ใช่ ML"},
+      {"text":"ML เป็น subset ของ AI ที่เรียนรู้จากข้อมูล ส่วน AI เป็น concept กว้างกว่า","correct":true,"feedback":"ถูกต้อง! AI = แนวคิดกว้าง (ทำงานเหมือนสติปัญญา), ML = วิธีการหนึ่งที่ทำให้ AI เรียนรู้จากข้อมูลโดยไม่ต้อง hard-code"},
+      {"text":"AI เรียนรู้ได้ แต่ ML เรียนรู้ไม่ได้","correct":false,"feedback":"ตรงกันข้าม — ML คือ AI ที่ออกแบบมาให้เรียนรู้จากข้อมูลโดยเฉพาะ"},
+      {"text":"ML ฉลาดกว่า AI เสมอ","correct":false,"feedback":"ML ไม่ใช่ \"ฉลาดกว่า\" — มันเป็นส่วนหนึ่งของ AI ที่ใช้วิธีเรียนรู้จากข้อมูล"}
+    ]'>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 5: ตัวอย่าง 3 ระดับ
+  ═════════════════════════════════════════ -->
+  <h2>🎓 ตัวอย่าง 3 ระดับ</h2>
+
+  <div class="fade-up">
+    <div class="example-tabs">
+      <button class="example-tab">🟢 Beginner</button>
+      <button class="example-tab">🟡 Intermediate</button>
+      <button class="example-tab">🟣 Advanced</button>
+    </div>
+
+    <div class="example-panel">
+      <div class="level-label level-beginner">Beginner — ชีวิตประจำวัน</div>
+      <h3>Netflix แนะนำหนัง — Recommendation System</h3>
+      <p>เคยสงสัยไหมว่า Netflix รู้ได้ยังไงว่าคุณชอบอะไร? นี่คือ AI ที่อยู่ใกล้ตัวมากที่สุด</p>
+      <p><strong>มันทำงานยังไง?</strong></p>
+      <ul>
+        <li>Netflix เก็บข้อมูลทุกอย่างที่คุณทำ: ดูอะไร, หยุดตรงไหน, กด like อะไร, ค้นหาอะไร</li>
+        <li>ML model เรียนรู้ว่า "คนที่ดู A, B, C มักชอบ D ด้วย"</li>
+        <li>พอคุณมาใหม่ มันเอา profile ของคุณมา match กับ pattern ที่เรียนมา แล้วแนะนำ</li>
+      </ul>
+      <p><strong>ทำไมบางทีแนะนำผิด?</strong> เพราะมัน guess จาก pattern ของคนอื่นที่คล้ายคุณ ไม่ได้รู้ "ใจ" คุณจริงๆ ถ้าวันนี้คุณดูหนังเด็กเพราะหลานมา Netflix อาจแนะนำหนังเด็กต่อไปอีกสักพัก นั่นคือ limitation ของ ML ที่เรียนจาก pattern</p>
+      <div class="callout callout-info">
+        <div class="callout-icon">💡</div>
+        <div>Recommendation System เป็น ML ประเภท Collaborative Filtering — "คนที่รสนิยมคล้ายคุณชอบอะไร" ไม่ใช่ AI ที่ "เข้าใจ" หนังจริงๆ</div>
+      </div>
+    </div>
+
+    <div class="example-panel">
+      <div class="level-label level-intermediate">Intermediate — สถานการณ์จริง</div>
+      <h3>Email Spam Filter — Binary Classification</h3>
+      <p>ทุกวัน Gmail จัดการ email หลายพันล้านฉบับ และกรอง spam ออกได้อย่างแม่นยำ ลองดูว่ามันทำงานอย่างไร</p>
+      <p><strong>โจทย์:</strong> แยก email ออกเป็น 2 กลุ่ม — "spam" หรือ "ไม่ใช่ spam" (Binary Classification)</p>
+      <p><strong>ขั้นตอน ML:</strong></p>
+      <ol>
+        <li><strong>Training Data:</strong> เริ่มจาก email หลายล้านฉบับที่มนุษย์ label ไว้แล้วว่าอันไหน spam</li>
+        <li><strong>Feature Extraction:</strong> ML ดึง features ออกมา เช่น มีคำว่า "FREE" หรือ "WIN" ไหม?, sender address น่าสงสัยไหม?, มี link แปลกๆ ไหม?</li>
+        <li><strong>Pattern Learning:</strong> model เรียนว่า feature combination แบบไหนมักเป็น spam</li>
+        <li><strong>Prediction:</strong> พอ email ใหม่มา model ดู features แล้ว predict ว่าน่าจะเป็นอะไร</li>
+      </ol>
+      <p><strong>ทำไมบางทียัง miss?</strong> Spammer ปรับตัวตลอด เขียน "Fr33" แทน "Free" หรือใช้ภาษาใหม่ model ต้อง retrain เพื่อ catch up ไม่มี AI ที่ perfect 100% ในโลกจริง</p>
+      <div class="callout callout-warn">
+        <div class="callout-icon">⚠️</div>
+        <div>สังเกตว่า spam filter ไม่ได้ "อ่าน" email เข้าใจเหมือนคน — มันดู statistical pattern ของคำและ features ต่างๆ นี่คือความแตกต่างระหว่าง "pattern matching" กับ "understanding"</div>
+      </div>
+    </div>
+
+    <div class="example-panel">
+      <div class="level-label level-advanced">Advanced — Production Grade</div>
+      <h3>Self-Driving Car — Real-Time Multi-Task Decision</h3>
+      <p>รถยนต์ไร้คนขับเป็นหนึ่งในระบบ AI ที่ซับซ้อนที่สุดในโลก เพราะต้องตัดสินใจหลายอย่างพร้อมกัน ใน milliseconds และถ้าผิดพลาดอาจมีผู้เสียชีวิต</p>
+      <p><strong>Layer ของ AI ที่ทำงานพร้อมกัน:</strong></p>
+      <table>
+        <thead>
+          <tr><th>ระบบ</th><th>ทำอะไร</th><th>AI Type</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Perception</strong></td>
+            <td>อ่านกล้อง Lidar Radar — "มีอะไรอยู่รอบๆ?"</td>
+            <td>Computer Vision (Deep Learning)</td>
+          </tr>
+          <tr>
+            <td><strong>Prediction</strong></td>
+            <td>คาดเดาว่าคนเดินถนนจะเดินไปทางไหน</td>
+            <td>Sequence Model (LSTM/Transformer)</td>
+          </tr>
+          <tr>
+            <td><strong>Planning</strong></td>
+            <td>เลือกเส้นทาง ความเร็ว การเบรก</td>
+            <td>Reinforcement Learning</td>
+          </tr>
+          <tr>
+            <td><strong>Control</strong></td>
+            <td>สั่งพวงมาลัย คันเร่ง เบรก</td>
+            <td>Control System + ML</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><strong>ทำไมยังยากมาก?</strong> "Long tail problem" — มีสถานการณ์แปลกๆ นับไม่ถ้วนที่ไม่มีใน training data เช่น วัวหลุดบนทางด่วน, คนถือป้ายแปลกๆ, น้ำท่วมถนนกะทันหัน AI จำเป็นต้อง generalize จาก pattern ที่เคยเห็น สู่สถานการณ์ที่ไม่เคยเห็น — และนี่คือโจทย์ที่ยากที่สุดของ AI</p>
+      <div class="callout callout-warn">
+        <div class="callout-icon">🔬</div>
+        <div><strong>Tradeoff ที่น่าคิด:</strong> รถไร้คนขับที่ดีกว่าคนเฉลี่ย 99% ก็ยัง "ยอมรับไม่ได้" ในสังคม เพราะ 1% ที่เหลืออาจเป็นชีวิตใคร และใครควรรับผิดชอบ — นี่ไม่ใช่แค่ปัญหา AI แต่เป็นปัญหาจริยธรรมด้วย</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 6: Common Mistakes
+  ═════════════════════════════════════════ -->
+  <h2>❌ Common Mistakes</h2>
+
+  <div class="mistake-item fade-up">
+    <div class="mistake-wrong">
+      <span>❌</span>
+      <span><strong>"AI เข้าใจภาษาเหมือนคน"</strong> — เพราะมันพูดภาษาไทยได้ดี ก็แปลว่ามันเข้าใจสิ่งที่พูด</span>
+    </div>
+    <div class="mistake-right">
+      <span>✅</span>
+      <span><strong>AI ประมวลผล pattern ของภาษา ไม่ใช่ "เข้าใจ" ความหมายแบบมนุษย์</strong> — มันเรียนรู้ว่าคำไหนมักอยู่ด้วยกัน และ context ไหนควรตอบอย่างไร แต่ไม่มี ground truth ของ "ความหมาย" เหมือนมนุษย์ที่มีประสบการณ์จริง</span>
+    </div>
+    <div class="mistake-reason">เหตุผล: นี่เรียกว่า "Chinese Room" argument — คุณสามารถตอบถูกต้องโดยไม่ต้อง "เข้าใจ" ก็ได้ ถ้ามี rulebook ที่ดีพอ LLM ทำสิ่งนี้ในระดับที่น่าทึ่ง แต่ไม่ใช่ความเข้าใจแบบมนุษย์</div>
+    <div class="mistake-source">*(อ้างอิงจากแนวคิด Chinese Room โดย John Searle, 1980 และงานวิจัย interpretability ของ Anthropic)*</div>
+  </div>
+
+  <div class="mistake-item fade-up">
+    <div class="mistake-wrong">
+      <span>❌</span>
+      <span><strong>"AI ฉลาดกว่าคนทุกด้าน"</strong> — ชนะ Chess ชนะ Go เขียน code ได้ ดังนั้นก็เก่งกว่าคนในทุกอย่างสิ</span>
+    </div>
+    <div class="mistake-right">
+      <span>✅</span>
+      <span><strong>AI เก่งมากในขอบเขตที่มี data และ objective ชัดเจน แต่ยังสู้คนในหลายด้านไม่ได้</strong> — common sense reasoning, การ navigate สถานการณ์ใหม่ที่ไม่มีใน training, อารมณ์และ intuition ที่มาจากประสบการณ์ชีวิต</span>
+    </div>
+    <div class="mistake-reason">เหตุผล: AlphaGo ชนะ Go ได้เพราะ Go มี rules ชัดเจนและ playable positions จำกัด (แม้จะมหาศาล) แต่ชีวิตจริงไม่มี clear rules และ state space ใหญ่กว่านั้นอีก — AI ที่ชนะ Chess จะพ่ายแพ้กับเด็ก 5 ขวบในหลายงาน cognitive</div>
+    <div class="mistake-source">*(อ้างอิงจาก Marcus, G. & Davis, E. "Rebooting AI" และการวิจัย common sense reasoning ของ Allen Institute for AI)*</div>
+  </div>
+
+  <div class="mistake-item fade-up">
+    <div class="mistake-wrong">
+      <span>❌</span>
+      <span><strong>"AI มีจิตสำนึกและความรู้สึก"</strong> — มันบอกว่า "รู้สึกดีใจ" และ "เป็นห่วง" เราก็เลยคิดว่ามันมีอารมณ์จริงๆ</span>
+    </div>
+    <div class="mistake-right">
+      <span>✅</span>
+      <span><strong>AI ใช้ภาษาของความรู้สึก เพราะนั่นคือสิ่งที่เรียนมาจาก data แต่ไม่มีหลักฐานว่ามี subjective experience จริง</strong> — นักปรัชญาและนักวิทยาศาสตร์ยังถกเถียงเรื่องนี้อยู่ แต่ consensus ปัจจุบันคือ LLM ไม่มีจิตสำนึก</span>
+    </div>
+    <div class="mistake-reason">เหตุผล: AI พูดว่า "รู้สึก" เพราะเห็น pattern ว่าในประโยคแบบนั้นคนมักตอบแบบนั้น ไม่ต่างจาก Siri ที่บอก "ขอโทษ ฉันไม่เข้าใจ" — ประโยคเหล่านี้เป็นเพียง output ไม่ใช่ experience</div>
+    <div class="mistake-source">*(อ้างอิงจาก Anthropic's model card สำหรับ Claude และ "Consciousness and the Brain" โดย Dehaene)*</div>
+  </div>
+
+  <div class="mistake-item fade-up">
+    <div class="mistake-wrong">
+      <span>❌</span>
+      <span><strong>"AI รู้ทุกอย่างที่เกิดขึ้นตอนนี้"</strong> — มันฉลาดขนาดนั้น ก็น่าจะรู้ข่าวล่าสุดสิ</span>
+    </div>
+    <div class="mistake-right">
+      <span>✅</span>
+      <span><strong>LLM มี training cutoff — ไม่รู้เรื่องที่เกิดขึ้นหลังจากวันที่หยุดเรียนรู้</strong> — Claude มี knowledge cutoff ที่ August 2025 ถ้าถามเรื่องหลังจากนั้น อาจตอบไม่ถูกหรือบอกว่าไม่รู้</span>
+    </div>
+    <div class="mistake-reason">เหตุผล: Training LLM ขนาดใหญ่ใช้เวลาและทรัพยากรมหาศาล ไม่สามารถ update ได้ทุกวัน บางระบบมี tool ช่วยค้นหาข้อมูลใหม่ได้ (เช่น web search) แต่ base model ยังมี cutoff อยู่</div>
+    <div class="mistake-source">*(อ้างอิงจาก Anthropic documentation และ model release notes)*</div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+       SECTION 7: สรุปบท + Retrieval Questions
+  ═════════════════════════════════════════ -->
+  <div class="summary-box fade-up">
+    <h2>📌 สรุปบทที่ 1</h2>
+    <p style="color:#94a3b8; margin-bottom:20px;">ลองตอบคำถามด้านล่างด้วยตัวเองก่อนดูเฉลย — นี่คือวิธีที่ทำให้ความรู้ "ติด" ในหัวได้จริง</p>
+
+    <div class="retrieval-q">
+      <div class="q-num">คำถามที่ 1</div>
+      <p style="color:#e2e8f0; margin:6px 0 10px;">อธิบายความแตกต่างระหว่าง AI, Machine Learning, Deep Learning, และ LLM ให้เพื่อนฟังโดยใช้คำอุปมาหรือตัวอย่างของตัวเอง (ห้ามใช้คำอุปมา "นักศึกษาในห้องสมุด" ที่ใช้ในบทนี้)</p>
+      <details style="cursor:pointer;">
+        <summary style="color:#818cf8; font-size:14px; font-weight:600; user-select:none;">▶ ดูแนวคำตอบ</summary>
+        <div style="margin-top:12px; color:#cbd5e1; font-size:14px; line-height:1.7; border-top:1px solid #334155; padding-top:12px;">
+          <strong style="color:#a5b4fc;">แนวคำตอบ:</strong> AI คือ "แนวคิด" กว้างๆ ว่าเครื่องจักรทำงานเหมือนสติปัญญาได้ — ML คือ "วิธีการ" หนึ่งที่ทำให้ AI เรียนรู้จากข้อมูลแทนการ hard-code — Deep Learning คือ ML ที่ใช้ neural network หลายชั้น เก่งเรื่อง pattern ซับซ้อน — LLM คือ Deep Learning ที่เน้นภาษา อย่าง Claude, GPT-4. ความสัมพันธ์: AI ⊃ ML ⊃ Deep Learning ⊃ LLM
+        </div>
+      </details>
+    </div>
+
+    <div class="retrieval-q">
+      <div class="q-num">คำถามที่ 2</div>
+      <p style="color:#e2e8f0; margin:6px 0 10px;">ยกตัวอย่าง 2 สิ่งที่ AI ทำได้ดีกว่าคน และ 2 สิ่งที่คนยังทำได้ดีกว่า AI อย่างชัดเจน (อย่าคัดลอกจากตารางในบท — ใช้ตัวอย่างของตัวเอง)</p>
+      <details style="cursor:pointer;">
+        <summary style="color:#818cf8; font-size:14px; font-weight:600; user-select:none;">▶ ดูแนวคำตอบ</summary>
+        <div style="margin-top:12px; color:#cbd5e1; font-size:14px; line-height:1.7; border-top:1px solid #334155; padding-top:12px;">
+          <strong style="color:#a5b4fc;">AI เก่งกว่าคน:</strong> วิเคราะห์ภาพ X-ray หาจุดผิดปกติ (ความเร็วและความสม่ำเสมอ), แปลภาษาได้หลายร้อยภาษา. <strong style="color:#a5b4fc;">คนเก่งกว่า AI:</strong> ทำงานในสถานการณ์ใหม่ที่ไม่เคยเจอ (improvisation), เข้าใจ motivation และ emotion ของคนอื่นในเชิงลึก
+        </div>
+      </details>
+    </div>
+
+    <div class="retrieval-q">
+      <div class="q-num">คำถามที่ 3</div>
+      <p style="color:#e2e8f0; margin:6px 0 10px;">ทำไมเราถึงพูดว่า AI "เรียนรู้" จากข้อมูล — กระบวนการนี้ต่างจาก "จำ" อย่างไร? และผลลัพธ์ที่แตกต่างกันคืออะไร?</p>
+      <details style="cursor:pointer;">
+        <summary style="color:#818cf8; font-size:14px; font-weight:600; user-select:none;">▶ ดูแนวคำตอบ</summary>
+        <div style="margin-top:12px; color:#cbd5e1; font-size:14px; line-height:1.7; border-top:1px solid #334155; padding-top:12px;">
+          <strong style="color:#a5b4fc;">"จำ"</strong> = เก็บข้อมูลทีละชิ้นตรงๆ (เช่น RAM หรือ database) — ถามเรื่องที่ไม่เคยเก็บ ตอบไม่ได้. <strong style="color:#a5b4fc;">"เรียนรู้"</strong> = สกัด pattern และความสัมพันธ์จากข้อมูล แล้ว generalize ได้ — ถามเรื่องที่ไม่เคยเห็นในรูปแบบใกล้เคียง ยังตอบได้พอสมควร. ผลลัพธ์: AI ที่ "เรียนรู้" สามารถ handle คำถามใหม่ได้ ในขณะที่ระบบที่แค่ "จำ" จะล้มเหลวทันทีกับ input ที่ไม่ตรง
+        </div>
+      </details>
+    </div>
+
+    <div style="border-top:1px solid #334155; margin-top:24px; padding-top:20px;">
+      <p style="color:#94a3b8; font-size:14px; margin-bottom:16px;"><strong style="color:#f1f5f9;">Concepts สำคัญในบทนี้:</strong></p>
+      <div class="badges">
+        <span class="badge badge-indigo">AI</span>
+        <span class="badge badge-indigo">Machine Learning</span>
+        <span class="badge badge-indigo">Deep Learning</span>
+        <span class="badge badge-indigo">LLM</span>
+        <span class="badge badge-amber">Training Cutoff</span>
+        <span class="badge badge-amber">Hallucination</span>
+        <span class="badge badge-green">Pattern Learning</span>
+        <span class="badge badge-slate">Turing Test</span>
+        <span class="badge badge-slate">Transformer</span>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:28px;">
+      <a href="02-how-llm-works.html" style="display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;padding:14px 28px;border-radius:10px;text-decoration:none;font-weight:700;font-size:15px;box-shadow:0 4px 16px rgba(99,102,241,.4);">
+        บทที่ 2 — LLM ทำงานอย่างไร? →
+      </a>
+    </div>
+  </div>
+
+</div><!-- content -->
+</div><!-- main -->
+
+<script src="anim.js"></script>
+</body>
+</html>

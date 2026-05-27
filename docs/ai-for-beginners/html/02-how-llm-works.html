@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 2 — LLM ทำงานอย่างไร? | เข้าใจ AI & Claude</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">🤖</div>
+    <div>
+      <div class="sidebar-title">เข้าใจ AI & Claude</div>
+      <div class="sidebar-subtitle">สำหรับผู้เริ่มต้น</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section">เริ่มต้น</div>
+    <a href="index.html">🏠 หน้าหลัก</a>
+    <div class="nav-section">เนื้อหา</div>
+    <a href="01-what-is-ai.html">🤖 บทที่ 1 — AI คืออะไร?</a>
+    <a href="02-how-llm-works.html" class="active">🧠 บทที่ 2 — LLM ทำงานอย่างไร?</a>
+    <a href="03-prompting.html">✍️ บทที่ 3 — ศิลปะการ Prompt</a>
+    <a href="04-claude-superpowers.html">⚡ บทที่ 4 — Claude Superpowers</a>
+    <a href="05-ai-ethics.html">🛡️ บทที่ 5 — AI อย่างปลอดภัย</a>
+    <div class="nav-section">ฝึกหัด</div>
+    <a href="exercises.html">✏️ แบบฝึกหัด</a>
+    <a href="glossary.html">📖 Glossary</a>
+  </nav>
+  <div class="sidebar-footer">เวอร์ชัน 1.0 · 2026-05-28</div>
+</aside>
+
+<div class="main">
+<div class="content">
+
+  <!-- ── CHAPTER HEADER ── -->
+  <div class="ch-label">🧠 บทที่ 2</div>
+  <h1>LLM ทำงานอย่างไร?</h1>
+
+  <div class="badges fade-up">
+    <span class="badge badge-indigo">⏱ 30 นาที</span>
+    <span class="badge badge-amber">🔢 Tokenization · Embedding · Attention · Generation</span>
+    <span class="badge badge-slate">🧩 บทที่ 2 จาก 5</span>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       SECTION 8: PRE-CHAPTER RETRIEVAL (บทที่ 2 ต้องมี)
+  ════════════════════════════════════════════════ -->
+  <div class="pre-chapter fade-up">
+    <h3>🔄 ก่อนอ่านบทนี้ — ทบทวนจากบทที่ 1</h3>
+    <p>ลองตอบคำถามนี้ก่อนดูเฉลย (บังคับ! อย่าข้ามไปดูเฉลยทันที 😄):</p>
+    <p><strong>"LLM คือส่วนหนึ่งของอะไร? และมันอยู่ในลำดับชั้นของ AI อย่างไร?"</strong></p>
+    <details>
+      <summary>ดูเฉลย</summary>
+      <div class="answer">
+        LLM (Large Language Model) เป็น subset ของ <strong>Deep Learning</strong> ซึ่งเป็น subset ของ <strong>Machine Learning</strong> ซึ่งเป็น subset ของ <strong>AI</strong> — ลำดับชั้นคือ AI ⊃ ML ⊃ Deep Learning ⊃ LLM<br><br>
+        กล่าวคือ LLM คือรูปแบบหนึ่งของ Deep Learning ที่ถูก train บนข้อมูลภาษาจำนวนมหาศาล และ Deep Learning คือ ML ที่ใช้ neural network หลายชั้น ส่วน ML คือสาขาหนึ่งของ AI ที่ให้คอมพิวเตอร์เรียนรู้จากข้อมูลแทนการเขียน rules ทีละข้อ
+      </div>
+    </details>
+  </div>
+
+  <hr>
+
+  <!-- ════════════════════════════════════════════════
+       SECTION 1: วัตถุประสงค์
+  ════════════════════════════════════════════════ -->
+  <div class="objective-box fade-up">
+    <h3>🎯 อ่านจบบทนี้แล้ว คุณจะสามารถ...</h3>
+    <ul>
+      <li>อธิบายได้ว่า <strong>Tokenization</strong> คืออะไร และทำไมภาษาไทยถึงใช้ tokens มากกว่าภาษาอังกฤษในบางกรณี</li>
+      <li>เข้าใจว่า <strong>Embedding</strong> เปลี่ยน token เป็นตัวเลขได้อย่างไร และทำไมคำที่ "ใกล้เคียงกัน" ถึงอยู่ใกล้กันในทางคณิตศาสตร์</li>
+      <li>อธิบายหลักการ <strong>Attention</strong> และเหตุผลที่ทำให้ LLM เข้าใจ context ในประโยคได้</li>
+      <li>เข้าใจว่า <strong>Generation</strong> แบบ autoregressive ทำงานอย่างไร และทำไมจึงเห็นคำตอบทยอยออกมาทีละคำ</li>
+      <li>อธิบาย <strong>Context Window</strong> และผลที่มีต่อการสนทนายาวๆ</li>
+      <li>บอกได้ว่าทำไม LLM ถึง <strong>ไม่ได้ "ค้นหา" คำตอบ</strong> แต่ "สร้าง" มันขึ้นมา</li>
+    </ul>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       SECTION 2: ทำไมต้องรู้?
+  ════════════════════════════════════════════════ -->
+  <h2>🤔 ทำไมต้องรู้เรื่องนี้?</h2>
+
+  <div class="why-box fade-up">
+    <div class="why-label">💡 Why This Matters</div>
+    <p>คุณเคยสงสัยไหมว่าทำไม AI ถึงบางครั้ง <strong>ตอบผิดอย่างมั่นใจมาก</strong>? หรือทำไมมันถึงลืมสิ่งที่คุยกันไปตั้งแต่ต้น conversation? หรือทำไมภาษาไทยถึงดูเหมือนยากกว่าภาษาอังกฤษสำหรับ LLM?</p>
+    <p>ถ้าคุณรู้แค่ว่า "AI ฉลาด" แต่ไม่รู้ว่ามันทำงานยังไง คุณจะใช้มันแบบ "ลุ้น" ว่าจะได้ผลหรือเปล่า แต่ถ้าคุณเข้าใจ mechanism ข้างใน คุณจะ <strong>ออกแบบการใช้งาน</strong> ให้ได้ผลดีกว่า รู้ว่าเมื่อไรควรเชื่อ เมื่อไรควร verify และทำไมบาง prompt ถึงได้ผลดีกว่าอีก prompt</p>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       SECTION 3: Analogy + Breakdown Points
+  ════════════════════════════════════════════════ -->
+  <h2>💡 Analogy — มองผ่านเลนส์ที่คุ้นเคย</h2>
+
+  <div class="analogy-box fade-up">
+    <div class="analogy-label">Analogy หลัก</div>
+    <p style="font-size:1.05rem; font-weight:600; margin-bottom:12px;">
+      LLM เหมือน <strong>autocomplete บน keyboard ของมือถือที่ฉลาดมากผิดปกติ</strong>
+    </p>
+    <p>ลองนึกถึงตอนที่คุณพิมพ์ข้อความใน LINE แล้ว keyboard แนะนำคำที่น่าจะมาต่อ — LLM ทำงานแบบเดียวกัน แต่ฉลาดขึ้นหลายพัน (หรือล้าน) เท่า</p>
+    <p>Keyboard ของมือถือเรียนรู้จากการพิมพ์ของคุณ แต่ LLM เรียนรู้จากข้อความ <strong>เกือบทั้งหมดที่มนุษย์เขียนบนอินเทอร์เน็ต</strong> — หนังสือ บทความ code เว็บไซต์ Wikipedia รวมแล้วหลายร้อยพัน ล้านหน้า</p>
+    <p>เมื่อคุณถามอะไร มันไม่ได้ "ค้นหา" คำตอบในฐานข้อมูล แต่ <strong>ทำนายว่าคำตอบที่ดีสำหรับคำถามนี้ควรเป็นอะไร</strong> ทีละ token</p>
+
+    <div class="breakdown-box">
+      <strong>⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:</strong>
+      <ul style="margin-top:8px; margin-bottom:0;">
+        <li><strong>LLM ไม่รู้อะไรเลย</strong> — จริงๆ แล้วมันมีความรู้มหาศาลที่ "encode" ไว้ใน weights (พารามิเตอร์หลายพันล้านตัว) เพียงแต่ความรู้นั้น implicit ไม่ใช่ตารางข้อมูล</li>
+        <li><strong>LLM แค่ copy ข้อมูลที่เห็นมาแล้ว</strong> — จริงๆ แล้วมัน generalize ได้ สามารถตอบคำถามที่ไม่เคยเห็นใน training data โดยเชื่อมโยง patterns ที่เรียนรู้มา</li>
+        <li><strong>LLM ทำงาน "ตัวต่อตัว" กับคำ</strong> — จริงๆ แล้วมันทำงานกับ "tokens" ซึ่งอาจเป็นส่วนของคำ, คำ, หรือหลายคำรวมกัน ไม่ใช่ตัวอักษรเดี่ยว</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       SECTION 4: เนื้อหาหลัก — 4 ขั้นตอน + Context Window
+  ════════════════════════════════════════════════ -->
+  <h2>📖 เนื้อหาหลัก — ข้างในหัว LLM มีอะไร?</h2>
+
+  <p>การที่ LLM สร้างคำตอบ 1 ประโยคให้คุณ ผ่านกระบวนการ <strong>5 ขั้นตอน</strong> ลองกดดูทีละขั้น:</p>
+
+  <!-- LLM Stepper Animation -->
+  <div data-anim="llm-stepper" data-steps='[
+    {"icon":"📝","name":"Input Text","title":"ขั้นที่ 1: รับข้อความ Input","desc":"ข้อความที่คุณพิมพ์เข้ามา เช่น \"อธิบาย photosynthesis ให้เด็ก 10 ขวบฟัง\" — นี่คือจุดเริ่มต้นของกระบวนการทั้งหมด ข้อความนี้จะถูก process ผ่านขั้นตอนต่อไปทั้งหมด"},
+    {"icon":"🔢","name":"Tokenization","title":"ขั้นที่ 2: Tokenization — แบ่งข้อความเป็น Tokens","desc":"ข้อความถูกแบ่งเป็นหน่วยย่อยที่เรียกว่า Token เช่น \"photo\", \"syn\", \"thesis\" อาจเป็น 3 tokens แยกกัน LLM ทำงานกับ tokens ไม่ใช่ตัวอักษรหรือคำทั้งคำ — นี่คือเหตุผลที่ภาษาไทยบางครั้งใช้ tokens มากกว่าภาษาอังกฤษ"},
+    {"icon":"🌐","name":"Embedding","title":"ขั้นที่ 3: Embedding — แปลง Token เป็นตัวเลข","desc":"แต่ละ token ถูกแปลงเป็น vector (ชุดตัวเลขหลายพันมิติ) ที่จับ \"ความหมาย\" ไว้ คำที่มีความหมายใกล้กันจะมี vectors อยู่ใกล้กันใน mathematical space เช่น \"กษัตริย์\" และ \"ราชา\" จะอยู่ใกล้กันมากกว่า \"กษัตริย์\" และ \"รถยนต์\""},
+    {"icon":"🔍","name":"Attention","title":"ขั้นที่ 4: Attention — เชื่อมความสัมพันธ์","desc":"Transformer ดูว่า token ไหน \"สัมพันธ์\" กับ token ไหนในประโยค เช่น ในประโยค \"แมวกินมัน เพราะมันหิว\" — Attention ช่วยให้ model รู้ว่า \"มัน\" ตัวแรกอ้างถึง \"อาหาร\" และ \"มัน\" ตัวที่สองอ้างถึง \"แมว\""},
+    {"icon":"✨","name":"Generation","title":"ขั้นที่ 5: Generation — สร้าง Output ทีละ Token","desc":"Model เลือก token ที่น่าจะมาต่อทีละตัว โดยดูจาก context ทั้งหมด แล้ว append เข้าไป แล้วทำซ้ำจนได้คำตอบสมบูรณ์ นี่คือเหตุผลที่ streaming response แสดงผลทีละคำ — และเป็นเหตุผลที่ temperature ส่งผลต่อความ creative vs predictable ของคำตอบ"}
+  ]'></div>
+
+  <!-- ── 4.1 Tokenization ── -->
+  <h3>🔢 1. Tokenization — ภาษาผ่านสายตา AI</h3>
+
+  <p>ก่อนที่ LLM จะทำอะไรได้ มันต้องแปลง "ข้อความ" ให้เป็นหน่วยที่จัดการได้ก่อน หน่วยนั้นเรียกว่า <strong>token</strong></p>
+
+  <p>Token ไม่ใช่คำเสมอไป — มันอาจเป็น:</p>
+  <ul>
+    <li>ทั้งคำ เช่น "cat" = 1 token</li>
+    <li>ส่วนของคำ เช่น "playing" = "play" + "ing" = 2 tokens</li>
+    <li>เครื่องหมายวรรคตอน เช่น "!" = 1 token</li>
+    <li>ช่องว่างรวมกับคำ เช่น " Hello" (มี space นำหน้า) = 1 token</li>
+  </ul>
+
+  <div class="callout callout-warn">
+    <div class="callout-icon">🇹🇭</div>
+    <div>
+      <strong>ทำไมภาษาไทยถึงใช้ tokens มากกว่า?</strong><br>
+      LLM ส่วนใหญ่ train บน data ภาษาอังกฤษมากกว่า ทำให้ tokenizer "รู้จัก" คำศัพท์ภาษาอังกฤษเป็นหน่วย แต่ภาษาไทยมักถูกแบ่งเป็น subunit เล็กกว่า ส่งผลให้ข้อความไทยความยาวเท่ากันอาจใช้ tokens มากกว่า 2-3 เท่า — ซึ่งกินพื้นที่ context window มากกว่า และมีต้นทุนสูงกว่า
+    </div>
+  </div>
+
+  <p>ลองเล่น Token Visualizer ด้านล่าง — พิมพ์ข้อความแล้วดูว่าถูกแบ่งเป็น tokens ยังไง:</p>
+
+  <div data-anim="token-viz" data-text="Hello, I am Claude. สวัสดีครับ"></div>
+
+  <div class="callout callout-info">
+    <div class="callout-icon">ℹ️</div>
+    <div>
+      <strong>หมายเหตุ:</strong> Token visualizer ด้านบนเป็น approximation เพื่อแสดงแนวคิด tokenizer จริงๆ ของ Claude ใช้ BPE (Byte-Pair Encoding) ซึ่งซับซ้อนกว่านี้ โดยประมาณ 1 token ≈ 4 ตัวอักษรภาษาอังกฤษ
+    </div>
+  </div>
+
+  <!-- ── 4.2 Embedding ── -->
+  <h3>🌐 2. Embedding — แปลงความหมายเป็นตัวเลข</h3>
+
+  <p>หลังจากได้ tokens แล้ว แต่ละ token ถูกแปลงเป็น <strong>vector</strong> — ชุดตัวเลขหลายพันมิติที่จับ "ความหมาย" ของ token นั้นไว้</p>
+
+  <p>ลองนึกถึง coordinate บนแผนที่ — เมืองที่อยู่ใกล้กันบนแผนที่มี coordinates ที่ใกล้กัน ในโลกของ Embedding: <strong>คำที่มีความหมายใกล้กันจะมี vectors ที่อยู่ใกล้กัน</strong></p>
+
+  <div class="card fade-up">
+    <div style="font-weight:700; margin-bottom:12px;">ตัวอย่าง Word Vector Arithmetic (ที่มีชื่อเสียงมาก)</div>
+    <p style="font-family: monospace; font-size: 15px; background: var(--code-bg); color: #e2e8f0; padding: 14px 18px; border-radius: 8px; margin-bottom: 12px;">
+      "กษัตริย์" − "ชาย" + "หญิง" ≈ "ราชินี"
+    </p>
+    <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 0;">
+      นี่คือ word2vec example ที่โด่งดัง — แสดงให้เห็นว่า vectors จับ "ความสัมพันธ์เชิงความหมาย" ไม่ใช่แค่ความคล้ายของตัวอักษร ซึ่งหมายความว่า Embedding เข้าใจ concept เช่น เพศ, สถานะทางสังคม, ความเกี่ยวข้อง
+    </p>
+  </div>
+
+  <!-- ── 4.3 Attention / Transformer ── -->
+  <h3>🔍 3. Attention — โฟกัสส่วนที่สำคัญ</h3>
+
+  <p>ปัญหาของการเข้าใจภาษาคือ <strong>ความหมายขึ้นอยู่กับ context</strong> ลองดูตัวอย่าง:</p>
+
+  <div class="card fade-up">
+    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 6px;"><em>บริบท: แมวกำลังกินอาหาร</em></p>
+    <p style="font-size: 15px; margin-bottom: 8px;">"<strong>มัน</strong>กิน<strong>มัน</strong> เพราะ<strong>มัน</strong>หิว"</p>
+    <ul style="font-size: 14px; color: var(--text-muted); margin-bottom: 0;">
+      <li>"มัน" ตัวแรก = แมว (subject — ผู้กระทำ)</li>
+      <li>"มัน" ตัวที่สอง = อาหาร (object — สิ่งที่ถูกกิน)</li>
+      <li>"มัน" ตัวที่สาม = แมว (อีกครั้ง — ผู้ที่หิว)</li>
+    </ul>
+    <p style="font-size: 14px; margin-top: 12px; margin-bottom: 0;">ทั้งสามคำเป็น "มัน" เหมือนกัน แต่มีความหมายต่างกัน — Attention mechanism ช่วยให้ model "โฟกัส" ไปที่ tokens ที่เกี่ยวข้องกัน เมื่อประมวลผล "มัน" ตัวที่สาม model ให้ attention มากกับ "มัน" ตัวแรก + "กิน" มากกว่า tokens อื่น จึงรู้ว่าหมายถึง "แมว"</p>
+  </div>
+
+  <p>Transformer architecture (ที่ LLM ทุกตัวใช้) ทำ Attention นี้ <strong>หลายร้อยครั้งพร้อมกัน</strong> ในแต่ละ layer แต่ละครั้งมอง "ความสัมพันธ์" คนละมิติ เช่น ความสัมพันธ์เชิงไวยากรณ์, เชิงความหมาย, เชิง coreference ฯลฯ</p>
+
+  <!-- ── 4.4 Generation ── -->
+  <h3>✨ 4. Generation — สร้างคำตอบทีละ Token</h3>
+
+  <p>นี่คือขั้นตอนที่น่าทึ่งที่สุด — LLM <strong>ไม่ได้ค้นหาคำตอบ แต่สร้างมันขึ้นมา</strong> ทีละ token</p>
+
+  <p>กระบวนการคร่าวๆ:</p>
+  <ol>
+    <li>รับ context ทั้งหมด (prompt + tokens ที่สร้างมาแล้ว)</li>
+    <li>คำนวณ probability distribution ของ "token ที่น่าจะมาต่อ"</li>
+    <li>เลือก token หนึ่งตัว (แบบ probabilistic — ไม่ได้เลือก highest probability เสมอไป)</li>
+    <li>append token นั้นเข้าไปใน context</li>
+    <li>วนซ้ำตั้งแต่ข้อ 1 จนกว่าจะจบ</li>
+  </ol>
+
+  <div class="callout callout-warn">
+    <div class="callout-icon">🌡️</div>
+    <div>
+      <strong>Temperature คืออะไร?</strong><br>
+      Temperature ส่งผลต่อขั้นตอนที่ 3 — <strong>Temperature สูง</strong> = เลือก tokens ที่มี probability ต่ำกว่าบ้าง → ได้คำตอบที่ creative/แปลกใหม่ กว่า | <strong>Temperature ต่ำ</strong> = เลือก token ที่มี probability สูงที่สุดเสมอ → ได้คำตอบที่ predictable/คงที่กว่า นี่คือเหตุผลที่ creative writing ควรใช้ temperature สูงกว่า ส่วนงาน factual/code ควรใช้ต่ำกว่า
+    </div>
+  </div>
+
+  <!-- ── 4.5 Context Window ── -->
+  <h3>📦 Context Window — ความจำระยะสั้นของ LLM</h3>
+
+  <div class="card fade-up">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div>
+        <div class="level-label level-beginner" style="margin-bottom:8px;">Context Window คืออะไร</div>
+        <p style="font-size: 14px;">ทุกอย่างใน conversation ปัจจุบัน — ทั้ง prompt ของคุณ, คำตอบก่อนหน้า, system instructions — ถูก "อ่าน" ทุกครั้งที่ LLM จะตอบ</p>
+        <p style="font-size: 14px;">มีขีดจำกัดของ size ที่เรียกว่า Context Window (วัดเป็น tokens) เช่น 200,000 tokens สำหรับ Claude บางรุ่น</p>
+      </div>
+      <div>
+        <div class="level-label level-advanced" style="margin-bottom:8px;">ผลต่อการใช้งาน</div>
+        <p style="font-size: 14px;"><strong>เมื่อจบ session:</strong> ทุกอย่างถูกลืม ไม่มี persistent memory ข้าม sessions</p>
+        <p style="font-size: 14px;"><strong>เมื่อ conversation ยาวเกิน context:</strong> ส่วนแรกถูกตัดออก ทำให้ LLM "ลืม" บทสนทนาช่วงต้น</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout callout-info fade-up">
+    <div class="callout-icon">🔑</div>
+    <div>
+      <strong>จำไว้เสมอ:</strong> Context Window ≠ Memory ถาวร — ถ้าต้องการให้ AI "จำ" ข้อมูลสำคัญข้าม sessions ต้องมี external memory system ที่ผู้พัฒนา implement เพิ่มเติม ไม่ใช่ feature ที่มีอยู่ใน LLM โดย default
+    </div>
+  </div>
+
+  <!-- Quiz -->
+  <div data-anim="quiz"
+    data-q="ถ้าคุณปิด chat window แล้วเปิดใหม่ Claude จะจำสิ่งที่คุยกันไว้ได้ไหม?"
+    data-options='[
+      {"text":"จำได้ — Claude มี long-term memory","correct":false,"feedback":"ไม่ถูกต้อง — Claude ไม่มี persistent memory ข้ามระหว่าง sessions โดย default ทุกอย่างรีเซ็ตเมื่อจบ session"},
+      {"text":"จำไม่ได้ — ข้อมูลอยู่แค่ใน context window ของ session นั้น","correct":true,"feedback":"ถูกต้อง! Context window รีเซ็ตเมื่อจบ session เว้นแต่จะมี memory system ที่ผู้พัฒนา implement เพิ่มเติม (เช่น ใช้ Projects ใน Claude.ai)"},
+      {"text":"ขึ้นอยู่กับความยาวของ conversation","correct":false,"feedback":"ความยาวส่งผลต่อ context window ภายใน session แต่ไม่ส่งผลต่อ persistence ข้าม sessions"},
+      {"text":"จำได้ถ้าคุณ subscribe plan แพงขึ้น","correct":false,"feedback":"Plan ระดับสูงอาจมีฟีเจอร์ Projects ที่ช่วยเรื่อง memory แต่นั่นคือ feature เพิ่มเติมที่สร้างบน context window ไม่ใช่ model มี \"memory\" โดยตรง"}
+    ]'>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       SECTION 5: ตัวอย่าง 3 ระดับ
+  ════════════════════════════════════════════════ -->
+  <h2>📚 ตัวอย่าง 3 ระดับ</h2>
+
+  <div class="example-tabs">
+    <button class="example-tab">🟢 Beginner</button>
+    <button class="example-tab">🟡 Intermediate</button>
+    <button class="example-tab">🔴 Advanced</button>
+  </div>
+
+  <!-- Beginner -->
+  <div class="example-panel">
+    <div class="level-label level-beginner">Beginner — Google Translate กับ LLM</div>
+    <h3>Google Translate ใช้ LLM concepts อย่างไร?</h3>
+    <p>เมื่อคุณ translate "I love learning" เป็นภาษาไทย Google Translate ต้องผ่านกระบวนการที่คล้ายกับที่เพิ่งอ่านมา:</p>
+
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon">🔢</div>
+        <div class="card-title">Tokenization</div>
+        <div class="card-desc">"I", " love", " learning" ถูกแยกเป็น 3 tokens แยกกัน</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <div class="card-title">Embedding</div>
+        <div class="card-desc">แต่ละ token ถูกแปลงเป็น vector ที่จับความหมายของมัน</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔍</div>
+        <div class="card-title">Attention</div>
+        <div class="card-desc">Model รู้ว่า "learning" สัมพันธ์กับ "love" — ฉันรัก "การเรียนรู้" ไม่ใช่รัก "กำลังเรียน"</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">✨</div>
+        <div class="card-title">Generation</div>
+        <div class="card-desc">สร้าง "ฉัน", "รัก", "การเรียนรู้" ทีละ token ในภาษาปลายทาง</div>
+      </div>
+    </div>
+
+    <p>สิ่งที่น่าสนใจคือ — Google Translate รุ่นเก่า (pre-2016) ไม่ได้ใช้ Transformer และผลลัพธ์แย่กว่ามาก โดยเฉพาะกับประโยคยาวที่ต้องเข้าใจ context เพราะไม่มี Attention mechanism</p>
+  </div>
+
+  <!-- Intermediate -->
+  <div class="example-panel">
+    <div class="level-label level-intermediate">Intermediate — ทำไมภาษาไทยถึงมีปัญหาเรื่องการสะกด</div>
+    <h3>ทำไม Claude ตอบภาษาไทยได้ แต่บางครั้งสะกดผิดหรือใช้คำแปลกๆ?</h3>
+    <p>นี่ไม่ใช่เรื่องบังเอิญ — มีเหตุผลที่อธิบายได้ผ่าน 2 concepts:</p>
+
+    <div class="card fade-up">
+      <div style="font-weight:700; margin-bottom:10px;">เหตุผลที่ 1: Training Data Distribution</div>
+      <p style="font-size: 14px; margin-bottom: 0;">ข้อมูลบนอินเทอร์เน็ตเป็นภาษาอังกฤษมากกว่าภาษาไทยอย่างมีนัยสำคัญ (ประมาณ 50%+ ของ CommonCrawl เป็นภาษาอังกฤษ ส่วนภาษาไทยน้อยกว่า 1%) ทำให้ LLM เห็น "ตัวอย่าง" ภาษาอังกฤษที่ถูกต้องมากกว่ามาก → Probability distribution สำหรับ next token ในภาษาไทยมี "ความแม่นยำ" น้อยกว่า</p>
+    </div>
+
+    <div class="card fade-up">
+      <div style="font-weight:700; margin-bottom:10px;">เหตุผลที่ 2: Tokenization Mismatch</div>
+      <p style="font-size: 14px; margin-bottom: 8px;">Tokenizer ที่ optimize สำหรับภาษาอังกฤษจะแบ่งภาษาไทยอย่าง "หยาบ" กว่า เช่น:</p>
+      <ul style="font-size: 14px;">
+        <li>คำว่า "สวัสดี" อาจถูกแบ่งเป็น bytes หรือ character ย่อยๆ แทนที่จะเป็น 1 token</li>
+        <li>ทำให้ model เห็น pattern ระดับ character มากกว่า pattern ระดับ word</li>
+        <li>เมื่อ generate ออกมา อาจเกิด character combination ที่ผิดหลักภาษา</li>
+      </ul>
+      <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 0;"><strong>ผลลัพธ์:</strong> LLM "รู้" ภาษาไทย แต่ความ "ลื่นไหล" และความถูกต้องน้อยกว่าภาษาอังกฤษ</p>
+    </div>
+  </div>
+
+  <!-- Advanced -->
+  <div class="example-panel">
+    <div class="level-label level-advanced">Advanced — Hallucination เกิดจาก Generation Process อย่างไร?</div>
+    <h3>ทำไม LLM ถึงบางครั้ง "โกหกอย่างมั่นใจ" (Hallucinate)?</h3>
+    <p>Hallucination ไม่ใช่ bug — มันคือ emergent behavior ที่เข้าใจได้จาก generation mechanism:</p>
+
+    <div class="card fade-up">
+      <div style="font-weight:700; color: var(--danger); margin-bottom:12px;">Root Cause: Confident Next-Token Prediction ที่ผิด</div>
+      <p style="font-size: 14px; margin-bottom: 12px;">เมื่อ LLM generate คำตอบ มันคำนวณ probability ของ next token จาก patterns ใน training data ปัญหาเกิดเมื่อ:</p>
+      <ol style="font-size: 14px; margin-bottom: 12px;">
+        <li><strong>Pattern ที่ดูเหมือนถูกต้อง แต่ facts ผิด</strong> — เช่น "นักวิทยาศาสตร์ X ค้นพบ Y ในปี Z" อาจ generate ได้ดูถูกต้องตามรูปแบบ แต่ X, Y, Z อาจผสมกันผิด</li>
+        <li><strong>Confident generation บน low-frequency information</strong> — ข้อมูลที่ปรากฏน้อยใน training data มี probability distribution ที่กระจาย model จึง generate บน "best guess" ที่อาจผิด</li>
+        <li><strong>Autoregressive error accumulation</strong> — เมื่อ token แรกผิด token ถัดไปก็ generate จาก context ที่มี token ผิดนั้น ทำให้ errors สะสม</li>
+      </ol>
+      <div class="callout callout-danger" style="margin-bottom:0;">
+        <div class="callout-icon">⚠️</div>
+        <div style="font-size: 13.5px;">
+          <strong>นัยสำคัญ:</strong> LLM ไม่ "รู้ว่าตัวเองไม่รู้" เพราะ generation process คำนวณ probability เสมอ ไม่มี mechanism ที่บอกว่า "ฉันไม่มีข้อมูลนี้" — นั่นคือเหตุผลที่ต้อง verify ข้อมูล factual สำคัญเสมอ
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       SECTION 6: Common Mistakes
+  ════════════════════════════════════════════════ -->
+  <h2>🚫 Common Mistakes — ความเข้าใจผิดที่พบบ่อย</h2>
+
+  <div class="mistake-item fade-up">
+    <div class="mistake-wrong">
+      <span>❌</span>
+      <span>"LLM ค้นหาข้อมูลจาก internet ตลอดเวลาที่ตอบ"</span>
+    </div>
+    <div class="mistake-right">
+      <span>✅</span>
+      <span>LLM ทำงานจาก weights (พารามิเตอร์) ที่ train ไว้แล้ว ไม่ได้ browse internet ขณะตอบ — ความรู้ถูก "encode" ลงใน weights ณ เวลา training ยกเว้นมี tool ที่ให้ทำ (เช่น web search tool ที่ต้องมี developer เปิดใช้งาน)</span>
+    </div>
+    <div class="mistake-reason">เหตุผลที่เข้าใจผิด: เพราะ AI ดูเหมือน "รู้ทุกอย่าง" แต่ความรู้นั้นมาจาก training data ที่ตัดรอบในวันที่หนึ่ง (knowledge cutoff)</div>
+    <div class="mistake-source">*(source: Anthropic model documentation)*</div>
+  </div>
+
+  <div class="mistake-item fade-up">
+    <div class="mistake-wrong">
+      <span>❌</span>
+      <span>"LLM จำทุกอย่างไว้ตลอดชีวิต — มันจะ 'รู้' ว่าเราเป็นใครทุกครั้งที่คุย"</span>
+    </div>
+    <div class="mistake-right">
+      <span>✅</span>
+      <span>ข้อมูลอยู่ใน context window เท่านั้น เมื่อจบ session = ลืมทุกอย่าง ในรุ่นปัจจุบัน (Claude.ai) มี Projects ที่เพิ่ม persistent context ได้ แต่นั่นคือ feature ที่ต้องตั้งค่าแยกต่างหาก ไม่ใช่ default behavior ของ model</span>
+    </div>
+    <div class="mistake-reason">เหตุผลที่สำคัญ: ถ้าแชร์ข้อมูลส่วนตัวโดยคิดว่า AI จะ "จำ" ข้ามรอบ อาจทำให้ประเมินความเป็นส่วนตัวผิดพลาด</div>
+    <div class="mistake-source">*(source: Claude documentation — How Claude works)*</div>
+  </div>
+
+  <div class="mistake-item fade-up">
+    <div class="mistake-wrong">
+      <span>❌</span>
+      <span>"LLM คิดเหมือนสมองคน — มันเข้าใจ ใคร่ครวญ และมีเหตุผลเหมือนมนุษย์"</span>
+    </div>
+    <div class="mistake-right">
+      <span>✅</span>
+      <span>LLM ทำ statistical pattern matching ที่ซับซ้อนมาก แต่ต่างจาก human reasoning อย่างมาก — ไม่มี "ความเข้าใจ" เชิง conceptual แบบที่มนุษย์มี, ไม่มี common sense grounding จากประสบการณ์โลกจริง, และไม่ได้ "คิด" ก่อนตอบแบบที่คนทำ (มัน generate ทีละ token ไปข้างหน้า)</span>
+    </div>
+    <div class="mistake-reason">เหตุผลที่สำคัญ: การคาดหวังว่า AI จะ "คิดแบบคน" ทำให้ประเมิน capability ผิด ทั้ง overestimate (เชื่อทุกอย่าง) และ underestimate (ไม่รู้ว่าใช้ได้ดีแค่ไหน)</div>
+    <div class="mistake-source">*(source: AI research community — understanding LLM capabilities and limitations)*</div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════
+       SECTION 7: สรุปบท + Retrieval Questions
+  ════════════════════════════════════════════════ -->
+  <div class="summary-box fade-up">
+    <h2>📝 สรุปบท — สิ่งสำคัญที่ต้องจำ</h2>
+
+    <div class="card-grid" style="margin-bottom: 20px;">
+      <div style="background: #1e293b; border-radius: 8px; padding: 16px;">
+        <div style="color: #93c5fd; font-weight: 700; margin-bottom: 8px;">🔢 Tokenization</div>
+        <div style="font-size: 14px; color: #94a3b8;">ข้อความถูกแบ่งเป็น tokens (ไม่ใช่คำ) — ภาษาไทยใช้ tokens มากกว่าภาษาอังกฤษ</div>
+      </div>
+      <div style="background: #1e293b; border-radius: 8px; padding: 16px;">
+        <div style="color: #93c5fd; font-weight: 700; margin-bottom: 8px;">🌐 Embedding</div>
+        <div style="font-size: 14px; color: #94a3b8;">Token → Vector ที่จับความหมาย คำที่ใกล้กันมี vectors ใกล้กัน</div>
+      </div>
+      <div style="background: #1e293b; border-radius: 8px; padding: 16px;">
+        <div style="color: #93c5fd; font-weight: 700; margin-bottom: 8px;">🔍 Attention</div>
+        <div style="font-size: 14px; color: #94a3b8;">Model โฟกัส tokens ที่เกี่ยวข้องกัน ทำให้เข้าใจ context ในประโยคได้</div>
+      </div>
+      <div style="background: #1e293b; border-radius: 8px; padding: 16px;">
+        <div style="color: #93c5fd; font-weight: 700; margin-bottom: 8px;">✨ Generation</div>
+        <div style="font-size: 14px; color: #94a3b8;">สร้างคำตอบทีละ token แบบ probabilistic — ไม่ได้ "ค้นหา" แต่ "สร้าง"</div>
+      </div>
+    </div>
+
+    <p style="color: #94a3b8; font-size: 15px; margin-bottom: 24px;">
+      <strong style="color: #e2e8f0;">กฎทอง:</strong> LLM ไม่ได้รู้คำตอบ แต่ทำนายว่า token อะไรน่าจะมาต่อ — นั่นคือเหตุผลที่มันเก่งมากในบางเรื่อง และผิดอย่างมั่นใจในบางเรื่อง Context Window คือขีดจำกัดของ "ความจำ" ในแต่ละ session
+    </p>
+
+    <div style="border-top: 1px solid #334155; padding-top: 20px;">
+      <div style="color: #e2e8f0; font-weight: 700; margin-bottom: 16px;">🧠 Retrieval Questions — ลองตอบก่อนดูเฉลย</div>
+
+      <div class="retrieval-q">
+        <div class="q-num">คำถามที่ 1</div>
+        <p style="margin-bottom: 8px;">"อธิบาย tokenization ให้คนที่ไม่รู้อะไรเกี่ยวกับ AI ฟัง โดยใช้ analogy ที่ไม่มีในบทเรียนนี้"</p>
+        <details style="margin-top: 8px;">
+          <summary style="cursor: pointer; color: #93c5fd; font-size: 13px; user-select: none;">ดูแนวคำตอบ</summary>
+          <div style="margin-top: 10px; font-size: 14px; color: #94a3b8; padding-left: 12px; border-left: 2px solid #334155;">
+            ตัวอย่าง analogy: "เหมือน LEGO — ข้อความทั้งประโยคไม่ได้ถูกมองเป็นชิ้นเดียว แต่ถูกแยกออกเป็นชิ้น LEGO ย่อยๆ ที่เรียกว่า tokens บางชิ้นเป็นคำสั้น บางชิ้นเป็นส่วนของคำ AI ทำงานกับ LEGO แต่ละชิ้น ไม่ใช่ภาพรวมทั้งหมด" — สำคัญที่ต้องอธิบายคือ token ≠ ตัวอักษร และ token ≠ คำทั้งคำ
+          </div>
+        </details>
+      </div>
+
+      <div class="retrieval-q">
+        <div class="q-num">คำถามที่ 2</div>
+        <p style="margin-bottom: 8px;">"ทำไม LLM ถึงตอบในภาษาไทยได้แย่กว่าภาษาอังกฤษในบางกรณี — อธิบายผ่าน concept tokenization และ training data"</p>
+        <details style="margin-top: 8px;">
+          <summary style="cursor: pointer; color: #93c5fd; font-size: 13px; user-select: none;">ดูแนวคำตอบ</summary>
+          <div style="margin-top: 10px; font-size: 14px; color: #94a3b8; padding-left: 12px; border-left: 2px solid #334155;">
+            สองเหตุผลหลัก: (1) Training data ภาษาอังกฤษมีมากกว่าภาษาไทยมาก ทำให้ probability distribution สำหรับ next token ในภาษาไทยแม่นยำน้อยกว่า (2) Tokenizer ที่ design มาสำหรับภาษาอังกฤษแบ่งภาษาไทยเป็น unit เล็กกว่า ทำให้ model เห็น pattern ภาษาไทยในระดับ sub-word มากกว่า word — ผลลัพธ์คือการ generate ภาษาไทยมีโอกาสสะกดผิดหรือใช้คำแปลกๆ มากกว่า
+          </div>
+        </details>
+      </div>
+
+      <div class="retrieval-q">
+        <div class="q-num">คำถามที่ 3</div>
+        <p style="margin-bottom: 8px;">"Context window คืออะไร และมันส่งผลต่อการสนทนายาวๆ อย่างไร?"</p>
+        <details style="margin-top: 8px;">
+          <summary style="cursor: pointer; color: #93c5fd; font-size: 13px; user-select: none;">ดูแนวคำตอบ</summary>
+          <div style="margin-top: 10px; font-size: 14px; color: #94a3b8; padding-left: 12px; border-left: 2px solid #334155;">
+            Context window คือขนาดสูงสุดของ tokens ที่ LLM สามารถ "อ่าน" ได้ในการตอบครั้งหนึ่ง ผลต่อสนทนายาวๆ: (1) เมื่อ conversation ยาวเกิน context window ส่วนแรกถูกตัดออก ทำให้ LLM "ลืม" บทสนทนาช่วงต้น (2) เมื่อจบ session ทุกอย่างถูก reset — LLM ไม่มี persistent memory ข้าม sessions (3) ยิ่ง conversation ยาว ยิ่งกิน tokens มาก และมีต้นทุนสูงกว่า
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Navigation ── -->
+  <div style="display: flex; justify-content: space-between; margin-top: 48px; gap: 16px; flex-wrap: wrap;">
+    <a href="01-what-is-ai.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);color:var(--text);padding:14px 24px;border-radius:10px;text-decoration:none;font-weight:600;font-size:14px;box-shadow:var(--shadow);">
+      ← บทที่ 1: AI คืออะไร?
+    </a>
+    <a href="03-prompting.html" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;padding:14px 24px;border-radius:10px;text-decoration:none;font-weight:700;font-size:14px;box-shadow:0 4px 16px rgba(99,102,241,.4);">
+      บทที่ 3: ศิลปะการ Prompt →
+    </a>
+  </div>
+
+</div><!-- content -->
+</div><!-- main -->
+
+<script src="anim.js"></script>
+</body>
+</html>
