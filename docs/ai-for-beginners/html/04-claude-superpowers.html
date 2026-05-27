@@ -658,6 +658,365 @@ Claude: [Systematic Debugging Skill activated]
     </div>
   </div>
 
+  <hr>
+
+  <!-- ═══════════════════════════════════════════
+       BONUS: ChatGPT vs Claude+Superpowers
+  ═══════════════════════════════════════════ -->
+  <h2>⚡ ChatGPT vs Claude+Superpowers — เห็นความต่างชัดๆ</h2>
+
+  <p>ถ้าคุณเคยใช้ ChatGPT มาก่อน นี่คือสิ่งที่ต่างกันจริงๆ เมื่อ Claude มี Skills</p>
+
+  <!-- Comparison 1: Debugging -->
+  <div class="card fade-up" style="margin-bottom:20px; border-left:4px solid #6366f1;">
+    <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px;">
+      <span style="font-size:24px;">🐛</span>
+      <div>
+        <div style="font-weight:800; font-size:16px;">สถานการณ์ที่ 1: Debug โค้ดที่ผิดพลาด</div>
+        <div style="font-size:13px; color:var(--text-muted);">มีข้อผิดพลาดใน assignment แต่หาสาเหตุไม่เจอ</div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div>
+        <div style="font-weight:700; color:#ef4444; margin-bottom:8px; font-size:13px;">❌ ChatGPT (หรือ Claude แบบ default)</div>
+        <div style="background:#fff5f5; border:1px solid #fecaca; border-radius:8px; padding:12px; font-size:13px; line-height:1.7;">
+          คุณ: โค้ดนี้ error ทำไม?<br>
+          <code>[paste code]</code><br><br>
+          AI: ปัญหาน่าจะมาจากบรรทัดที่ 12 ลองเปลี่ยน <code>x = x + 1</code> เป็น <code>x += 1</code> ดูนะ
+        </div>
+        <div style="margin-top:8px; font-size:12px; color:#ef4444;">⚠️ เดาสาเหตุ ไม่ได้วิเคราะห์จริง — อาจแก้ไม่หาย</div>
+      </div>
+      <div>
+        <div style="font-weight:700; color:#059669; margin-bottom:8px; font-size:13px;">✅ Claude + /systematic-debugging</div>
+        <div style="background:#f0fdf4; border:1px solid #a7f3d0; border-radius:8px; padding:12px; font-size:13px; line-height:1.7;">
+          คุณ: /systematic-debugging โค้ดนี้ error<br><br>
+          Claude: ก่อนแก้ ขอ diagnose ก่อน:<br>
+          1️⃣ Error message เต็มๆ คืออะไร?<br>
+          2️⃣ เกิดทุกครั้งหรือบางครั้ง?<br>
+          3️⃣ ก่อน error เกิด ทำอะไรล่าสุด?<br>
+          4️⃣ เคยทำงานได้ก่อนหน้านี้ไหม?
+        </div>
+        <div style="margin-top:8px; font-size:12px; color:#059669;">✅ วินิจฉัยก่อนแก้ — แก้ได้จริงและไม่กลับมาอีก</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison 2: Writing Code / Feature -->
+  <div class="card fade-up" style="margin-bottom:20px; border-left:4px solid #8b5cf6;">
+    <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px;">
+      <span style="font-size:24px;">✨</span>
+      <div>
+        <div style="font-weight:800; font-size:16px;">สถานการณ์ที่ 2: สร้าง Feature ใหม่</div>
+        <div style="font-size:13px; color:var(--text-muted);">ต้องการเพิ่ม feature login ด้วย Google ใน web app</div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div>
+        <div style="font-weight:700; color:#ef4444; margin-bottom:8px; font-size:13px;">❌ ChatGPT / Claude default</div>
+        <div style="background:#fff5f5; border:1px solid #fecaca; border-radius:8px; padding:12px; font-size:13px; line-height:1.7;">
+          AI: โอเค! มาเพิ่ม Google OAuth กัน<br>
+          ขั้นตอนที่ 1: ไปที่ Google Console...<br>
+          [เริ่ม implement ทันที]
+        </div>
+        <div style="margin-top:8px; font-size:12px; color:#ef4444;">⚠️ ลง code ทันทีโดยไม่รู้ stack, auth library ที่ใช้, หรือ security requirement ของโปรเจค</div>
+      </div>
+      <div>
+        <div style="font-weight:700; color:#059669; margin-bottom:8px; font-size:13px;">✅ Claude + /brainstorming</div>
+        <div style="background:#f0fdf4; border:1px solid #a7f3d0; border-radius:8px; padding:12px; font-size:13px; line-height:1.7;">
+          Claude: ก่อน implement ขอถามก่อน:<br>
+          🔧 ใช้ framework อะไร? (Next.js, Express...)<br>
+          🔑 มี auth library อยู่แล้วไหม? (NextAuth, Passport...)<br>
+          💾 เก็บ session ที่ไหน? (JWT, database...)<br>
+          🛡️ ต้องการ PDPA compliance ไหม?<br><br>
+          [design ก่อน แล้วค่อย implement]
+        </div>
+        <div style="margin-top:8px; font-size:12px; color:#059669;">✅ รู้ context ก่อน → code ที่ได้เหมาะกับโปรเจคจริง</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison 3: Writing Essay / Planning -->
+  <div class="card fade-up" style="margin-bottom:20px; border-left:4px solid #f59e0b;">
+    <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px;">
+      <span style="font-size:24px;">📝</span>
+      <div>
+        <div style="font-weight:800; font-size:16px;">สถานการณ์ที่ 3: วางแผนโปรเจค</div>
+        <div style="font-size:13px; color:var(--text-muted);">ต้องทำ senior project ภายใน 3 เดือน ไม่รู้จะเริ่มจากไหน</div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div>
+        <div style="font-weight:700; color:#ef4444; margin-bottom:8px; font-size:13px;">❌ ChatGPT / Claude default</div>
+        <div style="background:#fff5f5; border:1px solid #fecaca; border-radius:8px; padding:12px; font-size:13px; line-height:1.7;">
+          AI: วางแผนโปรเจค 3 เดือน:<br>
+          เดือนที่ 1: ออกแบบ<br>
+          เดือนที่ 2: พัฒนา<br>
+          เดือนที่ 3: ทดสอบ
+        </div>
+        <div style="margin-top:8px; font-size:12px; color:#ef4444;">⚠️ แผน generic มากจนแทบใช้งานไม่ได้จริง</div>
+      </div>
+      <div>
+        <div style="font-weight:700; color:#059669; margin-bottom:8px; font-size:13px;">✅ Claude + /writing-plans</div>
+        <div style="background:#f0fdf4; border:1px solid #a7f3d0; border-radius:8px; padding:12px; font-size:13px; line-height:1.7;">
+          Claude สร้าง plan แบบ:<br>
+          📁 ไฟล์ที่ต้องสร้าง/แก้ไข<br>
+          ✅ Task ย่อยทีละ 2-5 นาที<br>
+          🧪 วิธีทดสอบแต่ละส่วน<br>
+          📅 Milestone ชัดเจน<br>
+          ⚠️ Risk ที่ต้องระวัง<br>
+          🔗 Dependencies ระหว่าง tasks
+        </div>
+        <div style="margin-top:8px; font-size:12px; color:#059669;">✅ แผนละเอียดพอที่จะ execute ได้จริงทันที</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison 4: Code Review -->
+  <div class="card fade-up" style="margin-bottom:20px; border-left:4px solid #10b981;">
+    <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px;">
+      <span style="font-size:24px;">🔍</span>
+      <div>
+        <div style="font-weight:800; font-size:16px;">สถานการณ์ที่ 4: Review โค้ดก่อนส่งงาน</div>
+        <div style="font-size:13px; color:var(--text-muted);">เขียน assignment เสร็จแล้ว อยากมั่นใจก่อนส่ง</div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div>
+        <div style="font-weight:700; color:#ef4444; margin-bottom:8px; font-size:13px;">❌ ChatGPT / Claude default</div>
+        <div style="background:#fff5f5; border:1px solid #fecaca; border-radius:8px; padding:12px; font-size:13px; line-height:1.7;">
+          AI: โค้ดดูดีนะ! มีบางจุดที่ปรับได้:<br>
+          - ตั้งชื่อตัวแปรให้ชัดขึ้น<br>
+          - อาจเพิ่ม comment ได้<br>
+          โดยรวมโอเคครับ 👍
+        </div>
+        <div style="margin-top:8px; font-size:12px; color:#ef4444;">⚠️ คำแนะนำผิวเผิน ไม่ตรวจ edge cases หรือ security</div>
+      </div>
+      <div>
+        <div style="font-weight:700; color:#059669; margin-bottom:8px; font-size:13px;">✅ Claude + /code-review</div>
+        <div style="background:#f0fdf4; border:1px solid #a7f3d0; border-radius:8px; padding:12px; font-size:13px; line-height:1.7;">
+          Claude ตรวจ systematic:<br>
+          🔴 Bugs: ลืมจัดการ null pointer line 24<br>
+          🟡 Performance: nested loop O(n²) ควรเป็น O(n)<br>
+          🔵 Style: variable naming ไม่สม่ำเสมอ<br>
+          🔒 Security: SQL query ควร parameterize<br>
+          ✅ ไม่มีปัญหา: logic หลักถูกต้อง
+        </div>
+        <div style="margin-top:8px; font-size:12px; color:#059669;">✅ Review ครอบคลุม มี severity level ชัดเจน</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Comparison 5: Quick Question (when NOT to use skills) -->
+  <div class="card fade-up" style="margin-bottom:24px; border-left:4px solid #94a3b8;">
+    <div style="display:flex; gap:12px; align-items:center; margin-bottom:16px;">
+      <span style="font-size:24px;">💬</span>
+      <div>
+        <div style="font-weight:800; font-size:16px;">สถานการณ์ที่ 5: ถามคำถามง่ายๆ</div>
+        <div style="font-size:13px; color:var(--text-muted);">อยากรู้ความหมายของ API key คืออะไร</div>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div>
+        <div style="font-weight:700; color:#059669; margin-bottom:8px; font-size:13px;">✅ ChatGPT / Claude default — เหมาะกว่า!</div>
+        <div style="background:#f0fdf4; border:1px solid #a7f3d0; border-radius:8px; padding:12px; font-size:13px; line-height:1.7;">
+          คุณ: API key คืออะไร?<br><br>
+          Claude: API key คือ "รหัสลับ" ที่ใช้ระบุตัวตนเมื่อเรียกใช้ API เหมือนกับ password ที่ระบุว่า "คนนี้มีสิทธิ์ใช้บริการนี้" [อธิบายต่อ...]
+        </div>
+        <div style="margin-top:8px; font-size:12px; color:#059669;">✅ ได้คำตอบทันที ไม่ต้อง overhead จาก workflow</div>
+      </div>
+      <div>
+        <div style="font-weight:700; color:#ef4444; margin-bottom:8px; font-size:13px;">❌ ไม่จำเป็นต้อง invoke Skill</div>
+        <div style="background:#fff5f5; border:1px solid #fecaca; border-radius:8px; padding:12px; font-size:13px; line-height:1.7;">
+          คุณ: /brainstorming API key คืออะไร?<br><br>
+          Claude: ขอสำรวจ context ก่อน — คุณกำลัง build อะไร? ต้องการ API key ประเภทไหน? ใช้ framework อะไร?...
+        </div>
+        <div style="margin-top:8px; font-size:12px; color:#ef4444;">⚠️ Overkill — Skills ทำให้ workflow ซับซ้อนเกินความจำเป็น</div>
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ═══════════════════════════════════════════
+       WHEN TO USE / NOT USE
+  ═══════════════════════════════════════════ -->
+  <h2>🗺️ เมื่อไรควรใช้ Skills — เมื่อไรไม่ควร?</h2>
+
+  <p>นี่คือ decision guide ง่ายๆ สำหรับมือใหม่:</p>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px;">
+    <div style="background:#f0fdf4; border:2px solid #a7f3d0; border-radius:var(--radius); padding:20px;">
+      <div style="font-weight:800; color:#065f46; font-size:16px; margin-bottom:14px;">✅ ควรใช้ Skills เมื่อ...</div>
+      <ul style="list-style:none; padding:0; margin:0; font-size:14px; line-height:1.9;">
+        <li>🔧 <strong>งานมี best practice</strong> ที่ชัดเจน เช่น debugging, code review</li>
+        <li>🔄 <strong>ทำซ้ำบ่อย</strong> — ไม่อยาก re-explain ทุกครั้ง</li>
+        <li>👥 <strong>ทำงานเป็นทีม</strong> — ต้องการ standard เดียวกัน</li>
+        <li>📋 <strong>มีหลาย step</strong> ที่ลืมได้ง่าย เช่น security checklist</li>
+        <li>🎯 <strong>งานสำคัญ</strong> ที่ต้องการ quality สูง</li>
+      </ul>
+    </div>
+    <div style="background:#fff5f5; border:2px solid #fecaca; border-radius:var(--radius); padding:20px;">
+      <div style="font-weight:800; color:#991b1b; font-size:16px; margin-bottom:14px;">❌ ไม่ต้องใช้ Skills เมื่อ...</div>
+      <ul style="list-style:none; padding:0; margin:0; font-size:14px; line-height:1.9;">
+        <li>❓ <strong>คำถามง่ายๆ</strong> เช่น "อธิบาย X ให้ฉันฟัง"</li>
+        <li>🎨 <strong>งาน creative</strong> ที่ต้องการ improvise</li>
+        <li>⚡ <strong>ต้องการคำตอบเร็ว</strong> ไม่มี workflow ซับซ้อน</li>
+        <li>🗣️ <strong>แค่อยากคุย</strong> หรือ brainstorm คร่าวๆ</li>
+        <li>📖 <strong>lookup ข้อมูล</strong> ที่ไม่ต้องการ structured workflow</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="background:linear-gradient(135deg,#1e293b,#0f172a); border-radius:var(--radius); padding:22px 26px; margin-bottom:24px;">
+    <div style="color:#fbbf24; font-weight:700; font-size:15px; margin-bottom:10px;">🧭 Rule of thumb ง่ายๆ</div>
+    <div style="color:#e2e8f0; font-size:14.5px; line-height:1.8;">
+      ถามตัวเองว่า <strong style="color:#a78bfa;">"ถ้า expert ในด้านนี้ทำงาน พวกเขาจะทำตาม checklist หรือ process อะไร?"</strong><br>
+      ถ้าคำตอบคือ "ใช่ มี process" → ใช้ Skill<br>
+      ถ้าคำตอบคือ "ไม่ แค่ตอบตรงๆ" → Claude default ก็พอ
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- ═══════════════════════════════════════════
+       PRO WORKFLOWS — สำหรับนักศึกษา/นักพัฒนา
+  ═══════════════════════════════════════════ -->
+  <h2>🚀 Workflow มืออาชีพ — ทำตามได้เลย</h2>
+
+  <p>นี่คือ workflow จริงๆ ที่นักศึกษาและ developer ใช้ทุกวัน — copy prompt แล้วใช้ได้เลย</p>
+
+  <div class="card fade-up" style="margin-bottom:16px;">
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+      <span style="font-size:28px; flex-shrink:0;">1️⃣</span>
+      <div>
+        <div style="font-weight:800; font-size:15px; margin-bottom:4px;">Debug Assignment ที่ error</div>
+        <div style="font-size:13px; color:var(--text-muted);">เมื่อโค้ดมี error และหาสาเหตุไม่เจอ</div>
+      </div>
+    </div>
+    <pre style="margin-bottom:8px;"><code>/systematic-debugging
+
+โค้ดนี้ error แต่หาสาเหตุไม่เจอ:
+
+[paste โค้ดของคุณ]
+
+Error message: [paste error message เต็มๆ]
+Expected behavior: [อธิบายว่าโค้ดควรทำอะไร]
+Already tried: [สิ่งที่ลองแก้ไปแล้ว]</code></pre>
+    <div style="font-size:13px; color:var(--text-muted);">Claude จะถามคำถาม diagnose ก่อน แล้วค่อยแนะนำวิธีแก้ที่แม่นยำ</div>
+  </div>
+
+  <div class="card fade-up" style="margin-bottom:16px;">
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+      <span style="font-size:28px; flex-shrink:0;">2️⃣</span>
+      <div>
+        <div style="font-weight:800; font-size:15px; margin-bottom:4px;">วางแผน Senior Project / งานใหญ่</div>
+        <div style="font-size:13px; color:var(--text-muted);">เมื่อมี spec แล้ว แต่ไม่รู้จะเริ่มจากไหน</div>
+      </div>
+    </div>
+    <pre style="margin-bottom:8px;"><code>/brainstorming
+
+ฉันต้องทำ [ชื่อโปรเจค] ภายใน [timeframe]
+Requirements:
+- [requirement 1]
+- [requirement 2]
+- [requirement 3]
+
+Tech stack ที่ใช้: [ภาษา/framework ที่รู้]
+ทำคนเดียว/เป็นทีม [X] คน
+
+ช่วยออกแบบ approach และถามสิ่งที่ยังไม่ชัดก่อนเริ่ม</code></pre>
+    <div style="font-size:13px; color:var(--text-muted);">Claude จะ explore requirements ก่อน แล้วเสนอ 2-3 approach พร้อม tradeoffs</div>
+  </div>
+
+  <div class="card fade-up" style="margin-bottom:16px;">
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+      <span style="font-size:28px; flex-shrink:0;">3️⃣</span>
+      <div>
+        <div style="font-weight:800; font-size:15px; margin-bottom:4px;">ตรวจโค้ดก่อนส่งงาน/commit</div>
+        <div style="font-size:13px; color:var(--text-muted);">เมื่อเขียนเสร็จแล้วอยากมั่นใจก่อนส่ง</div>
+      </div>
+    </div>
+    <pre style="margin-bottom:8px;"><code>/code-review
+
+ช่วย review โค้ดนี้ก่อนที่ฉันจะ submit:
+
+[paste โค้ด]
+
+Context: นี่คือ [อธิบาย function/feature]
+Focus: ดูเรื่อง [bugs / performance / security / style / ทั้งหมด]</code></pre>
+    <div style="font-size:13px; color:var(--text-muted);">Claude จะ review แบบ systematic และแจ้ง severity ของแต่ละ issue</div>
+  </div>
+
+  <div class="card fade-up" style="margin-bottom:16px;">
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+      <span style="font-size:28px; flex-shrink:0;">4️⃣</span>
+      <div>
+        <div style="font-weight:800; font-size:15px; margin-bottom:4px;">เขียนโค้ดแบบ TDD (Test-Driven)</div>
+        <div style="font-size:13px; color:var(--text-muted);">เมื่อต้องการโค้ดที่มีคุณภาพสูงและทดสอบได้</div>
+      </div>
+    </div>
+    <pre style="margin-bottom:8px;"><code>/test-driven-development
+
+ต้องการ implement function นี้:
+- ชื่อ: [ชื่อ function]
+- Input: [รับอะไร]
+- Output: [return อะไร]
+- Edge cases: [กรณีพิเศษที่ต้องจัดการ]
+
+Language: [Python/JavaScript/etc.]
+Testing framework: [pytest/jest/etc.]</code></pre>
+    <div style="font-size:13px; color:var(--text-muted);">Claude จะเขียน test ก่อน แล้วค่อย implement — โค้ดที่ได้จะผ่าน test ทุกตัวแน่นอน</div>
+  </div>
+
+  <div class="card fade-up" style="margin-bottom:16px;">
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+      <span style="font-size:28px; flex-shrink:0;">5️⃣</span>
+      <div>
+        <div style="font-weight:800; font-size:15px; margin-bottom:4px;">สร้าง Implementation Plan ละเอียด</div>
+        <div style="font-size:13px; color:var(--text-muted);">เมื่อมี spec/design แล้ว อยากได้ plan ที่ทำตามได้ทีละขั้น</div>
+      </div>
+    </div>
+    <pre style="margin-bottom:8px;"><code>/writing-plans
+
+Spec สำหรับ [feature/project]:
+[paste spec หรืออธิบาย requirement]
+
+Tech stack: [ระบุ]
+ทีม: [คนเดียว / X คน]
+Deadline: [ระบุ]</code></pre>
+    <div style="font-size:13px; color:var(--text-muted);">Claude สร้าง plan แบบ bite-sized tasks พร้อม file paths, คำสั่งทดสอบ, และ commit strategy</div>
+  </div>
+
+  <div class="card fade-up" style="margin-bottom:16px;">
+    <div style="display:flex; gap:12px; align-items:flex-start; margin-bottom:12px;">
+      <span style="font-size:28px; flex-shrink:0;">6️⃣</span>
+      <div>
+        <div style="font-weight:800; font-size:15px; margin-bottom:4px;">ตรวจงานก่อนประกาศว่าเสร็จ</div>
+        <div style="font-size:13px; color:var(--text-muted);">เมื่อ implement เสร็จแล้ว แต่ยังไม่แน่ใจว่าครบ</div>
+      </div>
+    </div>
+    <pre style="margin-bottom:8px;"><code>/verification-before-completion
+
+ฉัน implement [feature/bugfix] เสร็จแล้ว
+ช่วย verify ว่าครบถ้วนก่อนที่ฉันจะบอกว่าเสร็จ
+
+สิ่งที่ทำ:
+- [สิ่งที่ทำ 1]
+- [สิ่งที่ทำ 2]
+
+Requirements เดิม: [ระบุ requirements]</code></pre>
+    <div style="font-size:13px; color:var(--text-muted);">Claude จะรัน verification commands จริงๆ และ confirm ก่อนบอกว่าผ่าน — ไม่เชื่อแค่ที่คุณบอก</div>
+  </div>
+
+  <div class="callout callout-info fade-up">
+    <div class="callout-icon">💡</div>
+    <div>
+      <strong>Tips สำหรับมือใหม่:</strong> ไม่ต้องจำ Skills ทุกตัวทีเดียว เริ่มจาก 2 ตัวที่ใช้บ่อยที่สุด —
+      <code>/systematic-debugging</code> (เมื่อ bug) และ <code>/brainstorming</code> (เมื่อสร้างของใหม่)
+      แค่สองตัวนี้จะช่วยได้ 80% ของงานประจำวัน
+    </div>
+  </div>
+
   <!-- Navigation -->
   <div style="display:flex; justify-content:space-between; align-items:center; margin-top:40px; gap:16px; flex-wrap:wrap;">
     <a href="03-prompting.html" style="display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border:1.5px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text-muted);font-weight:600;font-size:14px;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--primary)';this.style.color='var(--primary)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">
