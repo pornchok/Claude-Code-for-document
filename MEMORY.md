@@ -27,6 +27,7 @@
 | 2026-03-26 | RF Control Flow: IF/ELSE, FOR (IN/RANGE/ENUMERATE/ZIP), WHILE, BREAK, CONTINUE (00-overview + 01~03 + exercises + glossary) | docs/robot-framework-control-flow/ | 100/100 (7/7 files) | 100/100 (RF 7.3.2 tested locally, syntax verified, FOR IN ZIP bug found+fixed) | 100/100 |
 | 2026-04-05 | RF + AppiumLibrary Mobile Testing Series (00-overview + 01~07 + exercises + glossary) | docs/rf-mobile-testing/ | 100/100 (10/10 files) | 100/100 (AppiumLibrary 3.0.0, Appium 2.x, verified via official docs) | 100/100 |
 | 2026-04-05 | WebdriverIO + Appium Mobile Testing Series (00-overview + 01~07 + exercises + glossary) | docs/wdio-mobile-testing/ | 100/100 (10/10 files) | 100/100 (WDIO v9, Appium 2.x, verified via official docs) | 100/100 |
+| 2026-05-28 | AI for Beginners — Interactive HTML Course (5 บท + exercises + glossary, format: animated HTML) | docs/ai-for-beginners/html/ | 100/100 (10/10 files) | 98.4/100 (quality-audit pass: 5 minor fixes applied) | 98.4/100 — animations: Timeline, Taxonomy, LLM Stepper, Token Viz, Prompt Builder, Flip-card, Skills Flow, Quiz; exercises: 15 ข้อ (Recall/Application/Synthesis) ไม่มี fill-in-blank; glossary: 34 คำ + real-time search |
 
 ## Skills Quality History
 | วันที่ | Skill | PE | LS | EC | หมายเหตุ |
