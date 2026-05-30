@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Playwright Course App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="main-nav"></div>
+  <main>
+    <h1 data-testid="admin-heading">Admin Dashboard</h1>
+    <div id="admin-content" data-testid="admin-content">
+      <p style="color:var(--text-muted)">Loading...</p>
+    </div>
+  </main>
+
+  <script src="/client.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      if (!Auth.getToken()) {
+        location.href = '/login?redirect=/admin&unauthorized=1';
+        return;
+      }
+      try {
+        const data = await apiFetch('/api/admin');
+        document.getElementById('admin-content').innerHTML = `
+          <div class="card-grid">
+            <div class="card" data-testid="stat-users" style="text-align:center">
+              <h2 style="font-size:2.5rem;margin:0">${data.stats.users}</h2>
+              <p>Users</p>
+            </div>
+            <div class="card" data-testid="stat-products" style="text-align:center">
+              <h2 style="font-size:2.5rem;margin:0">${data.stats.products}</h2>
+              <p>Products</p>
+            </div>
+            <div class="card" data-testid="stat-todos" style="text-align:center">
+              <h2 style="font-size:2.5rem;margin:0">${data.stats.todos}</h2>
+              <p>Todos</p>
+            </div>
+            <div class="card" data-testid="stat-orders" style="text-align:center">
+              <h2 style="font-size:2.5rem;margin:0">${data.stats.orders}</h2>
+              <p>Orders</p>
+            </div>
+          </div>
+          <p style="margin-top:1rem;color:var(--text-muted)" data-testid="admin-welcome">
+            Welcome, admin. You have full access.
+          </p>`;
+      } catch (err) {
+        if (err.status === 403) {
+          document.getElementById('admin-content').innerHTML =
+            '<div class="alert alert-error" data-testid="access-denied">Access denied. Admin role required.</div>';
+        } else {
+          location.href = '/login?redirect=/admin&unauthorized=1';
+        }
+      }
+    });
+  </script>
+</body>
+</html>
