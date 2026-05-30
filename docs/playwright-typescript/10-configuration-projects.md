@@ -84,7 +84,7 @@ export default defineConfig({
 
 `workers` คือจำนวน **parallel processes** ที่ Playwright spawns — เหมือนจำนวน "คนงาน" ที่ทำงานพร้อมกัน
 
-`fullyParallel` คือ "คนงานแต่ละคน ทำ test ได้กี่ test พร้อมกัน" — ถ้า `fullyParallel: false` (default) แต่ละ worker รันทีละ test ตามลำดับใน file นั้น ถ้า `fullyParallel: true` tests ใน file เดียวกันก็รัน parallel ได้ด้วย
+`fullyParallel` คือ "ทุก test ในทุก file รัน parallel ได้หรือไม่" — ถ้า `fullyParallel: false` (default) แต่ละ file รันทีละ test ตามลำดับ (sequential ภายใน file) แต่ files ต่างกันรัน parallel กันได้ ถ้า `fullyParallel: true` ทุก test ในทุก file รัน parallel พร้อมกันได้
 
 ```
 workers: 4, fullyParallel: false → 4 files รันพร้อมกัน, แต่ละ file รัน tests ทีละตัว
