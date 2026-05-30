@@ -554,15 +554,50 @@ for (const { name, device } of mobileDevices) {
       await expect(page.locator('nav.mobile-nav')).toBeVisible();
     });
 
-    test('dark mode renders correct colors on mobile', async ({ page }) => {
-      await page.emulateMedia({ colorScheme: 'dark' });
-      await page.goto('/');
+    test('product grid shows correct columns in portrait vs landscape', async ({ browser }) => {
+      // --- PORTRAIT MODE ---
+      const portraitCtx = await browser.newContext({
+        viewport: { width: 390, height: 844 },
+      });
+      const portraitPage = await portraitCtx.newPage();
+      await portraitPage.goto('/shop');
 
-      // header background ควรเป็น dark
-      await expect(page.locator('header')).toHaveCSS(
-        'background-color',
-        /rgb\(1[0-9]|2[0-9]|[0-9], /
-      );
+      // portrait ควรแสดง 1 column layout (stacked)
+      const portraitCards = portraitPage.locator('[data-testid="product-card"]');
+      const portraitFirstCard = portraitCards.nth(0);
+      const portraitSecondCard = portraitCards.nth(1);
+
+      const portraitFirstBox = await portraitFirstCard.boundingBox();
+      const portraitSecondBox = await portraitSecondCard.boundingBox();
+
+      // ส่วน Y ต่างกัน (stacked vertically)
+      expect(portraitSecondBox!.y).toBeGreaterThan(portraitFirstBox!.y + portraitFirstBox!.height);
+      // ส่วน X เหมือนกัน (same column)
+      expect(portraitSecondBox!.x).toBeCloseTo(portraitFirstBox!.x, 10);
+
+      await portraitCtx.close();
+
+      // --- LANDSCAPE MODE ---
+      const landscapeCtx = await browser.newContext({
+        viewport: { width: 844, height: 390 },
+      });
+      const landscapePage = await landscapeCtx.newPage();
+      await landscapePage.goto('/shop');
+
+      const landscapeCards = landscapePage.locator('[data-testid="product-card"]');
+      const landscapeFirstCard = landscapeCards.nth(0);
+      const landscapeSecondCard = landscapeCards.nth(1);
+
+      const landscapeFirstBox = await landscapeFirstCard.boundingBox();
+      const landscapeSecondBox = await landscapeSecondCard.boundingBox();
+
+      // landscape ควรแสดง 2 columns (side-by-side)
+      // ส่วน Y เหมือนกัน (same row)
+      expect(landscapeSecondBox!.y).toBeCloseTo(landscapeFirstBox!.y, 10);
+      // ส่วน X ต่างกัน (different columns)
+      expect(landscapeSecondBox!.x).toBeGreaterThan(landscapeFirstBox!.x + landscapeFirstBox!.width);
+
+      await landscapeCtx.close();
     });
   });
 }
@@ -644,6 +679,8 @@ test('HR document signing flow — iframe + shadow DOM + download', async ({ pag
 
   // save และตรวจสอบไฟล์
   const savePath = path.join('test-results', 'downloads', filename);
+  // ✅ สร้าง directory ก่อนบันทึกไฟล์
+  fs.mkdirSync(path.dirname(savePath), { recursive: true });
   await download.saveAs(savePath);
   expect(fs.existsSync(savePath)).toBe(true);
 
