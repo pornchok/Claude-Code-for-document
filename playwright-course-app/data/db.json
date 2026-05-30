@@ -1,19 +1,99 @@
 {
   "users": [
-    { "id": 1, "username": "admin", "password": "admin123", "role": "admin" },
-    { "id": 2, "username": "testuser", "password": "test123", "role": "user" }
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "admin123",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "username": "testuser",
+      "password": "test123",
+      "role": "user"
+    }
   ],
   "products": [
-    { "id": 1, "name": "iPhone 15 Pro", "price": 999, "category": "Electronics", "description": "Apple flagship smartphone with titanium design", "image": "https://placehold.co/300x200?text=iPhone+15+Pro" },
-    { "id": 2, "name": "MacBook Air M3", "price": 1299, "category": "Electronics", "description": "Ultra-thin laptop with Apple M3 chip", "image": "https://placehold.co/300x200?text=MacBook+Air" },
-    { "id": 3, "name": "AirPods Pro", "price": 249, "category": "Electronics", "description": "Active noise cancellation earbuds", "image": "https://placehold.co/300x200?text=AirPods+Pro" },
-    { "id": 4, "name": "iPad mini", "price": 499, "category": "Electronics", "description": "Compact tablet with A15 Bionic chip", "image": "https://placehold.co/300x200?text=iPad+mini" },
-    { "id": 5, "name": "Clean Code", "price": 45, "category": "Books", "description": "A handbook of agile software craftsmanship by Robert C. Martin", "image": "https://placehold.co/300x200?text=Clean+Code" },
-    { "id": 6, "name": "The Pragmatic Programmer", "price": 50, "category": "Books", "description": "Your journey to mastery by David Thomas and Andrew Hunt", "image": "https://placehold.co/300x200?text=Pragmatic+Programmer" },
-    { "id": 7, "name": "Design Patterns", "price": 55, "category": "Books", "description": "Elements of Reusable Object-Oriented Software (GoF)", "image": "https://placehold.co/300x200?text=Design+Patterns" },
-    { "id": 8, "name": "Classic T-Shirt", "price": 25, "category": "Clothing", "description": "100% cotton comfortable everyday t-shirt", "image": "https://placehold.co/300x200?text=T-Shirt" },
-    { "id": 9, "name": "Tech Hoodie", "price": 65, "category": "Clothing", "description": "Warm fleece hoodie with front pocket", "image": "https://placehold.co/300x200?text=Hoodie" },
-    { "id": 10, "name": "Canvas Sneakers", "price": 80, "category": "Clothing", "description": "Lightweight canvas shoes for everyday wear", "image": "https://placehold.co/300x200?text=Sneakers" }
+    {
+      "id": 1,
+      "name": "iPhone 15 Pro",
+      "price": 999,
+      "category": "Electronics",
+      "description": "Apple flagship smartphone with titanium design",
+      "image": "https://placehold.co/300x200?text=iPhone+15+Pro"
+    },
+    {
+      "id": 2,
+      "name": "MacBook Air M3",
+      "price": 1299,
+      "category": "Electronics",
+      "description": "Ultra-thin laptop with Apple M3 chip",
+      "image": "https://placehold.co/300x200?text=MacBook+Air"
+    },
+    {
+      "id": 3,
+      "name": "AirPods Pro",
+      "price": 249,
+      "category": "Electronics",
+      "description": "Active noise cancellation earbuds",
+      "image": "https://placehold.co/300x200?text=AirPods+Pro"
+    },
+    {
+      "id": 4,
+      "name": "iPad mini",
+      "price": 499,
+      "category": "Electronics",
+      "description": "Compact tablet with A15 Bionic chip",
+      "image": "https://placehold.co/300x200?text=iPad+mini"
+    },
+    {
+      "id": 5,
+      "name": "Clean Code",
+      "price": 45,
+      "category": "Books",
+      "description": "A handbook of agile software craftsmanship by Robert C. Martin",
+      "image": "https://placehold.co/300x200?text=Clean+Code"
+    },
+    {
+      "id": 6,
+      "name": "The Pragmatic Programmer",
+      "price": 50,
+      "category": "Books",
+      "description": "Your journey to mastery by David Thomas and Andrew Hunt",
+      "image": "https://placehold.co/300x200?text=Pragmatic+Programmer"
+    },
+    {
+      "id": 7,
+      "name": "Design Patterns",
+      "price": 55,
+      "category": "Books",
+      "description": "Elements of Reusable Object-Oriented Software (GoF)",
+      "image": "https://placehold.co/300x200?text=Design+Patterns"
+    },
+    {
+      "id": 8,
+      "name": "Classic T-Shirt",
+      "price": 25,
+      "category": "Clothing",
+      "description": "100% cotton comfortable everyday t-shirt",
+      "image": "https://placehold.co/300x200?text=T-Shirt"
+    },
+    {
+      "id": 9,
+      "name": "Tech Hoodie",
+      "price": 65,
+      "category": "Clothing",
+      "description": "Warm fleece hoodie with front pocket",
+      "image": "https://placehold.co/300x200?text=Hoodie"
+    },
+    {
+      "id": 10,
+      "name": "Canvas Sneakers",
+      "price": 80,
+      "category": "Clothing",
+      "description": "Lightweight canvas shoes for everyday wear",
+      "image": "https://placehold.co/300x200?text=Sneakers"
+    }
   ],
   "todos": [],
   "orders": []
