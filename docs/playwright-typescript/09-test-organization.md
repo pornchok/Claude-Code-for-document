@@ -214,8 +214,8 @@ test.describe('Auth flows', { tag: '@auth' }, () => {
 # รันเฉพาะ tests ที่มี @smoke
 npx playwright test --grep @smoke
 
-# รัน tests ที่มีทั้ง @smoke และ @regression
-npx playwright test --grep "@smoke.*@regression"
+# รัน tests ที่มีทั้ง @smoke และ @regression (ไม่สนลำดับ)
+npx playwright test --grep "(?=.*@smoke)(?=.*@regression)"
 
 # ยกเว้น @slow ทั้งหมด
 npx playwright test --grep-invert @slow
@@ -223,6 +223,8 @@ npx playwright test --grep-invert @slow
 # combine: เอา @smoke แต่ยกเว้น @slow
 npx playwright test --grep @smoke --grep-invert @slow
 ```
+
+**หมายเหตุ:** `@smoke.*@regression` จะ match เฉพาะเมื่อ `@smoke` อยู่ก่อน `@regression` ในชื่อ test เท่านั้น ถ้าต้องการ match ไม่สนลำดับ (เช่น `@regression @smoke`) ให้ใช้ lookahead pattern `(?=.*@smoke)(?=.*@regression)` แทน
 
 Tags ยังแสดงใน HTML report และ available ผ่าน `TestCase.tags` property สำหรับ custom reporter
 
@@ -657,7 +659,7 @@ test.each([
   { username: 'read-only',  password: 'readonly1', feature: 'view-only' },
 ])('$username เข้าถึง $feature ได้ตาม permission', async ({ page }, params) => { ... });
 ```
-เหตุผล: parameterized test ที่ดีควรแสดงว่า concept ใช้ได้กับหลาย context ไม่ใช่แค่ recap example เดิม *(source: CLAUDE.md — Content Standards)*
+เหตุผล: **Pedagogical best practice** — ถ้า parameterized test ใช้ข้อมูล (context/ตัวเลข) โดยตรงจากตัวอย่างในบท แล้วแทนที่จะเป็นการ "เรียนรู้แบบ transfer learning" (นำความเข้าใจไปใช้กับสถานการณ์ใหม่) มันกลายเป็นการ "recognition ล้วนๆ" (จำไว้เฉยๆ) ผู้เรียนไม่ได้ฝึกว่า concept ใช้ได้กับ data หลากหลายระดับขนาด/บริบทต่างกัน การเปลี่ยน data set ขนาดนี้ทำให้ exercise ช่วยเสริม concept ได้จริง
 
 ---
 
