@@ -275,6 +275,100 @@ CONCEPT: Locator Priority Order — Verified Fix
 QUOTE: "These are the recommended built-in locators. page.getByRole() to locate by explicit and implicit accessibility attributes. page.getByText() to locate by text content. page.getByLabel() to locate a form control by associated label's text. page.getByPlaceholder() to locate an input by placeholder. page.getByAltText() to locate an element, usually image, by its text alternative. page.getByTitle() to locate an element by its title attribute. page.getByTestId() to locate an element based on its data-testid attribute."
 
 Note: Correct order is getByRole → getByText → getByLabel → getByPlaceholder → getByAltText → getByTitle → getByTestId
+
+---
+
+## Ch05: Actions & Assertions
+
+SOURCE: https://playwright.dev/docs/input
+VERSION: 2026-05-31
+CONCEPT: fill() — replace input content immediately
+QUOTE: "the easiest way to fill out the form fields. It focuses the element and triggers an `input` event with the entered text. It works for `<input>`, `<textarea>` and `[contenteditable]` elements."
+
+SOURCE: https://playwright.dev/docs/input
+VERSION: 2026-05-31
+CONCEPT: pressSequentially() — keystroke-by-keystroke typing
+QUOTE: "character by character, as if it was a user with a real keyboard"
+
+SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: Visible check definition
+QUOTE: "Element is considered visible when it has non-empty bounding box and does not have `visibility:hidden` computed style."
+
+SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: Stable check definition
+QUOTE: "Element is considered stable when it has maintained the same bounding box for at least two consecutive animation frames."
+
+SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: Receives Events check definition
+QUOTE: "Element is considered receiving pointer events when it is the hit target of the pointer event at the action point."
+
+SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: Enabled check definition
+QUOTE: "Element is considered enabled when it is not disabled."
+
+SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: Editable check definition
+QUOTE: "Element is considered editable when it is [enabled] and is not readonly."
+
+SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: Actions with all 5 checks
+QUOTE: "locator.click(), locator.check(), locator.dblclick(), locator.setChecked(), locator.tap(), locator.uncheck()" require all checks
+
+SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: fill() and clear() actionability checks
+QUOTE: "locator.fill(), locator.clear()" — checks: Visible + Enabled + Editable
+
+SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: press() and pressSequentially() — no actionability checks
+QUOTE: "locator.press(), locator.pressSequentially()" — listed under "No Checks" category
+
+SOURCE: https://playwright.dev/docs/navigations
+VERSION: 2026-05-31
+CONCEPT: page.goto() waits for load event
+QUOTE: "The code above loads the page and waits for the web page to fire the load event."
+
+SOURCE: https://playwright.dev/docs/navigations
+VERSION: 2026-05-31
+CONCEPT: Auto-waiting principle
+QUOTE: "It will automatically wait for the target elements to become actionable."
+
+SOURCE: https://playwright.dev/docs/navigations
+VERSION: 2026-05-31
+CONCEPT: Playwright speed and actionability
+QUOTE: "Playwright operates as a very fast user - the moment it sees the button, it clicks it. In the general case, you don't need to worry about whether all the resources loaded."
+
+SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-05-31
+CONCEPT: Web-first assertions retry behavior
+QUOTE: "Playwright will be re-testing the element with the test id of `status` until the fetched element has the `\"Submitted\"` text."
+
+SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-05-31
+CONCEPT: Soft assertions with expect.soft()
+QUOTE: "Using expect.soft() allows assertions to fail without terminating test execution, enabling multiple validations per test while still marking failures."
+
+SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-05-31
+CONCEPT: Custom matchers with expect.extend()
+QUOTE: "The expect.extend() method enables developers to create domain-specific assertions tailored to application requirements."
+
+SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-05-31
+CONCEPT: toHaveRole() — ARIA role assertion
+QUOTE: "toHaveRole() - validates specific ARIA role"
+
+SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-05-31
+CONCEPT: toMatchAriaSnapshot() — aria snapshot matching
+QUOTE: "toMatchAriaSnapshot() - Element matches the Aria snapshot"
 Previous version of ch04 had getByLabel at #2 and getByText at #4 — this was wrong. Fixed 2026-05-31.
 
 ---
