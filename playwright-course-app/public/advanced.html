@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced — Playwright Course App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="main-nav"></div>
+  <main>
+    <h1>Advanced Browser Features</h1>
+    <p style="color:var(--text-muted);margin-bottom:2rem">Testing targets for popups, iframes, file handling, dialogs, and Shadow DOM.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+
+      <section class="card" data-testid="section-popup">
+        <h2>Popup / New Tab</h2>
+        <p style="font-size:.875rem;color:var(--text-muted);margin-bottom:.75rem">Click to open a new browser tab.</p>
+        <button class="btn btn-primary" data-testid="btn-open-popup"
+                onclick="window.open('/todos','_blank','width=800,height=600')">
+          Open Todos in New Tab
+        </button>
+      </section>
+
+      <section class="card" data-testid="section-upload">
+        <h2>File Upload</h2>
+        <form id="upload-form" data-testid="upload-form">
+          <div class="form-group">
+            <label for="file-input">Choose a file</label>
+            <input type="file" id="file-input" data-testid="input-file" accept=".txt,.csv,.json">
+          </div>
+          <button type="submit" class="btn btn-primary btn-sm" data-testid="btn-upload">Upload</button>
+          <p id="upload-result" data-testid="upload-result"
+             style="margin-top:.5rem;color:var(--success);display:none"></p>
+        </form>
+      </section>
+
+      <section class="card" data-testid="section-dialogs">
+        <h2>Browser Dialogs</h2>
+        <div style="display:flex;flex-direction:column;gap:.5rem">
+          <button class="btn btn-secondary" data-testid="btn-alert"
+                  onclick="alert('This is an alert dialog!')">
+            Trigger alert()
+          </button>
+          <button class="btn btn-secondary" data-testid="btn-confirm"
+                  onclick="document.getElementById('confirm-result').textContent=confirm('Do you confirm?')?'Confirmed ✅':'Cancelled ❌'">
+            Trigger confirm()
+          </button>
+          <p id="confirm-result" data-testid="confirm-result" style="font-weight:600"></p>
+          <button class="btn btn-secondary" data-testid="btn-prompt"
+                  onclick="const r=prompt('Enter your name:','Playwright');document.getElementById('prompt-result').textContent=r?'Hello, '+r+'!':'Cancelled'">
+            Trigger prompt()
+          </button>
+          <p id="prompt-result" data-testid="prompt-result" style="font-weight:600"></p>
+        </div>
+      </section>
+
+      <section class="card" data-testid="section-download">
+        <h2>File Download</h2>
+        <p style="font-size:.875rem;color:var(--text-muted);margin-bottom:.75rem">Download a CSV file of all todos.</p>
+        <a href="/api/export" class="btn btn-primary" data-testid="btn-download" download="todos.csv">
+          ⬇ Download todos.csv
+        </a>
+      </section>
+    </div>
+
+    <section class="card" style="margin-bottom:1rem" data-testid="section-iframe">
+      <h2>iFrame Embed</h2>
+      <p style="font-size:.875rem;color:var(--text-muted);margin-bottom:.75rem">The /todos page embedded inside an iframe.</p>
+      <iframe src="/todos" width="100%" height="400" data-testid="embedded-iframe"
+              title="Todos page embedded"
+              style="border:1px solid var(--border);border-radius:.375rem"></iframe>
+    </section>
+
+    <section class="card" data-testid="section-shadow-dom">
+      <h2>Shadow DOM Component</h2>
+      <p style="font-size:.875rem;color:var(--text-muted);margin-bottom:.75rem">
+        A custom web component with shadow root. Regular CSS and querySelector cannot reach inside.
+      </p>
+      <my-counter data-testid="shadow-counter"></my-counter>
+    </section>
+  </main>
+
+  <script src="/client.js"></script>
+  <script>
+    // File upload handler
+    document.getElementById('upload-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const file = document.getElementById('file-input').files[0];
+      if (!file) return;
+      const result = document.getElementById('upload-result');
+      result.textContent = `✅ Uploaded: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+      result.style.display = 'block';
+    });
+
+    // Shadow DOM custom element
+    class MyCounter extends HTMLElement {
+      constructor() {
+        super();
+        this._count = 0;
+        const shadow = this.attachShadow({ mode: 'open' });
+        shadow.innerHTML = `
+          <style>
+            :host { display: inline-block; }
+            .counter { display: flex; align-items: center; gap: 1rem; padding: 1rem;
+                       background: #f0f4ff; border-radius: .5rem; }
+            .count { font-size: 2rem; font-weight: 700; min-width: 3rem; text-align: center; color: #2563eb; }
+            button { padding: .4rem .9rem; font-size: 1.25rem; border: none;
+                     border-radius: .375rem; cursor: pointer; background: #2563eb; color: #fff; }
+            button:hover { background: #1d4ed8; }
+          </style>
+          <div class="counter">
+            <button id="dec" aria-label="Decrement counter">−</button>
+            <span class="count" id="count">0</span>
+            <button id="inc" aria-label="Increment counter">+</button>
+          </div>`;
+        shadow.getElementById('inc').addEventListener('click', () => {
+          this._count++;
+          shadow.getElementById('count').textContent = this._count;
+        });
+        shadow.getElementById('dec').addEventListener('click', () => {
+          this._count--;
+          shadow.getElementById('count').textContent = this._count;
+        });
+      }
+    }
+    customElements.define('my-counter', MyCounter);
+  </script>
+</body>
+</html>
