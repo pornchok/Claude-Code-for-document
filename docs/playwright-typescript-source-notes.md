@@ -812,3 +812,73 @@ VERSION: 2026-05-31
 CONCEPT: --workers / -j flag
 QUOTE: "Number of concurrent workers or percentage of logical CPU cores, use 1 to run in a single worker (default: 50%)."
 
+---
+
+## Ch12: Mocking — Network, Time & Browser APIs
+
+SOURCE: https://playwright.dev/docs/mock
+VERSION: 2026-05-31
+CONCEPT: page.route() basic mock
+QUOTE: "await page.route('*/**/api/v1/fruits', async route => { const json = [{ name: 'Strawberry', id: 21 }]; await route.fulfill({ json }); });"
+
+SOURCE: https://playwright.dev/docs/mock
+VERSION: 2026-05-31
+CONCEPT: Modify and replay responses with route.fetch()
+QUOTE: "await page.route('*/**/api/v1/fruits', async route => { const response = await route.fetch(); const json = await response.json(); json.push({ name: 'Loquat', id: 100 }); await route.fulfill({ response, json }); });"
+
+SOURCE: https://playwright.dev/docs/mock
+VERSION: 2026-05-31
+CONCEPT: WebSocket mocking via routeWebSocket
+QUOTE: "await page.routeWebSocket('wss://example.com/ws', ws => { ws.onMessage(message => { if (message === 'request') ws.send('response'); }); });"
+
+SOURCE: https://playwright.dev/docs/api/class-websocketroute
+VERSION: 2026-05-31
+CONCEPT: routeWebSocket added version
+QUOTE: "The WebSocketRoute API was introduced in v1.48 for core methods."
+
+SOURCE: https://playwright.dev/docs/api/class-clock
+VERSION: 2026-05-31
+CONCEPT: clock.setFixedTime — timers still run
+QUOTE: "Makes Date.now and new Date() return fixed fake time while 'keeps all the timers running'. Recommended for simple scenarios with predefined times."
+
+SOURCE: https://playwright.dev/docs/api/class-clock
+VERSION: 2026-05-31
+CONCEPT: clock.install — overrides Date AND timers
+QUOTE: "Installs fake implementations for time-related functions: Date, setTimeout, clearTimeout, setInterval, clearInterval, requestAnimationFrame, cancelAnimationFrame, requestIdleCallback, cancelIdleCallback, and performance"
+
+SOURCE: https://playwright.dev/docs/api/class-clock
+VERSION: 2026-05-31
+CONCEPT: clock.fastForward
+QUOTE: "Advances time by jumping forward, firing due timers at most once. Equivalent to closing and reopening a laptop after a delay."
+
+SOURCE: https://playwright.dev/docs/api/class-clock
+VERSION: 2026-05-31
+CONCEPT: clock.runFor
+QUOTE: "Advances the clock while firing all time-related callbacks"
+
+SOURCE: https://playwright.dev/docs/api/class-clock
+VERSION: 2026-05-31
+CONCEPT: All clock methods added version
+QUOTE: "All methods were 'Added in: v1.45' and return Promise<void>."
+
+SOURCE: https://playwright.dev/docs/api/class-clock
+VERSION: 2026-05-31
+CONCEPT: install() must be called before other clock calls
+QUOTE: "If you call install at any point in your test, the call MUST occur before any other clock related calls."
+
+SOURCE: https://playwright.dev/docs/mock-browser-apis
+VERSION: 2026-05-31
+CONCEPT: page.addInitScript() — inject before page load
+QUOTE: "Since the page may be calling the API very early while loading it's important to setup all the mocks before the page started loading"
+
+SOURCE: https://playwright.dev/docs/mock-browser-apis
+VERSION: 2026-05-31
+CONCEPT: page.addInitScript() scope — single page
+QUOTE: "await page.addInitScript(() => { const mockBattery = { level: 0.75, charging: true, ... }; window.navigator.getBattery = async () => mockBattery; });"
+
+SOURCE: https://playwright.dev/docs/mock-browser-apis
+VERSION: 2026-05-31
+CONCEPT: page.exposeFunction() — bridge browser to Node.js
+QUOTE: "await page.exposeFunction('logCall', msg => log.push(msg));"
+
+
