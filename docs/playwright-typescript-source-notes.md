@@ -539,3 +539,88 @@ CONCEPT: Locator properties in Page Object
 QUOTE: "constructor(page: Page) { this.page = page; this.getStartedLink = page.locator('a', { hasText: 'Get started' });"
 
 ---
+
+---
+
+## Ch09: Test Organization
+
+SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: test.skip behavior
+QUOTE: "Skip a test. Playwright will not run the test past the test.skip() call."
+
+SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: test.fail behavior
+QUOTE: "marks the test as failing. Playwright will run this test and ensure it does indeed fail."
+
+SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: test.fixme behavior
+QUOTE: "marks the test as failing. Playwright will not run this test, as opposed to the fail annotation."
+
+SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: test.slow behavior
+QUOTE: "marks the test as slow and triples the test timeout."
+
+SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: Conditional annotations
+QUOTE: "Built-in annotations can be conditional, in which case they apply when the condition is truthy, and may depend on test fixtures."
+
+SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: Runtime annotations via testInfo
+QUOTE: "During test execution, you can dynamically add annotations using test.info().annotations.push() with custom type and description properties."
+
+SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.skip API signature
+QUOTE: "Marks a test as 'should fail'. Playwright runs this test and ensures that it is actually failing."
+
+SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.fail API signature
+QUOTE: "Marks a test as 'should fail'. Playwright runs this test and ensures that it is actually failing."
+
+SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.fixme API signature
+QUOTE: "Mark a test as 'fixme', with the intention to fix it. Playwright will not run the test past the test.fixme() call."
+
+SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.slow API signature
+QUOTE: "Marks a test as 'slow'. Slow test will be given triple the default timeout."
+
+SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.describe.configure modes
+QUOTE: "mode: 'default' | 'parallel' | 'serial' — Running tests serially, retrying from the start. If one of the serial tests fails, all subsequent tests are skipped."
+
+SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.step signature and return value
+QUOTE: "The method returns the value returned by the step callback."
+
+SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.step options
+QUOTE: "timeout [number] — The maximum time, in milliseconds, allowed for the step to complete."
+
+SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: Tags inline syntax
+QUOTE: "Tests can include tags in the test title. Note that each tag must start with @ symbol."
+
+SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: Tags object syntax and reporting
+QUOTE: "Test tags are displayed in the test report, and are available to a custom reporter via TestCase.tags property."
+
+SOURCE: https://playwright.dev/docs/test-parameterize
+VERSION: 2026-05-31
+CONCEPT: Parameterized tests with forEach
+QUOTE: "Uses template literals for dynamic test names — Test names must remain unique across iterations"
+
