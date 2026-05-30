@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Playwright Course App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="main-nav"></div>
+  <main style="max-width:600px">
+    <h1>Checkout</h1>
+    <div class="stepper" role="list" aria-label="Checkout steps">
+      <div class="step active" data-testid="step-shipping" role="listitem">1. Shipping</div>
+      <div class="step" data-testid="step-payment" role="listitem">2. Payment</div>
+      <div class="step" data-testid="step-confirm" role="listitem">3. Confirm</div>
+    </div>
+
+    <!-- Step 1 -->
+    <div class="step-panel active card" id="panel-shipping" data-testid="panel-shipping">
+      <h2>Shipping Information</h2>
+      <div class="form-group">
+        <label for="full-name">Full Name</label>
+        <input id="full-name" type="text" data-testid="input-full-name" placeholder="John Doe">
+      </div>
+      <div class="form-group">
+        <label for="address">Address</label>
+        <input id="address" type="text" data-testid="input-address" placeholder="123 Main St">
+      </div>
+      <div class="form-group">
+        <label for="city">City</label>
+        <input id="city" type="text" data-testid="input-city" placeholder="Bangkok">
+      </div>
+      <div class="form-group">
+        <label for="country">Country</label>
+        <select id="country" data-testid="select-country">
+          <option value="TH">Thailand</option>
+          <option value="US">United States</option>
+          <option value="GB">United Kingdom</option>
+        </select>
+      </div>
+      <div style="display:flex;justify-content:flex-end;margin-top:1rem">
+        <button class="btn btn-primary" data-testid="btn-next-shipping" onclick="goStep(2)">Next &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step-panel card" id="panel-payment" data-testid="panel-payment">
+      <h2>Payment Details</h2>
+      <div class="form-group">
+        <label for="card-number">Card Number</label>
+        <input id="card-number" type="text" data-testid="input-card-number"
+               placeholder="1234 5678 9012 3456" maxlength="19">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="form-group">
+          <label for="expiry">Expiry (MM/YY)</label>
+          <input id="expiry" type="text" data-testid="input-expiry" placeholder="12/26" maxlength="5">
+        </div>
+        <div class="form-group">
+          <label for="cvv">CVV</label>
+          <input id="cvv" type="text" data-testid="input-cvv" placeholder="123" maxlength="3">
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:1rem">
+        <button class="btn btn-secondary" data-testid="btn-back-payment" onclick="goStep(1)">&larr; Back</button>
+        <button class="btn btn-primary" data-testid="btn-next-payment" onclick="goStep(3)">Next &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step-panel card" id="panel-confirm" data-testid="panel-confirm">
+      <h2>Order Confirmation</h2>
+      <div id="order-summary" data-testid="order-summary"></div>
+      <div style="display:flex;justify-content:space-between;margin-top:1rem">
+        <button class="btn btn-secondary" data-testid="btn-back-confirm" onclick="goStep(2)">&larr; Back</button>
+        <button class="btn btn-primary" data-testid="btn-place-order" onclick="placeOrder()">Place Order</button>
+      </div>
+    </div>
+
+    <div class="alert alert-success" id="order-success" data-testid="order-success"
+         style="display:none;margin-top:1rem">
+      &#x2705; Order placed successfully! Order ID: <span id="order-id" data-testid="order-id"></span>
+    </div>
+  </main>
+
+  <script src="/client.js"></script>
+  <script>
+    function goStep(n) {
+      document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById(['panel-shipping','panel-payment','panel-confirm'][n-1]).classList.add('active');
+      document.querySelectorAll('.step').forEach((s, i) => {
+        s.classList.toggle('active', i + 1 === n);
+        s.classList.toggle('done', i + 1 < n);
+      });
+      if (n === 3) {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+        document.getElementById('order-summary').innerHTML =
+          `<p><strong>${cart.length} items</strong></p><p>Total: <strong>$${total.toFixed(2)}</strong></p>`;
+      }
+    }
+
+    async function placeOrder() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      try {
+        const order = await apiFetch('/api/orders', {
+          method: 'POST',
+          body: JSON.stringify({ items: cart })
+        });
+        document.getElementById('order-id').textContent = order.orderId;
+        document.getElementById('order-success').style.display = 'block';
+        document.getElementById('panel-confirm').style.display = 'none';
+        localStorage.removeItem('cart');
+      } catch {
+        alert('Please login to place an order');
+        location.href = '/login?redirect=/checkout';
+      }
+    }
+  </script>
+</body>
+</html>

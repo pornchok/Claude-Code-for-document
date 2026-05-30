@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart — Playwright Course App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="main-nav"></div>
+  <main>
+    <h1>Shopping Cart</h1>
+    <div id="cart-items" data-testid="cart-items"></div>
+    <div id="cart-total" data-testid="cart-total" style="font-weight:700;font-size:1.1rem;margin:1rem 0"></div>
+    <a href="/checkout" class="btn btn-primary" data-testid="btn-checkout" id="btn-checkout"
+       style="text-decoration:none;display:inline-flex">Proceed to Checkout</a>
+  </main>
+  <script src="/client.js"></script>
+  <script>
+    function render() {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const el = document.getElementById('cart-items');
+      const totalEl = document.getElementById('cart-total');
+      const checkoutBtn = document.getElementById('btn-checkout');
+
+      if (!cart.length) {
+        el.innerHTML = '<p data-testid="empty-cart">Your cart is empty. <a href="/shop">Go shopping</a></p>';
+        totalEl.textContent = '';
+        checkoutBtn.style.display = 'none';
+        return;
+      }
+      checkoutBtn.style.display = 'inline-flex';
+      el.innerHTML = `<table><thead><tr>
+        <th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th>
+      </tr></thead><tbody>
+        ${cart.map((item, i) => `<tr data-testid="cart-row-${item.id}">
+          <td data-testid="cart-name-${item.id}">${item.name}</td>
+          <td>$${item.price}</td>
+          <td><input type="number" min="1" value="${item.qty}" style="width:4rem"
+                data-testid="cart-qty-${item.id}" onchange="updateQty(${i},this.value)"></td>
+          <td data-testid="cart-subtotal-${item.id}">$${(item.price * item.qty).toFixed(2)}</td>
+          <td><button class="btn btn-danger btn-sm" data-testid="btn-remove-${item.id}"
+                onclick="remove(${i})">Remove</button></td>
+        </tr>`).join('')}
+      </tbody></table>`;
+
+      const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+      totalEl.textContent = `Total: $${total.toFixed(2)}`;
+    }
+
+    function updateQty(idx, val) {
+      const c = JSON.parse(localStorage.getItem('cart') || '[]');
+      c[idx].qty = Math.max(1, parseInt(val) || 1);
+      localStorage.setItem('cart', JSON.stringify(c));
+      render();
+    }
+
+    function remove(idx) {
+      const c = JSON.parse(localStorage.getItem('cart') || '[]');
+      c.splice(idx, 1);
+      localStorage.setItem('cart', JSON.stringify(c));
+      render();
+    }
+
+    render();
+  </script>
+</body>
+</html>
