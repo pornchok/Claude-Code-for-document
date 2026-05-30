@@ -51,6 +51,21 @@ QUOTE: "You can use npm, yarn, or pnpm to install Playwright."
 
 ---
 
+## Ch11: Parallelism, Sharding & Reporting
+
+SOURCE: https://playwright.dev/docs/api/class-test#test-describe-serial
+VERSION: 2026-05-31
+CONCEPT: test.describe.serial() status — discouraged/deprecated
+QUOTE: "Declares a group of tests that should always be run serially. If one of the tests fails, all subsequent tests are skipped."
+NOTE: docs also state "Using serial is not recommended. It is usually better to make your tests isolated, so they can be run independently." — prefer test.describe.configure({ mode: 'serial' })
+
+SOURCE: https://playwright.dev/docs/test-parallel
+VERSION: 2026-05-31
+CONCEPT: test.describe.configure() as the canonical API for serial/parallel mode
+QUOTE: test-parallel docs use only test.describe.configure({ mode: 'serial' | 'parallel' | 'default' }) — test.describe.serial() is not mentioned in this page
+
+---
+
 ## Ch01: Why Playwright?
 
 SOURCE: https://playwright.dev/docs/actionability

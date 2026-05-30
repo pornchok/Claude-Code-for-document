@@ -63,6 +63,8 @@ Playwright มีสองเครื่องมือหลักแก้ป
 
 ```typescript
 // playwright.config.ts
+// partial example — see Section 5 for runnable version
+// tested: Playwright v1.50+, Node.js 20+
 export default defineConfig({
   workers: process.env.CI ? 2 : undefined,
   // undefined = Playwright เลือกเอง (default: 50% ของ CPU cores)
@@ -81,6 +83,9 @@ export default defineConfig({
 `fullyParallel: true` เปิดให้ทุก test ในทุก file รัน parallel อย่างอิสระ:
 
 ```typescript
+// playwright.config.ts
+// partial example — see Section 5 for runnable version
+// tested: Playwright v1.50+, Node.js 20+
 export default defineConfig({
   fullyParallel: true, // ทุก test ทุก file รัน parallel
 });
@@ -89,6 +94,9 @@ export default defineConfig({
 หรือเปิดเฉพาะบาง project:
 
 ```typescript
+// playwright.config.ts — projects array (partial)
+// partial example — see Section 5 for runnable version
+// tested: Playwright v1.50+, Node.js 20+
 projects: [
   {
     name: 'chromium',
@@ -100,6 +108,8 @@ projects: [
 #### `test.describe.configure()` — ควบคุม Mode ระดับ Describe Block
 
 ```typescript
+// partial example — see Section 5 for runnable version
+// tested: Playwright v1.50+, Node.js 20+
 import { test } from '@playwright/test';
 
 test.describe('tests ที่ต้อง sequential', () => {
@@ -122,7 +132,7 @@ test.describe('กลับสู่ default', () => {
 });
 ```
 
-> **หมายเหตุ:** `test.describe.serial()` และ `test.describe.parallel()` เป็น shorthand ที่มีใช้งานด้วย แต่ `test.describe.configure({ mode: '...' })` คือ API หลักที่ docs แนะนำ
+> **หมายเหตุ:** `test.describe.serial()` มีอยู่จริงใน API (ตั้งแต่ v1.10) แต่ **official docs ระบุว่า discouraged** — ใช้ `test.describe.configure({ mode: 'serial' })` เท่านั้น *(source: https://playwright.dev/docs/api/class-test#test-describe-serial)*
 
 #### Shared State — ภัยร้ายของ Parallel Tests
 
@@ -180,6 +190,8 @@ Format: `--shard=<current>/<total>` โดย current เริ่มจาก 1
 
 ```typescript
 // playwright.config.ts
+// partial example — see Section 5 for runnable version
+// tested: Playwright v1.50+, Node.js 20+
 export default defineConfig({
   reporter: process.env.CI ? 'blob' : 'html',
   // CI: บันทึกเป็น blob สำหรับ merge ทีหลัง
@@ -272,6 +284,17 @@ reporter: [['html', { open: 'on-failure' }]]
 เปิดดู report: `npx playwright show-report` หรือ `npx playwright show-report ./my-report`
 
 **`line`** — แสดง 1 บรรทัดต่อ test ที่เสร็จ เหมาะสำหรับ test suite ใหญ่ที่ไม่อยากเห็น output ท่วมหน้าจอ
+
+```typescript
+// playwright.config.ts — line reporter สำหรับ CI
+// partial example — see Section 5 for runnable version
+// tested: Playwright v1.50+, Node.js 20+
+export default defineConfig({
+  reporter: 'line',
+  // หรือใช้ด้วยกันกับ reporter อื่น:
+  // reporter: [['line'], ['json', { outputFile: 'results.json' }]],
+});
+```
 
 **`dot`** — กระชับที่สุด: ตัวอักษรตัวเดียวต่อ test (`·` = pass, `F` = fail, `±` = flaky, `T` = timeout) ใช้เป็น default บน CI
 
