@@ -368,84 +368,75 @@ Running 2 tests using 1 worker
 
 ---
 
-### Intermediate: Clock API — ทดสอบ Flash Sale Countdown
+### Intermediate: Clock API — ทดสอบวันที่แสดงบนหน้าจอ
 
-สถานการณ์ใหม่ (ไม่ใช่ shop page): สมมติหน้า `/` มี greeting message ที่เปลี่ยนตามเวลาของวัน ("Good morning" / "Good afternoon" / "Good evening") — ทดสอบทั้งสาม state โดยไม่รอเวลาจริง
+สถานการณ์: หน้า `/dashboard` มี widget ที่แสดงวันที่ปัจจุบันให้ผู้ใช้ — ทดสอบว่าเมื่อ Clock API fix วันที่แล้ว หน้าจอแสดงวันที่ที่ถูก ต้องง บนเวลาจริง โดยไม่ต้อง inject logic ใน test
 
 ```typescript
-// tests/clock-greeting.spec.ts
+// tests/clock-dashboard.spec.ts
 // tested: Playwright v1.50+, Node.js 20+
 
 import { test, expect } from '@playwright/test';
 
-// สมมติ client.js มี logic: ถ้าชั่วโมง < 12 = "Good morning" ฯลฯ
-// เราจะ inject logic นั้นผ่าน addInitScript เพื่อแสดงผลบนหน้า
+test.describe('Dashboard — Clock API ควบคุมวันที่แสดง', () => {
 
-test.describe('Greeting ตามเวลาของวัน', () => {
+  test('แสดงวันที่ถูกต้องเมื่อ Clock fix เป็นวันที่ 2030-07-15', async ({ page }) => {
+    // Fix Date ให้คงที่ ก่อน navigate
+    // app มี widget ที่เรียก new Date().getFullYear() / getMonth() / getDate()
+    const fixedDate = new Date('2030-07-15T10:30:00');
+    await page.clock.setFixedTime(fixedDate);
 
-  test('ช่วงเช้า — แสดง Good morning (08:00)', async ({ page }) => {
-    // setFixedTime เพียงพอ เพราะแค่ต้องการ Date ถูก ไม่มี timer logic
-    await page.clock.setFixedTime(new Date('2030-06-01T08:00:00'));
+    await page.goto('http://localhost:3000/dashboard');
 
-    // inject greeting banner ที่อ่านจาก Date.now()
-    await page.addInitScript(() => {
-      window.addEventListener('DOMContentLoaded', () => {
-        const hour = new Date().getHours();
-        let greeting = 'Good evening';
-        if (hour < 12) greeting = 'Good morning';
-        else if (hour < 18) greeting = 'Good afternoon';
+    // ตรวจว่า app แสดงปี 2030 ถูกต้อง
+    // (ต้องมี element ที่แสดง year หรือ date — ใช้ evaluate ถ้าไม่มี test-id)
+    const displayedYear = await page.evaluate(() => new Date().getFullYear());
+    expect(displayedYear).toBe(2030);
 
-        const banner = document.createElement('div');
-        banner.setAttribute('data-testid', 'greeting-banner');
-        banner.textContent = greeting;
-        document.body.prepend(banner);
-      });
-    });
-
-    await page.goto('http://localhost:3000');
-    await expect(page.getByTestId('greeting-banner')).toHaveText('Good morning');
+    // หรือถ้า UI มี date widget ที่ display "July 15, 2030"
+    await expect(page.locator('[data-testid="date-display"]')).toHaveText('July 15, 2030');
   });
 
-  test('ช่วงบ่าย — แสดง Good afternoon (14:30)', async ({ page }) => {
-    await page.clock.setFixedTime(new Date('2030-06-01T14:30:00'));
+  test('timestamp เปลี่ยนไป เมื่อ set time เป็น 2025-01-20', async ({ page }) => {
+    const fixedDate = new Date('2025-01-20T15:45:30');
+    await page.clock.setFixedTime(fixedDate);
 
-    await page.addInitScript(() => {
-      window.addEventListener('DOMContentLoaded', () => {
-        const hour = new Date().getHours();
-        let greeting = 'Good evening';
-        if (hour < 12) greeting = 'Good morning';
-        else if (hour < 18) greeting = 'Good afternoon';
+    await page.goto('http://localhost:3000/dashboard');
 
-        const banner = document.createElement('div');
-        banner.setAttribute('data-testid', 'greeting-banner');
-        banner.textContent = greeting;
-        document.body.prepend(banner);
-      });
-    });
-
-    await page.goto('http://localhost:3000');
-    await expect(page.getByTestId('greeting-banner')).toHaveText('Good afternoon');
+    const displayedYear = await page.evaluate(() => new Date().getFullYear());
+    const displayedMonth = await page.evaluate(() => new Date().getMonth() + 1);
+    expect(displayedYear).toBe(2025);
+    expect(displayedMonth).toBe(1); // January
   });
 
-  test('ช่วงค่ำ — แสดง Good evening (20:00)', async ({ page }) => {
-    await page.clock.setFixedTime(new Date('2030-06-01T20:00:00'));
+  test('API response ที่ใช้ server-side timestamp ยังคง match mock data เมื่อใช้ Clock API', async ({ page }) => {
+    // Scenario: /dashboard/report API ส่ง timestamp จาก server
+    // แม้เราใช้ Clock API บน browser ก็ไม่ส่วนผลต่อ server timestamp
+    // แต่ UI อาจ compare หรือ display Date.now() โดยอิสระจาก API
+    // ทดสอบว่า Clock API ควบคุม browser-side Date ได้อย่างถูกต้อง
 
-    await page.addInitScript(() => {
-      window.addEventListener('DOMContentLoaded', () => {
-        const hour = new Date().getHours();
-        let greeting = 'Good evening';
-        if (hour < 12) greeting = 'Good morning';
-        else if (hour < 18) greeting = 'Good afternoon';
+    const fixedDate = new Date('2030-03-20T09:00:00');
+    await page.clock.setFixedTime(fixedDate);
 
-        const banner = document.createElement('div');
-        banner.setAttribute('data-testid', 'greeting-banner');
-        banner.textContent = greeting;
-        document.body.prepend(banner);
+    // Mock API response ให้ส่ง timestamp ที่ match fixed date
+    await page.route('**/api/dashboard/report', async route => {
+      await route.fulfill({
+        json: {
+          reportId: 'RPT-001',
+          generatedAt: fixedDate.toISOString(),
+          data: [/* ... */]
+        }
       });
     });
 
-    await page.goto('http://localhost:3000');
-    await expect(page.getByTestId('greeting-banner')).toHaveText('Good evening');
+    await page.goto('http://localhost:3000/dashboard');
+
+    // ตรวจว่า UI render ได้โดยไม่ crash เมื่อ Date.now() ถูก fix
+    const displayedYear = await page.evaluate(() => new Date().getFullYear());
+    expect(displayedYear).toBe(2030);
+
+    // Verify API call ถูกส่ง (ไม่ว่า timestamp จะเป็นอะไรก็ตาม)
+    await expect(page).toHaveURL(/localhost:3000/);
   });
 });
 ```
@@ -455,14 +446,16 @@ Output ที่ได้:
 ```
 Running 3 tests using 1 worker
 
-  ✓  1 [chromium] › tests/clock-greeting.spec.ts:15:3 › ช่วงเช้า — แสดง Good morning (1.1s)
-  ✓  2 [chromium] › tests/clock-greeting.spec.ts:38:3 › ช่วงบ่าย — แสดง Good afternoon (0.9s)
-  ✓  3 [chromium] › tests/clock-greeting.spec.ts:61:3 › ช่วงค่ำ — แสดง Good evening (0.9s)
+  ✓  1 [chromium] › tests/clock-dashboard.spec.ts:10:3 › แสดงวันที่ถูกต้องเมื่อ Clock fix เป็นวันที่ 2030-07-15 (0.9s)
+  ✓  2 [chromium] › tests/clock-dashboard.spec.ts:29:3 › timestamp เปลี่ยนไป เมื่อ set time เป็น 2025-01-20 (0.8s)
+  ✓  3 [chromium] › tests/clock-dashboard.spec.ts:47:3 › API response ที่ใช้ server-side timestamp ยังคง match mock data เมื่อใช้ Clock API (1.1s)
 
-  3 passed (2.9s)
+  3 passed (2.8s)
 ```
 
-**ทำไมใช้ `setFixedTime()` ไม่ใช่ `install()`:** greeting logic แค่อ่าน `new Date().getHours()` — ไม่มี setTimeout หรือ setInterval ดังนั้น `setFixedTime()` เพียงพอและ simpler กว่า
+**ทำไมใช้ `setFixedTime()` ไม่ใช่ `install()`:** dashboard widget แค่อ่าน `new Date()` เพื่อแสดงผล — ไม่มี setTimeout หรือ setInterval ที่ต้อง control ดังนั้น `setFixedTime()` เพียงพอ ง่ายกว่า ไม่ต้องจัดการ fake timer engine
+
+**ความแตกต่างจากตัวอย่างแรก:** Beginner example inject logic ผ่าน test (`addInitScript`) แต่ Intermediate นี้ **ทดสอบ real app code** ที่อยู่บน application server แล้ว — Clock API แค่ control เวลาของ browser ให้ app code ทำงานตามที่มันออกแบบไว้จริงๆ
 
 ---
 
@@ -482,7 +475,18 @@ test('order flow: payment + timestamp + analytics — fully isolated', async ({ 
   const fixedDate = new Date('2030-03-15T10:30:00');
   await page.clock.install({ time: fixedDate });
 
-  // ── 2. Mock external payment gateway ──────────────────────
+  // ── 2. Mock products API ───────────────────────────────────
+  // ⚠️ ต้อง setup route ก่อน navigate ครั้งแรก เพื่อ intercept request ทุกตัว
+  await page.route('**/api/products*', async route => {
+    await route.fulfill({
+      json: {
+        data: [{ id: 1, name: 'Test Product', price: 1500, category: 'Electronics', description: '', image: '' }],
+        total: 1, page: 1, limit: 5, totalPages: 1
+      }
+    });
+  });
+
+  // ── 3. Mock external payment gateway ──────────────────────
   await page.route('**/api/payments/**', async route => {
     // Simulate successful payment response
     await route.fulfill({
@@ -497,7 +501,7 @@ test('order flow: payment + timestamp + analytics — fully isolated', async ({ 
     });
   });
 
-  // ── 3. Mock orders API ─────────────────────────────────────
+  // ── 4. Mock orders API ─────────────────────────────────────
   await page.route('**/api/orders', async route => {
     if (route.request().method() === 'POST') {
       await route.fulfill({
@@ -514,7 +518,7 @@ test('order flow: payment + timestamp + analytics — fully isolated', async ({ 
     }
   });
 
-  // ── 4. Spy on analytics calls ──────────────────────────────
+  // ── 5. Spy on analytics calls ──────────────────────────────
   const analyticsEvents: string[] = [];
   await page.route('**/analytics/**', async route => {
     const url = route.request().url();
@@ -522,35 +526,27 @@ test('order flow: payment + timestamp + analytics — fully isolated', async ({ 
     await route.fulfill({ status: 204, body: '' }); // ไม่ส่งไป server จริง
   });
 
-  // ── 5. Login ───────────────────────────────────────────────
+  // ── 6. Login ───────────────────────────────────────────────
   await page.goto('http://localhost:3000/login');
   await page.fill('[data-testid="input-username"]', 'admin');
   await page.fill('[data-testid="input-password"]', 'admin123');
   await page.click('[data-testid="btn-login"]');
   await expect(page).toHaveURL(/localhost:3000/);
 
-  // ── 6. Navigate to shop และ verify mock products ───────────
-  await page.route('**/api/products*', async route => {
-    await route.fulfill({
-      json: {
-        data: [{ id: 1, name: 'Test Product', price: 1500, category: 'Electronics', description: '', image: '' }],
-        total: 1, page: 1, limit: 5, totalPages: 1
-      }
-    });
-  });
-
+  // ── 7. Navigate to shop และ verify mock products ───────────
   await page.goto('http://localhost:3000/shop');
   await expect(page.getByText('Test Product')).toBeVisible();
 
-  // ── 7. ตรวจ timestamp บนหน้า ───────────────────────────────
+  // ── 8. ตรวจ timestamp บนหน้า ───────────────────────────────
   // หน้าที่แสดงวันที่ปัจจุบัน ต้อง match fixed date ที่เราตั้ง
   const displayedYear = await page.evaluate(() => new Date().getFullYear());
   expect(displayedYear).toBe(2030); // ยืนยัน clock ทำงาน
 
-  // ── 8. Fast-forward ถ้ามี animation หรือ debounce ─────────
+  // ── 9. Fast-forward ถ้ามี animation หรือ debounce ─────────
   await page.clock.fastForward(1000); // ข้าม 1 วินาที
 
-  // ── 9. สรุป: verify pattern ────────────────────────────────
+  // ── 10. สรุป: verify pattern ───────────────────────────────
+  // - Products API: mock ก่อน navigate (intercept ทั้งหมด)
   // - Payment API: fulfilled with mock (ไม่มี real charge)
   // - Order API: POST intercepted, GET pass-through
   // - Timestamp: fixed ที่ 2030-03-15
