@@ -217,3 +217,52 @@ CONCEPT: Fixture scope and teardown
 QUOTE: "Test-scoped fixtures are torn down after each test, while worker-scoped fixtures are only torn down when the worker process executing tests is torn down."
 
 ---
+
+## Ch04: Locators — Accessibility-First
+
+SOURCE: https://playwright.dev/docs/locators
+VERSION: 2026-05-31
+CONCEPT: Recommended locators list (official list)
+QUOTE: "These are the recommended built-in locators. page.getByRole() to locate by explicit and implicit accessibility attributes. page.getByText() to locate by text content. page.getByLabel() to locate a form control by associated label's text. page.getByPlaceholder() to locate an input by placeholder. page.getByAltText() to locate an element, usually image, by its text alternative. page.getByTitle() to locate an element by its title attribute. page.getByTestId() to locate an element based on its data-testid attribute."
+
+SOURCE: https://playwright.dev/docs/locators
+VERSION: 2026-05-31
+CONCEPT: Priority recommendation
+QUOTE: "we recommend prioritizing user-facing attributes and explicit contracts such as page.getByRole()"
+
+SOURCE: https://playwright.dev/docs/locators
+VERSION: 2026-05-31
+CONCEPT: Strict mode definition
+QUOTE: "Locators are strict. This means that all operations on locators that imply some target DOM element will throw an exception if more than one element matches."
+
+SOURCE: https://playwright.dev/docs/locators
+VERSION: 2026-05-31
+CONCEPT: filter({ visible: true }) — confirmed available
+QUOTE: "This will only find a second button, because it is visible, and then click it: await page.locator('button').filter({ visible: true }).click();"
+
+SOURCE: https://playwright.dev/docs/locators
+VERSION: 2026-05-31
+CONCEPT: Filtering with hasText and has
+QUOTE: "filter({ hasText: 'text' }), filter({ hasNotText: 'text' }), filter({ has: locator }), filter({ hasNot: locator })"
+
+SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-05-31
+CONCEPT: Prefer user-facing attributes over CSS/XPath
+QUOTE: "Prefer user-facing attributes to XPath or CSS selectors" and "Your DOM can easily change so having your tests depend on your DOM structure can lead to failing tests."
+
+SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-05-31
+CONCEPT: CSS class-based locators break on refactor
+QUOTE: "Should the designer change something then the class might change, thus breaking your test."
+
+SOURCE: https://playwright.dev/docs/other-locators
+VERSION: 2026-05-31
+CONCEPT: Legacy text locator (deprecated)
+QUOTE: "String selectors starting and ending with a quote...are assumed to be a legacy text locators." (deprecated — recommends "modern text locator instead")
+
+SOURCE: https://playwright.dev/docs/other-locators
+VERSION: 2026-05-31
+CONCEPT: CSS :visible pseudo-class
+QUOTE: ":visible — only matches visible buttons"
+
+---
