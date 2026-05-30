@@ -275,6 +275,34 @@ test('create todo when authenticated', async ({ todoPage, authToken }) => {
 });
 ```
 
+**Note:** `mergeTests()` รวม test objects โดยที่ custom matchers ที่สร้างจาก `expect.extend()` ทำงานอยู่ในแต่ละไฟล์ ถ้าต้องการรวม custom matchers ข้ามหลาย fixture files ให้ใช้ `mergeExpects()`:
+
+```typescript
+// fixtures/matchers.ts
+// tested: Playwright v1.50+, Node.js 20+
+import { expect as authExpect } from './auth.fixtures';  // มี toBeLoggedIn()
+import { expect as todoExpect } from './todo.fixtures';  // มี toHaveTodoCount()
+import { mergeExpects } from '@playwright/test';
+
+// รวม custom matchers จากหลาย fixture files
+export const expect = mergeExpects(authExpect, todoExpect);
+```
+
+ใช้ใน test:
+
+```typescript
+// tests/combined.spec.ts
+import { test } from '../fixtures';
+import { expect } from '../fixtures/matchers';
+
+test('verify auth status and todo count', async ({ page }) => {
+  await expect(page).toBeLoggedIn();           // จาก auth.fixtures
+  await expect(page).toHaveTodoCount(5);       // จาก todo.fixtures
+});
+```
+
+`mergeExpects()` ต้องใช้คู่กับ `mergeTests()` เสมอ เพื่อให้ test objects และ matchers อยู่ในการควบคุมเดียวกัน
+
 ### 4.7 เปรียบเทียบกับ Robot Framework + Selenium
 
 | สิ่งที่ต้องการ | Robot Framework + Selenium | Playwright Fixtures |
@@ -493,7 +521,7 @@ export const workerScopedTest = base.extend<{}, { sharedSeedData: SeedData }>({
     const page = await context.newPage();
 
     // ใช้ API request เพื่อ setup data — เร็วกว่า UI
-    const req = await context.request;
+    const req = context.request;
     await req.post('http://localhost:3000/api/reset');
     await req.post('http://localhost:3000/api/todos', {
       data: { text: 'Shared Seed 1' }
