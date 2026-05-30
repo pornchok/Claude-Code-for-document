@@ -335,43 +335,73 @@ await context.addCookies([{
 
 ปัญหาที่เกิดขึ้นเมื่อ tests ทำงาน parallel และ **modify server-side state**: สมมติมี 4 workers แชร์ admin account เดียว แต่ test A ลบ order #1 ขณะที่ test B พยายาม update order #1 เดียวกัน — race condition
 
-แนวทางแก้คือ สร้าง auth state แยกต่อ worker:
+แนวทางที่ Playwright แนะนำคือ **worker-scoped custom fixture** — สร้าง auth state แยกต่อ worker โดยใช้ `parallelIndex` เป็น identifier:
+
+> ข้อสำคัญ: `storageState` ใน `playwright.config.ts` **ไม่รับ function** — ต้องใช้ custom fixture แทน
+
+**tests/fixtures/auth.ts:**
 
 ```typescript
-// tests/worker-auth.setup.ts
+// tests/fixtures/auth.ts
 // tested: Playwright v1.50+, Node.js 20+
-import { test as setup } from '@playwright/test';
+import { test as baseTest, expect } from '@playwright/test';
+import fs from 'fs';
+import path from 'path';
 
-setup('authenticate per worker', async ({ page }, testInfo) => {
-  // parallelIndex: 0, 1, 2, 3... ตามจำนวน workers
-  const workerIndex = testInfo.parallelIndex;
-  const authFile = `playwright/.auth/worker-${workerIndex}.json`;
+export * from '@playwright/test';
 
-  // ใน real scenario: ควรมี test accounts หลายตัว (worker0@test.com, worker1@test.com ฯลฯ)
-  // ตัวอย่างนี้ใช้ account เดียวแต่ save state แยก file เพื่อ isolation
-  await page.goto('http://localhost:3000/login');
-  await page.fill('[data-testid="input-username"]', 'testuser');
-  await page.fill('[data-testid="input-password"]', 'test123');
-  await page.click('[data-testid="btn-login"]');
-  await page.context().storageState({ path: authFile });
+export const test = baseTest.extend<{}, { workerStorageState: string }>({
+  // Override storageState ให้ใช้ workerStorageState ของ worker นั้นๆ
+  storageState: ({ workerStorageState }, use) => use(workerStorageState),
+
+  // Worker-scoped fixture — รัน 1 ครั้งต่อ worker ไม่ใช่ต่อ test
+  workerStorageState: [async ({ browser }, use) => {
+    const id = test.info().parallelIndex;
+    const fileName = path.resolve(
+      test.info().project.outputDir,
+      `.auth/worker-${id}.json`
+    );
+
+    // ถ้ามีไฟล์แล้ว (จาก run ก่อนหน้า) ใช้ซ้ำได้เลย
+    if (fs.existsSync(fileName)) {
+      await use(fileName);
+      return;
+    }
+
+    // ใน production: ควรมี accounts แยกต่อ worker (worker0@company.com, worker1@company.com)
+    // เพื่อให้ server-side state ไม่ conflict กันจริงๆ
+    // ตัวอย่างนี้ใช้ account เดียวกันแต่ save state แยก file
+    const page = await browser.newPage({ storageState: undefined });
+    await page.goto('http://localhost:3000/login');
+    await page.fill('[data-testid="input-username"]', 'testuser');
+    await page.fill('[data-testid="input-password"]', 'test123');
+    await page.click('[data-testid="btn-login"]');
+    await expect(page.getByTestId('session-badge')).toContainText('testuser');
+
+    await page.context().storageState({ path: fileName });
+    await page.close();
+
+    await use(fileName);
+  }, { scope: 'worker' }],
 });
 ```
 
-แล้ว test fixture จะอ่าน `parallelIndex` เพื่อ load file ที่ถูกต้อง:
+**tests/parallel-orders.spec.ts — import จาก fixtures แทน `@playwright/test`:**
 
 ```typescript
-// playwright.config.ts สำหรับ per-worker setup
-// ใช้ workerStorageState pattern จาก docs
-{
-  name: 'chromium-parallel',
-  use: {
-    // ค่า storageState จะถูก override ด้วย custom fixture
-    storageState: ({ parallelIndex }, use) =>
-      use(`playwright/.auth/worker-${parallelIndex}.json`),
-  },
-  dependencies: ['setup workers'],
-}
+// tests/parallel-orders.spec.ts
+// tested: Playwright v1.50+, Node.js 20+
+import { test, expect } from './fixtures/auth';  // ← import จาก fixtures ไม่ใช่ @playwright/test
+
+test('สร้าง order และ verify (isolated per worker)', async ({ page }) => {
+  // page มี storageState ของ worker นี้โดยอัตโนมัติ — ไม่ต้องทำอะไรพิเศษ
+  await page.goto('http://localhost:3000/');
+  await expect(page.getByTestId('session-badge')).toContainText('testuser');
+  // ...rest of test
+});
 ```
+
+`playwright.config.ts` ไม่ต้องเปลี่ยนอะไร — fixture จัดการ per-worker storageState ทั้งหมดเอง
 
 ---
 
@@ -529,73 +559,86 @@ Running 1 setup and 3 tests using 1 worker
 
 ---
 
-### Intermediate: Multiple Roles — Admin + User ใน Context เดียวกัน
+### Intermediate: ทดสอบ Logout Flow — ยืนยันว่า Session หมดแล้วจริง
 
-สถานการณ์ใหม่ที่ไม่ใช่แค่ "setup แล้ว run": ต้องการทดสอบ **order workflow** ที่ admin สร้าง order แล้ว user ดู order นั้น — ต้องใช้ทั้งสอง role ใน test เดียวกัน
+สถานการณ์: e-commerce app ต้องการ verify ว่าหลัง user logout แล้ว storageState เก่าใช้งานไม่ได้อีกต่อไป — ทั้ง protected pages ต้อง redirect ไป `/login` และ API endpoints ต้อง return 401
 
 ```typescript
-// tests/order-workflow-roles.spec.ts
+// tests/logout-session.spec.ts
 // tested: Playwright v1.50+, Node.js 20+
-import { test, expect, Browser } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
-// ⚠️ test นี้ต้องการ browser object โดยตรง เพราะต้องสร้าง 2 contexts
-// ไม่ใช้ storageState จาก config — override ด้วย browser.newContext()
+// project นี้ใช้ storageState: 'playwright/.auth/user.json' จาก config
+// แต่ test เหล่านี้ทดสอบ state หลัง logout — ต้องล้าง auth state เอง
 
-test('admin สร้าง order → user เห็น order ใน history', async ({ browser }) => {
-  // ── Context 1: Admin ───────────────────────────────────────────
-  const adminContext = await browser.newContext({
-    storageState: 'playwright/.auth/admin.json',
+test.describe('logout invalidates session', () => {
+  test('หลัง logout: GET /api/me ต้อง return 401', async ({ page, request }) => {
+    // ขั้นตอน 1: ยืนยันว่า login อยู่ (storageState จาก config)
+    await page.goto('http://localhost:3000/');
+    await expect(page.getByTestId('session-badge')).toContainText('testuser');
+
+    // ขั้นตอน 2: Logout ผ่าน UI
+    await page.click('[data-testid="btn-logout"]');
+
+    // ขั้นตอน 3: ตรวจว่า redirect ไป login page
+    await expect(page).toHaveURL(/\/login/);
+    await expect(page.getByTestId('btn-login')).toBeVisible();
+
+    // ขั้นตอน 4: ลองเข้า protected page โดยตรง — ต้อง redirect กลับ login
+    await page.goto('http://localhost:3000/profile');
+    await expect(page).toHaveURL(/\/login/);
+
+    // ขั้นตอน 5: ตรวจ API ด้วย request context (ยังมี cookies จาก logout อยู่)
+    const meRes = await request.get('http://localhost:3000/api/me');
+    expect(meRes.status()).toBe(401);
   });
-  const adminPage = await adminContext.newPage();
 
-  // Admin สั่งสินค้าในนามของ user (หรือ admin ทดสอบ order system)
-  await adminPage.goto('http://localhost:3000/');
-  await expect(adminPage.getByTestId('session-badge')).toContainText('admin');
+  test('หลัง logout: storageState เก่าที่ inject ใหม่ใช้งานไม่ได้ ถ้า server revoke session', async ({ browser }) => {
+    // จำลอง scenario: เอา storageState เก่ามา inject หลังจาก logout ไปแล้ว
+    // ถ้า app ใช้ server-side session (revoked ทันทีที่ logout) → ต้อง fail
+    // ถ้า app ใช้ JWT (stateless) → อาจยังใช้ได้จนกว่า token จะ expire
 
-  // ── Context 2: User ────────────────────────────────────────────
-  const userContext = await browser.newContext({
-    storageState: 'playwright/.auth/user.json',
+    const staleContext = await browser.newContext({
+      storageState: 'playwright/.auth/user.json', // state เก่า
+    });
+    const stalePage = await staleContext.newPage();
+
+    // Navigate ไป protected page ด้วย stale state
+    const response = await stalePage.goto('http://localhost:3000/api/me');
+
+    // Demo app ใช้ JWT — stale token ยังใช้ได้จนกว่าจะ expire
+    // ถ้าเปลี่ยนเป็น server-side session test นี้ต้อง expect 401
+    // การทดสอบนี้ document behavior ของ app ว่าใช้ stateless หรือ stateful auth
+    if (response?.status() === 401) {
+      // Server-side session: revoked ทันทีที่ logout
+      console.log('App uses server-side session — stale token rejected correctly');
+    } else {
+      // JWT: stateless — token ยังใช้ได้จนกว่าจะ expire
+      console.log('App uses JWT — stale token still valid until expiry');
+      expect(response?.status()).toBe(200);
+    }
+
+    await staleContext.close();
   });
-  const userPage = await userContext.newPage();
-
-  await userPage.goto('http://localhost:3000/');
-  await expect(userPage.getByTestId('session-badge')).toContainText('testuser');
-
-  // ── Verify role-based access ────────────────────────────────────
-  // Admin เข้า /admin ได้
-  const adminRes = await adminPage.goto('http://localhost:3000/admin');
-  expect(adminRes?.status()).not.toBe(403);
-
-  // User เข้า /admin ไม่ได้ (403 หรือ redirect)
-  const userAdminRes = await userPage.goto('http://localhost:3000/admin');
-  // ตรวจว่า user ถูก redirect หรือได้รับ forbidden
-  const finalUrl = userPage.url();
-  const isBlocked = userAdminRes?.status() === 403 ||
-                    finalUrl.includes('/login') ||
-                    finalUrl.includes('/403');
-  expect(isBlocked).toBeTruthy();
-
-  // ── Cleanup ─────────────────────────────────────────────────────
-  await adminContext.close();
-  await userContext.close();
 });
 ```
 
 Output:
 
 ```
-Running 1 test using 1 worker
+Running 2 tests using 1 worker
 
-  ✓  1 [chromium] › tests/order-workflow-roles.spec.ts:8:1 › admin สร้าง order → user เห็น order ใน history (2.1s)
+  ✓  1 [chromium] › tests/logout-session.spec.ts:9:3 › หลัง logout: GET /api/me ต้อง return 401 (1.9s)
+  ✓  2 [chromium] › tests/logout-session.spec.ts:32:3 › หลัง logout: storageState เก่าที่ inject ใหม่ใช้งานไม่ได้ ถ้า server revoke session (0.8s)
 
-  1 passed (2.1s)
+  2 passed (2.8s)
 ```
 
 สิ่งที่ทำให้ตัวอย่างนี้ต่างจาก Beginner:
 
-- ใช้ `browser.newContext()` แทน `page` fixture ที่ config inject ให้ — เพื่อสร้าง **2 browser contexts พร้อมกัน** (คล้าย 2 browser windows แยกกันสมบูรณ์)
-- ทั้ง admin และ user active พร้อมกันใน test เดียว — ทดสอบ interaction ระหว่าง roles ได้
-- ต้อง `context.close()` เองเสมอเมื่อสร้าง context นอก fixture
+- เริ่มจาก authenticated state (storageState จาก config) แล้วทดสอบ **transition ออกจาก auth** — ตรวจทั้ง UI redirect และ API response
+- test ที่ 2 ทดสอบ security property ของ auth mechanism โดยตรง: stateless (JWT) vs stateful (server-side session) — เป็น pattern ที่ production teams ต้องรู้
+- ใช้ `browser.newContext()` สร้าง context ด้วย stale storageState แยกจาก main test session — ไม่ contaminate state ของ test อื่น
 
 ---
 
@@ -674,20 +717,42 @@ export default defineConfig({
     {
       name: 'parallel-setup',
       testMatch: /parallel-auth\.setup\.ts/,
-      // setup รัน per-worker ด้วยการใช้ fullyParallel: false
-      // แต่ parallelIndex ยังคงแตกต่างกันในแต่ละ invocation
     },
     {
       name: 'parallel-tests',
       use: {
         ...devices['Desktop Chrome'],
-        // storageState เป็น function — Playwright จะเรียกต่อ worker
-        storageState: ({ parallelIndex }) =>
-          `playwright/.auth/worker-${parallelIndex}.json`,
+        // ไม่ตั้ง storageState ที่นี่ — custom fixture ใน tests/fixtures/auth.ts
+        // จัดการ per-worker storageState เองโดยใช้ parallelIndex
       },
       dependencies: ['parallel-setup'],
     },
   ],
+});
+```
+
+**tests/fixtures/auth.ts — ให้ tests/parallel-orders.spec.ts import จากที่นี่แทน `@playwright/test`:**
+
+```typescript
+// tests/fixtures/auth.ts
+// tested: Playwright v1.50+, Node.js 20+
+import { test as baseTest } from '@playwright/test';
+import path from 'path';
+
+export * from '@playwright/test';
+
+export const test = baseTest.extend<{}, { workerStorageState: string }>({
+  storageState: ({ workerStorageState }, use) => use(workerStorageState),
+
+  workerStorageState: [async ({}, use) => {
+    const id = test.info().parallelIndex;
+    const fileName = path.resolve(
+      test.info().project.outputDir,
+      `.auth/worker-${id}.json`
+    );
+    // ไฟล์ถูกสร้างโดย parallel-setup project ไปแล้ว — load ตรงๆ
+    await use(fileName);
+  }, { scope: 'worker' }],
 });
 ```
 

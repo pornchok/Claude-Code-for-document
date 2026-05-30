@@ -33,6 +33,12 @@ VERSION: 2026-05-31
 CONCEPT: per-worker auth for tests that modify server-side state
 QUOTE: "Tests that modify server-side state require different accounts per parallel worker to prevent interference."
 
+SOURCE: https://playwright.dev/docs/auth#moderate-one-account-per-parallel-worker
+VERSION: 2026-05-31
+CONCEPT: storageState in config does NOT accept a function — must use worker-scoped custom fixture
+QUOTE: "storageState: ({ workerStorageState }, use) => use(workerStorageState)" [from fixtures.ts, not playwright.config.ts]
+NOTE: The official pattern uses baseTest.extend<{}, { workerStorageState: string }> with { scope: 'worker' } fixture. storageState in playwright.config.ts use: block is a static string only. Per-worker selection must happen inside a fixture via test.info().parallelIndex.
+
 SOURCE: https://playwright.dev/docs/auth
 VERSION: 2026-05-31
 CONCEPT: disable authentication for specific tests
