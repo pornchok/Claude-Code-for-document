@@ -104,3 +104,47 @@ CONCEPT: What Playwright Test is
 QUOTE: "Playwright Test is an end-to-end test framework for modern web apps. It bundles test runner, assertions, isolation, parallelization and rich tooling."
 
 ---
+
+## Ch02: Setup + TypeScript Essentials
+
+SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: TypeScript native support — no separate compilation step
+QUOTE: "You just write tests in TypeScript, and Playwright will read them, transform to JavaScript and run."
+
+SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: Supported tsconfig compiler options
+QUOTE: "Playwright only supports the following tsconfig options: allowJs, baseUrl, paths and references."
+
+SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: Separate tsconfig for tests recommended
+QUOTE: "We recommend setting up a separate tsconfig.json in the tests directory so that you can change some preferences specifically for the tests."
+
+SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: tsc --noEmit for CI type checking
+QUOTE: "For example on GitHub actions: npx tsc -p tsconfig.json --noEmit"
+
+SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: tsc watch mode for local development
+QUOTE: "For local development, you can run tsc in watch mode like this: npx tsc -p tsconfig.json --noEmit -w"
+
+SOURCE: https://playwright.dev/docs/intro
+VERSION: 2026-05-30
+CONCEPT: Installation command description
+QUOTE: "The command below either initializes a new project or adds Playwright to an existing one."
+
+SOURCE: https://playwright.dev/docs/intro
+VERSION: 2026-05-30
+CONCEPT: Interactive prompts during npm init playwright@latest
+QUOTE: "When prompted, choose / confirm: TypeScript or JavaScript (default: TypeScript), Tests folder name (default: tests, or e2e if tests already exists), Add a GitHub Actions workflow (recommended for CI), Install Playwright browsers (default: yes)"
+
+SOURCE: https://playwright.dev/docs/intro
+VERSION: 2026-05-30
+CONCEPT: File scaffold created by installer
+QUOTE: "Playwright downloads required browser binaries and creates the scaffold below. playwright.config.ts, package.json, package-lock.json, tests/example.spec.ts"
+
+---
