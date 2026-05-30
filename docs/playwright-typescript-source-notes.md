@@ -624,3 +624,87 @@ VERSION: 2026-05-31
 CONCEPT: Parameterized tests with forEach
 QUOTE: "Uses template literals for dynamic test names — Test names must remain unique across iterations"
 
+---
+
+## Ch10: Configuration & Projects
+
+SOURCE: https://playwright.dev/docs/test-configuration
+VERSION: 2026-05-31
+CONCEPT: defineConfig() — fullyParallel option
+QUOTE: "Have all tests in all files run in parallel"
+
+SOURCE: https://playwright.dev/docs/test-configuration
+VERSION: 2026-05-31
+CONCEPT: defineConfig() — forbidOnly option
+QUOTE: "Exit with error if tests marked as test.only exist; useful for CI"
+
+SOURCE: https://playwright.dev/docs/test-configuration
+VERSION: 2026-05-31
+CONCEPT: defineConfig() — retries recommended pattern
+QUOTE: "retries: process.env.CI ? 2 : 0"
+
+SOURCE: https://playwright.dev/docs/test-timeouts
+VERSION: 2026-05-31
+CONCEPT: Test timeout — default value
+QUOTE: "Timeout for each test" — default 30,000 ms
+
+SOURCE: https://playwright.dev/docs/test-timeouts
+VERSION: 2026-05-31
+CONCEPT: Expect timeout — default value
+QUOTE: "5 seconds for web-first assertions" (expect.timeout default)
+
+SOURCE: https://playwright.dev/docs/test-timeouts
+VERSION: 2026-05-31
+CONCEPT: Action timeout — no default
+QUOTE: "actionTimeout" in use block — "No default" (no timeout by default)
+
+SOURCE: https://playwright.dev/docs/test-timeouts
+VERSION: 2026-05-31
+CONCEPT: Navigation timeout — no default
+QUOTE: "navigationTimeout" in use block — "No default" (no timeout by default)
+
+SOURCE: https://playwright.dev/docs/test-timeouts
+VERSION: 2026-05-31
+CONCEPT: Global timeout — no default
+QUOTE: "Timeout for the whole test run" — globalTimeout — "No default"
+
+SOURCE: https://playwright.dev/docs/test-timeouts
+VERSION: 2026-05-31
+CONCEPT: beforeAll/afterAll timeout — 30,000 ms default
+QUOTE: "beforeAll/afterAll timeout" — default 30,000 ms, set via test.setTimeout() within hook
+
+SOURCE: https://playwright.dev/docs/test-webserver
+VERSION: 2026-05-31
+CONCEPT: webServer reuseExistingServer behavior
+QUOTE: "reuseExistingServer — Whether to reuse existing server on port/url" — default false
+
+SOURCE: https://playwright.dev/docs/test-webserver
+VERSION: 2026-05-31
+CONCEPT: webServer timeout — default
+QUOTE: "How long to wait for the process to start up and be available in milliseconds" — default 60000
+
+SOURCE: https://playwright.dev/docs/test-webserver
+VERSION: 2026-05-31
+CONCEPT: webServer port option deprecated
+QUOTE: "port — Deprecated; use url instead"
+
+SOURCE: https://playwright.dev/docs/test-projects
+VERSION: 2026-05-31
+CONCEPT: Project dependencies — setup project runs first
+QUOTE: "Setup projects execute first, and dependent projects only run if dependencies pass."
+
+SOURCE: https://playwright.dev/docs/test-global-setup-teardown
+VERSION: 2026-05-31
+CONCEPT: Project Dependencies vs globalSetup — modern approach recommended
+QUOTE: "the recommended approach, as it integrates better with the Playwright test runner: your HTML report will include the global setup, traces will be recorded, and fixtures can be used."
+
+SOURCE: https://playwright.dev/docs/api/class-testconfig
+VERSION: 2026-05-31
+CONCEPT: tsconfig property in TestConfig — exact property name
+QUOTE: "Path to a single tsconfig applicable to all imported files." — property name: tsconfig (added v1.49)
+
+SOURCE: https://playwright.dev/docs/api/class-testconfig
+VERSION: 2026-05-31
+CONCEPT: failOnFlakyTests — confirmed to exist in Playwright v1.52+
+QUOTE: "failOnFlakyTests: !!process.env.CI" — exits with error if any test is marked flaky (added v1.52, NOT an invented property)
+
