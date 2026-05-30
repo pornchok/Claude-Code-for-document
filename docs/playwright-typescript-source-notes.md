@@ -372,3 +372,67 @@ QUOTE: "toMatchAriaSnapshot() - Element matches the Aria snapshot"
 Previous version of ch04 had getByLabel at #2 and getByText at #4 — this was wrong. Fixed 2026-05-31.
 
 ---
+
+## Ch06: Debugging
+
+SOURCE: https://playwright.dev/docs/debug
+VERSION: 2026-05-31
+CONCEPT: Inspector — opening with --debug flag
+QUOTE: "Run with the --debug flag to open the GUI debugging tool: npx playwright test --debug"
+
+SOURCE: https://playwright.dev/docs/debug
+VERSION: 2026-05-31
+CONCEPT: page.pause() as code breakpoint
+QUOTE: "Insert breakpoints directly in code: await page.pause(); This pauses execution at that point without stepping through prior actions."
+
+SOURCE: https://playwright.dev/docs/debug
+VERSION: 2026-05-31
+CONCEPT: PWDEBUG=console for DevTools integration
+QUOTE: "Set PWDEBUG=console environment variable to access a playwright object in DevTools console"
+
+SOURCE: https://playwright.dev/docs/debug
+VERSION: 2026-05-31
+CONCEPT: headless: false and slowMo for headed mode
+QUOTE: "Launch browsers visually by setting headless: false in configuration or using slowMo to slow execution by milliseconds per operation."
+
+SOURCE: https://playwright.dev/docs/trace-viewer
+VERSION: 2026-05-31
+CONCEPT: Trace config options
+QUOTE: "'on-first-retry' - Record only on first retry attempt; 'on-all-retries' - Capture traces for all retries; 'off' - Disable tracing; 'on' - Record every test (performance-heavy); 'retain-on-failure' - Trace failed tests only"
+
+SOURCE: https://playwright.dev/docs/trace-viewer
+VERSION: 2026-05-31
+CONCEPT: Opening trace from command line
+QUOTE: "npx playwright show-trace path/to/trace.zip"
+
+SOURCE: https://playwright.dev/docs/trace-viewer
+VERSION: 2026-05-31
+CONCEPT: Actions tab shows locator and duration
+QUOTE: "what locator was used for every action and how long each one took"
+
+SOURCE: https://playwright.dev/docs/trace-viewer
+VERSION: 2026-05-31
+CONCEPT: DOM snapshots show exact click position
+QUOTE: "the exact click position"
+
+SOURCE: https://playwright.dev/docs/codegen
+VERSION: 2026-05-31
+CONCEPT: Codegen generates tests from browser interactions
+QUOTE: "Playwright comes with the ability to generate tests for you as you perform actions in the browser."
+
+SOURCE: https://playwright.dev/docs/codegen
+VERSION: 2026-05-31
+CONCEPT: Codegen locator priority
+QUOTE: "prioritizes role, text and test id locators"
+
+SOURCE: https://playwright.dev/docs/test-ui-mode
+VERSION: 2026-05-31
+CONCEPT: UI Mode — core purpose
+QUOTE: "UI Mode lets you explore, run, and debug tests with a time travel experience complete with a watch mode."
+
+SOURCE: https://playwright.dev/docs/test-ui-mode
+VERSION: 2026-05-31
+CONCEPT: UI Mode watch mode activation
+QUOTE: "Eye icons activate automatic re-runs when test code changes"
+
+---
