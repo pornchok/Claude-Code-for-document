@@ -5,6 +5,46 @@
 
 ---
 
+## Ch13: Authentication & Storage State
+
+SOURCE: https://playwright.dev/docs/auth
+VERSION: 2026-05-31
+CONCEPT: storageState captures cookies, localStorage, sessionStorage — and IndexedDB
+QUOTE: "Reusing signed in state covers cookies, local storage and IndexedDB based authentication."
+NOTE: sessionStorage requires custom persistence — docs note "Playwright doesn't provide native support" for sessionStorage across navigations; it is captured at point-in-time but not automatically restored across new pages.
+
+SOURCE: https://playwright.dev/docs/auth
+VERSION: 2026-05-31
+CONCEPT: Project dependencies for auth setup
+QUOTE: "{ name: 'setup', testMatch: /.*\\.setup\\.ts/ }, { name: 'chromium', use: { storageState: 'playwright/.auth/user.json' }, dependencies: ['setup'] }"
+
+SOURCE: https://playwright.dev/docs/auth
+VERSION: 2026-05-31
+CONCEPT: auth files should not be committed to git
+QUOTE: "Add 'playwright/.auth' to .gitignore. Make sure that the files containing the cookies and headers are not shared with anyone outside your team. These files are sensitive and enable account impersonation."
+
+SOURCE: https://playwright.dev/docs/auth#multiple-signed-in-roles
+VERSION: 2026-05-31
+CONCEPT: multiple roles — specify storageState per test file instead of global config
+QUOTE: "specify storageState for each test file or test group, instead of setting it in the config."
+
+SOURCE: https://playwright.dev/docs/auth#moderate-one-account-per-parallel-worker
+VERSION: 2026-05-31
+CONCEPT: per-worker auth for tests that modify server-side state
+QUOTE: "Tests that modify server-side state require different accounts per parallel worker to prevent interference."
+
+SOURCE: https://playwright.dev/docs/auth
+VERSION: 2026-05-31
+CONCEPT: disable authentication for specific tests
+QUOTE: "test.use({ storageState: { cookies: [], origins: [] } });"
+
+SOURCE: https://playwright.dev/docs/auth
+VERSION: 2026-05-31
+CONCEPT: UI Mode does not run setup project automatically
+QUOTE: "The setup project will not run...by default to improve testing speed"
+
+---
+
 ## System Requirements
 
 SOURCE: https://playwright.dev/docs/intro
