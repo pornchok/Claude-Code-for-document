@@ -148,3 +148,72 @@ CONCEPT: File scaffold created by installer
 QUOTE: "Playwright downloads required browser binaries and creates the scaffold below. playwright.config.ts, package.json, package-lock.json, tests/example.spec.ts"
 
 ---
+
+## Ch03: Architecture — Browser, BrowserContext, Page
+
+SOURCE: https://playwright.dev/docs/browser-contexts
+VERSION: 2026-05-30
+CONCEPT: BrowserContext definition and isolation
+QUOTE: "BrowserContexts which are equivalent to incognito-like profiles. They are fast and cheap to create and are completely isolated, even when running in a single browser."
+
+SOURCE: https://playwright.dev/docs/browser-contexts
+VERSION: 2026-05-30
+CONCEPT: Default isolation per test
+QUOTE: "each test has its own local storage, session storage, cookies etc."
+
+SOURCE: https://playwright.dev/docs/browser-contexts
+VERSION: 2026-05-30
+CONCEPT: Playwright creates context per test
+QUOTE: "Playwright creates a context for each test, and provides a default Page in that context."
+
+SOURCE: https://playwright.dev/docs/browser-contexts
+VERSION: 2026-05-30
+CONCEPT: No failure carry-over between tests
+QUOTE: "No failure carry-over. If one test fails it doesn't affect the other test."
+
+SOURCE: https://playwright.dev/docs/browser-contexts
+VERSION: 2026-05-30
+CONCEPT: Multiple contexts for multi-user scenarios
+QUOTE: "Playwright can create multiple browser contexts within a single scenario. This is useful when you want to test for multi-user functionality, like a chat."
+
+SOURCE: https://playwright.dev/docs/browser-contexts
+VERSION: 2026-05-30
+CONCEPT: Context lifecycle per test run
+QUOTE: "Running the test creates a new browser context each time."
+
+SOURCE: https://playwright.dev/docs/pages
+VERSION: 2026-05-30
+CONCEPT: Page definition
+QUOTE: "A Page refers to a single tab or a popup window within a browser context."
+
+SOURCE: https://playwright.dev/docs/pages
+VERSION: 2026-05-30
+CONCEPT: Multiple pages per context
+QUOTE: "Each BrowserContext can have multiple pages."
+
+SOURCE: https://playwright.dev/docs/pages
+VERSION: 2026-05-30
+CONCEPT: Pages respect context-level settings
+QUOTE: "Pages inside a context respect context-level emulation, like viewport sizes, custom network routes or browser locale."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-30
+CONCEPT: page fixture — isolated per test
+QUOTE: "Isolated page for this test run."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-30
+CONCEPT: context fixture — isolated per test
+QUOTE: "Isolated context for this test run. The `page` fixture belongs to this context as well."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-30
+CONCEPT: Browser fixture — shared across tests (worker-scoped)
+QUOTE: "Browsers are shared across tests to optimize resources."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-30
+CONCEPT: Fixture scope and teardown
+QUOTE: "Test-scoped fixtures are torn down after each test, while worker-scoped fixtures are only torn down when the worker process executing tests is torn down."
+
+---
