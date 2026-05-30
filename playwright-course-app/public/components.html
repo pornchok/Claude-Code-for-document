@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Components — Playwright Course App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="main-nav"></div>
+  <main>
+    <h1>UI Components (Kitchen Sink)</h1>
+    <p style="color:var(--text-muted);margin-bottom:2rem">All UI element types for Playwright locator and action practice.</p>
+
+    <section class="card" style="margin-bottom:1rem" data-testid="section-checkboxes">
+      <h2>Checkboxes</h2>
+      <div class="form-group">
+        <label><input type="checkbox" data-testid="check-option1"> Option 1 — JavaScript</label>
+        <label><input type="checkbox" data-testid="check-option2" checked> Option 2 — TypeScript (checked by default)</label>
+        <label><input type="checkbox" data-testid="check-option3" disabled> Option 3 — Disabled</label>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom:1rem" data-testid="section-radios">
+      <h2>Radio Buttons</h2>
+      <fieldset style="border:none;padding:0">
+        <legend style="font-weight:600;margin-bottom:.5rem">Preferred Browser</legend>
+        <label><input type="radio" name="browser" value="chromium" data-testid="radio-chromium"> Chromium</label><br>
+        <label><input type="radio" name="browser" value="firefox" data-testid="radio-firefox" checked> Firefox</label><br>
+        <label><input type="radio" name="browser" value="webkit" data-testid="radio-webkit"> WebKit</label>
+      </fieldset>
+    </section>
+
+    <section class="card" style="margin-bottom:1rem" data-testid="section-select">
+      <h2>Select Dropdown</h2>
+      <div class="form-group">
+        <label for="framework-select">Test Framework</label>
+        <select id="framework-select" data-testid="select-framework">
+          <option value="">-- Choose --</option>
+          <option value="playwright">Playwright</option>
+          <option value="cypress">Cypress</option>
+          <option value="selenium">Selenium</option>
+          <option value="rf">Robot Framework</option>
+        </select>
+      </div>
+      <p id="select-result" data-testid="select-result" style="color:var(--text-muted)"></p>
+    </section>
+
+    <section class="card" style="margin-bottom:1rem" data-testid="section-date">
+      <h2>Date Picker</h2>
+      <div class="form-group">
+        <label for="date-input">Select Date</label>
+        <input type="date" id="date-input" data-testid="input-date" style="width:auto">
+      </div>
+      <p id="date-result" data-testid="date-result" style="color:var(--text-muted)"></p>
+    </section>
+
+    <section class="card" style="margin-bottom:1rem" data-testid="section-slider">
+      <h2>Range Slider</h2>
+      <div class="form-group">
+        <label for="range-input">Value: <span id="range-value" data-testid="range-value">50</span></label>
+        <input type="range" id="range-input" data-testid="input-range" min="0" max="100" value="50">
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom:1rem" data-testid="section-hover">
+      <h2>Hover Menu &amp; Tooltip</h2>
+      <div style="display:flex;gap:2rem;align-items:center;flex-wrap:wrap">
+        <div class="hover-menu" data-testid="hover-menu">
+          <div class="hover-menu-trigger" data-testid="hover-trigger">Hover me ▾</div>
+          <div class="hover-menu-content" data-testid="hover-content">
+            <a href="#" data-testid="hover-item-profile">👤 Profile</a>
+            <a href="#" data-testid="hover-item-settings">⚙️ Settings</a>
+            <a href="#" data-testid="hover-item-logout">🚪 Logout</a>
+          </div>
+        </div>
+        <span class="tooltip-wrap" data-testid="tooltip-wrap">
+          <button class="btn btn-secondary" data-testid="tooltip-trigger">Hover for tooltip</button>
+          <span class="tooltip" data-testid="tooltip-content">This is a tooltip! 🎭</span>
+        </span>
+      </div>
+    </section>
+
+    <section class="card" style="margin-bottom:1rem" data-testid="section-table">
+      <h2>Sortable Table</h2>
+      <table id="sort-table" data-testid="sortable-table">
+        <thead><tr>
+          <th data-col="name" data-testid="th-name">Name</th>
+          <th data-col="age" data-testid="th-age">Age</th>
+          <th data-col="city" data-testid="th-city">City</th>
+        </tr></thead>
+        <tbody id="sort-tbody"></tbody>
+      </table>
+      <div class="pagination" id="table-pagination" data-testid="table-pagination"></div>
+    </section>
+
+    <section class="card" style="margin-bottom:1rem" data-testid="section-draglist">
+      <h2>Drag-and-Drop List</h2>
+      <ul class="drag-list" id="drag-list" data-testid="drag-list" role="list">
+        <li draggable="true" data-testid="drag-item-1" role="listitem"><span class="drag-handle">⠿</span> Item 1 — Playwright</li>
+        <li draggable="true" data-testid="drag-item-2" role="listitem"><span class="drag-handle">⠿</span> Item 2 — TypeScript</li>
+        <li draggable="true" data-testid="drag-item-3" role="listitem"><span class="drag-handle">⠿</span> Item 3 — Node.js</li>
+        <li draggable="true" data-testid="drag-item-4" role="listitem"><span class="drag-handle">⠿</span> Item 4 — Express</li>
+      </ul>
+    </section>
+
+    <section class="card" style="margin-bottom:1rem" data-testid="section-accordion">
+      <h2>Accordion</h2>
+      <div class="accordion-item" data-testid="accordion-item-1">
+        <button class="accordion-header" data-testid="accordion-header-1">What is Playwright?</button>
+        <div class="accordion-body" data-testid="accordion-body-1">Playwright is a Node.js library for browser automation, supporting Chromium, Firefox, and WebKit.</div>
+      </div>
+      <div class="accordion-item" data-testid="accordion-item-2">
+        <button class="accordion-header" data-testid="accordion-header-2">Why use TypeScript?</button>
+        <div class="accordion-body" data-testid="accordion-body-2">TypeScript adds static typing, better IDE support, and is the first-class language for Playwright.</div>
+      </div>
+      <div class="accordion-item" data-testid="accordion-item-3">
+        <button class="accordion-header" data-testid="accordion-header-3">What is a Fixture?</button>
+        <div class="accordion-body" data-testid="accordion-body-3">Fixtures are reusable setup/teardown blocks in Playwright that replace beforeEach/afterEach patterns.</div>
+      </div>
+    </section>
+
+    <section class="card" data-testid="section-tabs">
+      <h2>Tabs</h2>
+      <div class="tabs" role="tablist" data-testid="tablist">
+        <button class="tab-btn active" role="tab" data-testid="tab-overview" onclick="switchTab('overview')">Overview</button>
+        <button class="tab-btn" role="tab" data-testid="tab-details" onclick="switchTab('details')">Details</button>
+        <button class="tab-btn" role="tab" data-testid="tab-reviews" onclick="switchTab('reviews')">Reviews</button>
+      </div>
+      <div class="tab-panel active" id="tab-overview" data-testid="panel-overview" role="tabpanel">Overview content — Playwright is fast and reliable.</div>
+      <div class="tab-panel" id="tab-details" data-testid="panel-details" role="tabpanel">Details content — Supports Chromium, Firefox, WebKit.</div>
+      <div class="tab-panel" id="tab-reviews" data-testid="panel-reviews" role="tabpanel">Reviews content — ⭐⭐⭐⭐⭐ "Best testing tool ever!"</div>
+    </section>
+  </main>
+
+  <script src="/client.js"></script>
+  <script>
+    // Select
+    document.getElementById('framework-select').addEventListener('change', e => {
+      document.getElementById('select-result').textContent = e.target.value ? `Selected: ${e.target.value}` : '';
+    });
+
+    // Date picker
+    document.getElementById('date-input').addEventListener('change', e => {
+      document.getElementById('date-result').textContent = `Selected: ${e.target.value}`;
+    });
+
+    // Slider
+    document.getElementById('range-input').addEventListener('input', e => {
+      document.getElementById('range-value').textContent = e.target.value;
+    });
+
+    // Accordion
+    document.querySelectorAll('.accordion-header').forEach(btn => {
+      btn.addEventListener('click', () => btn.nextElementSibling.classList.toggle('open'));
+    });
+
+    // Tabs
+    function switchTab(name) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector(`[data-testid="tab-${name}"]`).classList.add('active');
+      document.getElementById(`tab-${name}`).classList.add('active');
+    }
+
+    // Sortable Table
+    const tableData = [
+      { name: 'Alice', age: 28, city: 'Bangkok' }, { name: 'Bob', age: 34, city: 'Chiang Mai' },
+      { name: 'Carol', age: 22, city: 'Phuket' }, { name: 'Dave', age: 41, city: 'Bangkok' },
+      { name: 'Eve', age: 29, city: 'Pattaya' }, { name: 'Frank', age: 37, city: 'Khon Kaen' },
+      { name: 'Grace', age: 25, city: 'Chiang Mai' }, { name: 'Henry', age: 31, city: 'Bangkok' }
+    ];
+    let sortCol = 'name', sortDir = 'asc', tablePage = 1;
+    const TABLE_LIMIT = 3;
+
+    function renderTable() {
+      const sorted = [...tableData].sort((a, b) => {
+        const va = a[sortCol], vb = b[sortCol];
+        return (sortDir === 'asc' ? 1 : -1) * (va < vb ? -1 : va > vb ? 1 : 0);
+      });
+      const paged = sorted.slice((tablePage - 1) * TABLE_LIMIT, tablePage * TABLE_LIMIT);
+      document.getElementById('sort-tbody').innerHTML = paged.map(r =>
+        `<tr data-testid="table-row-${r.name.toLowerCase()}"><td>${r.name}</td><td>${r.age}</td><td>${r.city}</td></tr>`
+      ).join('');
+      document.querySelectorAll('#sort-table th').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+        if (th.dataset.col === sortCol) th.classList.add(`sort-${sortDir}`);
+      });
+      const totalPages = Math.ceil(tableData.length / TABLE_LIMIT);
+      document.getElementById('table-pagination').innerHTML =
+        `<button ${tablePage <= 1 ? 'disabled' : ''} onclick="tablePage--;renderTable()">‹</button>` +
+        `<span style="padding:0 .5rem">Page ${tablePage} / ${totalPages}</span>` +
+        `<button ${tablePage >= totalPages ? 'disabled' : ''} onclick="tablePage++;renderTable()">›</button>`;
+    }
+
+    document.querySelectorAll('#sort-table th').forEach(th => {
+      th.addEventListener('click', () => {
+        if (sortCol === th.dataset.col) sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+        else { sortCol = th.dataset.col; sortDir = 'asc'; }
+        tablePage = 1;
+        renderTable();
+      });
+    });
+
+    renderTable();
+
+    // Drag list
+    let dragSrc = null;
+    document.querySelectorAll('#drag-list li').forEach(li => {
+      li.addEventListener('dragstart', () => { dragSrc = li; li.classList.add('dragging'); });
+      li.addEventListener('dragend', () => li.classList.remove('dragging'));
+      li.addEventListener('dragover', e => e.preventDefault());
+      li.addEventListener('drop', () => {
+        if (dragSrc && dragSrc !== li) {
+          const list = li.parentNode;
+          const items = [...list.children];
+          const srcIdx = items.indexOf(dragSrc), dstIdx = items.indexOf(li);
+          if (srcIdx < dstIdx) list.insertBefore(dragSrc, li.nextSibling);
+          else list.insertBefore(dragSrc, li);
+        }
+      });
+    });
+  </script>
+</body>
+</html>
