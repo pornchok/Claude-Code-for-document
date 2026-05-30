@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Playwright Course App — Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="main-nav"></div>
+  <main>
+    <h1 data-testid="dashboard-heading">Welcome to Playwright Course App</h1>
+    <p>This app is used as a test target for the Playwright TypeScript Master Course.</p>
+    <div class="card-grid" style="margin-top:1.5rem">
+      <div class="card">
+        <h2>📝 Todos</h2>
+        <p>CRUD, double-click edit, drag-drop</p>
+        <a href="/todos" class="btn btn-primary" data-testid="link-todos" style="margin-top:1rem;text-decoration:none;display:inline-flex">Open Todos</a>
+      </div>
+      <div class="card">
+        <h2>🛒 Shop</h2>
+        <p>Filter, search, pagination</p>
+        <a href="/shop" class="btn btn-primary" data-testid="link-shop" style="margin-top:1rem;text-decoration:none;display:inline-flex">Open Shop</a>
+      </div>
+      <div class="card">
+        <h2>🧩 Components</h2>
+        <p>All UI element types (kitchen sink)</p>
+        <a href="/components" class="btn btn-primary" data-testid="link-components" style="margin-top:1rem;text-decoration:none;display:inline-flex">Open Components</a>
+      </div>
+      <div class="card">
+        <h2>⚡ Advanced</h2>
+        <p>Popup, iframe, file upload, dialogs</p>
+        <a href="/advanced" class="btn btn-primary" data-testid="link-advanced" style="margin-top:1rem;text-decoration:none;display:inline-flex">Open Advanced</a>
+      </div>
+      <div class="card">
+        <h2>🎨 Visual</h2>
+        <p>Theme switcher for screenshot tests</p>
+        <a href="/visual" class="btn btn-primary" data-testid="link-visual" style="margin-top:1rem;text-decoration:none;display:inline-flex">Open Visual</a>
+      </div>
+      <div class="card">
+        <h2>🔐 Login</h2>
+        <p>Authenticate to access protected pages</p>
+        <a href="/login" class="btn btn-secondary" data-testid="link-login" style="margin-top:1rem;text-decoration:none;display:inline-flex">Go to Login</a>
+      </div>
+    </div>
+  </main>
+  <script src="/client.js"></script>
+</body>
+</html>

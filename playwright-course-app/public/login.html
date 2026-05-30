@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — Playwright Course App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="main-nav"></div>
+  <main style="max-width:400px">
+    <h1>Login</h1>
+    <div class="card">
+      <form id="login-form" data-testid="login-form" novalidate>
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" data-testid="input-username"
+                 placeholder="Enter username" autocomplete="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" data-testid="input-password"
+                 placeholder="Enter password" autocomplete="current-password" required>
+        </div>
+        <p class="error-msg" id="login-error" data-testid="login-error" role="alert"></p>
+        <button type="submit" class="btn btn-primary" data-testid="btn-login" style="width:100%">
+          Login
+        </button>
+      </form>
+      <p style="margin-top:1rem;font-size:.85rem;color:var(--text-muted)">
+        Credentials: <strong>admin/admin123</strong> or <strong>testuser/test123</strong>
+      </p>
+    </div>
+  </main>
+  <script src="/client.js"></script>
+  <script>
+    const form = document.getElementById('login-form');
+    const errorEl = document.getElementById('login-error');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorEl.classList.remove('visible');
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      if (!username || !password) {
+        errorEl.textContent = 'Username and password are required';
+        errorEl.classList.add('visible');
+        return;
+      }
+      try {
+        const data = await apiFetch('/api/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ username, password })
+        });
+        Auth.setToken(data.token);
+        const params = new URLSearchParams(location.search);
+        location.href = params.get('redirect') || '/';
+      } catch (err) {
+        errorEl.textContent = err.message || 'Invalid credentials';
+        errorEl.classList.add('visible');
+      }
+    });
+  </script>
+</body>
+</html>
