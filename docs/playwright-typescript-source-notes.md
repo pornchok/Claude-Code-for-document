@@ -266,3 +266,15 @@ CONCEPT: CSS :visible pseudo-class
 QUOTE: ":visible — only matches visible buttons"
 
 ---
+
+## Ch04: Locator Priority Order — Verified Fix (2026-05-31)
+
+SOURCE: https://playwright.dev/docs/locators
+VERSION: 2026-05-31
+CONCEPT: Locator Priority Order — Verified Fix
+QUOTE: "These are the recommended built-in locators. page.getByRole() to locate by explicit and implicit accessibility attributes. page.getByText() to locate by text content. page.getByLabel() to locate a form control by associated label's text. page.getByPlaceholder() to locate an input by placeholder. page.getByAltText() to locate an element, usually image, by its text alternative. page.getByTitle() to locate an element by its title attribute. page.getByTestId() to locate an element based on its data-testid attribute."
+
+Note: Correct order is getByRole → getByText → getByLabel → getByPlaceholder → getByAltText → getByTitle → getByTestId
+Previous version of ch04 had getByLabel at #2 and getByText at #4 — this was wrong. Fixed 2026-05-31.
+
+---
