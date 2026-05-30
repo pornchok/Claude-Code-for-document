@@ -436,3 +436,77 @@ CONCEPT: UI Mode watch mode activation
 QUOTE: "Eye icons activate automatic re-runs when test code changes"
 
 ---
+
+## Ch07: Fixtures
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: What fixtures are and why use them
+QUOTE: "Test fixtures are used to establish the environment for each test, giving the test everything it needs and nothing else. Test fixtures are isolated between tests."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Fixtures are on-demand (lazy initialization)
+QUOTE: "Fixtures are on-demand - you can define as many fixtures as you'd like, and Playwright Test will setup only the ones needed by your test."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Fixtures are composable
+QUOTE: "Fixtures are composable - they can depend on each other to provide complex behaviors."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Built-in page fixture
+QUOTE: "Isolated page for this test run."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Built-in context fixture
+QUOTE: "Isolated context for this test run."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Built-in browser fixture
+QUOTE: "Browsers are shared across tests to optimize resources."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Built-in request fixture
+QUOTE: "Isolated APIRequestContext instance for this test run."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Worker-scoped fixture definition
+QUOTE: "Playwright Test uses worker processes to run test files. Similar to how test fixtures are set up for individual test runs, worker fixtures are set up for each worker process."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Worker-scoped tuple syntax
+QUOTE: "Note the tuple-like syntax for the worker fixture - we have to pass `{scope: 'worker'}` so that test runner sets this fixture up once per worker."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Worker process reuse
+QUOTE: "Playwright Test will reuse the worker process for as many test files as it can, provided their worker fixtures match and hence environments are identical."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Automatic fixtures definition
+QUOTE: "Automatic fixtures are set up for each test/worker, even when the test does not list them directly. To create an automatic fixture, use the tuple syntax and pass `{ auto: true }`."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Fixture dependency ordering
+QUOTE: "When fixture A depends on fixture B: B is always set up before A and torn down after A."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: use() callback and teardown
+QUOTE: "Each fixture has a setup and teardown phase before and after the `await use()` call in the fixture. Setup is executed before the test/hook requiring it is run, and teardown is executed when the fixture is no longer being used."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: mergeTests() for combining fixtures
+QUOTE: (combining fixtures from multiple files) "export const test = mergeTests(dbTest, a11yTest);"
+
+---
