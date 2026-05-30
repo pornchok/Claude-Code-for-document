@@ -927,4 +927,81 @@ VERSION: 2026-05-31
 CONCEPT: page.exposeFunction() — bridge browser to Node.js
 QUOTE: "await page.exposeFunction('logCall', msg => log.push(msg));"
 
+---
+
+## Ch14: Advanced Browser Features & Emulation
+
+SOURCE: https://playwright.dev/docs/pages
+VERSION: 2026-05-31
+CONCEPT: Popup handling — start listening before click
+QUOTE: "Start waiting for popup before clicking. Note no await." — pattern: const popupPromise = page.waitForEvent('popup'); await page.getByText('...').click(); const popup = await popupPromise;
+
+SOURCE: https://playwright.dev/docs/pages
+VERSION: 2026-05-31
+CONCEPT: Continuous popup listener
+QUOTE: "page.on('popup', async popup => { await popup.waitForLoadState(); console.log(await popup.title()); });"
+
+SOURCE: https://playwright.dev/docs/frames
+VERSION: 2026-05-31
+CONCEPT: frameLocator() usage pattern
+QUOTE: "const username = await page.frameLocator('.frame-class').getByLabel('User Name'); await username.fill('John');"
+
+SOURCE: https://playwright.dev/docs/api/class-locator#locator-content-frame
+VERSION: 2026-05-31
+CONCEPT: locator.contentFrame() — version added and purpose
+QUOTE: "Added in v1.43" — signature: contentFrame(): FrameLocator — "useful when you have a Locator object obtained somewhere and later need to interact with content inside that iframe."
+NOTE: Reverse operation is frameLocator.owner() which returns Locator of the <iframe> element itself.
+
+SOURCE: https://playwright.dev/docs/dialogs
+VERSION: 2026-05-31
+CONCEPT: dialog handler must be registered before action
+QUOTE: "page.on('dialog') listener must handle the dialog. Otherwise your action will stall."
+
+SOURCE: https://playwright.dev/docs/dialogs
+VERSION: 2026-05-31
+CONCEPT: Auto-dismiss if no handler
+QUOTE: "If no listener is registered, all dialogs are automatically dismissed."
+
+SOURCE: https://playwright.dev/docs/dialogs
+VERSION: 2026-05-31
+CONCEPT: dialog.type() values
+QUOTE: (confirmed types) alert, confirm, prompt, beforeunload — example: "assert(dialog.type() === 'beforeunload');"
+
+SOURCE: https://playwright.dev/docs/downloads
+VERSION: 2026-05-31
+CONCEPT: download handling — start listening before click
+QUOTE: "const downloadPromise = page.waitForEvent('download'); await page.getByText('Download file').click(); const download = await downloadPromise;"
+
+SOURCE: https://playwright.dev/docs/downloads
+VERSION: 2026-05-31
+CONCEPT: download.saveAs() with suggestedFilename()
+QUOTE: "await download.saveAs('/path/to/save/at/' + download.suggestedFilename());"
+
+SOURCE: https://raw.githubusercontent.com/microsoft/playwright/main/packages/playwright-core/src/server/deviceDescriptorsSource.json
+VERSION: 2026-05-31
+CONCEPT: iPhone 15 device names — verified exact strings
+QUOTE: (from deviceDescriptorsSource.json) "iPhone 15", "iPhone 15 landscape", "iPhone 15 Plus", "iPhone 15 Plus landscape", "iPhone 15 Pro", "iPhone 15 Pro landscape", "iPhone 15 Pro Max", "iPhone 15 Pro Max landscape"
+NOTE: 'iPhone 15 Pro' IS a valid device name — confirmed from source JSON.
+
+SOURCE: https://playwright.dev/docs/emulation
+VERSION: 2026-05-31
+CONCEPT: devices[] usage with spread operator
+QUOTE: "use: { ...devices['iPhone 13'], ...devices['Desktop Chrome'] }" — note: docs example uses iPhone 13; iPhone 15 Pro verified from deviceDescriptorsSource.json
+
+SOURCE: https://playwright.dev/docs/emulation
+VERSION: 2026-05-31
+CONCEPT: page.emulateMedia() — both use cases
+QUOTE: "await page.emulateMedia({ colorScheme: 'dark' });" and "await page.emulateMedia({ media: 'print' });"
+
+SOURCE: https://playwright.dev/docs/emulation
+VERSION: 2026-05-31
+CONCEPT: locale and timezoneId — correct property name
+QUOTE: "use: { locale: 'en-GB', timezoneId: 'Europe/Paris' }" — NOTE: property is timezoneId (not timezone)
+
+SOURCE: https://playwright.dev/docs/emulation
+VERSION: 2026-05-31
+CONCEPT: geolocation requires permissions array
+QUOTE: "use: { geolocation: { longitude: 12.492507, latitude: 41.889938 }, permissions: ['geolocation'] }"
+NOTE: docs also state "you can only change geolocation for all pages in the context" — runtime update via context.setGeolocation()
+
 
