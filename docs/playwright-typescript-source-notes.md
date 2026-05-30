@@ -1004,4 +1004,58 @@ CONCEPT: geolocation requires permissions array
 QUOTE: "use: { geolocation: { longitude: 12.492507, latitude: 41.889938 }, permissions: ['geolocation'] }"
 NOTE: docs also state "you can only change geolocation for all pages in the context" — runtime update via context.setGeolocation()
 
+---
+
+## Ch15: API Testing & Hybrid
+
+SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: request fixture — built-in, respects config options
+QUOTE: "Playwright Test comes with the built-in `request` fixture that respects configuration options like `baseURL` or `extraHTTPHeaders`."
+
+SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: APIRequestContext — can send all HTTP(S) requests
+QUOTE: "APIRequestContext can send all kinds of HTTP(S) requests over network."
+
+SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: request fixture internally calls apiRequest.newContext()
+QUOTE: "Behind the scenes, the `request` fixture will actually call `apiRequest.newContext()`"
+
+SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: extraHTTPHeaders configuration at context level
+QUOTE: "extraHTTPHeaders: { 'Accept': 'application/vnd.github.v3+json', 'Authorization': `token ${process.env.API_TOKEN}` }"
+
+SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: response.ok() checks 2xx status range
+QUOTE: "expect(newIssue.ok()).toBeTruthy();" — .ok() is boolean indicating success (2xx status)
+
+SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: expect.objectContaining() for partial match in array
+QUOTE: "expect(await issues.json()).toContainEqual(expect.objectContaining({ title: '[Bug] report 1', body: 'Bug description' }));"
+
+SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: Hybrid testing — setup via API then verify in UI
+QUOTE: "create a new issue via API and then navigates to the list...to check that it appears at the top of the list."
+
+SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: Using API to prepare server state before UI test
+QUOTE: "The page emphasizes using APIRequestContext for 'preparing server state before visiting the web application in a test.'"
+
+SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: storageState interchangeable between BrowserContext and APIRequestContext
+QUOTE: "Storage state is interchangeable between BrowserContext and APIRequestContext."
+
+SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: request fixture is isolated per test
+QUOTE: "Isolated APIRequestContext instance for this test run."
+
 
