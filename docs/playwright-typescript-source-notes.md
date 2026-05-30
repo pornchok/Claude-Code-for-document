@@ -708,3 +708,92 @@ VERSION: 2026-05-31
 CONCEPT: failOnFlakyTests — confirmed to exist in Playwright v1.52+
 QUOTE: "failOnFlakyTests: !!process.env.CI" — exits with error if any test is marked flaky (added v1.52, NOT an invented property)
 
+---
+
+## Ch11: Parallelism, Sharding & Reporting
+
+SOURCE: https://playwright.dev/docs/test-parallel
+VERSION: 2026-05-31
+CONCEPT: workers config option
+QUOTE: "workers: process.env.CI ? 2 : undefined" — controls maximum parallel worker processes; "To disable parallelism entirely: workers: 1"
+
+SOURCE: https://playwright.dev/docs/test-parallel
+VERSION: 2026-05-31
+CONCEPT: fullyParallel setting
+QUOTE: "have all tests in all files to run in parallel" — configurable at testConfig.fullyParallel or per testProject.fullyParallel
+
+SOURCE: https://playwright.dev/docs/test-parallel
+VERSION: 2026-05-31
+CONCEPT: test.describe.configure() for serial and parallel modes
+QUOTE: "test.describe.configure({ mode: 'serial' });" and "test.describe.configure({ mode: 'parallel' });" — official API; test.describe.serial() and test.describe.parallel() exist as shorthand
+
+SOURCE: https://playwright.dev/docs/test-parallel
+VERSION: 2026-05-31
+CONCEPT: Parallel test isolation — workers cannot share state
+QUOTE: "Parallel tests are executed in separate worker processes and cannot share any state or global variables."
+
+SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: --shard flag syntax
+QUOTE: "split[s] the suite into four shards, each running one fourth of the tests" — syntax: --shard=1/4, --shard=2/4, etc.
+
+SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: Blob reporter for sharding
+QUOTE: "Blob report contains information about all the tests that were run and their results as well as all test attachments such as traces and screenshot diffs."
+
+SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: merge-reports command syntax
+QUOTE: "npx playwright merge-reports --reporter html ./all-blob-reports"
+
+SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: fullyParallel improves shard distribution
+QUOTE: "With fullyParallel: true: Tests split at individual test level for balanced distribution. Without fullyParallel: Tests split at file level; uneven file sizes can cause imbalanced shard loads."
+
+SOURCE: https://playwright.dev/docs/test-reporters
+VERSION: 2026-05-31
+CONCEPT: html reporter — show-report command
+QUOTE: "npx playwright show-report" or "npx playwright show-report my-report"
+
+SOURCE: https://playwright.dev/docs/test-reporters
+VERSION: 2026-05-31
+CONCEPT: dot reporter characters
+QUOTE: "Very concise - it only produces a single character per successful test run." — · (passed), F (failed), × (failed/timed out retrying), ± (passed on retry/flaky), T (timed out), ° (skipped)
+
+SOURCE: https://playwright.dev/docs/test-reporters
+VERSION: 2026-05-31
+CONCEPT: multiple reporters configuration
+QUOTE: "reporter: [['list'], ['json', { outputFile: 'test-results.json' }]]"
+
+SOURCE: https://playwright.dev/docs/test-reporters
+VERSION: 2026-05-31
+CONCEPT: failOnFlakyTests — NOT in reporters docs
+QUOTE: (not documented in test-reporters page — confirmed absent)
+
+SOURCE: https://playwright.dev/docs/test-cli
+VERSION: 2026-05-31
+CONCEPT: --last-failed flag
+QUOTE: "Only re-run the failures."
+
+SOURCE: https://playwright.dev/docs/test-cli
+VERSION: 2026-05-31
+CONCEPT: --repeat-each flag
+QUOTE: "Run each test N times (default: 1)."
+
+SOURCE: https://playwright.dev/docs/test-cli
+VERSION: 2026-05-31
+CONCEPT: --only-changed flag — CONFIRMED EXISTS
+QUOTE: "Only run test files that have been changed between 'HEAD' and 'ref'. Defaults to running all uncommitted changes. Only supports Git."
+
+SOURCE: https://playwright.dev/docs/test-cli
+VERSION: 2026-05-31
+CONCEPT: --forbid-only flag
+QUOTE: "Fail if test.only is called (default: false). Useful on CI."
+
+SOURCE: https://playwright.dev/docs/test-cli
+VERSION: 2026-05-31
+CONCEPT: --workers / -j flag
+QUOTE: "Number of concurrent workers or percentage of logical CPU cores, use 1 to run in a single worker (default: 50%)."
+
