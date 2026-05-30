@@ -510,3 +510,32 @@ CONCEPT: mergeTests() for combining fixtures
 QUOTE: (combining fixtures from multiple files) "export const test = mergeTests(dbTest, a11yTest);"
 
 ---
+
+## Ch08: Page Object Model
+
+SOURCE: https://playwright.dev/docs/pom
+VERSION: 2026-05-31
+CONCEPT: POM definition
+QUOTE: "A page object represents a part of your web application."
+
+SOURCE: https://playwright.dev/docs/pom
+VERSION: 2026-05-31
+CONCEPT: POM primary benefits
+QUOTE: "Page objects simplify authoring by creating a higher-level API which suits your application and simplify maintenance by capturing element selectors in one place and create reusable code to avoid repetition."
+
+SOURCE: https://playwright.dev/docs/pom
+VERSION: 2026-05-31
+CONCEPT: POM implementation approach
+QUOTE: "We will create a PlaywrightDevPage helper class to encapsulate common operations on the playwright.dev page."
+
+SOURCE: https://playwright.dev/docs/pom
+VERSION: 2026-05-31
+CONCEPT: POM usage pattern
+QUOTE: "const playwrightDev = new PlaywrightDevPage(page); await playwrightDev.goto(); await playwrightDev.getStarted();"
+
+SOURCE: https://playwright.dev/docs/pom
+VERSION: 2026-05-31
+CONCEPT: Locator properties in Page Object
+QUOTE: "constructor(page: Page) { this.page = page; this.getStartedLink = page.locator('a', { hasText: 'Get started' });"
+
+---
