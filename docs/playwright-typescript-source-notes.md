@@ -1058,4 +1058,88 @@ VERSION: 2026-05-31
 CONCEPT: request fixture is isolated per test
 QUOTE: "Isolated APIRequestContext instance for this test run."
 
+---
+
+## Ch16: Visual & Accessibility Testing
+
+SOURCE: https://playwright.dev/docs/test-snapshots
+VERSION: 2026-05-31
+CONCEPT: Platform/OS differences in screenshots
+QUOTE: "Browser rendering can vary based on the host OS, version, settings, hardware, power source (battery vs. power adapter), headless mode, and other factors. For consistent screenshots, run tests in the same environment where the baseline screenshots were generated."
+
+SOURCE: https://playwright.dev/docs/test-snapshots
+VERSION: 2026-05-31
+CONCEPT: Snapshot naming convention includes browser and platform
+QUOTE: "chromium-darwin - the browser name and the platform. Screenshots differ between browsers and platforms due to different rendering, fonts and more, so you will need different snapshots for them."
+NOTE: Filenames follow pattern `{test-name}-{number}-{browser}-{platform}.png` e.g. `dashboard-1-chromium-linux.png`
+
+SOURCE: https://playwright.dev/docs/test-snapshots
+VERSION: 2026-05-31
+CONCEPT: maxDiffPixels option for toHaveScreenshot
+QUOTE: "Playwright Test uses the pixelmatch library. You can pass various options to modify its behavior." and example: `await expect(page).toHaveScreenshot({ maxDiffPixels: 100 });`
+
+SOURCE: https://playwright.dev/docs/test-snapshots
+VERSION: 2026-05-31
+CONCEPT: stylePath option for hiding dynamic content
+QUOTE: "stylePath: Applies custom CSS during screenshot capture to hide dynamic elements and improve determinism"
+NOTE: animations option confirmed from docs — value 'disabled' stops CSS animations during capture
+
+SOURCE: https://playwright.dev/docs/test-snapshots
+VERSION: 2026-05-31
+CONCEPT: Update snapshots flag
+QUOTE: "Use the `--update-snapshots` flag to refresh baseline images after intentional page changes."
+
+SOURCE: https://playwright.dev/docs/accessibility-testing
+VERSION: 2026-05-31
+CONCEPT: @axe-core/playwright import syntax
+QUOTE: "import AxeBuilder from '@axe-core/playwright';" (TypeScript)
+NOTE: package must be installed separately: `npm install @axe-core/playwright`
+
+SOURCE: https://playwright.dev/docs/accessibility-testing
+VERSION: 2026-05-31
+CONCEPT: AxeBuilder.analyze() usage
+QUOTE: "Awaits `AxeBuilder.analyze()` to run the accessibility scan against the page"
+
+SOURCE: https://playwright.dev/docs/accessibility-testing
+VERSION: 2026-05-31
+CONCEPT: withTags WCAG options
+QUOTE: "to match that behavior, you would use the tags `wcag2a`, `wcag2aa`, `wcag21a`, and `wcag21aa`"
+
+SOURCE: https://playwright.dev/docs/accessibility-testing
+VERSION: 2026-05-31
+CONCEPT: AxeBuilder.include() for scoped scan
+QUOTE: "you can use `AxeBuilder.include()` to constrain an accessibility scan to only run against one specific part of a page"
+
+SOURCE: https://playwright.dev/docs/accessibility-testing
+VERSION: 2026-05-31
+CONCEPT: AxeBuilder.exclude() for known violations
+QUOTE: "you can use `AxeBuilder.exclude()` to exclude them from being scanned until you're able to fix the issues"
+NOTE: exclude() excludes the specified elements AND all their descendants
+
+SOURCE: https://playwright.dev/docs/accessibility-testing
+VERSION: 2026-05-31
+CONCEPT: AxeBuilder.disableRules() for specific rules
+QUOTE: "use `AxeBuilder.disableRules()` to temporarily disable individual rules"
+
+SOURCE: https://playwright.dev/docs/aria-snapshots
+VERSION: 2026-05-31
+CONCEPT: toMatchAriaSnapshot syntax and mechanism
+QUOTE: "the accessible structure of the page with a predefined aria snapshot template" — format: YAML-like, `- role \"name\" [attribute=value]`
+
+SOURCE: https://playwright.dev/docs/aria-snapshots
+VERSION: 2026-05-31
+CONCEPT: toMatchAriaSnapshot matching rules
+QUOTE: "The comparison is case-sensitive and collapses whitespace" and "The comparison is order-sensitive, meaning the order of elements in the snapshot template must match the order"
+
+SOURCE: https://playwright.dev/docs/aria-snapshots
+VERSION: 2026-05-31
+CONCEPT: toMatchAriaSnapshot update command
+QUOTE: "Snapshots that did not match. Matching snapshots will not be updated." — command: `npx playwright test --update-snapshots` (shorthand: `-u`)
+
+SOURCE: https://playwright.dev/docs/aria-snapshots
+VERSION: 2026-05-31
+CONCEPT: toMatchAriaSnapshot file snapshot option
+QUOTE: "To store your snapshots in a separate file, use the `toMatchAriaSnapshot` method with the `name` option, specifying a `.aria.yml` file extension."
+NOTE: toMatchAriaSnapshot version — docs confirm it exists but exact version not stated in fetched content; task notes indicate v1.49+
+
 
