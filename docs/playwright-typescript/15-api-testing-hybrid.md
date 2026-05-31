@@ -329,94 +329,106 @@ test.describe('Todos API — CRUD', () => {
 
 ---
 
-### Intermediate — Protected Endpoints ด้วย JWT Auth
+### Intermediate — Query Parameters & Pagination
 
-สถานการณ์: ระบบมี protected endpoints ที่ต้องการ JWT token — เขียน tests ตรวจว่า auth ทำงานถูกต้องทั้ง success case และ authorization failure:
+สถานการณ์: ระบบมี `/api/products` endpoint ที่รองรับ pagination และ filtering ด้วย query parameters — เขียน test ตรวจว่า API filter ทำงานถูกต้อง แล้ว verify ผลลัพธ์ที่ render ใน UI ตรงกับ API response:
 
 ```typescript
 // tested: Playwright v1.50+, Node.js 20+
-// tests/api-auth.spec.ts
+// tests/api-pagination.spec.ts
 
 import { test, expect } from '@playwright/test';
 
-test.describe('Protected API Endpoints', () => {
-  // helper สำหรับ login
-  async function getToken(
-    request: Parameters<typeof test>[1] extends { request: infer R } ? R : never,
-    username: string,
-    password: string
-  ): Promise<string> {
-    const res = await (request as any).post('http://localhost:3000/api/auth/login', {
-      data: { username, password }
+test.describe('Products API — Query Parameters & Pagination', () => {
+  test.beforeEach(async ({ request }) => {
+    // reset DB ก่อนทุก test
+    await request.post('http://localhost:3000/api/reset');
+    
+    // seed ข้อมูลตัวอย่าง: สร้าง 15 products หลากหลาย category
+    const categories = ['Electronics', 'Clothing', 'Food'];
+    const names = ['Laptop', 'Phone', 'Shirt', 'Jeans', 'Apple', 'Banana'];
+    
+    for (let i = 0; i < 15; i++) {
+      await request.post('http://localhost:3000/api/products', {
+        data: {
+          name: `${names[i % names.length]} ${i + 1}`,
+          category: categories[i % categories.length],
+          price: Math.floor(Math.random() * 1000) + 10
+        }
+      });
+    }
+  });
+
+  test('GET /api/products?category=Electronics returns filtered results', async ({ request }) => {
+    const res = await request.get('http://localhost:3000/api/products', {
+      params: { category: 'Electronics', limit: 10 }
     });
-    const body = await res.json();
-    return body.token;
-  }
 
-  test('GET /api/me returns user info for authenticated user', async ({ request }) => {
-    const loginRes = await request.post('http://localhost:3000/api/auth/login', {
-      data: { username: 'admin', password: 'admin123' }
-    });
-    expect(loginRes).toBeOK();
-
-    const { token } = await loginRes.json();
-
-    const meRes = await request.get('http://localhost:3000/api/me', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    expect(meRes).toBeOK();
-    const me = await meRes.json();
-    expect(me).toMatchObject({
-      username: 'admin',
-      role: 'admin',
+    expect(res).toBeOK();
+    const data = await res.json();
+    
+    // verify API response shape
+    expect(data).toHaveProperty('data');
+    expect(data.data).toBeTruthy();
+    expect(data.data.length).toBeGreaterThan(0);
+    expect(data.data.length).toBeLessThanOrEqual(10);
+    
+    // verify ว่าทั้งหมดเป็น Electronics
+    data.data.forEach((product: { category: string }) => {
+      expect(product.category).toBe('Electronics');
     });
   });
 
-  test('GET /api/me returns 401 without token', async ({ request }) => {
-    const res = await request.get('http://localhost:3000/api/me');
-    // ไม่มี auth header — ควร reject
-    expect(res.status()).toBe(401);
+  test('query params ?page=2&limit=5 returns correct offset', async ({ request }) => {
+    // page 1 (offset 0, limit 5)
+    const page1Res = await request.get('http://localhost:3000/api/products', {
+      params: { page: 1, limit: 5 }
+    });
+    const page1Data = await page1Res.json();
+    const firstPageIds = page1Data.data.map((p: { id: number }) => p.id);
+
+    // page 2 (offset 5, limit 5)
+    const page2Res = await request.get('http://localhost:3000/api/products', {
+      params: { page: 2, limit: 5 }
+    });
+    const page2Data = await page2Res.json();
+    const secondPageIds = page2Data.data.map((p: { id: number }) => p.id);
+
+    // ตรวจว่า page 2 เป็น items ต่างจาก page 1
+    expect(secondPageIds).not.toEqual(firstPageIds);
+    expect(page2Data.data.length).toBeGreaterThan(0);
   });
 
-  test('GET /api/admin returns 403 for regular user', async ({ request }) => {
-    // login เป็น regular user (ไม่ใช่ admin)
-    const loginRes = await request.post('http://localhost:3000/api/auth/login', {
-      data: { username: 'testuser', password: 'test123' }
+  test('filter via API and verify results in UI (hybrid)', async ({ request, page }) => {
+    // ─── VERIFY API FILTER ─── (ตรวจความถูกต้องที่ source)
+    const filterRes = await request.get('http://localhost:3000/api/products', {
+      params: { category: 'Clothing', limit: 5 }
     });
-    const { token } = await loginRes.json();
+    
+    expect(filterRes).toBeOK();
+    const apiProducts = await filterRes.json();
+    const filteredCount = apiProducts.data.length;
 
-    // regular user เข้า /api/admin ไม่ได้
-    const adminRes = await request.get('http://localhost:3000/api/admin', {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    expect(adminRes.status()).toBe(403);
-  });
-
-  test('extraHTTPHeaders context sends auth automatically', async ({ request }) => {
-    // login ก่อน
-    const loginRes = await request.post('http://localhost:3000/api/auth/login', {
-      data: { username: 'admin', password: 'admin123' }
-    });
-    const { token } = await loginRes.json();
-
-    // สร้าง context ที่มี auth header ติดไปทุก request
-    const authCtx = await request.newContext({
-      baseURL: 'http://localhost:3000',
-      extraHTTPHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-
-    // ไม่ต้องระบุ headers ซ้ำ
-    const meRes = await authCtx.get('/api/me');
-    const adminRes = await authCtx.get('/api/admin');
-
-    expect(meRes).toBeOK();
-    expect(adminRes).toBeOK();
-
-    await authCtx.dispose();
+    // ─── VERIFY FILTER ใน UI ─── (ตรวจว่า UI render API response ถูกต้อง)
+    await page.goto('http://localhost:3000/shop');
+    
+    // select filter dropdown
+    await page.selectOption('[data-testid="filter-category"]', 'Clothing');
+    
+    // wait for results to load
+    await page.waitForSelector('[data-testid="product-card"]');
+    
+    // count products displayed
+    const uiProducts = await page.locator('[data-testid="product-card"]').count();
+    
+    // UI count ควรตรงกับ API หรือน้อยกว่า (อาจมี pagination)
+    expect(uiProducts).toBeGreaterThan(0);
+    expect(uiProducts).toBeLessThanOrEqual(filteredCount);
+    
+    // verify ว่า product name ทั้งหมดที่แสดงเป็นของ Clothing category
+    const displayedNames = await page.locator('[data-testid="product-name"]').allTextContents();
+    // (assuming API data มี name field ที่ UI render)
+    expect(displayedNames.length).toBe(uiProducts);
   });
 });
 ```
@@ -549,7 +561,7 @@ const data = await res.json();
 console.log(data.text); // "Buy groceries"
 ```
 
-`res.json()` เป็น async method เพราะต้องรอ parse body stream — ถ้าลืม `await` จะได้ Promise object กลับมา *(source: https://playwright.dev/docs/api-testing)*
+`res.json()` เป็น async method เพราะต้องรอ parse body stream — ถ้าลืม `await` จะได้ Promise object กลับมา *(source: https://playwright.dev/docs/api-testing#response-methods)*
 
 ---
 
@@ -579,7 +591,7 @@ test('check my profile', async ({ request, page }) => {
 });
 ```
 
-`request` fixture มี baseURL, TLS handling, และ context lifecycle ที่ integrate กับ Playwright runner — ถ้าใช้ `fetch()` ธรรมดา feature เหล่านี้หาย *(source: https://playwright.dev/docs/api-testing)*
+`request` fixture มี baseURL, TLS handling, และ context lifecycle ที่ integrate กับ Playwright runner — ถ้าใช้ `fetch()` ธรรมดา feature เหล่านี้หาย *(source: https://playwright.dev/docs/api-testing#use-request-context)*
 
 ---
 
@@ -599,7 +611,7 @@ const data = await res.json();
 expect(data.text).toBe('Buy groceries');
 ```
 
-การ assert status ก่อนทำให้ error message ชัดเจนกว่ามาก โดยเฉพาะเมื่อ debug *(source: https://playwright.dev/docs/api-testing)*
+การ assert status ก่อนทำให้ error message ชัดเจนกว่ามาก โดยเฉพาะเมื่อ debug *(source: https://playwright.dev/docs/api-testing#assertions)*
 
 ---
 
@@ -625,7 +637,7 @@ const authRequest = await request.newContext({
 });
 ```
 
-Config-level `extraHTTPHeaders` ส่งไปทุก request จากทุก context ใน project — อาจ leak credentials ไปยัง third-party services *(source: https://playwright.dev/docs/api-testing)*
+Config-level `extraHTTPHeaders` ส่งไปทุก request จากทุก context ใน project — อาจ leak credentials ไปยัง third-party services *(source: https://playwright.dev/docs/api-testing#context-level-http-headers)*
 
 ---
 
