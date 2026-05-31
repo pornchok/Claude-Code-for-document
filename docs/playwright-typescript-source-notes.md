@@ -1142,4 +1142,86 @@ CONCEPT: toMatchAriaSnapshot file snapshot option
 QUOTE: "To store your snapshots in a separate file, use the `toMatchAriaSnapshot` method with the `name` option, specifying a `.aria.yml` file extension."
 NOTE: toMatchAriaSnapshot version — docs confirm it exists but exact version not stated in fetched content; task notes indicate v1.49+
 
+---
+
+## Ch17: CI/CD
+
+SOURCE: https://playwright.dev/docs/ci
+VERSION: 2026-05-31
+CONCEPT: npx playwright install --with-deps — installs browsers AND system dependencies
+QUOTE: "npx playwright install --with-deps"
+NOTE: fetched docs confirm --with-deps is the standard CI install command; installs both browser binaries and Linux system libraries (libnss3, libgbm, etc.)
+
+SOURCE: https://playwright.dev/docs/ci
+VERSION: 2026-05-31
+CONCEPT: workers setting in CI
+QUOTE: "workers: process.env.CI ? 1 : undefined"
+NOTE: confirmed from CI docs; 1 worker for stability in CI, undefined (all cores) on local
+
+SOURCE: https://playwright.dev/docs/ci-intro
+VERSION: 2026-05-31
+CONCEPT: artifact upload with if: !cancelled()
+QUOTE: "if: ${{ !cancelled() }}"
+NOTE: docs show !cancelled() condition (not always()) — both work; !cancelled() is more precise (skips if job was manually cancelled), always() uploads even on cancellation. Chapter uses always() which is more common in practice.
+
+SOURCE: https://playwright.dev/docs/ci-intro
+VERSION: 2026-05-31
+CONCEPT: artifact retention days
+QUOTE: "retention-days: 30"
+NOTE: 30 days is the documented default example
+
+SOURCE: https://playwright.dev/docs/ci-intro
+VERSION: 2026-05-31
+CONCEPT: security note on artifacts
+QUOTE: "Artifacts like trace files, HTML reports or even the console logs contain information about your test execution"
+NOTE: docs note sensitive data may be in artifacts
+
+SOURCE: https://playwright.dev/docs/docker
+VERSION: 2026-05-31
+CONCEPT: official Docker image name and OS variants
+QUOTE: "mcr.microsoft.com/playwright:v1.60.0-noble" (Noble = Ubuntu 24.04 LTS), "mcr.microsoft.com/playwright:v1.60.0-jammy" (Jammy = Ubuntu 22.04 LTS)
+NOTE: v1.60.0 is current at time of fetch; chapter uses v1.50.0 to match course Playwright version
+
+SOURCE: https://playwright.dev/docs/docker
+VERSION: 2026-05-31
+CONCEPT: Playwright package NOT included in Docker image
+QUOTE: "The Playwright package/dependency is not included in the image"
+NOTE: must run npm ci inside container to install @playwright/test
+
+SOURCE: https://playwright.dev/docs/docker
+VERSION: 2026-05-31
+CONCEPT: --ipc=host recommended for Chromium in Docker
+QUOTE: "docker run -it --rm --ipc=host mcr.microsoft.com/playwright:v1.60.0-noble /bin/bash"
+NOTE: --ipc=host needed for Chrome's shared memory renderer processes
+
+SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: sharding syntax
+QUOTE: "npx playwright test --shard=1/4" / "npx playwright test --shard=2/4"
+NOTE: x/y format confirmed; runs tests in that shard index
+
+SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: blob reporter for sharding
+QUOTE: "Blob report contains information about all the tests that were run and their results as well as all test attachments."
+NOTE: blob reporter is the correct format for shard merging
+
+SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: merge-reports command
+QUOTE: "npx playwright merge-reports --reporter html ./all-blob-reports"
+NOTE: confirmed command syntax
+
+SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: fail-fast: false required for sharding
+QUOTE: "strategy: fail-fast: false"
+NOTE: ensures remaining shards complete even if one fails; needed for complete merged report
+
+SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: fullyParallel improves shard balance
+QUOTE: "With `fullyParallel: true`: Tests are split at the individual test level, leading to more balanced shard execution."
+NOTE: without fullyParallel, tests split at file level requiring evenly-sized test files
+
 
