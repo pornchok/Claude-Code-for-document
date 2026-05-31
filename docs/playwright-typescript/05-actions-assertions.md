@@ -230,7 +230,7 @@ const count = await page.evaluate(() => {
 });
 ```
 
-`page.goto()` รอ `load` event โดย default — แปลว่ารอให้ HTML, CSS, JS โหลดครบก่อน return *(source: playwright.dev/docs/navigations)*
+`page.goto()` รอ `load` event โดย default — แปลว่ารอให้ HTML, CSS, JS โหลดครบก่อน return *(source: https://playwright.dev/docs/navigations)*
 
 ---
 

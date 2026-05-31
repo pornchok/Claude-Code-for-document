@@ -152,6 +152,7 @@ page.getByLabel('Password')
 ใช้เมื่อ input ไม่มี label แต่มี placeholder
 
 ```typescript
+// partial example — see Section 5 for runnable version
 page.getByPlaceholder('Search products...')
 page.getByPlaceholder('Enter your email')
 ```
@@ -165,6 +166,7 @@ page.getByPlaceholder('Enter your email')
 สำหรับ `<img>` และ element อื่นที่มี `alt` attribute
 
 ```typescript
+// partial example — see Section 5 for runnable version
 page.getByAltText('Company logo')
 page.getByAltText('Product: MacBook Pro')
 ```
@@ -176,6 +178,7 @@ page.getByAltText('Product: MacBook Pro')
 ค้นหาจาก `title` attribute ที่มักเป็น tooltip
 
 ```typescript
+// partial example — see Section 5 for runnable version
 page.getByTitle('Close dialog')
 page.getByTitle('Sort ascending')
 ```

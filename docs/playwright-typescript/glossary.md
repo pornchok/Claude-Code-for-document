@@ -14,6 +14,14 @@
 
 ---
 
+## Actionability
+
+**SOURCE:** https://playwright.dev/docs/actionability
+
+เงื่อนไขที่ element ต้องผ่านทั้งหมดก่อนที่ Playwright จะ execute action มี 5 เงื่อนไขหลัก: **Visible** (มี bounding box และไม่ hidden), **Stable** (ไม่กำลัง animate), **Enabled** (ไม่ disabled), **Editable** (ไม่ readonly สำหรับ input), **Receives Events** (ไม่มี overlay บัง) action แต่ละประเภทต้องการเงื่อนไขต่างกัน
+
+---
+
 ## Annotation
 
 **SOURCE:** https://playwright.dev/docs/test-annotations
@@ -21,14 +29,6 @@
 Metadata ที่แปะบน test เพื่อบอก test runner ว่าควรจัดการ test นั้นอย่างไร Playwright มี 4 built-in annotation: `skip` (ข้ามไม่รัน), `fail` (รันแต่คาดว่าต้อง fail), `fixme` (ข้ามเพราะรู้ว่า broken), `slow` (เพิ่ม timeout เป็น 3 เท่า) annotation สามารถระบุเงื่อนไขหรือใส่ข้อความอธิบายได้ และปรากฏในรายงาน
 
 ใช้เมื่อ: ต้องการ mark test ที่ยังไม่พร้อม หรือ document สถานะของ test ในทีม
-
----
-
-## Actionability
-
-**SOURCE:** https://playwright.dev/docs/actionability
-
-เงื่อนไขที่ element ต้องผ่านทั้งหมดก่อนที่ Playwright จะ execute action มี 5 เงื่อนไขหลัก: **Visible** (มี bounding box และไม่ hidden), **Stable** (ไม่กำลัง animate), **Enabled** (ไม่ disabled), **Editable** (ไม่ readonly สำหรับ input), **Receives Events** (ไม่มี overlay บัง) action แต่ละประเภทต้องการเงื่อนไขต่างกัน
 
 ---
 
