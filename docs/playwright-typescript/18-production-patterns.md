@@ -374,11 +374,12 @@ import { defineConfig } from '@playwright/test';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
-// โหลด .env.staging หรือ .env.production ตาม NODE_ENV
+// โหลด .env.staging หรือ .env.production ตาม TEST_ENV (custom var สำหรับ tests)
+// หรือใช้ NODE_ENV (Node.js built-in) — เลือกหนึ่งให้ consistent ในทีม
 dotenv.config({
   path: path.resolve(
     __dirname,
-    `.env.${process.env.NODE_ENV || 'development'}`
+    `.env.${process.env.TEST_ENV || process.env.NODE_ENV || 'development'}`
   ),
 });
 
@@ -699,7 +700,8 @@ class CriticalReporter implements Reporter {
     }
 
     // track เฉพาะ critical tests (tagged @smoke)
-    const isCritical = test.tags.includes('@smoke');
+    // note: test.tags อาจ empty ถ้า tag ฝังในชื่อ — check title ด้วย
+    const isCritical = test.tags.includes('@smoke') || test.title.includes('@smoke');
     if (isCritical && result.status === 'failed') {
       this.criticalFailures.push({
         title: test.title,
@@ -890,6 +892,8 @@ await page.goto('/login');
 // tested: Playwright v1.50+, Node.js 20+
 ```
 
+*(source: https://playwright.dev/docs/best-practices)*
+
 ---
 
 ❌ **ไม่มี cleanup — tests รัน parallel แล้ว state ปนกัน**
@@ -914,6 +918,10 @@ test('shows created todo', async ({ page, todoFactory }) => {
 });
 // tested: Playwright v1.50+, Node.js 20+
 ```
+
+*(source: https://playwright.dev/docs/test-fixtures)*
+
+---
 
 ---
 
@@ -948,6 +956,8 @@ test('checkout', async ({ page }) => {
 // tested: Playwright v1.50+, Node.js 20+
 ```
 
+*(source: https://playwright.dev/docs/api/class-testinfo#test-info-attach)*
+
 ---
 
 ## 7. สรุปบท
@@ -962,7 +972,7 @@ test('checkout', async ({ page }) => {
 
 ---
 
-เฉลย:
+**เฉลย:**
 
 **คำถามที่ 1**: เริ่มจาก config `trace: 'on-first-retry'` และตั้ง `retries: 1` บน CI — เมื่อ test fail และ retry จะมี trace file ที่ดาวน์โหลดได้จาก artifacts รัน `npx playwright show-trace trace.zip` เพื่อดู timeline แบบ step-by-step ว่า dialog ไม่เคยปรากฏ หรือปรากฏแล้วหายไป หรือ locator ผิด ถ้า dialog ปรากฏช้า (network-dependent) ให้เพิ่ม web-first assertion `await expect(page.locator('.confirm-dialog')).toBeVisible()` แทนการ select โดยตรง
 
