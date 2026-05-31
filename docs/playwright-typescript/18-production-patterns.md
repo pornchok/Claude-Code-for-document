@@ -81,7 +81,7 @@
 
 **ขั้นที่ 1 — ใช้ Web-First Assertions (แก้ที่ต้นเหตุ timing)**
 
-Playwright documentation ระบุว่า `toBeVisible()`, `toHaveText()`, และ assertion อื่นๆ จะ wait และ retry อัตโนมัติก่อน fail — ไม่ต้องใช้ `waitForTimeout()` เด็ดขาด *(source: playwright.dev/docs/best-practices)*
+Playwright documentation ระบุว่า `toBeVisible()`, `toHaveText()`, และ assertion อื่นๆ จะ wait และ retry อัตโนมัติก่อน fail — ไม่ต้องใช้ `waitForTimeout()` เด็ดขาด *(source: https://playwright.dev/docs/best-practices)*
 
 ```typescript
 // ❌ flaky — ตรวจทันทีโดยไม่ wait
@@ -154,7 +154,7 @@ test('create order', async ({ page, cleanDatabase }) => {
 
 Playwright มี annotation สำหรับจัดการ tests ที่ยังมีปัญหา:
 
-**`test.fixme()`** — test ที่รู้ว่า broken ชั่วคราว *(source: playwright.dev/docs/test-annotations)*
+**`test.fixme()`** — test ที่รู้ว่า broken ชั่วคราว *(source: https://playwright.dev/docs/test-annotations)*
 
 ```typescript
 test.fixme('checkout flow with discount code', async ({ page }) => {
@@ -183,7 +183,7 @@ test.fail('login with expired token should redirect', async ({ page }) => {
 
 ### 4.3 test.info().attach() — เพิ่ม Artifact เมื่อ Test Fail
 
-เมื่อ test fail บน CI วิธีเดียวที่จะรู้ว่าเกิดอะไรขึ้นคือ artifact — screenshot, log, หรือ response body Playwright documentation ระบุว่า `attach()` "automatically takes care of copying attached files to a location that is accessible to reporters" *(source: playwright.dev/docs/api/class-testinfo)*
+เมื่อ test fail บน CI วิธีเดียวที่จะรู้ว่าเกิดอะไรขึ้นคือ artifact — screenshot, log, หรือ response body Playwright documentation ระบุว่า `attach()` "automatically takes care of copying attached files to a location that is accessible to reporters" *(source: https://playwright.dev/docs/api/class-testinfo)*
 
 ```typescript
 // tested: Playwright v1.50+, Node.js 20+
@@ -336,7 +336,7 @@ tests/
 
 **Tagging สำหรับ selective runs:**
 
-Playwright รองรับ tag ที่ขึ้นต้นด้วย `@` *(source: playwright.dev/docs/test-annotations)*
+Playwright รองรับ tag ที่ขึ้นต้นด้วย `@` *(source: https://playwright.dev/docs/test-annotations)*
 
 ```typescript
 // tested: Playwright v1.50+, Node.js 20+
@@ -414,7 +414,7 @@ export default defineConfig({
 
 **ตรวจ test result ใน afterEach fixture:**
 
-`testInfo.status` มี 5 ค่า: `"passed"`, `"failed"`, `"timedOut"`, `"skipped"`, `"interrupted"` *(source: playwright.dev/docs/api/class-testinfo)*
+`testInfo.status` มี 5 ค่า: `"passed"`, `"failed"`, `"timedOut"`, `"skipped"`, `"interrupted"` *(source: https://playwright.dev/docs/api/class-testinfo)*
 
 ```typescript
 // tests/fixtures/monitoring.fixtures.ts
@@ -444,7 +444,7 @@ export const test = base.extend({
 
 **Custom Reporter สำหรับ Slack Notification:**
 
-Playwright documentation แสดง interface ที่ต้อง implement *(source: playwright.dev/docs/test-reporters)*
+Playwright documentation แสดง interface ที่ต้อง implement *(source: https://playwright.dev/docs/test-reporters)*
 
 ```typescript
 // reporters/slack-reporter.ts
@@ -852,7 +852,7 @@ test('clears completed todos', async ({ page }) => { /* ... */ });
 // tested: Playwright v1.50+, Node.js 20+
 ```
 
-*(source: playwright.dev/docs/best-practices — "Each test should be completely isolated from another test")*
+*(source: https://playwright.dev/docs/best-practices — "Each test should be completely isolated from another test")*
 
 ---
 
@@ -873,7 +873,7 @@ await expect(page.locator('.toast')).toHaveText('Saved!');
 // tested: Playwright v1.50+, Node.js 20+
 ```
 
-*(source: playwright.dev/docs/best-practices — use web-first assertions)*
+*(source: https://playwright.dev/docs/best-practices — use web-first assertions)*
 
 ---
 
@@ -920,8 +920,6 @@ test('shows created todo', async ({ page, todoFactory }) => {
 ```
 
 *(source: https://playwright.dev/docs/test-fixtures)*
-
----
 
 ---
 
