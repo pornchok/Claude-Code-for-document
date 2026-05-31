@@ -6,31 +6,31 @@
 
 ## สถานะปัจจุบัน
 
-| บท | ไฟล์ | สถานะ |
-|----|------|-------|
-| Overview | 00-overview.md | ✅ เสร็จ |
-| Ch01 | 01-why-playwright.md | ✅ เสร็จ (440 บรรทัด) |
-| Ch02 | 02-setup-typescript.md | ✅ เสร็จ (460 บรรทัด) |
-| Ch03 | 03-architecture.md | ⏳ ยังไม่ได้เขียน |
-| Ch04 | 04-locators.md | ⏳ ยังไม่ได้เขียน |
-| Ch05 | 05-actions-assertions.md | ⏳ ยังไม่ได้เขียน |
-| Ch06 | 06-debugging.md | ⏳ ยังไม่ได้เขียน |
-| Ch07 | 07-fixtures.md | ⏳ ยังไม่ได้เขียน |
-| Ch08 | 08-page-object-model.md | ⏳ ยังไม่ได้เขียน |
-| Ch09 | 09-test-organization.md | ⏳ ยังไม่ได้เขียน |
-| Ch10 | 10-configuration-projects.md | ⏳ ยังไม่ได้เขียน |
-| Ch11 | 11-parallelism-sharding-reporting.md | ⏳ ยังไม่ได้เขียน |
-| Ch12 | 12-mocking-network-time-browser.md | ⏳ ยังไม่ได้เขียน |
-| Ch13 | 13-authentication-storage-state.md | ⏳ ยังไม่ได้เขียน |
-| Ch14 | 14-advanced-browser-emulation.md | ⏳ ยังไม่ได้เขียน |
-| Ch15 | 15-api-testing-hybrid.md | ⏳ ยังไม่ได้เขียน |
-| Ch16 | 16-visual-accessibility-testing.md | ⏳ ยังไม่ได้เขียน |
-| Ch17 | 17-cicd.md | ⏳ ยังไม่ได้เขียน |
-| Ch18 | 18-production-patterns.md | ⏳ ยังไม่ได้เขียน |
-| Exercises | exercises.md | ⏳ ยังไม่ได้เขียน |
-| Glossary | glossary.md | ⏳ ยังไม่ได้เขียน |
+**🎉 ครบทุกบทแล้ว — ไม่มีงานเหลือ**
 
-**เริ่มต้นที่:** Ch03 (`03-architecture.md`)
+| บท | ไฟล์ | สถานะ | บรรทัด |
+|----|------|-------|--------|
+| Overview | 00-overview.md | ✅ เสร็จ | — |
+| Ch01 | 01-why-playwright.md | ✅ เสร็จ | 440 |
+| Ch02 | 02-setup-typescript.md | ✅ เสร็จ | 460 |
+| Ch03 | 03-architecture.md | ✅ เสร็จ | 511 |
+| Ch04 | 04-locators.md | ✅ เสร็จ | 603 |
+| Ch05 | 05-actions-assertions.md | ✅ เสร็จ | 654 |
+| Ch06 | 06-debugging.md | ✅ เสร็จ | 681 |
+| Ch07 | 07-fixtures.md | ✅ เสร็จ | 770 |
+| Ch08 | 08-page-object-model.md | ✅ เสร็จ | 683 |
+| Ch09 | 09-test-organization.md | ✅ เสร็จ | 724 |
+| Ch10 | 10-configuration-projects.md | ✅ เสร็จ | 708 |
+| Ch11 | 11-parallelism-sharding-reporting.md | ✅ เสร็จ | 852 |
+| Ch12 | 12-mocking-network-time-browser.md | ✅ เสร็จ | 710 |
+| Ch13 | 13-authentication-storage-state.md | ✅ เสร็จ | 854 |
+| Ch14 | 14-advanced-browser-emulation.md | ✅ เสร็จ | 785 |
+| Ch15 | 15-api-testing-hybrid.md | ✅ เสร็จ | 659 |
+| Ch16 | 16-visual-accessibility-testing.md | ✅ เสร็จ | 730 |
+| Ch17 | 17-cicd.md | ✅ เสร็จ | 876 |
+| Ch18 | 18-production-patterns.md | ✅ เสร็จ | 971 |
+| Exercises | exercises.md | ✅ เสร็จ | 1,721 |
+| Glossary | glossary.md | ✅ เสร็จ | 25 terms |
 
 ---
 
