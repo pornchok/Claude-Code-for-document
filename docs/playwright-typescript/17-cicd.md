@@ -208,12 +208,15 @@ docker pull mcr.microsoft.com/playwright:v1.50.0-jammy
 ```dockerfile
 # tested: Docker, Playwright v1.50+
 FROM mcr.microsoft.com/playwright:v1.50.0-jammy
+# image นี้มี browser binaries อยู่แล้วที่ /ms-playwright
+# ไม่ต้องรัน npx playwright install อีกครั้ง
 
 WORKDIR /app
 
 # Install Node dependencies ก่อน (cache layer)
 COPY package*.json ./
 RUN npm ci
+# ไม่ต้องรัน npx playwright install -- browser อยู่ใน image แล้ว
 
 # Copy source
 COPY . .
@@ -221,6 +224,11 @@ COPY . .
 # Run tests
 CMD ["npx", "playwright", "test"]
 ```
+
+**หมายเหตุสำคัญเกี่ยวกับ browser path:**
+- Official Playwright image `mcr.microsoft.com/playwright:vX.X.X-jammy` มี browser binaries ติดตั้งไว้แล้วที่ `/ms-playwright`
+- ไม่ต้องรัน `npx playwright install` ใน Dockerfile เพราะ browser มีอยู่แล้ว
+- ถ้าคุณใช้ `node:20` image ปกติ แทนที่จะใช้ official Playwright image ต้องรัน `npx playwright install --with-deps` เพื่อติดตั้ง browser binary + system dependencies ด้วย
 
 **รันด้วย Docker locally:**
 
@@ -341,11 +349,17 @@ npx playwright test --only-changed=main
 เหมาะสำหรับ early-feedback ใน CI — รัน quick pass ก่อน แล้วค่อยรัน full suite:
 
 ```yaml
+- uses: actions/checkout@v4
+  with:
+    fetch-depth: 0  # ต้องการ full git history สำหรับ --only-changed
+
 - name: Run changed tests (fast feedback)
   run: npx playwright test --only-changed=origin/main
   env:
     CI: true
 ```
+
+**เหตุที่ต้อง `fetch-depth: 0`:** `--only-changed` ต้องการ git history เพื่อเปรียบเทียบ diff ระหว่าง branch ปัจจุบันกับ base branch (เช่น `origin/main`) — ถ้า `fetch-depth` เป็น default (1) จะมีแค่ latest commit และ git history ไม่พอสำหรับ comparison ทำให้ flag อาจทำงานผิดพลาดหรือ fallback ไปรัน tests ทั้งหมด (ซึ่งหมายความว่า early-feedback ไม่ได้เร็วขึ้น)
 
 ### 4.7 เปรียบเทียบ: Robot Framework + Selenium vs Playwright
 
