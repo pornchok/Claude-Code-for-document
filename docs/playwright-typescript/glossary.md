@@ -176,7 +176,7 @@ DOM tree ที่ encapsulate อยู่ภายใน web component — แ
 
 **SOURCE:** https://playwright.dev/docs/auth
 
-ข้อมูล session ของเบราว์เซอร์ที่ serialize แล้ว ครอบคลุม cookies, localStorage, และ IndexedDB ใช้สำหรับ save authenticated state หลังจาก login ครั้งเดียว แล้ว load state นั้นซ้ำใน test อื่นๆ โดยไม่ต้อง login ใหม่ทุกครั้ง
+ข้อมูล session ของเบราว์เซอร์ที่ serialize แล้ว ครอบคลุม cookies, localStorage, และ IndexedDB (ต้องระบุ `{ indexedDB: true }` เพื่อ capture IndexedDB) — **sessionStorage ไม่ถูก capture** ใช้สำหรับ save authenticated state หลังจาก login ครั้งเดียว แล้ว load state นั้นซ้ำใน test อื่นๆ โดยไม่ต้อง login ใหม่ทุกครั้ง
 
 ใช้เมื่อ: test ส่วนใหญ่ต้อง login ก่อน — ช่วยลด test time อย่างมากโดยข้ามขั้นตอน authentication
 
