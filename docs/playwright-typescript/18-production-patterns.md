@@ -970,6 +970,9 @@ test('checkout', async ({ page }) => {
 
 ---
 
+<details>
+<summary>ดูเฉลย</summary>
+
 **เฉลย:**
 
 **คำถามที่ 1**: เริ่มจาก config `trace: 'on-first-retry'` และตั้ง `retries: 1` บน CI — เมื่อ test fail และ retry จะมี trace file ที่ดาวน์โหลดได้จาก artifacts รัน `npx playwright show-trace trace.zip` เพื่อดู timeline แบบ step-by-step ว่า dialog ไม่เคยปรากฏ หรือปรากฏแล้วหายไป หรือ locator ผิด ถ้า dialog ปรากฏช้า (network-dependent) ให้เพิ่ม web-first assertion `await expect(page.locator('.confirm-dialog')).toBeVisible()` แทนการ select โดยตรง
@@ -977,3 +980,5 @@ test('checkout', async ({ page }) => {
 **คำถามที่ 2**: (1) **Sharding** — แบ่ง 500 tests เป็น 3 shards รันบน 3 machines พร้อมกัน ลดจาก 45 นาทีเหลือ ~15 นาที (2) **API setup แทน UI** — tests ที่ใช้เวลาส่วนใหญ่ใน login/setup ให้ใช้ storageState ลด overhead 2-3 วินาทีต่อ test (3) **Tagging + selective runs** — รัน `@smoke` (30-50 tests critical path) ทุก PR รัน `@regression` (ทั้งหมด) ทุกคืน PR workflow เร็วขึ้นทันทีโดยไม่ต้องลด test coverage
 
 **คำถามที่ 3**: Diagnose ด้วย `--repeat-each=10` เพื่อยืนยันว่า test A จริงๆ flaky ไม่ใช่แค่ unlucky จากนั้นตรวจว่า test A อ่าน/เขียน shared resource อะไร (database table, file, API state) — ถ้า test อื่น modify resource เดิม นั่นคือ root cause แก้ด้วย Factory pattern ให้แต่ละ test สร้าง data ของตัวเอง และ cleanup หลังเสร็จ พร้อม verify ด้วย text assertion แทน count assertion ที่ขึ้นกับ total state ของ database
+
+</details>
