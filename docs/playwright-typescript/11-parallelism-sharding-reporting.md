@@ -834,7 +834,10 @@ export default defineConfig({
 
 ---
 
-เฉลย:
+<details>
+<summary>ดูเฉลย</summary>
+
+**เฉลย:**
 
 **คำถามที่ 1:**
 - **Workers** ช่วยใน machine เดียว: 4-8 workers บน GitHub Actions runner (4 cores) อาจลดได้ ~3-4x → 5-7 นาที แต่ memory จำกัด
@@ -863,6 +866,8 @@ npx playwright test --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 # merge step (b)
 npx playwright merge-reports --reporter html ./all-blob-reports
 ```
+
+</details>
 
 ---
 

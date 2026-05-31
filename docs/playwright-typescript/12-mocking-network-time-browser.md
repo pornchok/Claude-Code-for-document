@@ -689,7 +689,10 @@ await page.goto('http://localhost:3000');
 
 ---
 
-เฉลย:
+<details>
+<summary>ดูเฉลย</summary>
+
+**เฉลย:**
 
 **คำถามที่ 1:**
 - **ควร mock:** external payment gateway (ไม่อยากชาร์จ card จริง), third-party SMS API (ต้นทุนสูง), slow analytics service (ทำให้ test ช้า), เพื่อทดสอบ error scenarios ที่ produce ยาก
@@ -706,11 +709,13 @@ await page.goto('http://localhost:3000');
 - Diagnose: timestamp ใน test พึ่งพา `new Date()` จาก environment จริง — บน CI อาจต่าง timezone (เช่น UTC) ทำให้วันที่/เวลาต่างกัน
 - Fix: ใช้ `page.clock.install({ time: new Date('2030-03-15T10:30:00Z') })` ก่อน navigate เพื่อ freeze time ให้ test ไม่ขึ้นกับ system clock ของ environment ใดๆ จากนั้น assert timestamp ด้วย ISO string แทน locale string เพื่อหลีกเลี่ยง timezone issues
 
+</details>
+
 ---
 
 ## 8. สิ่งที่ต้องรู้ก่อนบทถัดไป
 
-บทที่ 13 จะพูดถึง **Visual Testing & Screenshots** — การ capture screenshots, เปรียบเทียบ pixel-by-pixel และ visual regression testing
+บทที่ 13 จะพูดถึง **Authentication & Storage State** — การ login ครั้งเดียวและ reuse session ข้าม tests ทั้งหมด
 
 ทบทวนก่อน:
 - `page.addInitScript()` ที่ใช้ใน section นี้รัน **ก่อน** page scripts ทุกครั้ง — concept เดียวกับ `beforeEach` fixture แต่อยู่ใน browser context แทน Node.js

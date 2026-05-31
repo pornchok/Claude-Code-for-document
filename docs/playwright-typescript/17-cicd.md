@@ -881,10 +881,15 @@ Playwright browser version ต้องตรงกับ package version เส
 
 ---
 
-เฉลย:
+<details>
+<summary>ดูเฉลย</summary>
+
+**เฉลย:**
 
 **คำถาม 1**: โดยไม่มี `forbidOnly` — `test.only()` ทำให้ Playwright รันแค่ test นั้น test อื่นทั้งหมดถูก skip แต่ **ไม่มี error** — CI ผ่านทั้งๆ ที่ test suite ส่วนใหญ่ไม่ได้รัน เป็น false positive ที่อันตราย `forbidOnly: !!process.env.CI` ทำให้ Playwright fail ทันทีเมื่อพบ `.only` ใน CI environment — developer จะเห็น error และต้องลบ `.only` ก่อน merge ได้
 
 **คำถาม 2**: แบ่งเป็น 4 shards ด้วย `strategy.matrix.shardIndex: [1,2,3,4]` และ `npx playwright test --shard=${{ matrix.shardIndex }}/4` — 4 shards รัน parallel แต่ละ shard ใช้เวลา ~10 นาที ต้อง `fail-fast: false` เพราะถ้า shard 1 fail แล้ว GitHub cancel shards อื่น, `merge-reports` job จะได้ blob report ไม่ครบทำให้ HTML report ไม่สมบูรณ์ และต้อง blob reporter เพราะ blob format ออกแบบมาเพื่อ merge ได้ต่างจาก HTML ที่เป็น standalone report
 
 **คำถาม 3**: Download artifact `test-results-shard-2` จาก GitHub Actions → รัน `npx playwright show-trace test-results/[test-name]/trace.zip` → trace viewer แสดง timeline ของ actions ทั้งหมด screenshot ก่อน/หลัง action และ network requests — ถ้า trace แสดงว่า element ยังไม่ปรากฏตอน action เกิด อาจเป็น race condition กับ demo app startup (เพิ่ม `wait-on` step) หรือ timing issue (เพิ่ม `waitFor` assertion) ถ้า fail เฉพาะ shard 2 ให้ตรวจว่า tests ใน shard นั้น depend on state จาก test อื่นหรือไม่ (test isolation issue)
+
+</details>

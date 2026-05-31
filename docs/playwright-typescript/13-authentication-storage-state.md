@@ -896,7 +896,10 @@ await page.context().storageState({ path: authFile, indexedDB: true });
 
 ---
 
-เฉลย:
+<details>
+<summary>ดูเฉลย</summary>
+
+**เฉลย:**
 
 **คำถามที่ 1:**
 - **สิ่งที่เพื่อนเข้าใจผิด:** storageState capture **cookies, localStorage, และ IndexedDB** (ด้วย `{ indexedDB: true }`) — แต่ **ไม่รวม sessionStorage** และไม่รวม in-memory state ของ JavaScript การบอกว่า "เก็บทุกอย่าง" ผิดสองจุด: sessionStorage หายไปเสมอ และ IndexedDB ต้องเปิดใช้เองด้วย option
@@ -915,6 +918,8 @@ await page.context().storageState({ path: authFile, indexedDB: true });
   3. **Domain/URL ไม่ตรง** — storageState ผูกกับ origin ถ้า local ใช้ `localhost:3000` แต่ CI ใช้ IP หรือ hostname อื่น cookies จะไม่ match
   4. **Setup รันคนละ worker กับ test** — storageState file save แล้วแต่ worker ที่รัน test อ่าน file path ผิด
 - **วิธี diagnose:** เพิ่ม `console.log` ใน test เพื่อ print storageState path, ตรวจ file ว่ามีจริงและมี cookies/origins ด้วย `fs.readFileSync()`, และ verify baseURL ใน config ตรงกับ origin ที่ app ใช้จริง
+
+</details>
 
 ---
 

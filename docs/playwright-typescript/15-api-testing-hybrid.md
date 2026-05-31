@@ -661,13 +661,18 @@ Config-level `extraHTTPHeaders` ส่งไปทุก request จากทุ
 
 ---
 
-เฉลย:
+<details>
+<summary>ดูเฉลย</summary>
+
+**เฉลย:**
 
 **คำถาม 1**: Setup ผ่าน UI: ใช้เวลา ~40-60 วินาที (fill form 20 ครั้ง x 2-3s/item), เปราะบาง (พังถ้า UI เปลี่ยน), ทดสอบ UI + backend พร้อมกัน (scope กว้าง) — Setup ผ่าน API: ใช้เวลา ~200-500ms (20 API calls parallel), robust (API contract เปลี่ยนน้อยกว่า UI), แล้วค่อย verify checkout ใน UI ที่เป็น focus จริงๆ — hybrid approach ดีกว่าเพราะ fast + focused
 
 **คำถาม 2**: เพราะถ้า status ผิด (เช่น server return 500 พร้อม JSON error body) แล้ว parse ต่อจะได้ error message ที่สับสน — `toBeOK()` fail จะบอกทันทีว่า "expected 500 to be in range 200-299" ซึ่งชัดกว่ามาก ส่วน `toBeOK()` ต่างจาก `toBe(200)` ตรงที่ accept status 200-299 ทั้งหมด (รวม 201, 204) — ใช้ `toBe(201)` เมื่อต้องการ exact code เช่น verify ว่า create ส่ง 201 ไม่ใช่ 200
 
 **คำถาม 3**: แยก login ออกเป็น helper function หรือ fixture เพื่อไม่ duplicate logic, ใช้ `test.describe()` แยกตาม role, สร้าง `authContext` ใน `test.beforeEach` ของแต่ละ describe block — หรือใช้ Playwright fixture ที่ extends `test` เพื่อ inject token แยกต่อ role
+
+</details>
 
 ---
 

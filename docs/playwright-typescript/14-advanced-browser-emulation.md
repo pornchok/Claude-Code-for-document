@@ -801,7 +801,10 @@ await frame.getByRole('button').click(); // Error: cross-origin frame
 
 ---
 
-เฉลย:
+<details>
+<summary>ดูเฉลย</summary>
+
+**เฉลย:**
 
 **คำถาม 1**: ต้อง `page.once('dialog', handler)` ก่อน click เสมอ สำหรับ 2 cases:
 - Case "กด OK": `page.once('dialog', async d => await d.accept())` ก่อน click, แล้ว assert ว่า item ถูกลบ
@@ -811,6 +814,8 @@ await frame.getByRole('button').click(); // Error: cross-origin frame
 **คำถาม 2**: `frameLocator()` return FrameLocator ที่ scope ภายใน iframe — ทุก locator ที่ chain ต่อจะหาใน iframe นั้น ไม่ต้อง "switch context" — `page.frame()` return Frame object แบบ Selenium-style ที่ older API ส่วน `locator.contentFrame()` ใช้เมื่อคุณมี Locator ของ iframe element อยู่แล้ว (เพิ่มใน v1.43) แต่ต้องการ interact กับ content ข้างใน — ทั้งสองให้ผลเหมือนกัน แค่ starting point ต่างกัน
 
 **คำถาม 3**: สร้าง test ที่เรียก `await page.emulateMedia({ media: 'print' })` ก่อน assert, ตรวจสอบด้วย `expect(locator).not.toBeVisible()` สำหรับ nav และ sidebar — ใส่ใน project แยกหรือ tag ว่า `@print` แล้วรันใน CI cron job ทุกคืน
+
+</details>
 
 ---
 

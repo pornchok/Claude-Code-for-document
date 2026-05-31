@@ -721,10 +721,15 @@ import AxeBuilder from '@axe-core/playwright';
 
 ---
 
-เฉลย:
+<details>
+<summary>ดูเฉลย</summary>
+
+**เฉลย:**
 
 **คำถาม 1**: เพิ่ม `toHaveScreenshot()` เพื่อตรวจ visual regression — screenshot จะ fail เพราะ pixel สีต่างกัน เพราะ functional test ตรวจแค่ behavior ไม่ใช่ visual appearance ส่วนถ้า baseline สร้างบน macOS (`-darwin.png`) แต่ CI รันบน Linux (`-linux.png`) test จะ fail ทันทีเพราะ font rendering ต่างกัน — ต้องสร้าง baseline บน environment เดียวกับ CI หรือใช้ Docker image `mcr.microsoft.com/playwright:v1.50.0-jammy`
 
 **คำถาม 2**: ใช้ทั้งสอง approach: (1) `toMatchAriaSnapshot()` เพื่อตรวจว่า button มี accessible name — `await expect(page.locator('[data-testid="add-to-cart-btn"]')).toMatchAriaSnapshot('- button "Add to Cart"')` ถ้า name หาย snapshot จะ fail และ (2) `AxeBuilder` เพื่อ scan WCAG compliance รวมถึง `button-name` rule — `new AxeBuilder({ page }).include('[data-testid="product-card"]').analyze()` แล้ว `expect(results.violations).toEqual([])`
 
 **คำถาม 3**: (a) Platform dependency: `toHaveScreenshot()` ขึ้นกับ OS — snapshot ต่างกันระหว่าง macOS/Linux/Windows, `toMatchAriaSnapshot()` ไม่ขึ้นกับ OS เลย (b) สิ่งที่ตรวจ: screenshot ตรวจ visual pixels (สี, layout, font rendering), aria snapshot ตรวจ accessibility tree structure (roles, names, states) (c) ใช้ screenshot เมื่อ design/visual regression สำคัญ เช่น ตรวจว่า dark mode ถูกต้อง, ใช้ aria snapshot เมื่อต้องการ verify accessibility structure ที่ cross-platform เช่น ตรวจว่า navigation มี links ครบ หรือ form มี labels ถูกต้อง
+
+</details>

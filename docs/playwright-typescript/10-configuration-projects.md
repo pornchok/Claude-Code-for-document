@@ -688,7 +688,10 @@ export default defineConfig({
 
 ---
 
-เฉลย:
+<details>
+<summary>ดูเฉลย</summary>
+
+**เฉลย:**
 
 **คำถาม 1:** `actionTimeout: 15_000` จะ timeout ก่อน เพราะ action ใช้เวลา 20 วิ > 15 วิ Error message จะบอกว่า "action timeout of 15000ms exceeded" — ซึ่งบอกชัดกว่า "test timeout" ว่าปัญหาอยู่ที่ action นั้นโดยเฉพาะ ทำให้ debug ง่ายขึ้น
 
@@ -698,11 +701,13 @@ export default defineConfig({
 - **Local** (`!process.env.CI` = `true`): ถ้ามี server รันอยู่ที่ port 3000 แล้ว Playwright ใช้ต่อได้เลย ไม่ start ใหม่ ประหยัดเวลา dev ที่ต้องรัน test บ่อยๆ
 - **CI** (`!process.env.CI` = `false`): บังคับ start server ใหม่ทุกครั้ง เพื่อ guarantee clean state ป้องกัน test pass เพราะ state จาก run ก่อนหน้า
 
+</details>
+
 ---
 
 ## 8. Pre-chapter Retrieval สำหรับบทถัดไป
 
-บทที่ 11 จะพูดถึง **API Testing** กับ `request` fixture และ `APIRequestContext` — ลองนึกดูก่อน:
+บทที่ 11 จะพูดถึง **Parallelism, Sharding & Reporting** — ลองนึกดูก่อน:
 
-- ถ้าต้องการ test REST API endpoint โดยไม่เปิด browser เลย Playwright ทำได้ไหม อย่างไร?
-- `request` fixture ที่ Playwright จัดมาให้ต่างจากการใช้ `fetch()` ปกติอย่างไร?
+- ความแตกต่างระหว่าง `workers` กับ `sharding` คืออะไร — แต่ละอย่างแก้ปัญหาอะไร?
+- ถ้า test suite รัน 25 นาทีและมี 4 CI machines available คุณจะตั้งค่า sharding อย่างไร?
