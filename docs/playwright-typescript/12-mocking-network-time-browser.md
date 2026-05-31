@@ -72,6 +72,7 @@ URL pattern รับ glob string, RegExp, หรือ predicate function:
 **route.fulfill()** — ส่ง response จำลองกลับให้ browser:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 await page.route('**/api/products*', route => {
   route.fulfill({
     status: 200,
@@ -86,6 +87,7 @@ await page.route('**/api/products*', route => {
 **route.abort()** — simulate network failure:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 await page.route('**/api/payments', route => {
   route.abort('failed'); // 'failed' | 'timedout' | 'connectionrefused'
 });
@@ -94,6 +96,7 @@ await page.route('**/api/payments', route => {
 **route.continue()** — ส่งต่อ request โดยอาจ modify บางส่วน:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 await page.route('**/api/products*', async route => {
   // modify header ก่อนส่งต่อ
   await route.continue({
@@ -108,6 +111,7 @@ await page.route('**/api/products*', async route => {
 ถ้าต้องการ fetch จริงแล้ว modify response ก่อน return:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 await page.route('**/api/products*', async route => {
   const response = await route.fetch(); // fetch จริงแต่ผ่าน Playwright
   const json = await response.json();
@@ -121,6 +125,7 @@ await page.route('**/api/products*', async route => {
 นอกจาก intercept ยังดู traffic ได้โดยไม่ต้อง block:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 // รอ specific response
 const responsePromise = page.waitForResponse('**/api/products*');
 await page.goto('http://localhost:3000/shop');
@@ -136,6 +141,7 @@ const requestPromise = page.waitForRequest(req =>
 Event listeners สำหรับ spy on all traffic:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 page.on('request', req => console.log(req.url(), req.method()));
 page.on('response', res => console.log(res.url(), res.status()));
 ```
@@ -154,6 +160,7 @@ npx playwright open --save-har=recording.har --save-har-glob="**/api/**" http://
 หรือใน test:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 const context = await browser.newContext();
 await context.recordHAR({ path: 'recording.har', urlFilter: '**/api/**' });
 const page = await context.newPage();
@@ -164,6 +171,7 @@ await context.close(); // ⚠️ ต้อง close เพื่อ flush แล
 **Playback:**
 
 ```typescript
+// partial example — see Section 5 for runnable version
 await page.routeFromHAR('recording.har', {
   url: '**/api/**',
   update: false, // false = ใช้ HAR file, true = record ใหม่
@@ -176,6 +184,7 @@ await page.goto('http://localhost:3000/shop'); // ไม่มี real network r
 `page.routeWebSocket()` เพิ่มใน v1.48 สำหรับ intercept WebSocket connections:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 await page.routeWebSocket('wss://example.com/ws', ws => {
   ws.onMessage(message => {
     if (message === 'ping') {
@@ -243,6 +252,7 @@ context.addInitScript(script)   →  inject ทุก page ที่เปิด
 ตัวอย่าง override `navigator.geolocation`:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 // ใช้ context.addInitScript เพราะ geolocation อาจถูกเรียกจากหลายหน้า
 await context.addInitScript(() => {
   Object.defineProperty(navigator, 'geolocation', {
@@ -258,6 +268,7 @@ await context.addInitScript(() => {
 **`page.exposeFunction()`** — expose Node.js function ให้ browser code เรียกได้ (สำหรับ spy หรือ pass data กลับมา):
 
 ```typescript
+// partial example — see Section 5 for runnable version
 const calls: string[] = [];
 await page.exposeFunction('trackCall', (name: string) => {
   calls.push(name);

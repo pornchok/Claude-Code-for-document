@@ -65,6 +65,7 @@
 Playwright Test comes with a built-in `request` fixture ที่ `respects configuration options like baseURL or extraHTTPHeaders` (docs) และพร้อม inject เข้า test เหมือนกับ `page` fixture ทุกประการ ไม่ต้องติดตั้งอะไรเพิ่ม
 
 ```typescript
+// partial example — see Section 5 for runnable version
 test('example', async ({ request }) => {
   // request คือ APIRequestContext instance
   // พร้อมใช้งานทันที
@@ -78,6 +79,7 @@ test('example', async ({ request }) => {
 `APIRequestContext` รองรับทุก HTTP method หลัก:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 // GET — ไม่มี body
 const res = await request.get('http://localhost:3000/api/todos');
 
@@ -110,6 +112,7 @@ const res = await request.put(`http://localhost:3000/api/todos/${id}`, {
 ทุก method return `APIResponse` object:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 const res = await request.get('http://localhost:3000/api/todos');
 
 res.ok()        // boolean — true ถ้า status 200-299
@@ -125,6 +128,7 @@ res.url()       // URL จริงที่ request ไป (หลัง redire
 ### 4.4 Assertions
 
 ```typescript
+// partial example — see Section 5 for runnable version
 // ตรวจว่า status 2xx (แนะนำทำก่อน assert อื่นๆ เสมอ)
 expect(response).toBeOK();
 
@@ -151,6 +155,7 @@ expect(body).toContainEqual(
 **Per-request** — ส่ง header ในแต่ละ call เลย:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 const token = 'eyJhbGciOi...';
 
 const res = await request.get('http://localhost:3000/api/me', {
@@ -161,6 +166,7 @@ const res = await request.get('http://localhost:3000/api/me', {
 **Per-context** — ใช้ `extraHTTPHeaders` ใน `newContext()` เมื่อต้องการ header เดิมทุก request ใน context นั้น:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 const authRequest = await request.newContext({
   baseURL: 'http://localhost:3000',
   extraHTTPHeaders: {
@@ -183,6 +189,7 @@ await authRequest.dispose();
 Playwright สามารถ inject ทั้ง `request` และ `page` ใน test เดียวกัน ทำให้เขียน hybrid test ได้ง่ายมาก:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 test('todo created via API appears in UI', async ({ request, page }) => {
   // Step 1: Reset state ผ่าน API (เร็ว)
   await request.post('http://localhost:3000/api/reset');
@@ -206,6 +213,7 @@ Pattern นี้ verify ว่า backend API ทำงานถูกต้อ
 ใช้ `toMatchObject()` ตรวจ shape ของ response:
 
 ```typescript
+// partial example — see Section 5 for runnable version
 const todo = await res.json();
 
 // ตรวจทุก field ที่ต้องการ
