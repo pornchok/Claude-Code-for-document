@@ -1224,4 +1224,80 @@ CONCEPT: fullyParallel improves shard balance
 QUOTE: "With `fullyParallel: true`: Tests are split at the individual test level, leading to more balanced shard execution."
 NOTE: without fullyParallel, tests split at file level requiring evenly-sized test files
 
+---
+
+## Ch18: Production Patterns
+
+SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-05-31
+CONCEPT: test isolation — each test should be independent
+QUOTE: "Each test should be completely isolated from another test and should run independently with its own local storage, session storage, data, cookies etc."
+
+SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-05-31
+CONCEPT: web-first assertions wait and retry automatically
+QUOTE: "Employ assertions like toBeVisible() that wait and retry automatically, avoiding manual checks that return immediately without waiting."
+NOTE: source paraphrased "Use web-first assertions" — the direct quote is from best-practices page emphasis on waiting assertions
+
+SOURCE: https://playwright.dev/docs/test-retries
+VERSION: 2026-05-31
+CONCEPT: retries configuration in defineConfig
+QUOTE: "import { defineConfig } from '@playwright/test'; export default defineConfig({ retries: 3, });"
+
+SOURCE: https://playwright.dev/docs/test-retries
+VERSION: 2026-05-31
+CONCEPT: test categories — passed, flaky, failed
+QUOTE: "Playwright classifies test outcomes as: 'passed' - succeeded on first run, 'flaky' - failed initially but passed on retry, 'failed' - failed on first attempt and all retries"
+NOTE: source confirms these exact three categories with these exact labels
+
+SOURCE: https://playwright.dev/docs/test-retries
+VERSION: 2026-05-31
+CONCEPT: testInfo.retry for conditional cleanup
+QUOTE: "test('my test', async ({ page }, testInfo) => { if (testInfo.retry) await cleanSomeCachesOnTheServer(); });"
+
+SOURCE: https://playwright.dev/docs/test-retries
+VERSION: 2026-05-31
+CONCEPT: worker restarts on test failure
+QUOTE: "When a test fails, the entire worker process restarts. With retries enabled, the failed test reruns in a new process before continuing with subsequent tests."
+
+SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: test.fixme() skips the test (unlike test.fail which runs it)
+QUOTE: "test.fixme(): marks the test as failing. Playwright will not run this test, as opposed to the fail annotation."
+
+SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: test.fail() expects test to fail — warns if it passes
+QUOTE: "test.fail(): marks the test as failing. Playwright will run this test and ensure it does indeed fail."
+
+SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: tags must begin with @ symbol
+QUOTE: "Tags must begin with the @ symbol."
+
+SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: running tagged tests with --grep
+QUOTE: "npx playwright test --grep @fast" and "npx playwright test --grep-invert @fast"
+
+SOURCE: https://playwright.dev/docs/api/class-testinfo
+VERSION: 2026-05-31
+CONCEPT: testInfo.attach() copies files to reporter-accessible location
+QUOTE: "automatically takes care of copying attached files to a location that is accessible to reporters."
+
+SOURCE: https://playwright.dev/docs/api/class-testinfo
+VERSION: 2026-05-31
+CONCEPT: testInfo.status values
+QUOTE: "passed | failed | timedOut | skipped | interrupted"
+
+SOURCE: https://playwright.dev/docs/api/class-testinfo
+VERSION: 2026-05-31
+CONCEPT: testInfo.retry tracks retry attempts
+QUOTE: "The first test run has testInfo.retry equal to zero, the first retry has it equal to one, and so on."
+
+SOURCE: https://playwright.dev/docs/test-reporters
+VERSION: 2026-05-31
+CONCEPT: custom reporter interface with onBegin, onTestEnd, onEnd
+QUOTE: "class MyReporter implements Reporter { onBegin(config: FullConfig, suite: Suite) { ... } onTestEnd(test: TestCase, result: TestResult) { ... } onEnd(result: FullResult) { ... } }"
+
 
