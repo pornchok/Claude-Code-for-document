@@ -103,6 +103,7 @@ npx playwright test --project=chromium --debug
 แทนที่จะใช้ `--debug` ซึ่งเริ่มจาก step แรก คุณสามารถใส่ `page.pause()` ในจุดที่ต้องการหยุดโดยตรง
 
 ```typescript
+// partial example — see Section 5 for runnable version
 test('debug ณ จุดสำคัญ', async ({ page }) => {
   await page.goto('http://localhost:3000/checkout');
   await page.getByLabel('Card Number').fill('4111111111111111');
