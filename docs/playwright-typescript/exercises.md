@@ -1093,36 +1093,43 @@ export default defineConfig({
 **Advanced:**
 Root cause: 4 workers แชร์ storageState ไฟล์เดียวและ account เดียว → tests ที่รันพร้อมกันแก้ไขข้อมูลใน account เดียวกัน ทำให้ data conflict
 
-Solution: Per-worker accounts — สร้าง test accounts หลาย accounts แต่ละ worker ใช้ account ของตัวเอง:
+Solution: Per-worker auth ใน Playwright ต้องใช้ **worker-scoped fixture** ไม่ใช่ function ใน config
+
+ทำไม config function ถึงไม่ทำงาน: `storageState` ใน `playwright.config.ts` `use:` block รับค่า `string` หรือ `{ cookies, origins }` เท่านั้น — ไม่รองรับ function signature ใดๆ
+
+วิธีที่ถูกต้อง — สร้าง worker-scoped fixture:
 
 ```typescript
-// playwright.config.ts
-export default defineConfig({
-  workers: 4,
-  projects: [{
-    name: 'tests',
-    use: {
-      // ใช้ worker index เลือก storageState
-      storageState: ({ workerIndex }) => 
-        `playwright/.auth/user-${workerIndex}.json`,
-    },
-  }],
-});
+// playwright/fixtures.ts
+import { test as base } from '@playwright/test';
 
-// auth.setup.ts — รันสำหรับแต่ละ worker
-test('authenticate', async ({ page, workerIndex }) => {
-  const email = `testuser-${workerIndex}@company.com`;
-  await page.goto('/login');
-  await page.fill('#email', email);
-  await page.fill('#password', 'password123');
-  await page.click('#submit');
-  await page.context().storageState({
-    path: `playwright/.auth/user-${workerIndex}.json`,
-  });
+export const test = base.extend<{}, { workerStorageState: string }>({
+  workerStorageState: [async ({ browser }, use, workerInfo) => {
+    const id = workerInfo.parallelIndex;
+    const fileName = `playwright/.auth/user-${id}.json`;
+
+    // login ครั้งเดียวต่อ worker (ไม่ซ้ำถ้าไฟล์มีอยู่แล้ว)
+    const page = await browser.newPage();
+    await page.goto('http://localhost:3000/login');
+    await page.fill('[data-testid="input-username"]', `testuser-${id}`);
+    await page.fill('[data-testid="input-password"]', 'test123');
+    await page.click('[data-testid="btn-login"]');
+    await page.context().storageState({ path: fileName });
+    await page.close();
+
+    await use(fileName);
+  }, { scope: 'worker' }],
+
+  // override storageState fixture ให้ใช้ per-worker file
+  storageState: async ({ workerStorageState }, use) => {
+    await use(workerStorageState);
+  },
 });
 ```
 
-ต้องสร้าง test accounts จริงใน test database สำหรับแต่ละ workerIndex ด้วย
+import `test` จาก fixtures นี้แทน `@playwright/test` ในทุก test file ที่ต้องการ per-worker auth
+
+ต้องสร้าง test accounts จริงใน test database สำหรับแต่ละ parallelIndex ด้วย
 
 </details>
 
@@ -1163,7 +1170,7 @@ test('download invoice and verify', async ({ page }) => {
 ```
 
 <details>
-<summary>เฉلى</summary>
+<summary>เฉลย</summary>
 
 **Beginner:**
 Popup event เกิดขึ้น milliseconds หลัง click เริ่มต้น ถ้าเรียก `waitForEvent('popup')` หลัง click อาจ miss event ไปแล้ว ต้องเรียกก่อน click เสมอ:
