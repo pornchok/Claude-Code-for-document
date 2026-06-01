@@ -746,9 +746,8 @@ test('add todo', async ({ page, prepared }) => {
 });
 ```
 
----
-
-เฉลย:
+<details>
+<summary>ดูเฉลย</summary>
 
 **คำถามที่ 1:**
 ```typescript
@@ -796,3 +795,5 @@ prepared: async ({ request }, use) => {
   await use();  // ← ต้องมี
 },
 ```
+
+</details>

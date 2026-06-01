@@ -76,8 +76,8 @@ test('homepage shows guest view', async ({ page }) => {
 
 ⚠️ **ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:**
 
-- **1 context ต้องมีแค่ 1 page** — จริงๆ BrowserContext หนึ่งตัวมี page ได้หลายตัว (หลาย tab) ที่ share cookies/localStorage กัน เช่นเดียวกับห้องพักที่มีโต๊ะทำงานหลายตัว *(source: "Each BrowserContext can have multiple pages.")*
-- **ปิดห้อง (close context) แล้วโรงแรม (browser) ปิดด้วย** — Browser ยังทำงานต่อหลัง context ถูก close Playwright ยัง reuse browser instance เดิมสำหรับ test ถัดไป *(source: "Browsers are shared across tests to optimize resources.")*
+- **1 context ต้องมีแค่ 1 page** — จริงๆ BrowserContext หนึ่งตัวมี page ได้หลายตัว (หลาย tab) ที่ share cookies/localStorage กัน เช่นเดียวกับห้องพักที่มีโต๊ะทำงานหลายตัว *(source: https://playwright.dev/docs/browser-contexts)*
+- **ปิดห้อง (close context) แล้วโรงแรม (browser) ปิดด้วย** — Browser ยังทำงานต่อหลัง context ถูก close Playwright ยัง reuse browser instance เดิมสำหรับ test ถัดไป *(source: https://playwright.dev/docs/browser-contexts)*
 - **แต่ละห้องแยกจากกันโดย hardware** — ใน analogy โรงแรมแต่ละห้องมีผนังจริง แต่ใน browser isolation เกิดจาก software — ถ้าคุณเขียน code ที่ expose state ระหว่าง context เอง (เช่นผ่าน global variable ใน test code) isolation ก็พัง
 
 ---
@@ -218,47 +218,49 @@ test('test 2 — completely new context, no admin session', async ({ page }) => 
 
 ---
 
-### Intermediate: สองแผนกทดสอบ Feature ที่ต้อง Cross-User Verification
+### Intermediate: ทดสอบ Role-Based Access — admin กับ testuser เห็น Admin Dashboard ต่างกัน
 
-สถานการณ์: ระบบจัดการคำสั่งซื้อ — admin ยืนยัน order แล้ว customer ต้องเห็น status เปลี่ยนทันที ต้องการ verify ว่าทั้งสอง user เห็นสถานะที่ถูกต้องพร้อมกัน
+สถานการณ์: ระบบมีหน้า Admin Dashboard ที่จำกัดสิทธิ์ — admin ต้องเห็น welcome message แต่ testuser (role ปกติ) ต้องเห็น "Access denied" ต้องการทดสอบทั้งสองพร้อมกันบน browser เดียว เพื่อยืนยันว่า context isolation ทำให้ role ของแต่ละ session แยกกันสมบูรณ์
 
 ```typescript
 // tested: Playwright v1.50+, Node.js 20+ (requires demo app at localhost:3000)
 import { test, expect } from '@playwright/test';
 
-test('admin and customer see correct session independently', async ({ browser }) => {
-  // สร้าง 2 contexts — แต่ละตัวคือ user คนละคน
+test('admin sees dashboard, testuser sees access denied — same browser, different contexts', async ({ browser }) => {
+  // สร้าง 2 contexts — แต่ละตัวมี session และ role ของตัวเอง
   const adminCtx = await browser.newContext();
-  const customerCtx = await browser.newContext();
+  const userCtx = await browser.newContext();
 
   const adminPage = await adminCtx.newPage();
-  const customerPage = await customerCtx.newPage();
+  const userPage = await userCtx.newPage();
 
   try {
-    // Admin login ใน context แรก
+    // Login เป็น admin ใน context แรก
     await adminPage.goto('http://localhost:3000/login');
     await adminPage.fill('[data-testid="input-username"]', 'admin');
     await adminPage.fill('[data-testid="input-password"]', 'admin123');
     await adminPage.click('[data-testid="btn-login"]');
-    await expect(adminPage.locator('[data-testid="session-badge"]')).toContainText('admin');
 
-    // Customer login ใน context ที่สอง (แยกกันสมบูรณ์)
-    await customerPage.goto('http://localhost:3000/login');
-    await customerPage.fill('[data-testid="input-username"]', 'testuser');
-    await customerPage.fill('[data-testid="input-password"]', 'test123');
-    await customerPage.click('[data-testid="btn-login"]');
-    await expect(customerPage.locator('[data-testid="session-badge"]')).toContainText('testuser');
+    // Login เป็น testuser ใน context ที่สอง
+    await userPage.goto('http://localhost:3000/login');
+    await userPage.fill('[data-testid="input-username"]', 'testuser');
+    await userPage.fill('[data-testid="input-password"]', 'test123');
+    await userPage.click('[data-testid="btn-login"]');
 
-    // ตรวจว่า session ของแต่ละคนไม่ปะปนกัน
-    // admin badge ยังเป็น 'admin' — ไม่ถูก overwrite โดย customer login
-    await expect(adminPage.locator('[data-testid="session-badge"]')).toContainText('admin');
-    // customer badge ยังเป็น 'testuser' — ไม่ถูก overwrite โดย admin
-    await expect(customerPage.locator('[data-testid="session-badge"]')).toContainText('testuser');
+    // ทั้งสอง navigate ไปหน้าเดียวกัน — /admin
+    await adminPage.goto('http://localhost:3000/admin');
+    await userPage.goto('http://localhost:3000/admin');
+
+    // Admin เห็น welcome message (มีสิทธิ์)
+    await expect(adminPage.locator('[data-testid="admin-welcome"]')).toBeVisible();
+
+    // testuser เห็น access denied (ไม่มีสิทธิ์) — หน้าเดียวกัน แต่ต่างกันเพราะ session ต่างกัน
+    await expect(userPage.locator('[data-testid="access-denied"]')).toBeVisible();
 
   } finally {
     // ต้อง close contexts ที่สร้างเองด้วยมือเสมอ
     await adminCtx.close();
-    await customerCtx.close();
+    await userCtx.close();
   }
 });
 ```
@@ -266,7 +268,7 @@ test('admin and customer see correct session independently', async ({ browser })
 สังเกตสิ่งสำคัญ:
 - ใช้ `browser` fixture (ไม่ใช่ `page`) เพราะต้องสร้าง context เอง
 - ใช้ `try/finally` เพื่อให้ contexts ถูก close แม้ test fail
-- บน browser เดียวกัน แต่ state ไม่ปะปนกันเลย
+- URL เดียวกัน (`/admin`) แต่ผลต่างกันเพราะ session แยกกัน — นี่คือพลังของ context isolation
 
 ---
 
@@ -275,6 +277,8 @@ test('admin and customer see correct session independently', async ({ browser })
 สถานการณ์: Junior test engineer ส่ง test มาให้ดู บอกว่า "test 2 บางครั้งผ่าน บางครั้งพัง ไม่รู้ทำไม"
 
 ```typescript
+// ⚠️ ตัวอย่างนี้จงใจเขียนผิด เพื่อแสดง anti-pattern — ห้าม copy
+// tested: Playwright v1.50+, Node.js 20+ (requires demo app at localhost:3000)
 // ⚠️ CODE ที่มีปัญหา — ให้วิเคราะห์หาสาเหตุก่อนดูเฉลย
 import { test, expect } from '@playwright/test';
 
@@ -337,6 +341,7 @@ test('test C — logout then check guest view', async () => {
 ```typescript
 // ✅ แก้ไข: ให้แต่ละ test จัดการ login ของตัวเอง
 // หรือใช้ storageState เพื่อ reuse auth (ดู Ch13)
+// tested: Playwright v1.50+, Node.js 20+ (requires demo app at localhost:3000)
 import { test, expect } from '@playwright/test';
 
 // Option 1: แยก login ทุก test (ง่ายที่สุด, isolated ที่สุด)
@@ -496,15 +501,16 @@ test('correct multi-tab', async ({ page, context }) => {
 
 3. คุณกำลังเขียน test สำหรับ feature "online users counter" ที่แสดงจำนวน active sessions คุณจะใช้ fixture อะไร และ structure test อย่างไร?
 
----
-
-เฉลย:
+<details>
+<summary>ดูเฉลย</summary>
 
 1. ข้อโต้แย้ง: BrowserContext สร้างเร็วและเบา ("fast and cheap to create") เพราะ Playwright ไม่ต้องสร้าง browser process ใหม่ — แค่สร้าง isolated profile บน browser เดิม ส่วน browser process ที่แพงนั้น Playwright reuse ข้าม tests ทั้งหมดอยู่แล้ว ดังนั้น Playwright มักเร็วกว่า Selenium ที่ต้องเปิด browser process ใหม่ทุก test
 
 2. คำตอบ: ไม่ต้องเขียนอะไรเลย — Playwright close context หลังแต่ละ test อัตโนมัติ test B จะได้ context ใหม่ที่สะอาดโดยไม่มีร่องรอย session จาก test A นี่คือ design ที่ทำให้ไม่ต้องเขียน cleanup
 
 3. แนวทาง: ใช้ `browser` fixture แล้วสร้าง context หลายตัว — แต่ละ context คือ active session ของ user คนละคน ตัวอย่าง: สร้าง 3 contexts พร้อมกัน ให้แต่ละตัว navigate ไปที่ app แล้ว assert ว่า counter แสดง "3 online users" เสร็จแล้ว close contexts ทีละตัวแล้ว verify counter ลดลง ใช้ `try/finally` เพื่อให้ contexts ถูก close เสมอ
+
+</details>
 
 ---
 

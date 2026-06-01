@@ -1051,9 +1051,9 @@ test('authenticate', async ({ page }) => {
 <summary>เฉลย</summary>
 
 **Beginner:**
-storageState เก็บ: cookies ทั้งหมด, localStorage, sessionStorage ของทุก origin ที่ browser เข้าถึง
+storageState เก็บ: cookies ทั้งหมด, localStorage ของทุก origin ที่ browser เข้าถึง และ IndexedDB (ต้องระบุ `{ indexedDB: true }` ตอนเรียก `storageState()` ด้วย)
 
-storageState ไม่เก็บ: IndexedDB, Web Crypto keys, in-memory JavaScript state
+storageState **ไม่เก็บ**: sessionStorage (ผูกกับ tab/session เดียว ไม่สามารถ serialize ข้าม context ได้), Web Crypto keys, in-memory JavaScript state
 
 ประโยชน์ด้านความเร็ว: ถ้า login ผ่าน UI ใช้เวลา 3-5 วินาทีต่อครั้ง × 80 tests = 240-400 วินาที (~4-7 นาที) แค่สำหรับ login อย่างเดียว การ login ครั้งเดียวแล้ว reuse storageState ลดเหลือ < 1 วินาทีต่อ test (แค่อ่านไฟล์)
 

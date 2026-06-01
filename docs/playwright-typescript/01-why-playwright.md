@@ -376,12 +376,13 @@ await expect(page.locator('.success-message')).toBeVisible();
 
 3. ถ้าทีมมี 50 test cases ใน Robot Framework และต้องการ migrate เป็น Playwright — คุณจะแนะนำให้ migrate ทั้งหมดพร้อมกันทันทีหรือไม่? ถ้าไม่ จะเริ่มจากตรงไหนก่อน?
 
----
-
-**เฉลย:**
+<details>
+<summary>ดูเฉลย</summary>
 
 1. Playwright ใช้ **CDP (Chrome DevTools Protocol)** และ **WebSocket** เชื่อมตรงกับ browser โดยไม่ผ่าน WebDriver HTTP layer — Selenium ต้องส่ง HTTP request ผ่าน 3 layer (code → WebDriver server → browser) ซึ่งช้ากว่าและมี failure point เพิ่มขึ้น
 
 2. ก่อน action ทุกตัว Playwright รอให้ element ผ่านเงื่อนไขเหล่านี้: **Visible** (มี bounding box, ไม่ hidden), **Stable** (ไม่กำลัง animate), **Enabled** (ไม่ถูก disable), **Editable** (สำหรับ input: enabled + ไม่ readonly), และ **Receives Events** (ไม่มีอะไรทับอยู่)
 
 3. ไม่แนะนำให้ migrate ทั้งหมดพร้อมกัน — ควรเริ่มจาก **test ใหม่ทั้งหมดใช้ Playwright** และ **migrate RF test ที่ flaky มากที่สุดก่อน** (ROI สูงสุด) แล้วประเมินผลหลัง 3 เดือนก่อนตัดสินใจ migrate ที่เหลือ
+
+</details>

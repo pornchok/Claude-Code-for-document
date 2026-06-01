@@ -654,12 +654,13 @@ expect(isGone).toBe(false);
 
 **คำถามที่ 3:** เมื่อไหรควรใช้ soft assertions และเมื่อไหรไม่ควรใช้? ให้ยกตัวอย่างกรณีที่ soft assertions ทำให้ test ดีขึ้น และกรณีที่ไม่ควรใช้
 
----
-
-เฉลย:
+<details>
+<summary>ดูเฉลย</summary>
 
 **คำถามที่ 1:** `<select>` ใช้ `selectOption()` เพราะ dropdown ไม่ใช่ text input และ Playwright มี API เฉพาะสำหรับ select element ที่จัดการ option matching ให้ครบ — credit card number ที่มี mask ควรใช้ `pressSequentially()` เพราะ mask library ต้องการ keystroke events ทีละตัวเพื่อจัด format ระหว่างพิมพ์ ถ้าใช้ `fill()` mask จะไม่ทำงานและค่าใน DOM จะเป็นตัวเลขล้วนแทนที่จะเป็น `1234 5678 9012 3456`
 
 **คำถามที่ 2:** test นี้จะ **fail อย่างไม่น่าเชื่อถือ** — ปัญหาคือ `isVisible()` คือ snapshot ณ ขณะที่ call ถ้า item ยังไม่ถูกลบออกจาก DOM ทันที (มี animation หรือ async deletion) `isVisible()` จะคืน `true` ทำให้ `expect(isGone).toBe(false)` fail ทั้งที่ item จะหายไปในอีกไม่กี่ millisecond วิธีแก้: `await expect(page.getByTestId('item-1')).not.toBeVisible()` — web-first assertion จะ retry จนกว่า item จะหายไปจริง
 
 **คำถามที่ 3:** ควรใช้ soft assertions เมื่อต้องการตรวจหลาย field/condition พร้อมกันและต้องการเห็น error ทุกข้อในรอบเดียว — ตัวอย่างที่ดี: form validation ที่ต้องการรู้ว่า field ไหน fail บ้างทั้งหมด, หน้า dashboard ที่ต้องตรวจ widget ทุกตัว ไม่ควรใช้เมื่อ assertion ถัดไป depend on assertion ก่อนหน้า — เช่น ถ้า assert ว่า "modal เปิดแล้ว" fail แล้วยัง assert "ปุ่มใน modal clickable" ต่อไป test จะ confusing มากกว่าได้ประโยชน์
+
+</details>
