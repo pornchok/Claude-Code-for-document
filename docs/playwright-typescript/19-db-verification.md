@@ -483,8 +483,8 @@ interface Order {
 }
 
 interface DbSnapshot {
-  users: Array<{ id: number; username: string; role: string }>;
-  products: Array<{ id: number; name: string; price: number; category: string }>;
+  users: Array<{ id: number; username: string; password: string; role: string }>;
+  products: Array<{ id: number; name: string; price: number; category: string; description: string; image: string }>;
   todos: Array<{ id: number; text: string; completed: boolean; createdAt: string }>;
   orders: Order[];
 }
@@ -495,7 +495,7 @@ function readDb(): DbSnapshot {
   const dbPath = resolve(
     'docs/playwright-typescript/playwright-course-app/data/db.json'
   );
-  return JSON.parse(readFileSync(dbPath, 'utf-8'));
+  return JSON.parse(readFileSync(dbPath, 'utf-8')) as DbSnapshot;
 }
 
 // --- Custom Fixtures ---
@@ -556,8 +556,8 @@ test('order created via API is persisted correctly in db.json', async ({
     status: 'confirmed',
     items: [{ productId: 2, quantity: 3 }],
   });
-  // createdAt ต้องเป็น valid ISO 8601
-  expect(savedOrder?.createdAt).toBeDefined();
+  // createdAt ต้องเป็น valid ISO 8601 (ใช้ ! เพราะ toBeDefined() ข้างบนการันตีว่าไม่ใช่ undefined)
+  expect(savedOrder!.createdAt).toBeDefined();
   expect(new Date(savedOrder!.createdAt).toISOString()).toBe(savedOrder!.createdAt);
 
   // Cross-verify ผ่าน Admin Stats API — orders count ต้องเพิ่มด้วย
