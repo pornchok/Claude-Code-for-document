@@ -6,7 +6,7 @@
 
 ## สถานะปัจจุบัน
 
-**🎉 ครบทุกบทแล้ว — ไม่มีงานเหลือ**
+**🎉 ครบทุกบทแล้ว (19 บท + exercises ขยาย) — ไม่มีงานเหลือ**
 
 | บท | ไฟล์ | สถานะ | บรรทัด |
 |----|------|-------|--------|
@@ -30,6 +30,7 @@
 | Ch17 | 17-cicd.md | ✅ เสร็จ | 876 |
 | Ch18 | 18-production-patterns.md | ✅ เสร็จ | 971 |
 | Exercises | exercises.md | ✅ เสร็จ | 1,721 |
+| Ch19 | 19-db-verification.md | ✅ เสร็จ | 764 |
 | Glossary | glossary.md | ✅ เสร็จ | 25 terms |
 
 ---
@@ -120,7 +121,7 @@
 
 ## Demo App สำหรับ Code Examples
 
-**รัน:** `cd playwright-course-app && npm install && npm start` → http://localhost:3000
+**รัน:** `cd docs/playwright-typescript/playwright-course-app && npm install && npm start` → http://localhost:3000
 
 **Users:** admin/admin123 (admin role), testuser/test123 (user role)
 
@@ -233,4 +234,4 @@ git commit -m "docs: ch[NN] [topic name]"
 ## คำสั่งสำหรับ session ใหม่
 
 เมื่อเปิด session ใหม่ให้บอก Claude ว่า:
-> "ทำต่อจาก Playwright TypeScript course content — เริ่มจาก Ch03 อ่าน HANDOFF.md ก่อน แล้วดู plan ที่ docs/superpowers/plans/2026-05-30-playwright-typescript-course-docs.md ทำทีละบทโดยใช้ subagent-driven development เน้นความถูกต้อง verify ทุก concept กับ playwright.dev"
+> "ทำต่อจาก Playwright TypeScript course content — ครบทุกบทแล้ว (Ch01-Ch19) อ่าน HANDOFF.md ก่อน คอร์สนี้สมบูรณ์แล้วไม่มีงานเหลือ"
