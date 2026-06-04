@@ -180,7 +180,8 @@ test('completing todo updates all layers correctly', async ({ page, request }) =
   const todosRes = await request.get('http://localhost:3000/api/todos');
   const todos = await todosRes.json();
   const updatedTodo = todos.find((t: { id: number }) => t.id === id);
-  expect(updatedTodo?.completed).toBe(true);
+  expect(updatedTodo).toBeDefined();
+  expect(updatedTodo!.completed).toBe(true);
 
   // Layer 3: UI re-render verify — ตรวจว่า UI สะท้อน DB state ใหม่
   // ใช้ todo-text-{id} (span) ไม่ใช่ todo-item-{id} (li) — class "completed" อยู่ที่ span
