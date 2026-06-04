@@ -72,3 +72,117 @@ Test ที่ครอบคลุมต้องตรวจทั้ง 3 ช
 - **"UI แสดงข้อมูลถูกต้องแปลว่า DB มีข้อมูลนั้น"** — ไม่จริง เหมือน ATM screen แสดงยอดเงินจาก cache ที่ยังไม่ sync กับ Core Banking — UI อาจแสดงจาก optimistic update (แสดงผลล่วงหน้าก่อน DB จะ confirm) หรือจาก in-memory state ที่ยังไม่ได้ persist จริง
 
 ---
+
+## 4. เนื้อหาหลัก
+
+### 4.1 Pattern 1: API Read-back — ยืนยันผ่าน GET หลัง Action
+
+ทำไมต้องมี pattern นี้? เพราะ UI action ส่ง HTTP request ไปที่ backend แต่คุณยังไม่รู้ว่า backend เขียน DB สำเร็จหรือเปล่า — UI แสดงผลได้จาก optimistic update หรือ local state ก็ได้ การ call GET API ซ้ำหลัง action คือการถามโดยตรงว่า "ตอนนี้ DB มีข้อมูลนี้อยู่หรือเปล่า?"
+
+**API Read-back** คือ pattern ที่หลัง UI action เสร็จ คุณ call `request.get()` เพื่อดึงข้อมูลจาก API แล้ว verify ว่า record ที่ควรจะมีอยู่นั้นอยู่จริง Playwright ให้ `request` fixture มาพร้อมทุก test โดย isolate แยกกันอัตโนมัติ *(source: "Isolated [APIRequestContext] instance for each test.")*
+
+```typescript
+// partial example — full runnable version อยู่ใน Section 5
+// tested: Playwright v1.50+, Node.js 20+
+test('todo created via UI appears in database', async ({ page, request }) => {
+  await page.goto('http://localhost:3000/todos');
+  await page.getByTestId('input-new-todo').fill('Buy groceries');
+  await page.getByTestId('btn-add-todo').click();
+
+  // รอ UI update ก่อน
+  await expect(page.getByTestId('todo-list')).toContainText('Buy groceries');
+
+  // API Read-back: ยืนยันว่า DB มี record นี้จริง
+  const response = await request.get('http://localhost:3000/api/todos');
+  expect(response.ok()).toBeTruthy(); // status 200-299
+  const todos = await response.json();
+  expect(todos).toContainEqual(
+    expect.objectContaining({ text: 'Buy groceries', completed: false })
+  );
+});
+```
+
+สังเกตว่าใช้ `toContainEqual` + `expect.objectContaining` ไม่ใช่ exact match แบบ `toEqual` กับ array ทั้งหมด เหตุผลคือ `id` และ `createdAt` เป็น dynamic values ที่เราไม่รู้ล่วงหน้า ถ้า assert ทั้ง array จะต้องรู้ค่าทุก field ทุก record รวมถึง record เก่าที่มีอยู่ก่อนแล้ว ซึ่งทำให้ test เปราะบาก `objectContaining` บอกว่า "ขอแค่ field ที่ระบุตรง ส่วน field อื่นไม่สนใจ" และ `toContainEqual` บอกว่า "ขอแค่หนึ่ง element ใน array ที่ match ก็พอ"
+
+ใช้ pattern นี้เมื่อ: API มี GET endpoint สำหรับ resource ที่คุณต้องการ verify และ endpoint นั้น reflect state จาก DB จริง ไม่ใช่แค่ in-memory cache
+
+---
+
+### 4.2 Pattern 2: Direct File Read — อ่าน db.json โดยตรง
+
+บางครั้ง API ไม่มี GET endpoint สำหรับ resource ที่คุณต้องการ verify — เช่น demo app ของเราไม่มี `GET /api/orders` แต่มีแค่ `POST /api/orders` ในกรณีแบบนี้ API Read-back ทำไม่ได้ ต้องใช้ **Direct File Read** แทน
+
+Pattern นี้เหมาะสำหรับ file-based DB โดยเฉพาะ — อ่านไฟล์ db.json โดยตรงด้วย Node.js `fs.readFileSync` แล้ว parse JSON มา verify เอง ข้อดีคือตรงและเร็ว ข้อเสียคือ coupling กับ DB file path — ถ้าย้าย path ต้องแก้ test ด้วย
+
+```typescript
+// partial example — full runnable version อยู่ใน Section 5
+// tested: Playwright v1.50+, Node.js 20+
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
+test('order appears in db.json after creation', async ({ request }) => {
+  // Login เพื่อรับ token
+  const loginRes = await request.post('http://localhost:3000/api/auth/login', {
+    data: { username: 'admin', password: 'admin123' }
+  });
+  const { token } = await loginRes.json();
+
+  // สร้าง order ผ่าน API
+  const orderRes = await request.post('http://localhost:3000/api/orders', {
+    headers: { Authorization: `Bearer ${token}` },
+    data: { items: [{ productId: 1, quantity: 1 }] }
+  });
+  expect(orderRes.status()).toBe(201);
+  const { orderId } = await orderRes.json();
+
+  // Direct file read: อ่าน DB โดยตรง
+  const dbPath = resolve('docs/playwright-typescript/playwright-course-app/data/db.json');
+  const db = JSON.parse(readFileSync(dbPath, 'utf-8'));
+  expect(db.orders).toContainEqual(
+    expect.objectContaining({ orderId, status: 'confirmed' })
+  );
+});
+```
+
+ทำไม demo app ต้องใช้ direct file read สำหรับ orders? เพราะ app ไม่ expose `GET /api/orders` — ออกแบบมาเพื่อให้เห็น limitation ของ API-only approach และให้ฝึก pattern นี้
+
+อีกเหตุผลที่ `readFileSync` (synchronous) ทำงานได้ถูกต้องตรงนี้: server.js ของ demo app ใช้ `writeFileSync` เพื่อเขียน DB เช่นกัน ซึ่งหมายความว่าเมื่อ HTTP response ส่งกลับมาแล้ว ไฟล์ db.json ถูก write เสร็จแน่นอน ไม่มี async write ค้างอยู่ ทำให้ sync read ได้ค่าที่ถูกต้องทันที
+
+---
+
+### 4.3 Pattern 3: Cross-layer Verification — ตรวจ 3 ชั้นในชุดเดียว
+
+สองกรณีข้างต้นตรวจแค่ UI กับ DB ซึ่งดีกว่า UI-only แน่นอน แต่ยังมีช่องว่าง: UI action ส่งผลต่อ API state จริงไหม? และหลัง DB เปลี่ยน UI re-render สะท้อนค่าใหม่ถูกต้องไหม?
+
+**Cross-layer Verification** คือ pattern ที่ตรวจครบ 4 จุดในชุดเดียว: UI action → API state → DB state → UI re-render ทำไมต้องครบ? เพราะแต่ละชั้นสามารถ fail แบบ silent โดยไม่กระทบชั้นอื่น เช่น UI toggle checkbox แต่ HTTP PATCH ไม่ถูก fire (Layer 1 pass แต่ Layer 2 fail), หรือ API อัปเดตสำเร็จแต่ UI ไม่ re-fetch ข้อมูลใหม่ (Layer 2 pass แต่ Layer 4 fail)
+
+```typescript
+// partial example — full runnable version อยู่ใน Section 5
+// tested: Playwright v1.50+, Node.js 20+
+test('completing todo updates all layers correctly', async ({ page, request }) => {
+  // Setup: สร้าง todo ผ่าน API (เร็วกว่า UI)
+  const createRes = await request.post('http://localhost:3000/api/todos', {
+    data: { text: 'Layer verification test' }
+  });
+  const { id } = await createRes.json();
+
+  // Layer 1: UI action — toggle complete
+  await page.goto('http://localhost:3000/todos');
+  await page.getByTestId(`todo-item-${id}`).locator('input[type="checkbox"]').check();
+
+  // Layer 2: API verify — ตรวจว่า DB state เปลี่ยนผ่าน API
+  const todosRes = await request.get('http://localhost:3000/api/todos');
+  const todos = await todosRes.json();
+  const updatedTodo = todos.find((t: { id: number }) => t.id === id);
+  expect(updatedTodo?.completed).toBe(true);
+
+  // Layer 3: UI re-render verify — ตรวจว่า UI สะท้อน DB state ใหม่
+  await expect(page.getByTestId(`todo-item-${id}`)).toHaveClass(/completed/);
+});
+```
+
+Pattern นี้ setup ด้วย `request.post()` แทน UI เพราะเร็วกว่าและไม่เกี่ยวข้องกับสิ่งที่กำลัง test *(source: "Sends HTTP(S) POST request and returns its response.")* — เราต้องการ test การ toggle ไม่ใช่การ create
+
+trade-off ของ pattern นี้คือ test ยาวขึ้นและช้ากว่า unit test แต่ให้ confidence สูงสุดว่า entire stack ทำงานสอดคล้องกัน ใช้ pattern นี้เมื่อ feature สำคัญต่อ business (เช่น checkout, payment confirmation, user permission update) และ bug ในชั้นใดชั้นหนึ่งมีผลร้ายแรง
+
+---
