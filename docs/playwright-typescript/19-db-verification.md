@@ -491,6 +491,7 @@ interface DbSnapshot {
 
 // --- Helper: อ่าน DB snapshot โดยตรงจากไฟล์ ---
 // ใช้ sync read ได้เพราะ server.js ใช้ writeFileSync — HTTP response กลับมาแล้ว file เขียนเสร็จแน่นอน
+// resolve() ใช้ process.cwd() เป็น base — ต้องรัน npx playwright test จาก repo root
 function readDb(): DbSnapshot {
   const dbPath = resolve(
     'docs/playwright-typescript/playwright-course-app/data/db.json'
