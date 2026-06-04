@@ -1300,4 +1300,83 @@ VERSION: 2026-05-31
 CONCEPT: custom reporter interface with onBegin, onTestEnd, onEnd
 QUOTE: "class MyReporter implements Reporter { onBegin(config: FullConfig, suite: Suite) { ... } onTestEnd(test: TestCase, result: TestResult) { ... } onEnd(result: FullResult) { ... } }"
 
+---
+
+## Ch19: Database State Verification
+
+SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-06-04
+CONCEPT: request fixture — APIRequestContext for API testing
+QUOTE: "Playwright Test comes with the built-in `request` fixture that respects configuration options like `baseURL` or `extraHTTPHeaders` we specified and is ready to send some requests."
+
+SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-06-04
+CONCEPT: APIRequestContext can send all HTTP(S) requests
+QUOTE: "[APIRequestContext] can send all kinds of HTTP(S) requests over network."
+
+SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-06-04
+CONCEPT: Two types of APIRequestContext
+QUOTE: "There are two types of [APIRequestContext]: associated with a [BrowserContext] [and] isolated instance, created via [apiRequest.newContext()]"
+
+SOURCE: https://playwright.dev/docs/api/class-fixtures
+VERSION: 2026-06-04
+CONCEPT: request fixture isolation per test
+QUOTE: "Isolated [APIRequestContext] instance for each test."
+
+SOURCE: https://playwright.dev/docs/api/class-apirequestcontext
+VERSION: 2026-06-04
+CONCEPT: APIRequestContext.get() method
+QUOTE: "Sends HTTP(S) GET request and returns its response. The method will populate request cookies from the context and update context cookies from the response."
+
+SOURCE: https://playwright.dev/docs/api/class-apirequestcontext
+VERSION: 2026-06-04
+CONCEPT: APIRequestContext.post() method
+QUOTE: "Sends HTTP(S) POST request and returns its response. The method will populate request cookies from the context and update context cookies from the response."
+
+SOURCE: https://playwright.dev/docs/api/class-apirequestcontext
+VERSION: 2026-06-04
+CONCEPT: APIRequestContext.fetch() method
+QUOTE: "Sends HTTP(S) request and returns its response. The method will populate request cookies from the context and update context cookies from the response."
+
+SOURCE: https://playwright.dev/docs/api/class-apiresponse
+VERSION: 2026-06-04
+CONCEPT: APIResponse.ok() method
+QUOTE: "Contains a boolean stating whether the response was successful (status in the range 200-299) or not."
+
+SOURCE: https://playwright.dev/docs/api/class-apiresponse
+VERSION: 2026-06-04
+CONCEPT: APIResponse.status() method
+QUOTE: "Contains the status code of the response (e.g., 200 for a success)."
+
+SOURCE: https://playwright.dev/docs/api/class-apiresponse
+VERSION: 2026-06-04
+CONCEPT: APIResponse.json() method
+QUOTE: "Returns the JSON representation of response body."
+
+SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-06-04
+CONCEPT: expect.poll() for async assertions — description
+QUOTE: "You can convert any synchronous `expect` to an asynchronous polling one using `expect.poll`."
+
+SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-06-04
+CONCEPT: expect.poll() intervals option default values
+QUOTE: "Probe, wait 1s, probe, wait 2s, probe, wait 10s, probe, wait 10s, probe ... Defaults to [100, 250, 500, 1000]."
+
+SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-06-04
+CONCEPT: expect.poll() timeout option
+QUOTE: "Poll for 10 seconds; defaults to 5 seconds. Pass 0 to disable timeout."
+
+SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-06-04
+CONCEPT: Test isolation best practice
+QUOTE: "Each test should be completely isolated from another test and should run independently with its own local storage, session storage, data, cookies etc."
+
+SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-06-04
+CONCEPT: Test isolation improves reproducibility
+QUOTE: "Test isolation improves reproducibility, makes debugging easier and prevents cascading test failures."
+
 
