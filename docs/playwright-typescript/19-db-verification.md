@@ -136,6 +136,7 @@ test('order appears in db.json after creation', async ({ request }) => {
   const { orderId } = await orderRes.json();
 
   // Direct file read: อ่าน DB โดยตรง
+  // resolve() ใช้ process.cwd() เป็น base — ต้องรัน npx playwright test จาก repo root
   const dbPath = resolve('docs/playwright-typescript/playwright-course-app/data/db.json');
   const db = JSON.parse(readFileSync(dbPath, 'utf-8'));
   expect(db.orders).toContainEqual(
@@ -177,7 +178,8 @@ test('completing todo updates all layers correctly', async ({ page, request }) =
   expect(updatedTodo?.completed).toBe(true);
 
   // Layer 3: UI re-render verify — ตรวจว่า UI สะท้อน DB state ใหม่
-  await expect(page.getByTestId(`todo-item-${id}`)).toHaveClass(/completed/);
+  // ใช้ todo-text-{id} (span) ไม่ใช่ todo-item-{id} (li) — class "completed" อยู่ที่ span
+  await expect(page.getByTestId(`todo-text-${id}`)).toHaveClass(/completed/);
 });
 ```
 
@@ -330,11 +332,11 @@ pattern นี้ถือเป็น best practice สำหรับ integrat
 | ตรวจ DB state | ต้องติดตั้ง DatabaseLibrary หรือ RequestsLibrary แยก ไม่ share session กับ browser | `request` fixture built-in, ใช้ร่วมกับ `page` ใน test เดียวกันได้ทันที |
 | Async DB polling | ต้องเขียน custom keyword loop ที่ retry เอง หรือใช้ `Wait Until Keyword Succeeds` | `expect.poll()` built-in พร้อม configurable intervals และ timeout |
 | Direct file read | ใช้ Python standard library `open()` ใน custom keyword | `import { readFileSync } from 'fs'` โดยตรงใน TypeScript test |
-| DB isolation / cleanup | ต้องตั้ง Suite Setup/Teardown ใน `.robot` file — teardown อาจไม่รันถ้า Suite setup fail | Playwright fixture teardown (code หลัง `await use()`) รันเสมอแม้ test throw error |
-| Cross-layer verify | ต้อง switch ระหว่าง SeleniumLibrary keyword และ RequestsLibrary keyword — state ไม่ share | `page` + `request` ใน test เดียวกัน share base URL, headers, และ context ได้ |
+| DB isolation / cleanup | ต้องตั้ง Test Setup/Teardown ใน `.robot` file — Test Teardown จะไม่รันถ้า Test Setup fail | Playwright fixture teardown (code หลัง `await use()`) รันเสมอแม้ test throw error (ยกเว้น timeout หมดก่อน teardown เสร็จ) |
+| Cross-layer verify | ต้อง switch ระหว่าง SeleniumLibrary keyword และ RequestsLibrary keyword — state ไม่ share | `page` + `request` ใน test เดียวกัน share `baseURL` และ `extraHTTPHeaders` — แต่ไม่ share cookies โดยอัตโนมัติ (ใช้ `page.request` แทนถ้าต้องการ share cookies กับ browser) |
 | Type safety | Python dict — ไม่มี type checking | TypeScript: `expect(todos[0]).toMatchObject<Partial<Todo>>({...})` |
 
-จุดแตกต่างสำคัญที่สุดคือ Playwright รวม browser automation และ API testing ไว้ใน framework เดียว — ไม่ต้อง context switch ระหว่าง library, ไม่ต้อง manage library version แยก, และ `page` กับ `request` ใช้ base URL และ authentication context ร่วมกันได้ใน test เดียวกัน
+จุดแตกต่างสำคัญที่สุดคือ Playwright รวม browser automation และ API testing ไว้ใน framework เดียว — ไม่ต้อง context switch ระหว่าง library, ไม่ต้อง manage library version แยก, และ `page` กับ `request` ใช้ `baseURL` และ `extraHTTPHeaders` ร่วมกันได้ใน test เดียวกัน
 
 ---
 
@@ -430,8 +432,9 @@ test('completing one todo updates DB without affecting others', async ({ page, r
   expect(updated2?.completed).toBe(false);
 
   // Layer 3: UI re-render — สะท้อน DB state
-  await expect(page.getByTestId(`todo-item-${todo1.id}`)).toHaveClass(/completed/);
-  await expect(page.getByTestId(`todo-item-${todo2.id}`)).not.toHaveClass(/completed/);
+  // class "completed" อยู่ที่ <span data-testid="todo-text-{id}"> ไม่ใช่ <li data-testid="todo-item-{id}">
+  await expect(page.getByTestId(`todo-text-${todo1.id}`)).toHaveClass(/completed/);
+  await expect(page.getByTestId(`todo-text-${todo2.id}`)).not.toHaveClass(/completed/);
 });
 ```
 
@@ -439,7 +442,7 @@ test('completing one todo updates DB without affecting others', async ({ page, r
 
 1. Setup ผ่าน API แทน UI ทั้งสองครั้ง — ทำให้ setup เร็วขึ้นและ test โฟกัสที่ verify behavior ไม่ใช่ setup behavior
 2. Negative check (`updated2?.completed === false`) มีค่าเท่ากับ positive check — ถ้า backend มี bug ที่ mark todos ทั้งหมดพร้อมกัน positive check จะผ่านแต่ negative check จะ catch ได้
-3. Layer 3 ใช้ `toHaveClass(/completed/)` เป็น regex — ตรวจว่ามี class ที่มีคำว่า "completed" อยู่ ไม่ใช่ exact match ซึ่ง robust กว่าเพราะ element อาจมีหลาย class พร้อมกัน
+3. Layer 3 ใช้ `toHaveClass(/completed/)` บน `todo-text-{id}` (คือ `<span class="todo-text completed">`) — class "completed" อยู่ที่ span ไม่ใช่ที่ `<li>` ที่มีแค่ class `todo-item` เสมอ regex check ดีกว่า exact string เพราะ element อาจมีหลาย class พร้อมกัน
 
 ---
 
@@ -665,6 +668,8 @@ test('second test checks count', async ({ request }) => {
 });
 ```
 
+> ⚠️ **Parallel workers:** `beforeEach` reset ยังเพียงพอสำหรับ sequential tests แต่ถ้ารัน parallel ด้วย `workers > 1` workers หลายตัวอาจ call `/api/reset` ชนกัน ต้องใช้ fixture-based isolation พร้อม unique data prefix แทน (ดู Pattern 6 และ Ch19 L5 exercise)
+
 *(source: https://playwright.dev/docs/best-practices)*
 
 ---
@@ -690,8 +695,9 @@ expect(todos).toContainEqual(
 
 // ถ้าต้องการตรวจ dynamic fields ด้วย ให้ assert แค่ type
 const todo = todos.find((t: { text: string }) => t.text === 'My task');
-expect(typeof todo.id).toBe('number');
-expect(new Date(todo.createdAt).toISOString()).toBe(todo.createdAt); // valid ISO string
+expect(todo).toBeDefined(); // ตรวจก่อนว่า find() เจอ record จริง
+expect(typeof todo!.id).toBe('number');
+expect(new Date(todo!.createdAt).toISOString()).toBe(todo!.createdAt); // valid ISO string
 ```
 
 *(source: https://playwright.dev/docs/test-assertions)*
@@ -705,7 +711,7 @@ expect(new Date(todo.createdAt).toISOString()).toBe(todo.createdAt); // valid IS
 - **3 patterns หลัก**: API Read-back (ใช้เมื่อมี GET endpoint), Direct File Read (ใช้เมื่อ demo app เก็บข้อมูลใน JSON file), Cross-layer Verification (ตรวจหลายชั้นพร้อมกัน) — แต่ละ pattern เหมาะกับ stack ที่ต่างกัน
 - **ทำไม verify DB ถึงสำคัญ**: UI อาจแสดง success ได้จาก local state โดยที่ข้อมูลไม่เคยถึง DB — test ที่ตรวจแค่ UI จะไม่จับ bug ประเภทนี้ได้
 - **`expect.poll()`** คือเครื่องมือสำหรับ async DB writes ที่ backend process หลังจาก response กลับแล้ว — poll ซ้ำจนครบ timeout แทนที่จะใช้ `waitForTimeout()` ที่ fragile
-- **DB isolation** ด้วย `beforeEach` reset หรือ fixture-based cleanup คือสิ่งที่ขาดไม่ได้เมื่อ tests รัน parallel เพื่อป้องกัน state leakage ระหว่าง tests
+- **DB isolation**: `beforeEach` reset เหมาะสำหรับ sequential tests — สำหรับ parallel workers ต้องใช้ fixture-based isolation พร้อม unique data prefix เพื่อป้องกัน race condition บน DB เดียวกัน
 
 ---
 
