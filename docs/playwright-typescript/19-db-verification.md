@@ -174,9 +174,9 @@ test('completing todo updates all layers correctly', async ({ page, request }) =
   await page.getByTestId(`todo-item-${id}`).locator('input[type="checkbox"]').check();
 
   // Layer 2: API verify — ตรวจว่า DB state เปลี่ยนผ่าน API
-  // หมายเหตุ: .check() trigger click แต่ไม่รอ PATCH network request เสร็จ
-  // ทำงานได้เพราะ server.js ใช้ writeFileSync synchronous (DB write เสร็จก่อน response กลับ)
-  // สำหรับ production code ที่ต้องการ robust ให้ใช้ expect.poll() แทน (ดู Pattern 5)
+  // ⚠️ Race condition: .check() ไม่รอ PATCH network request เสร็จ — Layer 2 อาจได้ stale data
+  // สำหรับ robust code: ใช้ page.waitForResponse() หรือ expect.poll() (ดู Pattern 5)
+  // ตัวอย่าง robust: await page.waitForResponse(r => r.url().includes('/api/todos/') && r.request().method() === 'PATCH')
   const todosRes = await request.get('http://localhost:3000/api/todos');
   const todos = await todosRes.json();
   const updatedTodo = todos.find((t: { id: number }) => t.id === id);
