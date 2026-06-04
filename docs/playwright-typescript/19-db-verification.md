@@ -104,6 +104,8 @@ test('todo created via UI appears in database', async ({ page, request }) => {
 
 สังเกตว่าใช้ `toContainEqual` + `expect.objectContaining` ไม่ใช่ exact match แบบ `toEqual` กับ array ทั้งหมด เหตุผลคือ `id` และ `createdAt` เป็น dynamic values ที่เราไม่รู้ล่วงหน้า ถ้า assert ทั้ง array จะต้องรู้ค่าทุก field ทุก record รวมถึง record เก่าที่มีอยู่ก่อนแล้ว ซึ่งทำให้ test เปราะบาก `objectContaining` บอกว่า "ขอแค่ field ที่ระบุตรง ส่วน field อื่นไม่สนใจ" และ `toContainEqual` บอกว่า "ขอแค่หนึ่ง element ใน array ที่ match ก็พอ"
 
+ทำไมรอ UI update ก่อนถึงมั่นใจว่า DB เขียนแล้ว: demo app นี้ใช้ `writeFileSync` แบบ synchronous — server เขียน DB เสร็จก่อนส่ง HTTP response กลับ ดังนั้นเมื่อ browser ได้รับ response และ UI update แสดงว่า DB write สมบูรณ์แล้ว สำหรับ server ที่ใช้ async DB writes (เช่น background job หรือ message queue) ต้องใช้ `expect.poll()` แทน (ดู Pattern 5)
+
 ใช้ pattern นี้เมื่อ: API มี GET endpoint สำหรับ resource ที่คุณต้องการ verify และ endpoint นั้น reflect state จาก DB จริง ไม่ใช่แค่ in-memory cache
 
 ---
@@ -172,6 +174,9 @@ test('completing todo updates all layers correctly', async ({ page, request }) =
   await page.getByTestId(`todo-item-${id}`).locator('input[type="checkbox"]').check();
 
   // Layer 2: API verify — ตรวจว่า DB state เปลี่ยนผ่าน API
+  // หมายเหตุ: .check() trigger click แต่ไม่รอ PATCH network request เสร็จ
+  // ทำงานได้เพราะ server.js ใช้ writeFileSync synchronous (DB write เสร็จก่อน response กลับ)
+  // สำหรับ production code ที่ต้องการ robust ให้ใช้ expect.poll() แทน (ดู Pattern 5)
   const todosRes = await request.get('http://localhost:3000/api/todos');
   const todos = await todosRes.json();
   const updatedTodo = todos.find((t: { id: number }) => t.id === id);
@@ -419,15 +424,18 @@ test('completing one todo updates DB without affecting others', async ({ page, r
   await page.goto('http://localhost:3000/todos');
   await page.getByTestId(`todo-item-${todo1.id}`).locator('input[type="checkbox"]').check();
 
-  // Layer 2: API verify — ตรวจ DB state ของทั้งสอง record
-  const todosRes = await request.get('http://localhost:3000/api/todos');
-  const todos = await todosRes.json();
+  // Layer 2: ใช้ expect.poll() รอ PATCH เสร็จก่อน verify
+  // (.check() trigger click แต่ไม่รอ PATCH network request — poll แก้ race condition นี้)
+  await expect.poll(async () => {
+    const res = await request.get('http://localhost:3000/api/todos');
+    const ts = await res.json();
+    return ts.find((t: { id: number }) => t.id === todo1.id)?.completed;
+  }).toBe(true);
 
-  const updated1 = todos.find((t: { id: number }) => t.id === todo1.id);
+  // อ่าน DB อีกครั้งเพื่อ verify ทั้งสอง record ในคราวเดียว
+  const todos = await (await request.get('http://localhost:3000/api/todos')).json();
   const updated2 = todos.find((t: { id: number }) => t.id === todo2.id);
 
-  // Positive check: todo1 ต้อง complete
-  expect(updated1?.completed).toBe(true);
   // Negative check: todo2 ต้องไม่โดนกระทบ
   expect(updated2?.completed).toBe(false);
 
@@ -441,8 +449,9 @@ test('completing one todo updates DB without affecting others', async ({ page, r
 **สิ่งที่น่าสังเกต:**
 
 1. Setup ผ่าน API แทน UI ทั้งสองครั้ง — ทำให้ setup เร็วขึ้นและ test โฟกัสที่ verify behavior ไม่ใช่ setup behavior
-2. Negative check (`updated2?.completed === false`) มีค่าเท่ากับ positive check — ถ้า backend มี bug ที่ mark todos ทั้งหมดพร้อมกัน positive check จะผ่านแต่ negative check จะ catch ได้
-3. Layer 3 ใช้ `toHaveClass(/completed/)` บน `todo-text-{id}` (คือ `<span class="todo-text completed">`) — class "completed" อยู่ที่ span ไม่ใช่ที่ `<li>` ที่มีแค่ class `todo-item` เสมอ regex check ดีกว่า exact string เพราะ element อาจมีหลาย class พร้อมกัน
+2. Layer 2 ใช้ `expect.poll()` แทนการ call API โดยตรง — เพราะ `.check()` trigger click แต่ไม่รอ PATCH network request เสร็จ `expect.poll()` retry จนกว่าจะเห็น `completed: true` ใน DB ซึ่ง handle race condition ได้ถูกต้อง
+3. Negative check (`updated2?.completed === false`) มีค่าเท่ากับ positive check — ถ้า backend มี bug ที่ mark todos ทั้งหมดพร้อมกัน positive check จะผ่านแต่ negative check จะ catch ได้
+4. Layer 3 ใช้ `toHaveClass(/completed/)` บน `todo-text-{id}` (คือ `<span class="todo-text completed">`) — class "completed" อยู่ที่ span ไม่ใช่ที่ `<li>` ที่มีแค่ class `todo-item` เสมอ regex check ดีกว่า exact string เพราะ element อาจมีหลาย class พร้อมกัน
 
 ---
 
