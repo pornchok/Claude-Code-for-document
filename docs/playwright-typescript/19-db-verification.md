@@ -437,7 +437,8 @@ test('completing one todo updates DB without affecting others', async ({ page, r
   const updated2 = todos.find((t: { id: number }) => t.id === todo2.id);
 
   // Negative check: todo2 ต้องไม่โดนกระทบ
-  expect(updated2?.completed).toBe(false);
+  expect(updated2).toBeDefined(); // guard ก่อน access property — ถ้า find() คืน undefined แสดงว่า record หาย
+  expect(updated2!.completed).toBe(false);
 
   // Layer 3: UI re-render — สะท้อน DB state
   // class "completed" อยู่ที่ <span data-testid="todo-text-{id}"> ไม่ใช่ <li data-testid="todo-item-{id}">
