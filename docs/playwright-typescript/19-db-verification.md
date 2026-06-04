@@ -517,9 +517,11 @@ const test = base.extend<OrderFixtures>({
     // ไม่มี teardown สำหรับ token — JWT stateless ไม่ต้อง revoke
   },
 
-  // fixture: reset DB ก่อนและหลัง test เสมอ แม้ test จะ fail
+  // fixture: reset todos ก่อนและหลัง test เสมอ แม้ test จะ fail
+  // ⚠️ ชื่อ cleanOrders อาจทำให้เข้าใจผิด — POST /api/reset ล้างแค่ todos ไม่ใช่ orders
+  // (demo app ไม่มี DELETE /api/orders) ดังนั้น test ต้องใช้ orderCountBefore snapshot แทน
   cleanOrders: [async ({ request }, use) => {
-    await request.post('http://localhost:3000/api/reset');
+    await request.post('http://localhost:3000/api/reset'); // ล้าง todos เท่านั้น
     await use();
     // Teardown รันเสมอแม้ test throw error — ป้องกัน test pollution
     await request.post('http://localhost:3000/api/reset');
@@ -736,11 +738,13 @@ expect(new Date(todo!.createdAt).toISOString()).toBe(todo!.createdAt); // valid 
 <details>
 <summary>เฉลย</summary>
 
-**ข้อ 1:** ใช้ **API Read-back pattern** — หลังจาก UI แสดง "Order created!" แล้ว ให้ call `GET /api/orders` (หรือ `GET /api/orders/:id` ถ้ารู้ order ID จาก response) ผ่าน `request` fixture แล้ว assert ว่า order มีอยู่ใน response
+**ข้อ 1:** ตรวจสอบ API ก่อนว่ามี GET endpoint สำหรับ orders ไหม — ถ้ามีให้ใช้ **API Read-back pattern** เป็นตัวเลือกแรก เพราะ query ผ่าน application layer เดิมไม่ต้อง access storage โดยตรง
 
-เหตุผลที่เลือก pattern นี้: ถ้ามี GET endpoint สำหรับ orders อยู่แล้ว นี่คือวิธีที่ clean ที่สุดเพราะ query ผ่าน application layer เดิม ไม่ต้อง access storage โดยตรง
+สำหรับ demo app นี้ **ไม่มี `GET /api/orders` endpoint** จึงต้องเลือกจาก 2 แนวทาง:
+- **(a) Direct File Read** — อ่าน `db.json` ด้วย `fs.readFileSync` แล้ว parse หา order โดยตรง (ตรงที่สุด)
+- **(b) Admin Stats API** — call `GET /api/admin` แล้วตรวจ `stats.orders` ว่าเพิ่มขึ้น (ตรวจ count เท่านั้น ไม่เห็น content)
 
-ถ้าไม่มี GET endpoint ให้เลือก: (a) **Direct File Read** ถ้า app เก็บข้อมูลใน JSON file อ่าน file ตรงๆ ด้วย `fs.readFileSync` แล้ว parse หา order ที่ต้องการ หรือ (b) **Admin Stats API** ถ้ามี admin endpoint ที่แสดง aggregate data เช่น order count
+approach (a) ดีกว่า (b) เมื่อต้องการ verify ว่าข้อมูลใน order ถูกต้อง เช่น `status:'confirmed'` และ items array ตรงกัน
 
 *(source: https://playwright.dev/docs/api-testing)*
 
