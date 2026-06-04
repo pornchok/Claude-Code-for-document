@@ -833,9 +833,14 @@ git rm --cached playwright/.auth/ -r  # ลบออกจาก tracking ถ้
 // Worker 1 ลบ order #5, Worker 2 พยายาม update order #5 → fail
 use: { storageState: 'playwright/.auth/single-user.json' }
 
-// ✅ ถูก — แยก auth state ต่อ worker
+// ❌ ผิด — storageState ใน playwright.config.ts ไม่รับ function
 storageState: ({ parallelIndex }) =>
   `playwright/.auth/worker-${parallelIndex}.json`
+
+// ✅ ถูก — ใช้ worker-scoped fixture แทน (ดู section 4.5)
+// tests/fixtures/auth.ts — custom fixture ที่ manage per-worker storageState
+// tests/parallel-orders.spec.ts — import { test } from './fixtures/auth'
+// ไฟล์ที่สร้างแล้ว: playwright/.auth/worker-0.json, worker-1.json, ...
 ```
 
 *(source: https://playwright.dev/docs/auth#moderate-one-account-per-parallel-worker)*
