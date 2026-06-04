@@ -337,7 +337,7 @@ pattern นี้ถือเป็น best practice สำหรับ integrat
 | ตรวจ DB state | ต้องติดตั้ง DatabaseLibrary หรือ RequestsLibrary แยก ไม่ share session กับ browser | `request` fixture built-in, ใช้ร่วมกับ `page` ใน test เดียวกันได้ทันที |
 | Async DB polling | ต้องเขียน custom keyword loop ที่ retry เอง หรือใช้ `Wait Until Keyword Succeeds` | `expect.poll()` built-in พร้อม configurable intervals และ timeout |
 | Direct file read | ใช้ Python standard library `open()` ใน custom keyword | `import { readFileSync } from 'fs'` โดยตรงใน TypeScript test |
-| DB isolation / cleanup | ต้องตั้ง Test Setup/Teardown ใน `.robot` file — Test Teardown จะไม่รันถ้า Test Setup fail | Playwright fixture teardown (code หลัง `await use()`) รันเสมอแม้ test throw error (ยกเว้น timeout หมดก่อน teardown เสร็จ) |
+| DB isolation / cleanup | ต้องตั้ง Test Setup/Teardown ใน `.robot` file — ถ้า Suite Setup fail ทุก tests ใน suite จะถูก skip และ Test Teardown ไม่รัน | Playwright fixture teardown (code หลัง `await use()`) รันเสมอแม้ test throw error (ยกเว้น timeout หมดก่อน teardown เสร็จ) |
 | Cross-layer verify | ต้อง switch ระหว่าง SeleniumLibrary keyword และ RequestsLibrary keyword — state ไม่ share | `page` + `request` ใน test เดียวกัน share `baseURL` และ `extraHTTPHeaders` — แต่ไม่ share cookies โดยอัตโนมัติ (ใช้ `page.request` แทนถ้าต้องการ share cookies กับ browser) |
 | Type safety | Python dict — ไม่มี type checking | TypeScript: `expect(todos[0]).toMatchObject<Partial<Todo>>({...})` |
 
