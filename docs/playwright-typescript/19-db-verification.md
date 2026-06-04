@@ -564,3 +564,201 @@ test('order created via API is persisted correctly in db.json', async ({
 3. **`{ auto: false }`** บน `cleanOrders` fixture หมายความว่า fixture นี้รันเฉพาะเมื่อ test ประกาศใช้ชัดเจน ไม่รัน auto ทุก test — ป้องกัน reset ที่ไม่ตั้งใจสำหรับ test อื่นใน suite เดียวกัน
 
 ---
+
+## 6. Common Mistakes
+
+### Mistake 1: Verify UI แล้วไม่ตรวจ DB
+
+❌ **ผิด:** Test ที่ตรวจแค่ว่า UI แสดง success message โดยไม่ verify DB เลย — นี่คือ test ที่อันตรายที่สุด เพราะผ่านได้แม้ข้อมูลไม่ถึง DB
+
+```typescript
+// ❌ ผิด
+test('add todo', async ({ page }) => {
+  await page.getByTestId('input-todo').fill('My task');
+  await page.getByTestId('btn-add-todo').click();
+  await expect(page.getByTestId('todo-list')).toContainText('My task');
+  // จบโดยไม่ verify DB เลย — UI อาจ render จาก local state แทน
+});
+```
+
+✅ **ถูก:** ต้อง read-back จาก API หลัง UI confirm เพื่อยืนยันว่าข้อมูลถึง DB จริง
+
+```typescript
+// ✅ ถูก
+test('add todo', async ({ page, request }) => {
+  await page.getByTestId('input-todo').fill('My task');
+  await page.getByTestId('btn-add-todo').click();
+  // รอ UI confirm ก่อน — ถ้า UI แสดงแล้ว server น่าจะตอบกลับแล้ว
+  await expect(page.getByTestId('todo-list')).toContainText('My task');
+  // Verify ว่า DB มีข้อมูลจริง ไม่ใช่แค่ UI state
+  const todos = await request.get('http://localhost:3000/api/todos').then(r => r.json());
+  expect(todos).toContainEqual(expect.objectContaining({ text: 'My task' }));
+});
+```
+
+*(source: https://playwright.dev/docs/api-testing)*
+
+---
+
+### Mistake 2: ไม่รอ UI confirm ก่อน verify DB
+
+❌ **ผิด:** Verify DB ทันทีหลัง click โดยไม่รอ UI — อาจ query DB ก่อน server เขียนเสร็จ ทำให้ test flaky
+
+```typescript
+// ❌ ผิด — race condition: DB อาจยังไม่มีข้อมูลตอนที่ query
+test('add todo', async ({ page, request }) => {
+  await page.getByTestId('btn-add-todo').click();
+  // Query DB ทันทีโดยไม่รอ UI — server อาจยังประมวลผลอยู่
+  const todos = await request.get('http://localhost:3000/api/todos').then(r => r.json());
+  expect(todos).toContainEqual(expect.objectContaining({ text: 'My task' }));
+});
+```
+
+✅ **ถูก:** รอ UI confirm ก่อนเสมอ — UI confirm หมายความว่า server response กลับมาแล้ว ซึ่งหมายความว่า server น่าจะเขียน DB เสร็จแล้ว
+
+```typescript
+// ✅ ถูก
+test('add todo', async ({ page, request }) => {
+  await page.getByTestId('btn-add-todo').click();
+  // รอ UI confirm ก่อน — server response กลับมาแล้ว แปลว่า DB ควรมีข้อมูลแล้ว
+  await expect(page.getByTestId('todo-list')).toContainText('My task');
+  // ค่อย verify DB หลังจากนั้น
+  const todos = await request.get('http://localhost:3000/api/todos').then(r => r.json());
+  expect(todos).toContainEqual(expect.objectContaining({ text: 'My task' }));
+});
+```
+
+*(source: https://playwright.dev/docs/test-assertions)*
+
+---
+
+### Mistake 3: ไม่ cleanup DB ระหว่าง tests
+
+❌ **ผิด:** Tests แชร์ DB state ร่วมกัน — test ที่รันก่อนทิ้งข้อมูลไว้ให้ test ถัดไปเจอ ทำให้ผล assert ไม่น่าเชื่อถือ
+
+```typescript
+// ❌ ผิด — ไม่มี cleanup ระหว่าง tests
+test('first test adds todo A', async ({ request }) => {
+  await request.post('http://localhost:3000/api/todos', { data: { text: 'A' } });
+  // test จบ แต่ข้อมูล 'A' ยังอยู่ใน DB
+});
+
+test('second test checks count', async ({ request }) => {
+  const todos = await request.get('http://localhost:3000/api/todos').then(r => r.json());
+  expect(todos).toHaveLength(1); // ❌ อาจเจอ 2 ถ้า first test ยังอยู่ใน DB
+});
+```
+
+✅ **ถูก:** ใช้ `beforeEach` reset ทุกครั้งก่อน test รัน เพื่อให้แต่ละ test เริ่มจาก clean state เสมอ
+
+```typescript
+// ✅ ถูก
+test.beforeEach(async ({ request }) => {
+  // Reset DB ก่อนทุก test — แต่ละ test เริ่มจาก clean state
+  await request.post('http://localhost:3000/api/reset');
+});
+
+test('second test checks count', async ({ request }) => {
+  await request.post('http://localhost:3000/api/todos', { data: { text: 'B' } });
+  const todos = await request.get('http://localhost:3000/api/todos').then(r => r.json());
+  expect(todos).toHaveLength(1); // ✅ มั่นใจได้ว่า count ถูกต้อง
+});
+```
+
+*(source: https://playwright.dev/docs/best-practices)*
+
+---
+
+### Mistake 4: ใช้ exact JSON match กับ dynamic values
+
+❌ **ผิด:** Assert ทั้ง object แบบ exact match รวม fields ที่ generate อัตโนมัติ — `id`, `createdAt`, `updatedAt` เปลี่ยนทุก run ทำให้ test fail เสมอ
+
+```typescript
+// ❌ ผิด — id และ createdAt เปลี่ยนทุก run
+expect(todos).toEqual([
+  { id: 1, text: 'My task', completed: false, createdAt: '2026-01-01T00:00:00.000Z' }
+]);
+```
+
+✅ **ถูก:** ใช้ `objectContaining` เพื่อ assert เฉพาะ fields ที่เรา control และรู้ค่าล่วงหน้า ส่วน dynamic fields ให้ assert แค่ว่า "มีอยู่" หรือ "มี type ถูกต้อง"
+
+```typescript
+// ✅ ถูก — assert เฉพาะ fields ที่เรา control
+expect(todos).toContainEqual(
+  expect.objectContaining({ text: 'My task', completed: false })
+);
+
+// ถ้าต้องการตรวจ dynamic fields ด้วย ให้ assert แค่ type
+const todo = todos.find((t: { text: string }) => t.text === 'My task');
+expect(typeof todo.id).toBe('number');
+expect(new Date(todo.createdAt).toISOString()).toBe(todo.createdAt); // valid ISO string
+```
+
+*(source: https://playwright.dev/docs/test-assertions)*
+
+---
+
+## 7. สรุปบท
+
+บทนี้สอน pattern สำคัญสำหรับการ verify ว่า data ถึง DB จริงหลังจาก user action:
+
+- **3 patterns หลัก**: API Read-back (ใช้เมื่อมี GET endpoint), Direct File Read (ใช้เมื่อ demo app เก็บข้อมูลใน JSON file), Cross-layer Verification (ตรวจหลายชั้นพร้อมกัน) — แต่ละ pattern เหมาะกับ stack ที่ต่างกัน
+- **ทำไม verify DB ถึงสำคัญ**: UI อาจแสดง success ได้จาก local state โดยที่ข้อมูลไม่เคยถึง DB — test ที่ตรวจแค่ UI จะไม่จับ bug ประเภทนี้ได้
+- **`expect.poll()`** คือเครื่องมือสำหรับ async DB writes ที่ backend process หลังจาก response กลับแล้ว — poll ซ้ำจนครบ timeout แทนที่จะใช้ `waitForTimeout()` ที่ fragile
+- **DB isolation** ด้วย `beforeEach` reset หรือ fixture-based cleanup คือสิ่งที่ขาดไม่ได้เมื่อ tests รัน parallel เพื่อป้องกัน state leakage ระหว่าง tests
+
+---
+
+**คำถาม (ตอบก่อนดูเฉลย):**
+
+1. คุณเขียน test ที่ผู้ใช้สร้าง order ผ่าน UI และ UI แสดง "Order created!" — แต่คุณต้องการยืนยันว่า order ถูกบันทึกใน DB จริงๆ ด้วย อธิบายว่าจะใช้ pattern ไหน และทำไม
+
+2. ระบบของคุณ process bulk import แบบ async — backend return 202 Accepted ทันที แต่ DB จะถูกเขียนหลังจากนั้น 1-3 วินาที คุณจะ verify ว่า DB มีข้อมูลครบอย่างไร โดยไม่ใช้ `waitForTimeout()`
+
+3. Tests ของคุณรัน parallel ด้วย 4 workers และทุก test ที่ verify todo count เริ่ม fail intermittently บน CI — อธิบาย root cause และวิธีแก้
+
+<details>
+<summary>เฉลย</summary>
+
+**ข้อ 1:** ใช้ **API Read-back pattern** — หลังจาก UI แสดง "Order created!" แล้ว ให้ call `GET /api/orders` (หรือ `GET /api/orders/:id` ถ้ารู้ order ID จาก response) ผ่าน `request` fixture แล้ว assert ว่า order มีอยู่ใน response
+
+เหตุผลที่เลือก pattern นี้: ถ้ามี GET endpoint สำหรับ orders อยู่แล้ว นี่คือวิธีที่ clean ที่สุดเพราะ query ผ่าน application layer เดิม ไม่ต้อง access storage โดยตรง
+
+ถ้าไม่มี GET endpoint ให้เลือก: (a) **Direct File Read** ถ้า app เก็บข้อมูลใน JSON file อ่าน file ตรงๆ ด้วย `fs.readFileSync` แล้ว parse หา order ที่ต้องการ หรือ (b) **Admin Stats API** ถ้ามี admin endpoint ที่แสดง aggregate data เช่น order count
+
+*(source: https://playwright.dev/docs/api-testing)*
+
+---
+
+**ข้อ 2:** ใช้ **`expect.poll()`** แทน `waitForTimeout()` เพราะ poll ตรวจสอบ condition จริงๆ แล้วหยุดทันทีที่ผ่าน แทนที่จะรอเวลาตายตัวซึ่ง flaky
+
+```typescript
+await expect.poll(async () => {
+  const res = await request.get('http://localhost:3000/api/import/items');
+  const { items } = await res.json();
+  return items.length;
+}, {
+  intervals: [500, 1000, 2000], // ลอง 500ms, 1000ms, 2000ms
+  timeout: 10_000               // รอสูงสุด 10 วินาที
+}).toBe(expectedCount);
+```
+
+Pattern นี้ทำงานได้เพราะ `expect.poll()` "Polls the condition until it returns a truthy value. Will keep re-evaluating the condition until it times out." — หยุดทันทีเมื่อ condition ผ่าน ไม่รอครบ timeout
+
+*(source: https://playwright.dev/docs/test-assertions)*
+
+---
+
+**ข้อ 3:** **Root cause:** Tests แชร์ DB state ร่วมกัน — เมื่อ 4 workers รันพร้อมกัน workers ต่างๆ เขียนข้อมูลลง DB เดียวกันและอ่านข้อมูลทับกัน ทำให้ count ที่ assert ไม่ตรงกับที่คาดเพราะมีข้อมูลจาก workers อื่นปน
+
+**วิธีแก้มี 2 แนวทาง:**
+
+**แนวทาง 1 — beforeEach reset:** เพิ่ม `beforeEach` ที่ call reset endpoint ก่อนทุก test เพื่อ clear DB แต่ข้อเสียคือ tests ยังคง share DB อยู่ ถ้ามี test อื่นรันพร้อมกันจาก worker อื่นก็ยังชนกันได้
+
+**แนวทาง 2 — Fixture-based isolation (แนะนำสำหรับ parallel):** ออกแบบ fixture ที่สร้าง isolated namespace สำหรับแต่ละ test เช่น prefix ทุก test ID ด้วย worker ID หรือ timestamp ทำให้แต่ละ test ทำงานกับชุดข้อมูลของตัวเองโดยไม่กระทบกัน
+
+"Make tests as isolated as possible" — isolation ต้องทำระดับ test ไม่ใช่แค่ระดับ suite
+
+*(source: https://playwright.dev/docs/best-practices)*
+
+</details>
