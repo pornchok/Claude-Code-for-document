@@ -1724,5 +1724,365 @@ await expect(page.getByRole('listitem')).toHaveCount(10);
 
 ---
 
-*แบบฝึกหัดนี้ครอบคลุม 18 บท × 3 ระดับ = 54 exercises*
+---
+
+## บทที่ 19 — Database State Verification: ปิด Loop ด้วยการตรวจ DB
+
+### L1: Recall (ขั้นพื้นฐาน)
+
+อธิบายด้วยคำตัวเองว่าทำไมการที่ UI แสดง "สร้างสำเร็จ" แล้วก็เพียงพอในการยืนยันว่าข้อมูลถูกบันทึกลง database หรือเปล่า — ยกตัวอย่างสถานการณ์จากชีวิตจริง (ไม่ต้องเป็น IT) ที่ "สิ่งที่เห็นบนหน้าจอ" ไม่ตรงกับ "ข้อมูลที่จริงๆ อยู่ในระบบ backend" และอธิบายว่า API Read-back pattern แก้ปัญหานี้อย่างไร
+
+<details>
+<summary>เฉลย</summary>
+
+UI แสดง success ไม่ได้หมายความว่า DB บันทึกสำเร็จ เพราะ UI อาจแสดงจาก: (1) optimistic update — UI update ล่วงหน้าก่อน server confirm (2) in-memory state ที่ยังไม่ได้ persist (3) race condition ที่ server ตอบก่อน DB write เสร็จ
+
+ตัวอย่างจากชีวิตจริง: เหมือนระบบจองตั๋วคอนเสิร์ต — เว็บไซต์แสดง "จองสำเร็จ! ที่นั่ง A12" แต่ถ้าระบบ backend มีปัญหา ตั๋วจริงอาจไม่ถูก issue ในระบบ E-Ticket ทำให้วันงานผ่านประตูไม่ได้ สิ่งที่เห็นบนหน้าจอ ≠ สถานะจริงในระบบ
+
+API Read-back แก้ปัญหานี้โดย: หลัง UI แสดง success → call GET API → ถามระบบโดยตรงว่า "ข้อมูลมีอยู่ใน DB จริงไหม" ถ้า DB ไม่มี → test fail → เจอ bug ก่อน production
+
+</details>
+
+---
+
+### L2: Recognition (อ่าน code + ระบุปัญหา)
+
+ตรวจสอบ code ต่อไปนี้แล้วระบุปัญหาทุกจุดพร้อมอธิบายว่าแต่ละปัญหาจะทำให้ test fail หรือพลาด bug อย่างไร:
+
+```typescript
+test('product added to cart is saved in database', async ({ page, request }) => {
+  await page.goto('http://localhost:3000/shop');
+  await page.getByTestId('product-card-1').getByRole('button', { name: 'Add to Cart' }).click();
+  
+  // Verify immediately without waiting for UI
+  const response = await request.get('http://localhost:3000/api/orders');
+  expect(response.status()).toBe(200);
+  const orders = await response.json();
+  expect(orders.length).toBeGreaterThan(0);
+});
+```
+
+**hint:** มีปัญหาอย่างน้อย 3 จุดที่ทำให้ test ผิดพลาด
+
+<details>
+<summary>เฉลย</summary>
+
+ปัญหา 3 จุด:
+
+1. **`GET /api/orders` ไม่มีใน demo app** — server.js ไม่ได้ define endpoint นี้ → response จะเป็น 404 ไม่ใช่ 200 ทำให้ test fail ผิดเหตุผล ต้องใช้ direct file read (`readFileSync`) หรือ `GET /api/admin` stats แทน
+
+2. **ไม่รอ UI confirm ก่อน verify** — หลัง click "Add to Cart" ควรรอให้ UI แสดง feedback ก่อน (เช่น cart icon update หรือ toast message) เพื่อให้แน่ใจว่า server ได้รับ request แล้ว ถ้า verify ทันทีอาจ check DB ก่อนที่ request จะถูก process
+
+3. **ไม่มี beforeEach reset / DB isolation** — ถ้า test อื่นสร้าง orders ไว้ก่อน `orders.length > 0` จะ pass แม้ว่า cart action นี้ไม่ได้ save อะไรจริงๆ เลย
+
+</details>
+
+---
+
+### L3: Guided Application (เขียนตาม scenario)
+
+เขียน Playwright test ที่ทำตาม steps เหล่านี้ครบถ้วน:
+
+**Scenario:** ทดสอบว่า "ลบ todo แล้ว — ยืนยันทั้ง UI และ DB ว่าหายจริง"
+
+**Steps ที่ต้องทำ (ตามลำดับ):**
+1. Reset DB ก่อน test ด้วย `POST /api/reset` ใน `test.beforeEach`
+2. สร้าง todo ข้อความ "Finish project report" ผ่าน API (`POST /api/todos`)
+3. เปิดหน้า todos ใน browser และ verify ว่า todo ปรากฏใน UI
+4. ลบ todo ผ่าน API (`DELETE /api/todos/:id`) และ verify response ok
+5. **API Read-back**: ดึง `GET /api/todos` และ verify ว่า todo ไม่อยู่ใน array แล้ว (ใช้ `not.toContainEqual`)
+6. Reload หน้าใน browser และ verify ว่า todo หายจาก UI ด้วย
+
+**Constraints:**
+- ใช้ `expect.objectContaining` สำหรับ partial match
+- ใช้ `not.toContainEqual` สำหรับ negative verification
+- ต้องมี import statements ที่ถูกต้อง
+
+<details>
+<summary>เฉลย</summary>
+
+```typescript
+// tested: Playwright v1.50+, Node.js 20+
+import { test, expect } from '@playwright/test';
+
+test.beforeEach(async ({ request }) => {
+  await request.post('http://localhost:3000/api/reset');
+});
+
+test('deleted todo is removed from both UI and database', async ({ page, request }) => {
+  // Step 2: สร้าง todo ผ่าน API
+  const createRes = await request.post('http://localhost:3000/api/todos', {
+    data: { text: 'Finish project report' }
+  });
+  expect(createRes.status()).toBe(201);
+  const { id } = await createRes.json();
+
+  // Step 3: verify ใน UI
+  await page.goto('http://localhost:3000/todos');
+  await expect(page.getByTestId(`todo-item-${id}`)).toBeVisible();
+
+  // Step 4: ลบผ่าน API
+  const deleteRes = await request.delete(`http://localhost:3000/api/todos/${id}`);
+  expect(deleteRes.ok()).toBeTruthy();
+
+  // Step 5: API Read-back — negative verification
+  const todosRes = await request.get('http://localhost:3000/api/todos');
+  const todos = await todosRes.json();
+  expect(todos).not.toContainEqual(expect.objectContaining({ id }));
+
+  // Step 6: UI verify หลัง reload
+  await page.reload();
+  await expect(page.getByTestId(`todo-item-${id}`)).not.toBeVisible();
+});
+```
+
+</details>
+
+---
+
+### L4: Independent Application (ออกแบบเอง)
+
+**Scenario:** คุณกำลัง test ระบบ "ระบบจัดการงาน (Task Manager)" ที่มีฟีเจอร์:
+- `POST /api/tasks` สร้าง task ใหม่ มี field: `title`, `priority` (low/medium/high), `assignee`
+- `PATCH /api/tasks/:id` อัปเดต task — รวมถึงเปลี่ยน priority ได้
+- `GET /api/tasks` ดึงทุก task
+- UI แสดง tasks เรียงตาม priority (high ก่อน)
+
+ออกแบบและเขียน test suite (3 tests) ที่ verify ทั้ง:
+1. **สร้าง task** — ยืนยันว่า DB มีข้อมูลครบทุก field ที่ส่งไป
+2. **Update priority** — UI แสดง high priority task ก่อน AND DB เก็บ priority ถูกต้อง (cross-layer)
+3. **Negative case** — task ที่ถูกลบไม่อยู่ใน DB อีกต่อไป
+
+**ไม่มี scaffold ให้** — ออกแบบ structure เองทั้งหมด รวมถึง beforeEach/cleanup strategy
+
+<details>
+<summary>เฉลย</summary>
+
+```typescript
+// tested: Playwright v1.50+, Node.js 20+
+import { test, expect } from '@playwright/test';
+
+const BASE = 'http://localhost:3000';
+
+test.beforeEach(async ({ request }) => {
+  // Assume มี reset endpoint สำหรับ tasks
+  await request.post(`${BASE}/api/tasks/reset`);
+});
+
+// Test 1: สร้าง task — verify ทุก field ใน DB
+test('task creation saves all fields to database', async ({ request }) => {
+  const res = await request.post(`${BASE}/api/tasks`, {
+    data: { title: 'Deploy hotfix', priority: 'high', assignee: 'alice' }
+  });
+  expect(res.status()).toBe(201);
+  const { id } = await res.json();
+
+  const tasksRes = await request.get(`${BASE}/api/tasks`);
+  const tasks = await tasksRes.json();
+  expect(tasks).toContainEqual(
+    expect.objectContaining({
+      id,
+      title: 'Deploy hotfix',
+      priority: 'high',
+      assignee: 'alice',
+    })
+  );
+});
+
+// Test 2: Update priority — cross-layer
+test('updating priority reflects in database and UI sort order', async ({ page, request }) => {
+  // Setup: สร้าง 2 tasks
+  const lowRes = await request.post(`${BASE}/api/tasks`, {
+    data: { title: 'Write docs', priority: 'low', assignee: 'bob' }
+  });
+  const lowTask = await lowRes.json();
+
+  const highRes = await request.post(`${BASE}/api/tasks`, {
+    data: { title: 'Fix prod bug', priority: 'high', assignee: 'alice' }
+  });
+  const highTask = await highRes.json();
+
+  // Upgrade low task เป็น high
+  await request.patch(`${BASE}/api/tasks/${lowTask.id}`, {
+    data: { priority: 'high' }
+  });
+
+  // API verify
+  const tasks = await (await request.get(`${BASE}/api/tasks`)).json();
+  const updated = tasks.find((t: any) => t.id === lowTask.id);
+  expect(updated?.priority).toBe('high');
+
+  // UI verify: ทั้งสอง tasks เป็น high priority — ต้องแสดงก่อน low ones
+  await page.goto(`${BASE}/tasks`);
+  const firstTask = page.getByTestId('task-list').locator('[data-priority="high"]').first();
+  await expect(firstTask).toBeVisible();
+});
+
+// Test 3: Negative — ลบ task แล้วหายจาก DB
+test('deleted task is removed from database', async ({ request }) => {
+  const res = await request.post(`${BASE}/api/tasks`, {
+    data: { title: 'Cleanup temp files', priority: 'low', assignee: 'charlie' }
+  });
+  const { id } = await res.json();
+
+  await request.delete(`${BASE}/api/tasks/${id}`);
+
+  const tasks = await (await request.get(`${BASE}/api/tasks`)).json();
+  expect(tasks).not.toContainEqual(expect.objectContaining({ id }));
+});
+```
+
+Key design decisions:
+- `beforeEach` reset สำหรับ isolation
+- Test 2 setup 2 tasks เพื่อมี context สำหรับ sort order test
+- Test 3 ใช้ API setup + API delete (ไม่ต้องการ UI สำหรับ deletion path ที่ test แค่ DB)
+
+</details>
+
+---
+
+### L5: Expert / Synthesis (Production-grade)
+
+**Context:** ทีม QA ของคุณมี test suite 400 tests รันบน GitHub Actions ด้วย 4 workers (parallel) tests เริ่ม fail บน CI ~25% โดยเฉพาะ tests ที่ verify todo counts — แต่ pass ทุกครั้งบน local (single worker)
+
+นี่คือ test ที่เป็นปัญหา:
+
+```typescript
+test.beforeEach(async ({ request }) => {
+  await request.post('http://localhost:3000/api/reset');
+});
+
+test('admin stats shows correct todo count after bulk create', async ({ request }) => {
+  // สร้าง 3 todos
+  await request.post('http://localhost:3000/api/todos', { data: { text: 'Sprint planning' } });
+  await request.post('http://localhost:3000/api/todos', { data: { text: 'Code review' } });
+  await request.post('http://localhost:3000/api/todos', { data: { text: 'Deploy checklist' } });
+
+  // Login
+  const { token } = await (await request.post('http://localhost:3000/api/auth/login', {
+    data: { username: 'admin', password: 'admin123' }
+  })).json();
+
+  // Verify count
+  const { stats } = await (await request.get('http://localhost:3000/api/admin', {
+    headers: { Authorization: `Bearer ${token}` }
+  })).json();
+
+  expect(stats.todos).toBe(3);  // ← fail intermittently ใน parallel
+});
+```
+
+**คำถาม (ต้องตอบครบทุกข้อ):**
+
+1. **Root Cause Analysis:** อธิบายอย่างละเอียดว่าทำไม test นี้ pass บน local (single worker) แต่ fail ใน parallel CI — trace ผ่าน sequence ของ events ที่ทำให้เกิด race condition
+
+2. **Fix with Code:** เขียน solution ที่แก้ปัญหาโดยไม่ลด workers — เลือก approach ที่เหมาะสมที่สุดระหว่าง: (A) worker-scoped fixture กับ unique data prefix (B) per-test DB snapshot restore (C) mock API endpoint แทน real DB
+
+3. **Trade-off Analysis:** เปรียบเทียบ 3 approaches:
+   - `beforeEach` reset (approach ปัจจุบัน)
+   - Worker-scoped fixture + unique prefix
+   - Mock `/api/admin` stats per test
+   
+   ระบุ: ✅ ข้อดี / ❌ ข้อเสีย / 🎯 เหมาะเมื่อไหร่
+
+4. **Retrofit Plan:** ถ้า 400 tests ใช้ approach ปัจจุบัน (beforeEach reset) ทั้งหมด — จะ migrate ไป worker-scoped fixture อย่างไรโดยไม่ rewrite ทุก test
+
+<details>
+<summary>เฉลย</summary>
+
+**1. Root Cause Analysis:**
+
+Race condition เกิดเพราะ `POST /api/reset` ใช้ instance เดียวกันของ demo app ที่รัน file-based DB (`db.json`) บน shared server:
+
+Timeline ใน parallel (4 workers):
+```
+Worker 1: POST /api/reset  → db.todos = []
+Worker 2: POST /api/reset  → db.todos = []  ← W1 เพิ่งล้าง, W2 ล้างซ้ำ (OK ตอนนี้)
+Worker 1: POST /api/todos (Sprint planning) → db.todos = [A]
+Worker 2: POST /api/todos (งานอื่น)         → db.todos = [A, X]  ← ปนกัน!
+Worker 1: GET /api/admin → stats.todos = 2  ← expect 3, ได้ 2 → FAIL
+```
+
+Local pass เพราะ single worker → ไม่มี concurrent requests → ไม่มี race condition
+
+**2. Fix with Worker-Scoped Fixture + Unique Prefix:**
+
+```typescript
+// tests/fixtures.ts
+import { test as base } from '@playwright/test';
+
+type WorkerFixtures = {
+  workerPrefix: string;
+};
+
+export const test = base.extend<{}, WorkerFixtures>({
+  workerPrefix: [async ({}, use, workerInfo) => {
+    // Unique prefix ต่อ worker: "w0", "w1", "w2", "w3"
+    await use(`w${workerInfo.parallelIndex}`);
+  }, { scope: 'worker' }],
+});
+
+// tests/admin-stats.spec.ts
+import { test } from './fixtures';
+import { expect } from '@playwright/test';
+
+test('admin stats correct for worker-isolated todos', async ({ request, workerPrefix }) => {
+  // สร้าง todos พร้อม prefix เพื่อ isolate ต่อ worker
+  await request.post('http://localhost:3000/api/todos', {
+    data: { text: `${workerPrefix}:Sprint planning` }
+  });
+  await request.post('http://localhost:3000/api/todos', {
+    data: { text: `${workerPrefix}:Code review` }
+  });
+  await request.post('http://localhost:3000/api/todos', {
+    data: { text: `${workerPrefix}:Deploy checklist` }
+  });
+
+  // ดึง todos แล้วนับเฉพาะ prefix ของ worker นี้
+  const todos = await (await request.get('http://localhost:3000/api/todos')).json();
+  const myTodos = todos.filter((t: any) => t.text.startsWith(`${workerPrefix}:`));
+  expect(myTodos).toHaveLength(3);
+
+  // Admin stats ยังตรวจได้ แต่ใช้ filtered count แทน total
+  // (สำหรับ stats.todos ที่ count ทั้งหมด — ต้องใช้ approach อื่น)
+});
+```
+
+**3. Trade-off Analysis:**
+
+**beforeEach reset (ปัจจุบัน):**
+- ✅ เข้าใจง่าย, setup น้อย
+- ❌ Race condition ชัดเจนใน parallel — tests รัน server เดียวกัน
+- 🎯 เหมาะสำหรับ: single worker หรือ sequential tests เท่านั้น
+
+**Worker-scoped fixture + unique prefix:**
+- ✅ Parallel-safe โดยไม่ต้องมี isolated server
+- ✅ Performance ดี — ไม่ต้อง reset DB ทุก test
+- ❌ Tests ต้อง filter data ด้วย prefix เพิ่มความซับซ้อน
+- ❌ global count (เช่น `stats.todos`) ยังคง contaminated
+- 🎯 เหมาะสำหรับ: tests ที่ filter data ได้ และไม่ต้องการ global counts
+
+**Mock `/api/admin` stats per test:**
+- ✅ 100% isolated — ไม่ขึ้นกับ DB state จริง
+- ✅ Fast
+- ❌ ไม่ได้ test integration จริง — mock อาจ diverge จาก real behavior
+- 🎯 เหมาะสำหรับ: unit-level tests ที่ test UI rendering จาก data ที่รู้แน่ ไม่ใช่ DB verification
+
+**4. Retrofit Plan:**
+
+1. สร้าง `tests/fixtures.ts` พร้อม `workerPrefix` fixture และ export `test`
+2. ใน tests ที่ต้องการ DB isolation → import `test` จาก `./fixtures` แทน `@playwright/test`
+3. เพิ่ม `workerPrefix` parameter ใน test functions ที่ต้องการ
+4. เปลี่ยน `beforeEach` reset → ใช้ cleanup ใน `afterEach` แทน (หรือไม่ reset เลยถ้าใช้ prefix)
+5. Migration: เริ่มจาก tests ที่ fail บ่อยที่สุดก่อน (25% failure rate = ~100 tests) → migrate เป็น batch ทีละ spec file
+
+ไม่ต้อง rewrite ทุก test พร้อมกัน — tests ที่ยังใช้ `beforeEach` reset แบบเก่าและรัน single worker ยังทำงานได้ปกติ
+
+</details>
+
+---
+
+*แบบฝึกหัดหลัก: 18 บท × 3 ระดับ = 54 exercises*  
+*Ch19: 5 levels (L1–L5) สำหรับ Database State Verification*  
+*Expert Level (L5) เพิ่มเติม: Ch13, Ch15, Ch17, Ch18 (ดูด้านล่าง)*  
 *สร้างโดยอิงเนื้อหาจากแต่ละบท — exercises ทุกข้อใช้สถานการณ์ใหม่ที่ไม่ซ้ำตัวอย่างในบท*
