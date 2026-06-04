@@ -2086,3 +2086,286 @@ test('admin stats correct for worker-isolated todos', async ({ request, workerPr
 *Ch19: 5 levels (L1–L5) สำหรับ Database State Verification*  
 *Expert Level (L5) เพิ่มเติม: Ch13, Ch15, Ch17, Ch18 (ดูด้านล่าง)*  
 *สร้างโดยอิงเนื้อหาจากแต่ละบท — exercises ทุกข้อใช้สถานการณ์ใหม่ที่ไม่ซ้ำตัวอย่างในบท*
+
+---
+
+## Expert Level — เพิ่มเติม (L5 สำหรับบทสำคัญ)
+
+### Ch13 Expert: Authentication + DB State Verification
+
+**Context:** ทีมของคุณ migrate จาก cookie-based เป็น JWT + `Authorization` header โดย storageState ยังเก็บ cookies เหมือนเดิม แต่ `request` fixture กลับ return 401 เมื่อ call protected API
+
+```typescript
+// auth.setup.ts
+test('authenticate as admin', async ({ page }) => {
+  await page.goto('http://localhost:3000/login');
+  await page.getByTestId('input-username').fill('admin');
+  await page.getByTestId('input-password').fill('admin123');
+  await page.getByTestId('btn-login').click();
+  await expect(page).toHaveURL('http://localhost:3000/todos');
+  await page.context().storageState({ path: 'playwright/.auth/admin.json' });
+});
+
+// admin.spec.ts
+test.use({ storageState: 'playwright/.auth/admin.json' });
+
+test('admin can verify stats match database', async ({ page, request }) => {
+  await page.goto('http://localhost:3000/admin');
+  await expect(page.getByTestId('stats-panel')).toBeVisible();
+
+  // DB verification via API — fails with 401
+  const statsRes = await request.get('http://localhost:3000/api/admin');
+  expect(statsRes.status()).toBe(200);  // ← 401 จริงๆ
+  const { stats } = await statsRes.json();
+  // cross-verify ว่า UI แสดงตรงกับ API
+  await expect(page.getByTestId('total-todos')).toHaveText(stats.todos.toString());
+});
+```
+
+**คำถาม:**
+
+1. **Diagnose:** อธิบาย root cause ว่าทำไม `request.get('/api/admin')` return 401 แม้ storageState set แล้ว — อธิบายความแตกต่างระหว่าง `page` context (browser cookies) และ `request` fixture context (isolated APIRequestContext)
+
+2. **Fix with Code:** เขียน setup + test ที่แก้ปัญหา โดย:
+   - `page` ยังใช้ storageState ได้ (สำหรับ UI)
+   - `request` fixture ส่ง JWT token ที่ถูกต้องใน Authorization header
+   - ไม่ต้อง login ซ้ำสำหรับทุก test (login ครั้งเดียวต่อ suite)
+
+3. **DB Cross-verification:** เพิ่มใน test: verify ว่า user ที่ `GET /api/me` return ตรงกับ admin ที่ storageState เก็บไว้ — เขียน assertion ที่ confirm ทั้ง `username` และ `role` ตรงกัน
+
+<details>
+<summary>เฉลย</summary>
+
+**1. Root Cause:**
+
+`storageState` เก็บ browser cookies และ localStorage ของ `BrowserContext` — เมื่อ `page.goto()` browser จะส่ง cookies ไปกับทุก request อัตโนมัติ
+
+แต่ `request` fixture เป็น **isolated `APIRequestContext`** ที่แยกต่างหากจาก BrowserContext — *(source: "Isolated [APIRequestContext] instance for each test.")* — ไม่ share cookies หรือ headers กับ browser session เลย
+
+ดังนั้น ถึงแม้ storageState จะทำให้ browser authenticate แล้ว `request` fixture ก็ไม่รู้ว่ามี JWT token ที่ไหน → 401
+
+**2. Fix:**
+
+```typescript
+// auth.setup.ts — เก็บ token ใน env หรือ file
+import { test } from '@playwright/test';
+
+test('authenticate admin', async ({ page, request }) => {
+  // Login ผ่าน API เพื่อรับ token
+  const loginRes = await request.post('http://localhost:3000/api/auth/login', {
+    data: { username: 'admin', password: 'admin123' }
+  });
+  const { token } = await loginRes.json();
+
+  // เก็บ token ใน file เพื่อ reuse
+  require('fs').writeFileSync('playwright/.auth/admin-token.json', JSON.stringify({ token }));
+
+  // Login ผ่าน UI เพื่อ storageState (สำหรับ page)
+  await page.goto('http://localhost:3000/login');
+  await page.getByTestId('input-username').fill('admin');
+  await page.getByTestId('input-password').fill('admin123');
+  await page.getByTestId('btn-login').click();
+  await page.context().storageState({ path: 'playwright/.auth/admin.json' });
+});
+
+// fixtures.ts — fixture ที่โหลด token
+import { test as base } from '@playwright/test';
+import { readFileSync } from 'fs';
+
+export const test = base.extend<{ adminToken: string }>({
+  adminToken: async ({}, use) => {
+    const { token } = JSON.parse(readFileSync('playwright/.auth/admin-token.json', 'utf-8'));
+    await use(token);
+  },
+});
+
+// admin.spec.ts
+import { test } from './fixtures';
+import { expect } from '@playwright/test';
+
+test.use({ storageState: 'playwright/.auth/admin.json' });
+
+test('admin stats match database', async ({ page, request, adminToken }) => {
+  await page.goto('http://localhost:3000/admin');
+  await expect(page.getByTestId('stats-panel')).toBeVisible();
+
+  // request + JWT token
+  const statsRes = await request.get('http://localhost:3000/api/admin', {
+    headers: { Authorization: `Bearer ${adminToken}` }
+  });
+  expect(statsRes.status()).toBe(200);
+  const { stats } = await statsRes.json();
+
+  await expect(page.getByTestId('total-todos')).toHaveText(stats.todos.toString());
+});
+```
+
+**3. DB Cross-verification:**
+
+```typescript
+test('logged-in user matches database record', async ({ request, adminToken }) => {
+  // Verify via API ว่า token ตรงกับ admin user ใน DB
+  const meRes = await request.get('http://localhost:3000/api/me', {
+    headers: { Authorization: `Bearer ${adminToken}` }
+  });
+  expect(meRes.status()).toBe(200);
+  const { username, role } = await meRes.json();
+
+  expect(username).toBe('admin');
+  expect(role).toBe('admin');
+
+  // ถ้าต้องการ verify กับ DB โดยตรง:
+  const { readFileSync } = require('fs');
+  const db = JSON.parse(readFileSync(
+    'docs/playwright-typescript/playwright-course-app/data/db.json', 'utf-8'
+  ));
+  const dbUser = db.users.find((u: any) => u.username === username);
+  expect(dbUser?.role).toBe(role);
+});
+```
+
+</details>
+
+---
+
+### Ch15 Expert: Hybrid API + DB Cross-verification
+
+**Context:** ระบบ e-commerce ของคุณมี bug: `GET /api/admin` บอก `orders: 5` แต่ customer report บอกว่าสั่งไปแล้ว 6 ครั้ง ทีมสงสัยว่า `POST /api/orders` มี double-insert bug — บาง request insert 2 records แต่ response ดูปกติ
+
+```typescript
+test('order creation workflow', async ({ page, request }) => {
+  const loginRes = await request.post('http://localhost:3000/api/auth/login', {
+    data: { username: 'testuser', password: 'test123' }
+  });
+  const { token } = await loginRes.json();
+
+  // สร้าง 3 orders ผ่าน API
+  for (let i = 0; i < 3; i++) {
+    const res = await request.post('http://localhost:3000/api/orders', {
+      headers: { Authorization: `Bearer ${token}` },
+      data: { items: [{ productId: i + 1, quantity: 1 }] }
+    });
+    expect(res.status()).toBe(201);
+  }
+
+  // Verify ผ่าน admin stats
+  const adminLoginRes = await request.post('http://localhost:3000/api/auth/login', {
+    data: { username: 'admin', password: 'admin123' }
+  });
+  const { token: adminToken } = await adminLoginRes.json();
+  const statsRes = await request.get('http://localhost:3000/api/admin', {
+    headers: { Authorization: `Bearer ${adminToken}` }
+  });
+  const { stats } = await statsRes.json();
+  expect(stats.orders).toBe(3);  // ← pass ✓ แต่ bug ยังอยู่
+});
+```
+
+**คำถาม:**
+
+1. **Gap Analysis:** ระบุว่า test นี้ verify อะไรได้บ้างและไม่ verify อะไร — โดยเฉพาะ double-insert bug จะถูก catch โดย test นี้ได้ไหม? อธิบายว่าทำไม
+
+2. **Design Better Test:** เขียน test ที่สามารถ detect double-insert bug โดย:
+   - Verify จำนวน orders ที่แน่นอนใน DB (ใช้ direct file read เพราะไม่มี GET /api/orders)
+   - Verify ว่า orderId ของแต่ละ order ไม่ซ้ำกัน
+   - Verify items ของแต่ละ order ถูกต้อง
+
+3. **Cleanup Challenge:** demo app ไม่มี DELETE /api/orders และ POST /api/reset ล้างแค่ todos — ออกแบบ cleanup strategy สำหรับ orders ที่สร้างในแต่ละ test
+
+<details>
+<summary>เฉลย</summary>
+
+**1. Gap Analysis:**
+
+Test ปัจจุบัน verify ได้:
+- API returns 201 สำหรับทุก POST request ✓
+- `stats.orders` เป็น 3 ✓
+
+**ไม่ verify:**
+- จำนวน records จริงใน DB (ถ้า double-insert → 6 records แต่ stats บอก 3 → ขัดกัน แต่ test ไม่ตรวจ)
+- `orderId` ไม่ซ้ำกัน (UUID collision หรือ counter bug)
+- items ของแต่ละ order ถูกต้องตามที่ส่งไป
+
+**Double-insert bug:**
+ถ้า server insert 2 records ต่อ 1 request แต่ stats aggregate ด้วย COUNT(DISTINCT orderId) หรือ logic อื่น — stats อาจยังบอก 3 แม้ DB มี 6 records → test นี้ **ไม่** catch bug นั้น
+
+**2. Better Test:**
+
+```typescript
+// tested: Playwright v1.50+, Node.js 20+
+import { test, expect } from '@playwright/test';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
+function readDb() {
+  return JSON.parse(readFileSync(
+    resolve('docs/playwright-typescript/playwright-course-app/data/db.json'),
+    'utf-8'
+  ));
+}
+
+test.beforeEach(async ({ request }) => {
+  await request.post('http://localhost:3000/api/reset');
+  // Note: orders ไม่มี reset — ต้อง track ด้วย snapshot
+});
+
+test('detects double-insert bug in order creation', async ({ request }) => {
+  // บันทึก order count ก่อน
+  const ordersBefore = readDb().orders.length;
+
+  const loginRes = await request.post('http://localhost:3000/api/auth/login', {
+    data: { username: 'testuser', password: 'test123' }
+  });
+  const { token } = await loginRes.json();
+
+  const createdOrderIds: string[] = [];
+
+  for (let i = 0; i < 3; i++) {
+    const res = await request.post('http://localhost:3000/api/orders', {
+      headers: { Authorization: `Bearer ${token}` },
+      data: { items: [{ productId: i + 1, quantity: 1 }] }
+    });
+    expect(res.status()).toBe(201);
+    const { orderId } = await res.json();
+    createdOrderIds.push(orderId);
+  }
+
+  // Direct file read: verify exact count
+  const afterDb = readDb();
+  const newOrders = afterDb.orders.slice(ordersBefore);
+
+  // ต้องมีแค่ 3 orders ใหม่ (ไม่ใช่ 6 จาก double-insert)
+  expect(newOrders).toHaveLength(3);
+
+  // Verify orderId ไม่ซ้ำกัน
+  const uniqueIds = new Set(newOrders.map((o: any) => o.orderId));
+  expect(uniqueIds.size).toBe(3);
+
+  // Verify items ตรงกับที่ส่งไป
+  for (let i = 0; i < 3; i++) {
+    const order = newOrders.find((o: any) => o.orderId === createdOrderIds[i]);
+    expect(order).toBeDefined();
+    expect(order?.items).toEqual([{ productId: i + 1, quantity: 1 }]);
+  }
+});
+```
+
+**3. Cleanup Strategy:**
+
+เนื่องจากไม่มี DELETE/reset สำหรับ orders มีทางเลือก:
+
+**Option A: Snapshot-based** (ใช้ในตัวอย่างข้างต้น)
+- บันทึก `ordersBefore` ก่อน test
+- Assert บน `orders.slice(ordersBefore)` เฉพาะ orders ที่ test นี้สร้าง
+- ไม่ต้องลบ orders เก่า — แค่ track ว่า index เริ่มต้นที่ไหน
+
+**Option B: Unique marker**
+- ใส่ timestamp หรือ test ID ใน items: `{ productId: 1, quantity: 1, testId: Date.now() }`
+- Filter เฉพาะ orders ที่มี testId ของ test นี้
+
+**Option C: Accept test pollution** (สำหรับ orders-as-append-only)
+- ยอมรับว่า orders สะสมข้ามบน test
+- ใช้ relative assertions ("เพิ่มขึ้น N") แทน absolute count
+- Document behavior ใน test comment
+
+</details>
