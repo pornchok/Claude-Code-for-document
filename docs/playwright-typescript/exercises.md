@@ -2369,3 +2369,365 @@ test('detects double-insert bug in order creation', async ({ request }) => {
 - Document behavior ใน test comment
 
 </details>
+
+---
+
+### Ch17 Expert: CI/CD + DB State Management
+
+**Context:** GitHub Actions pipeline รัน 300 tests ด้วย 4 shards parallel บน shared demo app instance เดียวกัน (`localhost:3000`) tests ที่ verify DB state fail ~30% บน CI
+
+```yaml
+# .github/workflows/playwright.yml (ปัจจุบัน)
+jobs:
+  test:
+    strategy:
+      matrix:
+        shard: [1, 2, 3, 4]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - name: Start demo app
+        run: cd docs/playwright-typescript/playwright-course-app && npm ci && npm start &
+      - name: Wait for app
+        run: npx wait-on http://localhost:3000
+      - run: npx playwright test --shard=${{ matrix.shard }}/4
+        env:
+          CI: true
+```
+
+**คำถาม:**
+
+1. **Root Cause:** อธิบายว่าทำไม 4 shards ที่ชี้ไป app instance เดียวกันถึงทำให้ DB tests fail — ยกตัวอย่าง scenario จริงที่ shard 1 และ shard 3 อาจ interfere กันใน DB เดียวกัน
+
+2. **Solution Design:** เลือก approach ที่ดีที่สุดระหว่าง:
+   - **A:** แต่ละ shard start demo app บน port ต่างกัน (3001, 3002, 3003, 3004)
+   - **B:** ใช้ unique data prefix ต่อ shard (เหมือน Ch19 L5)
+   - **C:** Sequential shards สำหรับ DB-sensitive tests + parallel สำหรับ tests อื่น
+   
+   เขียน complete GitHub Actions workflow yaml สำหรับ approach ที่เลือก
+
+3. **Trade-off + Cleanup:** เปรียบเทียบ approach A vs B:
+   - Setup complexity
+   - CI cost (runner minutes)
+   - Maintenance overhead
+   
+   และออกแบบ cleanup step ใน workflow ที่ทำงานเสมอ (even on failure) เพื่อ reset app state หลังแต่ละ shard
+
+<details>
+<summary>เฉลย</summary>
+
+**1. Root Cause:**
+
+4 shards ทำงานบน DB (`db.json`) เดียวกันผ่าน server เดียวกัน — ทำให้เกิด concurrent writes/reads ที่ไม่ synchronize:
+
+Timeline scenario:
+```
+Shard 1: POST /api/reset     → db.todos = []
+Shard 3: POST /api/todos (X) → db.todos = [X]   ← เขียนก่อน shard 1 เริ่ม test จริง
+Shard 1: POST /api/todos (A) → db.todos = [X, A]  ← ปนกัน!
+Shard 1: GET /api/todos      → ได้ [X, A] แต่ expect [A]
+Shard 1: expect(todos).toHaveLength(1) → FAIL
+```
+
+บน local (single worker) ไม่มี concurrent requests → ไม่มี race condition → tests pass
+
+**2. Approach A — Multiple App Instances:**
+
+```yaml
+name: Playwright Tests
+on: [push]
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - shard: 1
+            port: 3001
+          - shard: 2
+            port: 3002
+          - shard: 3
+            port: 3003
+          - shard: 4
+            port: 3004
+    
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - run: npm ci
+      
+      - name: Install demo app dependencies
+        run: cd docs/playwright-typescript/playwright-course-app && npm ci
+      
+      - name: Start demo app on port ${{ matrix.port }}
+        run: PORT=${{ matrix.port }} cd docs/playwright-typescript/playwright-course-app && node server.js &
+        # หมายเหตุ: server.js ต้องรองรับ PORT env variable
+      
+      - name: Wait for app on port ${{ matrix.port }}
+        run: npx wait-on http://localhost:${{ matrix.port }}
+      
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      
+      - name: Run tests (Shard ${{ matrix.shard }}/4)
+        run: npx playwright test --shard=${{ matrix.shard }}/4 --reporter=blob
+        env:
+          CI: true
+          BASE_URL: http://localhost:${{ matrix.port }}
+      
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blob-report-${{ matrix.shard }}
+          path: blob-report/
+          retention-days: 1
+  
+  merge-reports:
+    if: always()
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          path: all-blobs
+          pattern: blob-report-*
+          merge-multiple: true
+      - run: npx playwright merge-reports --reporter html ./all-blobs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: html-report
+          path: playwright-report/
+          retention-days: 30
+```
+
+**3. Trade-off A vs B:**
+
+| ประเด็น | A: Multiple Instances | B: Unique Prefix |
+|---------|----------------------|-----------------|
+| Setup complexity | ⚠️ Server ต้องรองรับ `PORT` env var + wait-on ต่อ port | ✅ แค่เพิ่ม fixture ใน test code |
+| CI cost | ❌ npm ci + server startup ต่อ shard (~2 นาทีเพิ่ม) | ✅ ไม่มี overhead |
+| Isolation | ✅ 100% isolated — DB แยกต่อ instance | ⚠️ Tests ต้อง filter data ด้วย prefix — global counts ยังปน |
+| Maintenance | ⚠️ server.js ต้องไม่ hardcode port | ✅ ไม่ต้องแก้ infrastructure |
+| เหมาะกับ | Tests ที่ต้องการ global state isolation | Tests ที่ filter data ได้และไม่ใช้ global counts |
+
+**Cleanup step ที่รันเสมอ:**
+```yaml
+- name: Reset app state
+  if: always()  # รันแม้ tests fail
+  run: |
+    curl -s -X POST http://localhost:${{ matrix.port }}/api/reset || true
+    # || true เพื่อไม่ให้ fail ถ้า app ไม่ตอบสนอง
+```
+
+</details>
+
+---
+
+### Ch18 Expert: Production DB Verification Architecture
+
+**Context:** บริษัทมี test suite ที่เติบโตจาก 50 เป็น 350 tests ใน 6 เดือน ทีม QA 3 คน CI รัน 4 workers ผลลัพธ์: tests fail บน CI ~20% โดยไม่มี pattern ชัดเจน
+
+จากการวิเคราะห์เบื้องต้นพบว่า:
+- 80 tests มี `beforeEach` reset
+- 270 tests ไม่มี cleanup ใดๆ
+- 40 tests verify todo count ใน admin stats
+- 60 tests verify order records โดยตรง
+
+ตัวอย่าง tests ที่ problematic:
+
+```typescript
+// todos.spec.ts — มี beforeEach reset
+test.beforeEach(async ({ request }) => {
+  await request.post('http://localhost:3000/api/reset');
+});
+
+test('todo count is correct', async ({ request }) => {
+  await request.post('http://localhost:3000/api/todos', { data: { text: 'A' } });
+  await request.post('http://localhost:3000/api/todos', { data: { text: 'B' } });
+  
+  const loginRes = await request.post('http://localhost:3000/api/auth/login', {
+    data: { username: 'admin', password: 'admin123' }
+  });
+  const { token } = await loginRes.json();
+  
+  const stats = await (await request.get('http://localhost:3000/api/admin', {
+    headers: { Authorization: `Bearer ${token}` }
+  })).json();
+  
+  expect(stats.stats.todos).toBe(2);  // fail ~20%
+});
+
+// orders.spec.ts — ไม่มี cleanup
+test('order creation works', async ({ request }) => {
+  const loginRes = await request.post('http://localhost:3000/api/auth/login', {
+    data: { username: 'testuser', password: 'test123' }
+  });
+  const { token } = await loginRes.json();
+  
+  const res = await request.post('http://localhost:3000/api/orders', {
+    headers: { Authorization: `Bearer ${token}` },
+    data: { items: [{ productId: 1, quantity: 1 }] }
+  });
+  expect(res.status()).toBe(201);
+  // ไม่มี DB verification เลย
+});
+```
+
+**คำถาม:**
+
+1. **Full Root Cause Analysis:** Categorize ปัญหาทั้งหมดใน codebase นี้เป็น 3 หมวด:
+   - Race conditions
+   - State contamination  
+   - Missing verification
+   
+   สำหรับแต่ละหมวดระบุ test ที่เป็นตัวอย่างและอธิบาย mechanism
+
+2. **Production Fix Strategy:** ออกแบบ strategy ที่ fix ปัญหา โดย:
+   - ทีม 3 คน implement ได้ใน 1 sprint (2 สัปดาห์)
+   - ไม่ต้อง rewrite 350 tests
+   - ลด flakiness อย่างน้อย 80%
+   
+   ระบุ: อะไรทำก่อน, อะไรทำหลัง, อะไรไม่ต้องทำ
+
+3. **Shared Fixture Library:** เขียน `tests/db-fixtures.ts` ที่มี:
+   - `cleanDb` fixture — reset ก่อน/หลัง test
+   - `dbSnapshot` fixture — อ่าน DB state ปัจจุบัน
+   - `verifyTodoCount` helper function — type-safe assertion สำหรับ todo count
+   
+   ทีมสามารถ import และใช้ได้ทันทีโดยไม่ต้อง modify test logic เดิม
+
+<details>
+<summary>เฉลย</summary>
+
+**1. Root Cause Analysis:**
+
+**Race Conditions:**
+- `todos.spec.ts` — `beforeEach` reset ทำงาน แต่ workers อื่นกำลัง create todos ระหว่างที่ worker นี้กำลัง reset → หลัง reset อาจมี todos จาก worker อื่นอยู่แล้ว
+- Timeline: W1 reset → W2 inserts → W1 creates 2 todos → W1 GET stats → count = 3 (ไม่ใช่ 2)
+
+**State Contamination:**
+- `orders.spec.ts` ไม่มี cleanup → orders สะสมข้าม test runs
+- 270 tests ที่ไม่มี cleanup ทำให้ DB โตขึ้นเรื่อยๆ — tests ที่ verify count ต้องการ predictable state แต่ไม่มี
+- 60 tests ที่ verify order records อาจเจอ orders เก่าจาก test อื่น
+
+**Missing Verification:**
+- `orders.spec.ts` ตรวจแค่ API response (201) ไม่ verify ว่า DB มี record จริง
+- ไม่มีใคร catch double-insert หรือ silent fail ใน DB write
+
+**2. Production Fix Strategy:**
+
+**สัปดาห์ 1 (ลด flakiness ทันที):**
+1. สร้าง `db-fixtures.ts` พร้อม `cleanDb` fixture
+2. Import และใช้ `cleanDb` ใน 80 tests ที่มี `beforeEach` reset อยู่แล้ว (เปลี่ยนจาก manual reset เป็น fixture)
+3. เพิ่ม `cleanDb` ให้ 40 tests ที่ verify todo count (เหล่านี้ fail บ่อยที่สุด)
+4. ผลที่คาดหวัง: ลด flakiness จาก 20% เหลือ ~5%
+
+**สัปดาห์ 2 (เพิ่ม DB verification):**
+1. เพิ่ม DB verify ให้ 60 tests ที่ verify orders (ใช้ direct file read)
+2. ทำ `verifyTodoCount` helper สำหรับ 40 stats tests
+3. Document pattern ใน team wiki
+
+**ไม่ต้องทำ:**
+- Rewrite 270 tests ที่ไม่ใช่ count tests (ถ้าไม่ verify count ก็ไม่ affected)
+- เพิ่ม cleanup ให้ทุก test (เน้นแค่ tests ที่ verify state-sensitive data)
+
+**3. Shared Fixture Library:**
+
+```typescript
+// tests/db-fixtures.ts
+// tested: Playwright v1.50+, Node.js 20+
+import { test as base, expect } from '@playwright/test';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
+// Types
+interface DbState {
+  todos: Array<{ id: number; text: string; completed: boolean; createdAt: string }>;
+  orders: Array<{ orderId: string; status: string; items: any[]; createdAt: string }>;
+  products: Array<{ id: number; name: string; price: number; category: string }>;
+  users: Array<{ id: number; username: string; role: string }>;
+}
+
+// Helper
+export function readDb(): DbState {
+  return JSON.parse(readFileSync(
+    resolve('docs/playwright-typescript/playwright-course-app/data/db.json'),
+    'utf-8'
+  ));
+}
+
+// Fixture type
+type DbFixtures = {
+  cleanDb: void;
+  dbSnapshot: DbState;
+};
+
+// Extended test
+export const test = base.extend<DbFixtures>({
+  // cleanDb: reset before + guaranteed reset after
+  cleanDb: async ({ request }, use) => {
+    await request.post('http://localhost:3000/api/reset');
+    await use();
+    await request.post('http://localhost:3000/api/reset');
+  },
+
+  // dbSnapshot: อ่าน DB state ตอน test เริ่ม
+  dbSnapshot: async ({}, use) => {
+    await use(readDb());
+  },
+});
+
+// Helper: type-safe todo count assertion
+export async function verifyTodoCount(
+  request: { get: (url: string) => Promise<{ json: () => Promise<any> }> },
+  adminToken: string,
+  expectedCount: number
+): Promise<void> {
+  const statsRes = await request.get('http://localhost:3000/api/admin');
+  // Note: ต้องส่ง token แยก เพราะ helper ไม่รู้เรื่อง fixture context
+  expect((await statsRes.json()).stats.todos).toBe(expectedCount);
+}
+```
+
+**Usage ใน existing tests:**
+```typescript
+// todos.spec.ts — เปลี่ยนน้อยมาก
+import { test } from './db-fixtures';  // เปลี่ยนแค่ import
+import { expect } from '@playwright/test';
+
+// ลบ beforeEach reset เดิม แล้วเพิ่ม cleanDb parameter
+test('todo count is correct', async ({ request, cleanDb }) => {
+  await request.post('http://localhost:3000/api/todos', { data: { text: 'A' } });
+  await request.post('http://localhost:3000/api/todos', { data: { text: 'B' } });
+  
+  const { token } = await (await request.post('http://localhost:3000/api/auth/login', {
+    data: { username: 'admin', password: 'admin123' }
+  })).json();
+  
+  const { stats } = await (await request.get('http://localhost:3000/api/admin', {
+    headers: { Authorization: `Bearer ${token}` }
+  })).json();
+  
+  expect(stats.todos).toBe(2);  // ✅ reliable แล้ว
+});
+```
+
+การ migrate แต่ละ test file ใช้เวลา 5-10 นาที — ทีม 3 คน รัน parallel migration ได้ ~30 files ต่อวัน
+
+</details>
+
+---
+
+*แบบฝึกหัดหลัก: 18 บท × 3 ระดับ = 54 exercises*  
+*Ch19: 5 levels (L1–L5) สำหรับ Database State Verification*  
+*Expert Level (L5) เพิ่มเติม: Ch13, Ch15, Ch17, Ch18*
