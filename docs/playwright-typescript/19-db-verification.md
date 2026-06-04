@@ -617,25 +617,25 @@ test('add todo', async ({ page, request }) => {
 
 ### Mistake 2: ไม่รอ UI confirm ก่อน verify DB
 
-❌ **ผิด:** Verify DB ทันทีหลัง click โดยไม่รอ UI — อาจ query DB ก่อน server เขียนเสร็จ ทำให้ test flaky
+❌ **ผิด:** Verify DB ทันทีหลัง click โดยไม่รอ UI — `.click()` ใน Playwright ไม่รอ network request ที่ถูก trigger โดย event handler ทำให้ POST อาจยังไม่เสร็จเลยตอนที่ query DB
 
 ```typescript
-// ❌ ผิด — race condition: DB อาจยังไม่มีข้อมูลตอนที่ query
+// ❌ ผิด — race condition: หลัง .click(), POST /api/todos อาจยังไม่ถูกส่งหรือยังไม่ได้รับ response
 test('add todo', async ({ page, request }) => {
   await page.getByTestId('btn-add-todo').click();
-  // Query DB ทันทีโดยไม่รอ UI — server อาจยังประมวลผลอยู่
+  // Query DB ทันที — แต่ POST request อาจยังไม่เสร็จ
   const todos = await request.get('http://localhost:3000/api/todos').then(r => r.json());
   expect(todos).toContainEqual(expect.objectContaining({ text: 'My task' }));
 });
 ```
 
-✅ **ถูก:** รอ UI confirm ก่อนเสมอ — UI confirm หมายความว่า server response กลับมาแล้ว ซึ่งหมายความว่า server น่าจะเขียน DB เสร็จแล้ว
+✅ **ถูก:** รอ UI confirm ก่อนเสมอ — เมื่อ UI อัปเดต หมายความว่า server response กลับมาแล้ว สำหรับ server ที่ใช้ synchronous DB write (เช่น `writeFileSync`) นี่การันตีว่า DB เขียนเสร็จแน่นอน
 
 ```typescript
 // ✅ ถูก
 test('add todo', async ({ page, request }) => {
   await page.getByTestId('btn-add-todo').click();
-  // รอ UI confirm ก่อน — server response กลับมาแล้ว แปลว่า DB ควรมีข้อมูลแล้ว
+  // รอ UI confirm — server response กลับมาแล้ว DB เขียนเสร็จแน่นอน (writeFileSync)
   await expect(page.getByTestId('todo-list')).toContainText('My task');
   // ค่อย verify DB หลังจากนั้น
   const todos = await request.get('http://localhost:3000/api/todos').then(r => r.json());
