@@ -25,7 +25,7 @@
 - ทำ cross-layer verification ครบทั้ง 3 ชั้น (UI → API → DB → UI re-render) ในชุดทดสอบเดียว
 - ใช้ `expect.poll()` สำหรับ async DB writes ที่ไม่เสร็จทันทีหลัง HTTP response
 - ทำ negative verification — ยืนยันว่าข้อมูลถูก delete ออกจาก DB จริง ไม่ใช่แค่หายจาก UI
-- จัดการ DB isolation เพื่อป้องกัน test contamination ข้ามบท และ reset state ก่อนแต่ละ test
+- จัดการ DB isolation เพื่อป้องกัน test contamination ข้าม test และ reset state ก่อนแต่ละ test
 
 ---
 
