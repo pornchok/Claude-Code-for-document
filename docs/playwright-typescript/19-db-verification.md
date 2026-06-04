@@ -337,3 +337,230 @@ pattern นี้ถือเป็น best practice สำหรับ integrat
 จุดแตกต่างสำคัญที่สุดคือ Playwright รวม browser automation และ API testing ไว้ใน framework เดียว — ไม่ต้อง context switch ระหว่าง library, ไม่ต้อง manage library version แยก, และ `page` กับ `request` ใช้ base URL และ authentication context ร่วมกันได้ใน test เดียวกัน
 
 ---
+
+## 5. ตัวอย่าง
+
+### Beginner
+
+**กำลังทดสอบอะไร:** เมื่อสร้าง todo ผ่าน UI ทุก field ใน DB บันทึกถูกต้อง — ไม่ใช่แค่ record มีอยู่ แต่ตรวจว่า `text` ไม่ถูก trim ผิด, `completed` เริ่มต้นเป็น `false`, `id` และ `createdAt` ถูก generate ครบ
+
+**ทำไม:** Bug แบบ "ข้อมูลมีอยู่แต่ค่าผิด" พบบ่อยกว่า "ข้อมูลหายไปเลย" — ถ้า test ตรวจแค่ว่า record exist แต่ไม่ตรวจ field values จะจับ bug นี้ไม่ได้เลย
+
+```typescript
+// tested: Playwright v1.50+, Node.js 20+
+import { test, expect } from '@playwright/test';
+
+test.beforeEach(async ({ request }) => {
+  await request.post('http://localhost:3000/api/reset');
+});
+
+test('todo fields are saved correctly in database', async ({ page, request }) => {
+  await page.goto('http://localhost:3000/todos');
+  await page.getByTestId('input-new-todo').fill('Read Playwright docs');
+  await page.getByTestId('btn-add-todo').click();
+
+  // รอ UI confirm ก่อน — ป้องกัน race condition ที่ test วิ่งเร็วกว่า backend เขียน
+  await expect(page.getByTestId('todo-list')).toContainText('Read Playwright docs');
+
+  // API Read-back: verify ทุก field ไม่ใช่แค่ exist
+  const res = await request.get('http://localhost:3000/api/todos');
+  const todos = await res.json();
+
+  expect(todos).toHaveLength(1);
+  expect(todos[0]).toMatchObject({
+    text: 'Read Playwright docs',
+    completed: false,
+  });
+  // id และ createdAt ต้อง generate มา — ถ้าไม่มีแสดงว่า schema ผิด
+  expect(todos[0].id).toBeDefined();
+  expect(todos[0].createdAt).toBeDefined();
+  // verify createdAt เป็น valid ISO 8601 format — ถ้า format ผิด new Date() จะ return NaN
+  expect(new Date(todos[0].createdAt).toISOString()).toBe(todos[0].createdAt);
+});
+```
+
+**สิ่งที่น่าสังเกต:**
+
+1. `beforeEach` reset ด้วย `POST /api/reset` ทำให้ `toHaveLength(1)` assert ได้แน่นอน — ถ้าไม่ reset, test นี้จะ fail ครั้งที่สองเพราะมี record เก่าค้างอยู่
+2. `toMatchObject` ตรวจแค่ field ที่ระบุ — `id` และ `createdAt` เป็น dynamic จึงตรวจแยกด้วย `toBeDefined()` และ ISO format check
+3. การรอ UI confirm ก่อน read API ไม่ใช่แค่ UX pattern — มันเป็น synchronization barrier ที่ให้เวลา backend เขียน DB เสร็จก่อนที่ test จะ query
+
+---
+
+### Intermediate
+
+**กำลังทดสอบอะไร:** เมื่อ user mark todo ว่า "complete" ใน UI — DB state ของ todo นั้นต้องเปลี่ยน, UI re-render ต้องสะท้อนความเปลี่ยนแปลง, **และ todo อื่นใน DB ต้องไม่โดนกระทบ** (negative check)
+
+**ทำไม:** Bug "side effect" ที่ action หนึ่ง unintentionally แก้ record อื่นพร้อมกันพบได้เมื่อ update query ขาด WHERE clause — test ที่ตรวจแค่ target record จะจับ bug นี้ไม่ได้
+
+```typescript
+// tested: Playwright v1.50+, Node.js 20+
+import { test, expect } from '@playwright/test';
+
+test.beforeEach(async ({ request }) => {
+  await request.post('http://localhost:3000/api/reset');
+});
+
+test('completing one todo updates DB without affecting others', async ({ page, request }) => {
+  // Setup ผ่าน API: สร้าง 2 todos (เร็วกว่า UI 2 รอบ และ isolate ชัดเจนกว่า)
+  const res1 = await request.post('http://localhost:3000/api/todos', {
+    data: { text: 'Study TypeScript generics' }
+  });
+  const todo1 = await res1.json();
+
+  const res2 = await request.post('http://localhost:3000/api/todos', {
+    data: { text: 'Write unit tests' }
+  });
+  const todo2 = await res2.json();
+
+  // Layer 1: UI action — complete todo1 เท่านั้น
+  await page.goto('http://localhost:3000/todos');
+  await page.getByTestId(`todo-item-${todo1.id}`).locator('input[type="checkbox"]').check();
+
+  // Layer 2: API verify — ตรวจ DB state ของทั้งสอง record
+  const todosRes = await request.get('http://localhost:3000/api/todos');
+  const todos = await todosRes.json();
+
+  const updated1 = todos.find((t: { id: number }) => t.id === todo1.id);
+  const updated2 = todos.find((t: { id: number }) => t.id === todo2.id);
+
+  // Positive check: todo1 ต้อง complete
+  expect(updated1?.completed).toBe(true);
+  // Negative check: todo2 ต้องไม่โดนกระทบ
+  expect(updated2?.completed).toBe(false);
+
+  // Layer 3: UI re-render — สะท้อน DB state
+  await expect(page.getByTestId(`todo-item-${todo1.id}`)).toHaveClass(/completed/);
+  await expect(page.getByTestId(`todo-item-${todo2.id}`)).not.toHaveClass(/completed/);
+});
+```
+
+**สิ่งที่น่าสังเกต:**
+
+1. Setup ผ่าน API แทน UI ทั้งสองครั้ง — ทำให้ setup เร็วขึ้นและ test โฟกัสที่ verify behavior ไม่ใช่ setup behavior
+2. Negative check (`updated2?.completed === false`) มีค่าเท่ากับ positive check — ถ้า backend มี bug ที่ mark todos ทั้งหมดพร้อมกัน positive check จะผ่านแต่ negative check จะ catch ได้
+3. Layer 3 ใช้ `toHaveClass(/completed/)` เป็น regex — ตรวจว่ามี class ที่มีคำว่า "completed" อยู่ ไม่ใช่ exact match ซึ่ง robust กว่าเพราะ element อาจมีหลาย class พร้อมกัน
+
+---
+
+### Advanced
+
+**กำลังทดสอบอะไร:** สร้าง reusable test fixture สำหรับ order verification ที่ต้องอ่าน db.json โดยตรง (เพราะไม่มี `GET /api/orders`) พร้อม TypeScript type definitions ที่ครบ และ automatic cleanup ทั้งก่อนและหลัง test
+
+**ทำไม:** Test ที่ต้องการ authentication token + direct file read + cleanup ทุกครั้ง ถ้าไม่ abstract เป็น fixture จะมี boilerplate ซ้ำกันทุก test ทำให้ maintain ยากและ error-prone
+
+```typescript
+// tested: Playwright v1.50+, Node.js 20+
+import { test as base, expect } from '@playwright/test';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
+// --- Type Definitions ---
+
+interface OrderItem {
+  productId: number;
+  quantity: number;
+}
+
+interface Order {
+  orderId: string;
+  status: string;
+  items: OrderItem[];
+  createdAt: string;
+}
+
+interface DbSnapshot {
+  users: Array<{ id: number; username: string; role: string }>;
+  products: Array<{ id: number; name: string; price: number; category: string }>;
+  todos: Array<{ id: number; text: string; completed: boolean; createdAt: string }>;
+  orders: Order[];
+}
+
+// --- Helper: อ่าน DB snapshot โดยตรงจากไฟล์ ---
+// ใช้ sync read ได้เพราะ server.js ใช้ writeFileSync — HTTP response กลับมาแล้ว file เขียนเสร็จแน่นอน
+function readDb(): DbSnapshot {
+  const dbPath = resolve(
+    'docs/playwright-typescript/playwright-course-app/data/db.json'
+  );
+  return JSON.parse(readFileSync(dbPath, 'utf-8'));
+}
+
+// --- Custom Fixtures ---
+
+type OrderFixtures = {
+  adminToken: string;
+  cleanOrders: void;
+};
+
+const test = base.extend<OrderFixtures>({
+  // fixture: login อัตโนมัติ ทุก test ที่ใช้ adminToken จะได้ token พร้อมใช้ทันที
+  adminToken: async ({ request }, use) => {
+    const loginRes = await request.post('http://localhost:3000/api/auth/login', {
+      data: { username: 'admin', password: 'admin123' }
+    });
+    expect(loginRes.status()).toBe(200);
+    const { token } = await loginRes.json();
+    await use(token);
+    // ไม่มี teardown สำหรับ token — JWT stateless ไม่ต้อง revoke
+  },
+
+  // fixture: reset DB ก่อนและหลัง test เสมอ แม้ test จะ fail
+  cleanOrders: [async ({ request }, use) => {
+    await request.post('http://localhost:3000/api/reset');
+    await use();
+    // Teardown รันเสมอแม้ test throw error — ป้องกัน test pollution
+    await request.post('http://localhost:3000/api/reset');
+  }, { auto: false }],
+});
+
+// --- Test ---
+
+test('order created via API is persisted correctly in db.json', async ({
+  request,
+  adminToken,
+  cleanOrders, // eslint-disable-line @typescript-eslint/no-unused-vars
+}) => {
+  // Snapshot ก่อน: บันทึก order count เป็น baseline
+  const beforeDb = readDb();
+  const orderCountBefore = beforeDb.orders.length;
+
+  // สร้าง order ผ่าน API ที่ต้องการ authentication
+  const orderRes = await request.post('http://localhost:3000/api/orders', {
+    headers: { Authorization: `Bearer ${adminToken}` },
+    data: { items: [{ productId: 2, quantity: 3 }] }
+  });
+  expect(orderRes.status()).toBe(201);
+  const { orderId } = await orderRes.json();
+
+  // Direct file read: verify order ถูก persist ลง db.json
+  const afterDb = readDb();
+  expect(afterDb.orders).toHaveLength(orderCountBefore + 1);
+
+  const savedOrder = afterDb.orders.find(o => o.orderId === orderId);
+  expect(savedOrder).toBeDefined();
+  expect(savedOrder).toMatchObject({
+    orderId,
+    status: 'confirmed',
+    items: [{ productId: 2, quantity: 3 }],
+  });
+  // createdAt ต้องเป็น valid ISO 8601
+  expect(savedOrder?.createdAt).toBeDefined();
+  expect(new Date(savedOrder!.createdAt).toISOString()).toBe(savedOrder!.createdAt);
+
+  // Cross-verify ผ่าน Admin Stats API — orders count ต้องเพิ่มด้วย
+  const statsRes = await request.get('http://localhost:3000/api/admin', {
+    headers: { Authorization: `Bearer ${adminToken}` }
+  });
+  expect(statsRes.status()).toBe(200);
+  const { stats } = await statsRes.json();
+  expect(stats.orders).toBe(orderCountBefore + 1);
+});
+```
+
+**สิ่งที่น่าสังเกต:**
+
+1. **Snapshot pattern** (`orderCountBefore`) แทนที่จะ hardcode expect length เป็น 1 — ทำให้ test ทำงานถูกต้องแม้มี order เก่าค้างอยู่ใน DB จาก test run ก่อนหน้า (defensive against state leakage)
+2. **Cross-verify สองชั้น** ในท้ายแบบเดียวกัน: direct file read verify ว่า record มีอยู่ใน storage จริง + Admin Stats API verify ว่า aggregate count ถูกต้อง — สองแหล่งข้อมูลอิสระที่ต้องตรงกัน
+3. **`{ auto: false }`** บน `cleanOrders` fixture หมายความว่า fixture นี้รันเฉพาะเมื่อ test ประกาศใช้ชัดเจน ไม่รัน auto ทุก test — ป้องกัน reset ที่ไม่ตั้งใจสำหรับ test อื่นใน suite เดียวกัน
+
+---
