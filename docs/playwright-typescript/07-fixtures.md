@@ -351,8 +351,8 @@ test('built-in request fixture — สร้าง todo ผ่าน API', async
 test('built-in page fixture — navigate และ verify', async ({ page }) => {
   await page.goto('http://localhost:3000');
 
-  // session badge ควรไม่แสดงเมื่อยังไม่ login
-  await expect(page.getByTestId('session-badge')).not.toBeVisible();
+  // session badge แสดง "Not logged in" เมื่อยังไม่ login
+  await expect(page.getByTestId('session-badge')).toContainText('Not logged in');
 
   // title ควรถูกต้อง
   await expect(page).toHaveTitle(/Playwright Course App/);

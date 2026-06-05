@@ -80,7 +80,7 @@ Playwright มี visual regression testing built-in ผ่าน `toHaveScreens
 await expect(page).toHaveScreenshot('dashboard.png');
 
 // Element เฉพาะส่วน
-await expect(page.locator('.product-card')).toHaveScreenshot('product-card.png');
+await expect(page.locator('[data-testid^="product-card-"]').first()).toHaveScreenshot('product-card.png');
 ```
 
 ครั้งแรกที่รัน Playwright จะสร้าง baseline screenshot ไว้ใน folder ชื่อ `[testfile]-snapshots/` การรันครั้งถัดไปจะเปรียบเทียบกับ baseline นั้น ถ้า pixel ต่างกันเกิน threshold ที่กำหนด test จะ fail พร้อม diff image ให้ดู
@@ -368,10 +368,10 @@ test.describe('Visual + Aria: Homepage', () => {
     await page.goto('http://localhost:3000/shop');
 
     // รอให้ products โหลดก่อน
-    await page.waitForSelector('[data-testid="product-card"]');
+    await page.waitForSelector('[data-testid^="product-card-"]');
 
     // screenshot เฉพาะ product card แรก
-    const firstCard = page.locator('[data-testid="product-card"]').first();
+    const firstCard = page.locator('[data-testid^="product-card-"]').first();
     await expect(firstCard).toHaveScreenshot('product-card.png', {
       animations: 'disabled',
     });
@@ -414,7 +414,7 @@ test.describe('Dark Mode Visual + Form Accessibility', () => {
     await page.goto('http://localhost:3000/shop');
 
     // รอ products load
-    await page.waitForSelector('[data-testid="product-card"]');
+    await page.waitForSelector('[data-testid^="product-card-"]');
 
     await expect(page).toHaveScreenshot('shop-dark.png', {
       animations: 'disabled',
@@ -425,7 +425,7 @@ test.describe('Dark Mode Visual + Form Accessibility', () => {
   test('shop page matches snapshot in light mode', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'light' });
     await page.goto('http://localhost:3000/shop');
-    await page.waitForSelector('[data-testid="product-card"]');
+    await page.waitForSelector('[data-testid^="product-card-"]');
 
     await expect(page).toHaveScreenshot('shop-light.png', {
       animations: 'disabled',
@@ -499,7 +499,7 @@ test.describe('Accessibility Audit: Full Coverage', () => {
 
   test('shop page: scan with known violations excluded, aria verify product list', async ({ page }) => {
     await page.goto('http://localhost:3000/shop');
-    await page.waitForSelector('[data-testid="product-card"]');
+    await page.waitForSelector('[data-testid^="product-card-"]');
 
     // ─── Accessibility scan ───
     const results = await new AxeBuilder({ page })
@@ -514,7 +514,7 @@ test.describe('Accessibility Audit: Full Coverage', () => {
 
     // ─── Aria snapshot: ตรวจโครงสร้าง product list ───
     // ใช้ first() เพื่อ snapshot แค่ card แรก ไม่ขึ้นกับจำนวน products
-    const firstCard = page.locator('[data-testid="product-card"]').first();
+    const firstCard = page.locator('[data-testid^="product-card-"]').first();
     await expect(firstCard).toMatchAriaSnapshot(`
       - article:
         - img "Product image"
@@ -545,7 +545,7 @@ test.describe('Accessibility Audit: Full Coverage', () => {
 
     // ─── Verify ผ่าน Aria snapshot ───
     await page.goto('http://localhost:3000/todos');
-    await page.waitForSelector('[data-testid="todo-item"]');
+    await page.waitForSelector('[data-testid^="todo-item-"]');
 
     // verify todo list structure — completed item ควรมี checked state
     await expect(page.locator('[data-testid="todo-list"]')).toMatchAriaSnapshot(`
@@ -558,7 +558,7 @@ test.describe('Accessibility Audit: Full Coverage', () => {
 
     // ─── Visual snapshot: ตรวจ visual state ของ completed todo ───
     // completed todo ควรมี strikethrough style
-    const completedItem = page.locator('[data-testid="todo-item"]').first();
+    const completedItem = page.locator('[data-testid^="todo-item-"]').first();
     await expect(completedItem).toHaveScreenshot('todo-completed.png', {
       animations: 'disabled',
     });
@@ -574,11 +574,11 @@ test.describe('Accessibility Audit: Full Coverage', () => {
 
   test('compare: visual diff catches style regression that functional test misses', async ({ page }) => {
     await page.goto('http://localhost:3000/shop');
-    await page.waitForSelector('[data-testid="add-to-cart-btn"]');
+    await page.waitForSelector('[data-testid^="btn-add-cart-"]');
 
     // ─── Visual snapshot: จับการเปลี่ยนแปลงสี/style ───
-    const addBtn = page.locator('[data-testid="add-to-cart-btn"]').first();
-    await expect(addBtn).toHaveScreenshot('add-to-cart-btn.png', {
+    const addBtn = page.locator('[data-testid^="btn-add-cart-"]').first();
+    await expect(addBtn).toHaveScreenshot('btn-add-cart.png', {
       animations: 'disabled',
       maxDiffPixels: 10,  // strict มากขึ้นสำหรับ critical UI element
     });
@@ -728,7 +728,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 **คำถาม 1**: เพิ่ม `toHaveScreenshot()` เพื่อตรวจ visual regression — screenshot จะ fail เพราะ pixel สีต่างกัน เพราะ functional test ตรวจแค่ behavior ไม่ใช่ visual appearance ส่วนถ้า baseline สร้างบน macOS (`-darwin.png`) แต่ CI รันบน Linux (`-linux.png`) test จะ fail ทันทีเพราะ font rendering ต่างกัน — ต้องสร้าง baseline บน environment เดียวกับ CI หรือใช้ Docker image `mcr.microsoft.com/playwright:v1.50.0-jammy`
 
-**คำถาม 2**: ใช้ทั้งสอง approach: (1) `toMatchAriaSnapshot()` เพื่อตรวจว่า button มี accessible name — `await expect(page.locator('[data-testid="add-to-cart-btn"]')).toMatchAriaSnapshot('- button "Add to Cart"')` ถ้า name หาย snapshot จะ fail และ (2) `AxeBuilder` เพื่อ scan WCAG compliance รวมถึง `button-name` rule — `new AxeBuilder({ page }).include('[data-testid="product-card"]').analyze()` แล้ว `expect(results.violations).toEqual([])`
+**คำถาม 2**: ใช้ทั้งสอง approach: (1) `toMatchAriaSnapshot()` เพื่อตรวจว่า button มี accessible name — `await expect(page.locator('[data-testid^="btn-add-cart-"]').first()).toMatchAriaSnapshot('- button "Add to Cart"')` ถ้า name หาย snapshot จะ fail และ (2) `AxeBuilder` เพื่อ scan WCAG compliance รวมถึง `button-name` rule — `new AxeBuilder({ page }).include('[data-testid^="product-card-"]').analyze()` แล้ว `expect(results.violations).toEqual([])`
 
 **คำถาม 3**: (a) Platform dependency: `toHaveScreenshot()` ขึ้นกับ OS — snapshot ต่างกันระหว่าง macOS/Linux/Windows, `toMatchAriaSnapshot()` ไม่ขึ้นกับ OS เลย (b) สิ่งที่ตรวจ: screenshot ตรวจ visual pixels (สี, layout, font rendering), aria snapshot ตรวจ accessibility tree structure (roles, names, states) (c) ใช้ screenshot เมื่อ design/visual regression สำคัญ เช่น ตรวจว่า dark mode ถูกต้อง, ใช้ aria snapshot เมื่อต้องการ verify accessibility structure ที่ cross-platform เช่น ตรวจว่า navigation มี links ครบ หรือ form มี labels ถูกต้อง
 

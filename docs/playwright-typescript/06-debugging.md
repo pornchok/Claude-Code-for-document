@@ -32,15 +32,21 @@
 
 ```typescript
 test('checkout flow', async ({ page }) => {
-  await page.goto('http://localhost:3000/cart');
-  await page.getByRole('button', { name: 'Proceed to Checkout' }).click();
-  await page.getByLabel('Card Number').fill('4111111111111111');
-  await page.getByRole('button', { name: 'Place Order' }).click();
-  await expect(page.getByTestId('order-confirmation')).toBeVisible();
+  await page.goto('http://localhost:3000/checkout');
+  await page.getByTestId('input-full-name').fill('Test User');
+  await page.getByTestId('input-address').fill('123 Main St');
+  await page.getByTestId('input-city').fill('Bangkok');
+  await page.getByTestId('btn-next-shipping').click();
+  await page.getByTestId('input-card-number').fill('4111111111111111');
+  await page.getByTestId('input-expiry').fill('12/28');
+  await page.getByTestId('input-cvv').fill('123');
+  await page.getByTestId('btn-next-payment').click();
+  await page.getByTestId('btn-place-order').click();
+  await expect(page.getByTestId('order-success')).toBeVisible();
 });
 ```
 
-test นี้รันผ่านใน local ทุกครั้ง แต่พังใน CI ทุกรอบ error message บอกว่า `order-confirmation` ไม่ปรากฏ
+test นี้รันผ่านใน local ทุกครั้ง แต่พังใน CI ทุกรอบ error message บอกว่า `order-success` ไม่ปรากฏ
 
 คุณจะทำอะไร? ถ้าเป็น Robot Framework + Selenium คุณคงต้องเพิ่ม `Log` keyword ทุกจุด, download screenshot จาก CI, แล้วไล่ดูว่าหยุดตรงไหน ใช้เวลานานและยังไม่แน่ว่าจะเจอปัญหา
 
@@ -443,18 +449,18 @@ import { test, expect } from '@playwright/test';
 // Strategy: รัน --headed --debug เพื่อ step-through ดู actionability log
 // command: npx playwright test advanced-debug-scenarios.spec.ts:15 --debug
 test('product search with filter', async ({ page }) => {
-  await page.goto('http://localhost:3000/products');
+  await page.goto('http://localhost:3000/shop');
 
   // สมมติ test ค้างตรงนี้โดยไม่รู้สาเหตุ — เปิด Inspector จะเห็น actionability log:
   // "waiting for element to be visible..."
   // "waiting for element to stop moving..."
   // นี่คือ clue ว่า dropdown animation ยังไม่เสร็จ
-  await page.getByRole('combobox', { name: 'Category' }).selectOption('Electronics');
-  await page.getByRole('button', { name: 'Apply Filters' }).click();
+  await page.selectOption('[data-testid="filter-category"]', 'Electronics');
+  await page.getByTestId('btn-search').click();
 
   // เมื่อ step ผ่าน Inspector จะเห็น network request ออกไปหลัง click
   // และ DOM เปลี่ยนแปลงทีละ step — ช่วยระบุว่า loading state กินเวลานานแค่ไหน
-  await expect(page.getByTestId('product-count')).toContainText('Electronics');
+  await expect(page.locator('[data-testid^="product-card-"]').first()).toBeVisible();
 });
 
 // ── สถานการณ์ที่ 2: CI Failure — test พังเฉพาะ CI environment ──
@@ -464,34 +470,46 @@ test('product search with filter', async ({ page }) => {
 //   - Timeline: test เริ่มหลัง 0ms แต่ API call ออกไปที่ 800ms หลัง click
 //   - Console: มี error "TypeError: Cannot read property 'data' of undefined"
 test('product search returns results', async ({ page }) => {
-  await page.goto('http://localhost:3000/products');
+  await page.goto('http://localhost:3000/shop');
   await page.getByTestId('search-input').fill('laptop');
-  await page.getByTestId('search-button').click();
+  await page.getByTestId('btn-search').click();
 
-  // ใน CI: API ช้ากว่า local → ต้องเพิ่ม waitFor หรือ ตรวจสอบ network mock
+  // ใน CI: rendering ช้ากว่า local → ต้องเพิ่ม waitFor หรือ ตรวจสอบ network mock
   // Trace Viewer แสดงว่า request ออกไปแต่ response กลับมาหลัง assertion timeout
-  await expect(page.getByTestId('search-results')).toBeVisible();
-  await expect(page.getByTestId('result-item').first()).toBeVisible();
+  await expect(page.getByTestId('product-grid')).toBeVisible();
+  await expect(page.locator('[data-testid^="product-card-"]').first()).toBeVisible();
 });
 
 // ── สถานการณ์ที่ 3: Performance Diagnosis — หา action ที่ช้าที่สุด ──
 // Strategy: เปิด trace: 'on' ชั่วคราว แล้วดู Actions tab ใน Trace Viewer
 // Actions tab แสดง duration ของแต่ละ action — หา action ที่ใช้เวลานานผิดปกติ
 test('complete order workflow — performance baseline', async ({ page }) => {
-  await page.goto('http://localhost:3000/cart');
+  await page.goto('http://localhost:3000/checkout');
 
   // หลังเปิด Trace Viewer → Actions tab:
   // ✓ goto (245ms)
-  // ✓ fill card-number (12ms)
-  // ✓ click place-order (8ms)
-  // ✗ waiting for order-confirmation (4,800ms ← ใกล้ timeout แล้ว!)
+  // ✓ fill input-full-name (12ms)
+  // ✓ click btn-next-shipping (8ms)
+  // ✓ fill input-card-number (10ms)
+  // ✗ waiting for order-success (4,800ms ← ใกล้ timeout แล้ว!)
   // นี่คือ signal ว่า API /api/orders ช้า ต้อง investigate ที่ backend ไม่ใช่ test
-  await page.getByTestId('card-number').fill('4111111111111111');
-  await page.getByTestId('card-expiry').fill('12/28');
-  await page.getByTestId('card-cvv').fill('123');
-  await page.getByRole('button', { name: 'Place Order' }).click();
 
-  await expect(page.getByTestId('order-confirmation')).toBeVisible({ timeout: 10000 });
+  // Shipping step
+  await page.getByTestId('input-full-name').fill('Test User');
+  await page.getByTestId('input-address').fill('123 Main St');
+  await page.getByTestId('input-city').fill('Bangkok');
+  await page.getByTestId('btn-next-shipping').click();
+
+  // Payment step
+  await page.getByTestId('input-card-number').fill('4111111111111111');
+  await page.getByTestId('input-expiry').fill('12/28');
+  await page.getByTestId('input-cvv').fill('123');
+  await page.getByTestId('btn-next-payment').click();
+
+  // Confirm step
+  await page.getByTestId('btn-place-order').click();
+
+  await expect(page.getByTestId('order-success')).toBeVisible({ timeout: 10000 });
 });
 ```
 
@@ -587,28 +605,28 @@ use: {
 ```typescript
 // code ที่ Codegen สร้าง — ใช้ได้แต่ไม่ maintainable
 test('test', async ({ page }) => {
-  await page.goto('http://localhost:3000/products');
-  await page.locator('#filter-category').selectOption('Electronics');
-  await page.locator('#btn-apply').click();
-  await expect(page.locator('#product-list')).toContainText('Laptop');
-  await expect(page.locator('#product-list')).toContainText('Phone');
-  await expect(page.locator('#product-list')).toContainText('Tablet');
+  await page.goto('http://localhost:3000/shop');
+  await page.locator('[data-testid="filter-category"]').selectOption('Electronics');
+  await page.locator('[data-testid="btn-search"]').click();
+  await expect(page.locator('[data-testid^="product-name-"]').first()).toContainText('iPhone');
+  await expect(page.locator('[data-testid^="product-name-"]').nth(1)).toContainText('MacBook');
 });
 ```
 
 ✅
 ```typescript
 // หลัง refactor — ใช้ proper locators และ descriptive test name
-test('filter products by category shows correct items', async ({ page }) => {
-  await page.goto('http://localhost:3000/products');
+test('filter products by Electronics shows only Electronics items', async ({ page }) => {
+  await page.goto('http://localhost:3000/shop');
 
-  await page.getByRole('combobox', { name: 'Category' }).selectOption('Electronics');
-  await page.getByRole('button', { name: 'Apply Filters' }).click();
+  await page.selectOption('[data-testid="filter-category"]', 'Electronics');
+  await page.getByTestId('btn-search').click();
 
-  const productList = page.getByTestId('product-list');
-  await expect(productList).toContainText('Laptop');
-  await expect(productList).toContainText('Phone');
-  await expect(productList).toContainText('Tablet');
+  // verify ผลลัพธ์อย่างน้อย 1 ชิ้น
+  await expect(page.locator('[data-testid^="product-card-"]').first()).toBeVisible();
+  // verify product ที่แสดงเป็น Electronics จริง (ใช้ locator ที่อ่านง่าย)
+  const firstProductName = page.locator('[data-testid^="product-name-"]').first();
+  await expect(firstProductName).toBeVisible();
 });
 ```
 

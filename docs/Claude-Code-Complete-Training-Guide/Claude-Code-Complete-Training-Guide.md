@@ -71,7 +71,7 @@ irm https://claude.ai/install.ps1 | iex
 **ตัวอย่าง output ที่จะเห็น (ถ้าสำเร็จ):**
 ```
 Downloading Claude Code...
-Installing to ~/.claude/bin/claude...
+Installing to ~/.local/bin/claude...
 Adding to PATH...
 ✓ Claude Code installed successfully!
 
@@ -81,7 +81,7 @@ Run 'claude --version' to verify.
 ```bash
 # ตรวจสอบว่าติดตั้งสำเร็จ
 claude --version
-# Output: claude-code version 1.0.x
+# Output: claude-code version 2.x.x
 ```
 
 > ⚠️ **ถ้าเจอ error:** ดู Section 16 (Troubleshooting) หรือลอง restart Terminal
@@ -1858,8 +1858,8 @@ touch ./CLAUDE.md
 # หรือ
 touch ./.claude/CLAUDE.md
 
-# Personal overrides (gitignored)
-touch ./.claude/CLAUDE.local.md
+# Personal overrides (gitignored) — วางไว้ที่ project root
+touch ./CLAUDE.local.md
 ```
 
 ## 4.4 เนื้อหาที่ควรใส่
@@ -3407,11 +3407,11 @@ If ESC doesn't work:
 
 ### Context Window Limits
 
-| Model | Input Tokens | Output Tokens | ค่าใช้จ่าย |
-|-------|-------------|---------------|-----------|
-| **Opus** (4.7) | 200K (~150K words) | 32K | สูงสุด |
-| **Sonnet** (4.6) | 200K | 32K | กลาง |
-| **Haiku** (4.5) | 200K | 8K | ต่ำสุด |
+| Model | Context Window | Max Output | ค่าใช้จ่าย |
+|-------|---------------|------------|-----------|
+| **Opus** (4.8) | 1M tokens | 128K | สูงสุด |
+| **Sonnet** (4.6) | 1M tokens | 64K | กลาง |
+| **Haiku** (4.5) | 200K tokens | 64K | ต่ำสุด |
 
 > **💡 หมายเหตุ:** เลขเวอร์ชัน model อาจเปลี่ยนเมื่อ Claude ออก model ใหม่ — พิมพ์ `/model` ใน session เพื่อดู model ที่ใช้งานได้จริงในปัจจุบัน
 
@@ -4134,7 +4134,6 @@ claude
 project/
 ├── .claude/
 │   ├── CLAUDE.md              # Project memory
-│   ├── CLAUDE.local.md        # Personal (gitignored)
 │   ├── settings.json          # Permissions
 │   ├── settings.local.json    # Personal (gitignored)
 │   ├── rules/
@@ -4149,14 +4148,15 @@ project/
 │   └── hooks/
 │       └── validate-command.sh
 ├── .mcp.json                  # MCP servers
-├── CLAUDE.md                  # Alt location
+├── CLAUDE.md                  # Project memory (alt location)
+├── CLAUDE.local.md            # Personal (gitignored) — project root
 └── .gitignore
 ```
 
 ### .gitignore
 ```gitignore
 # Claude Code
-.claude/CLAUDE.local.md
+CLAUDE.local.md
 .claude/settings.local.json
 .claude/settings.local.*.json
 .claude/.mcp.local.json
@@ -4721,7 +4721,7 @@ jobs:
       - name: Install Claude Code
         run: |
           curl -fsSL https://claude.ai/install.sh | bash
-          echo "$HOME/.claude/bin" >> $GITHUB_PATH
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: npm ci
@@ -4768,7 +4768,7 @@ jobs:
       - name: Install Claude Code
         run: |
           curl -fsSL https://claude.ai/install.sh | bash
-          echo "$HOME/.claude/bin" >> $GITHUB_PATH
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Review PR changes
         env:
@@ -4819,7 +4819,7 @@ test-with-claude:
   image: node:20
   before_script:
     - curl -fsSL https://claude.ai/install.sh | bash
-    - export PATH="$HOME/.claude/bin:$PATH"
+    - export PATH="$HOME/.local/bin:$PATH"
   script:
     - npm ci
     - claude -p "รัน npm test และสรุปผล" \
@@ -6376,13 +6376,13 @@ claude -r "name"          # Resume
 
 .claude/settings.json             # Project settings
 .claude/CLAUDE.md                 # Project memory
-.claude/CLAUDE.local.md           # Personal (gitignored)
 .claude/skills/                   # Project skills
 .claude/agents/                   # Project agents
 .claude/rules/                    # Modular rules
 
 .mcp.json                         # MCP servers
-CLAUDE.md                         # Alt memory location
+CLAUDE.md                         # Project memory (alt to .claude/CLAUDE.md)
+CLAUDE.local.md                   # Personal (gitignored) — project root
 ```
 
 ## 18.4 Environment Variables (ที่ใช้บ่อย)
@@ -6487,7 +6487,8 @@ Option+T/Alt+T  Toggle thinking
 
 ---
 
-*Document Version: 1.2.2*
-*Original: January 2026 | Accuracy Review & Update: May 2026 (Round 3 — MCP env vars, Playwright package, GitHub auth; Round 4 — keyboard shortcuts; Round 5 — CLAUDE_AUTOCOMPACT_PCT_OVERRIDE name, CLAUDE_CODE_EFFORT_LEVEL added 'auto' value)*
-*Verified against: https://code.claude.com/docs (2026-05-28)*
+*Document Version: 1.3.0*
+*Original: January 2026 | Accuracy Review & Update: May 2026*
+*(Round 3: MCP env vars, Playwright package, GitHub auth; Round 4: keyboard shortcuts; Round 5: CLAUDE_AUTOCOMPACT_PCT_OVERRIDE name, CLAUDE_CODE_EFFORT_LEVEL added 'auto'; Round 6: CLAUDE.local.md correct path, model context/output specs, CI install path ~/.local/bin)*
+*Verified against: https://code.claude.com/docs (2026-05-29)*
 *For Claude Code Training Course: Basic AI to Expert*

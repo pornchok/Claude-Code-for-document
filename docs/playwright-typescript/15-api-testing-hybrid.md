@@ -96,8 +96,8 @@ const res = await request.patch(`http://localhost:3000/api/todos/${id}`, {
 // DELETE — ลบ
 const res = await request.delete(`http://localhost:3000/api/todos/${id}`);
 
-// PUT — replace ทั้งหมด
-const res = await request.put(`http://localhost:3000/api/todos/${id}`, {
+// PATCH — อัปเดตบางฟิลด์
+const res = await request.patch(`http://localhost:3000/api/todos/${id}`, {
   data: { text: 'Updated text', completed: false }
 });
 ```
@@ -349,22 +349,9 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Products API — Query Parameters & Pagination', () => {
   test.beforeEach(async ({ request }) => {
-    // reset DB ก่อนทุก test
+    // reset todos ก่อนทุก test (products เป็น read-only ใน demo app — 10 ชิ้นคงที่)
     await request.post('http://localhost:3000/api/reset');
-    
-    // seed ข้อมูลตัวอย่าง: สร้าง 15 products หลากหลาย category
-    const categories = ['Electronics', 'Clothing', 'Food'];
-    const names = ['Laptop', 'Phone', 'Shirt', 'Jeans', 'Apple', 'Banana'];
-    
-    for (let i = 0; i < 15; i++) {
-      await request.post('http://localhost:3000/api/products', {
-        data: {
-          name: `${names[i % names.length]} ${i + 1}`,
-          category: categories[i % categories.length],
-          price: Math.floor(Math.random() * 1000) + 10
-        }
-      });
-    }
+    // product catalog: 10 items — Electronics(4), Books(3), Clothing(3)
   });
 
   test('GET /api/products?category=Electronics returns filtered results', async ({ request }) => {
@@ -424,17 +411,17 @@ test.describe('Products API — Query Parameters & Pagination', () => {
     await page.selectOption('[data-testid="filter-category"]', 'Clothing');
     
     // wait for results to load
-    await page.waitForSelector('[data-testid="product-card"]');
+    await page.waitForSelector('[data-testid^="product-card-"]');
     
     // count products displayed
-    const uiProducts = await page.locator('[data-testid="product-card"]').count();
+    const uiProducts = await page.locator('[data-testid^="product-card-"]').count();
     
     // UI count ควรตรงกับ API หรือน้อยกว่า (อาจมี pagination)
     expect(uiProducts).toBeGreaterThan(0);
     expect(uiProducts).toBeLessThanOrEqual(filteredCount);
     
     // verify ว่า product name ทั้งหมดที่แสดงเป็นของ Clothing category
-    const displayedNames = await page.locator('[data-testid="product-name"]').allTextContents();
+    const displayedNames = await page.locator('[data-testid^="product-name-"]').allTextContents();
     // (assuming API data มี name field ที่ UI render)
     expect(displayedNames.length).toBe(uiProducts);
   });
@@ -459,7 +446,7 @@ test.describe('Hybrid UI+API: Todo Workflow', () => {
     await request.post('http://localhost:3000/api/reset');
   });
 
-  test('completed todo moves to Done section (full stack)', async ({ request, page }) => {
+  test('completed todo แสดง strikethrough ใน UI (full stack)', async ({ request, page }) => {
     // ─── SETUP ผ่าน API ─── (~100ms รวม 3 calls)
     // สร้าง 3 todos ผ่าน API — เร็วกว่า fill form ทาง UI 3 ครั้งมาก
     const [res1, res2, res3] = await Promise.all([
@@ -469,7 +456,6 @@ test.describe('Hybrid UI+API: Todo Workflow', () => {
     ]);
 
     const todo1 = await res1.json();
-    const todo2 = await res2.json();
     const todo3 = await res3.json();
 
     // mark task 3 เป็น completed ผ่าน API
@@ -481,28 +467,24 @@ test.describe('Hybrid UI+API: Todo Workflow', () => {
     // ─── VERIFY ใน UI ─── (validate frontend render)
     await page.goto('http://localhost:3000/todos');
 
-    // active todos ควรมี 2 items ใน section "Active"
-    const activeSection = page.locator('[data-testid="active-todos"]');
-    await expect(activeSection.getByText('Active task 1')).toBeVisible();
-    await expect(activeSection.getByText('Active task 2')).toBeVisible();
-    await expect(activeSection.getByText('Finish report')).not.toBeVisible();
+    // ตรวจว่า todos ทั้ง 3 ปรากฏใน list
+    await expect(page.getByTestId('todo-list')).toBeVisible();
+    await expect(page.getByTestId(`todo-text-${todo1.id}`)).toContainText('Active task 1');
+    await expect(page.getByTestId(`todo-text-${todo3.id}`)).toContainText('Finish report');
 
-    // completed todo ควรอยู่ใน "Done" section
-    const doneSection = page.locator('[data-testid="done-todos"]');
-    await expect(doneSection.getByText('Finish report')).toBeVisible();
+    // completed todo ควรมี class "completed" (แสดง strikethrough ใน UI)
+    await expect(page.getByTestId(`todo-text-${todo3.id}`)).toHaveClass(/completed/);
+    await expect(page.getByTestId(`todo-checkbox-${todo3.id}`)).toBeChecked();
 
-    // count badge ควรถูกต้อง
-    await expect(page.locator('[data-testid="active-count"]')).toHaveText('2');
-    await expect(page.locator('[data-testid="done-count"]')).toHaveText('1');
+    // active todos ยังไม่มี completed class
+    await expect(page.getByTestId(`todo-text-${todo1.id}`)).not.toHaveClass(/completed/);
 
     // ─── VERIFY UI ACTION ─── (ทดสอบว่า UI interaction ทำงานด้วย)
     // check checkbox ใน UI สำหรับ "Active task 1"
-    await activeSection.getByRole('checkbox', { name: /Active task 1/i }).check();
+    await page.getByTestId(`todo-checkbox-${todo1.id}`).check();
 
-    // หลัง check ควรย้ายไป Done section
-    await expect(doneSection.getByText('Active task 1')).toBeVisible();
-    await expect(activeSection.getByText('Active task 1')).not.toBeVisible();
-    await expect(page.locator('[data-testid="done-count"]')).toHaveText('2');
+    // หลัง check ควรมี completed class
+    await expect(page.getByTestId(`todo-text-${todo1.id}`)).toHaveClass(/completed/);
 
     // ─── VERIFY ผ่าน API ด้วย ─── (confirm database state ถูกต้อง)
     const listRes = await request.get('http://localhost:3000/api/todos');
@@ -526,7 +508,7 @@ test.describe('Hybrid UI+API: Todo Workflow', () => {
     await page.goto('http://localhost:3000/todos');
 
     // verify ว่า first page แสดง 10 items (ถ้า app paginate)
-    const todoItems = page.locator('[data-testid="todo-item"]');
+    const todoItems = page.locator('[data-testid^="todo-item-"]');
     const count = await todoItems.count();
     expect(count).toBeGreaterThanOrEqual(10);
 

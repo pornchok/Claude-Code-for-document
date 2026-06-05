@@ -445,19 +445,18 @@ type RoleScenario = {
   role: string;
   password: string;
   canSeeAdminPanel: boolean;
-  canSeeEditor: boolean;
   canSeeTodos: boolean;
 };
 
 const roleScenarios: RoleScenario[] = [
-  { role: 'admin',   password: 'admin123', canSeeAdminPanel: true,  canSeeEditor: true,  canSeeTodos: true  },
-  { role: 'testuser', password: 'test123', canSeeAdminPanel: false, canSeeEditor: false, canSeeTodos: true  },
+  { role: 'admin',    password: 'admin123', canSeeAdminPanel: true,  canSeeTodos: true },
+  { role: 'testuser', password: 'test123',  canSeeAdminPanel: false, canSeeTodos: true },
 ];
 
 test.describe('Menu visibility ตาม role @regression', () => {
   test.each(roleScenarios)(
     '$role เห็น menu ถูกต้อง',
-    async ({ page }, { role, password, canSeeAdminPanel, canSeeEditor, canSeeTodos }) => {
+    async ({ page }, { role, password, canSeeAdminPanel, canSeeTodos }) => {
       // Login
       await page.goto('http://localhost:3000/login');
       await page.fill('[data-testid="input-username"]', role);
@@ -469,19 +468,12 @@ test.describe('Menu visibility ตาม role @regression', () => {
 
       // ตรวจสอบ menu items ตาม permission
       const adminPanel = page.getByTestId('nav-admin');
-      const editorMenu = page.getByTestId('nav-editor');
       const todosMenu  = page.getByTestId('nav-todos');
 
       if (canSeeAdminPanel) {
         await expect(adminPanel).toBeVisible();
       } else {
         await expect(adminPanel).not.toBeVisible();
-      }
-
-      if (canSeeEditor) {
-        await expect(editorMenu).toBeVisible();
-      } else {
-        await expect(editorMenu).not.toBeVisible();
       }
 
       if (canSeeTodos) {

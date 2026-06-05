@@ -42,13 +42,13 @@ test('login as admin', async ({ page }) => {
 
 test('homepage shows guest view', async ({ page }) => {
   await page.goto('http://localhost:3000');
-  await expect(page.locator('[data-testid="session-badge"]')).not.toBeVisible();
+  await expect(page.locator('[data-testid="session-badge"]')).toContainText('Not logged in');
 });
 ```
 
-คำถามคือ: **test ที่ 2 จะผ่านหรือเปล่า?** ถ้ามาจาก Selenium คุณอาจกลัวว่า session จาก test แรก (login admin) จะ "รั่ว" มา test ที่สอง แล้วทำให้ session badge โผล่ขึ้นมา
+คำถามคือ: **test ที่ 2 จะผ่านหรือเปล่า?** ถ้ามาจาก Selenium คุณอาจกลัวว่า session จาก test แรก (login admin) จะ "รั่ว" มา test ที่สอง แล้วทำให้ session badge แสดง "admin"
 
-คำตอบคือ: ผ่านเสมอ เพราะ Playwright สร้าง BrowserContext ใหม่ก่อนทุก test โดยอัตโนมัติ — cookies, localStorage, sessionStorage ทุกอย่างเริ่มใหม่จากศูนย์
+คำตอบคือ: ผ่านเสมอ เพราะ Playwright สร้าง BrowserContext ใหม่ก่อนทุก test โดยอัตโนมัติ — cookies, localStorage, sessionStorage ทุกอย่างเริ่มใหม่จากศูนย์ badge จึงแสดง "Not logged in" แทนที่จะเป็น "admin"
 
 แต่ถ้าคุณไม่เข้าใจว่า BrowserContext คืออะไร คุณจะไม่รู้ว่า isolation นี้เกิดขึ้นที่ระดับไหน หรือจะทำลายมันได้อย่างไร (โดยไม่ตั้งใจ) และเมื่อไหร่ต้องจัดการ context เอง
 
@@ -191,8 +191,8 @@ import { test, expect } from '@playwright/test';
 test('test 1 — fresh session starts logged out', async ({ page }) => {
   // เริ่มต้น: ไปที่ homepage โดยไม่ login
   await page.goto('http://localhost:3000');
-  // session-badge ไม่ควรมี เพราะ context ใหม่สะอาด
-  await expect(page.locator('[data-testid="session-badge"]')).not.toBeVisible();
+  // session-badge แสดง "Not logged in" เพราะ context ใหม่สะอาด ไม่มี user session
+  await expect(page.locator('[data-testid="session-badge"]')).toContainText('Not logged in');
 
   // ทำการ login
   await page.goto('http://localhost:3000/login');
@@ -209,8 +209,8 @@ test('test 1 — fresh session starts logged out', async ({ page }) => {
 test('test 2 — completely new context, no admin session', async ({ page }) => {
   await page.goto('http://localhost:3000');
   // ถ้า Playwright ไม่มี isolation จริง session badge จะแสดง admin จาก test 1
-  // แต่เพราะ context ใหม่ทุกครั้ง — badge ไม่มี
-  await expect(page.locator('[data-testid="session-badge"]')).not.toBeVisible();
+  // แต่เพราะ context ใหม่ทุกครั้ง — badge กลับไปเป็น "Not logged in"
+  await expect(page.locator('[data-testid="session-badge"]')).toContainText('Not logged in');
 });
 ```
 
@@ -304,8 +304,8 @@ test('test B — check homepage', async () => {
 });
 
 test('test C — logout then check guest view', async () => {
-  await sharedPage.click('[data-testid="btn-logout"]');
-  await expect(sharedPage.locator('[data-testid="session-badge"]')).not.toBeVisible();
+  await sharedPage.click('[data-testid="nav-logout"]');
+  await expect(sharedPage.locator('[data-testid="session-badge"]')).toContainText('Not logged in');
 });
 ```
 
@@ -361,8 +361,8 @@ test('test C — logout then check guest view', async ({ page }) => {
   await page.fill('[data-testid="input-password"]', 'admin123');
   await page.click('[data-testid="btn-login"]');
   // ตอนนี้ logout
-  await page.click('[data-testid="btn-logout"]');
-  await expect(page.locator('[data-testid="session-badge"]')).not.toBeVisible();
+  await page.click('[data-testid="nav-logout"]');
+  await expect(page.locator('[data-testid="session-badge"]')).toContainText('Not logged in');
 });
 ```
 

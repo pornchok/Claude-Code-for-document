@@ -203,7 +203,7 @@ test('login with valid credentials', async ({ page }) => {
   await page.fill('[data-testid="input-username"]', 'testuser');
   await page.fill('[data-testid="input-password"]', 'test123');
   await page.click('[data-testid="btn-login"]');
-  await expect(page).toHaveURL('http://localhost:3000/dashboard');
+  await expect(page).toHaveURL('http://localhost:3000/');
 });
 ```
 

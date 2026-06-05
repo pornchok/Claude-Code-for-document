@@ -84,12 +84,12 @@
     function gotoPage(p) { currentPage = p; loadProducts(); }
 
     function addToCart(id, name, price) {
-      let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const cart = Cart.get();
       const existing = cart.find(i => i.id === id);
       if (existing) existing.qty++;
       else cart.push({ id, name, price, qty: 1 });
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert(`Added "${name}" to cart`);
+      Cart.set(cart);
+      updateCartCount();
     }
 
     document.getElementById('btn-search').addEventListener('click', () => { currentPage = 1; loadProducts(); });

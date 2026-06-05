@@ -547,8 +547,8 @@ test('เห็น session badge บน dashboard', async ({ page }) => {
   await expect(page.getByTestId('session-badge')).toContainText('testuser');
 });
 
-test('เข้า /api/orders ได้ (protected endpoint)', async ({ request }) => {
-  const res = await request.get('/api/orders');
+test('เข้า /api/todos ได้ (protected endpoint)', async ({ request }) => {
+  const res = await request.get('/api/todos');
   expect(res.ok()).toBeTruthy();
 });
 ```
@@ -561,7 +561,7 @@ Running 1 setup and 3 tests using 1 worker
   ✓  1 [setup] › tests/auth.setup.ts:7:1 › authenticate as testuser (1.8s)
   ✓  2 [chromium] › tests/protected-pages.spec.ts:6:1 › เข้า /api/me ได้หลัง authenticate (0.3s)
   ✓  3 [chromium] › tests/protected-pages.spec.ts:12:1 › เห็น session badge บน dashboard (0.6s)
-  ✓  4 [chromium] › tests/protected-pages.spec.ts:18:1 › เข้า /api/orders ได้ (protected endpoint) (0.2s)
+  ✓  4 [chromium] › tests/protected-pages.spec.ts:18:1 › เข้า /api/todos ได้ (protected endpoint) (0.2s)
 
   4 passed (3.1s)
 ```
@@ -589,7 +589,7 @@ test.describe('logout invalidates session', () => {
     await expect(page.getByTestId('session-badge')).toContainText('testuser');
 
     // ขั้นตอน 2: Logout ผ่าน UI
-    await page.click('[data-testid="btn-logout"]');
+    await page.click('[data-testid="nav-logout"]');
 
     // ขั้นตอน 3: ตรวจว่า redirect ไป login page
     await expect(page).toHaveURL(/\/login/);

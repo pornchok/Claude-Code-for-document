@@ -638,66 +638,54 @@ test.describe('Product Catalog', () => {
 ```
 
 ```typescript
-// tests/orders/create-order.spec.ts
+// tests/todos/parallel-todo.spec.ts
 // tested: Playwright v1.50+, Node.js 20+
 
 import { test, expect } from '@playwright/test';
 
-// Order tests: เขียน DB แต่ใช้ unique IDs ป้องกัน conflict
-test.describe('Order Management', () => {
+// Todo tests: เขียน DB แต่ใช้ unique text ป้องกัน conflict
+test.describe('Todo Management — Parallel Safe', () => {
   test.describe.configure({ mode: 'parallel' });
 
-  // Fixture สร้าง unique customer ต่อ test
-  const createUniqueCustomer = async (
-    request: any,
-    testInfo: any
-  ) => {
+  // สร้าง todo ที่ unique ต่อ worker เพื่อป้องกัน conflict
+  const createUniqueTodo = async (request: any, testInfo: any) => {
     const id = `${testInfo.workerIndex}-${Date.now()}`;
-    const res = await request.post('/api/test-customers', {
-      data: {
-        email: `test-${id}@automation.com`,
-        name: `Test Customer ${id}`,
-      },
+    const res = await request.post('http://localhost:3000/api/todos', {
+      data: { text: `Task ${id}` },
     });
     return await res.json();
   };
 
-  test('create and confirm order', async ({ request }, testInfo) => {
-    const customer = await createUniqueCustomer(request, testInfo);
+  test('create and complete todo', async ({ request }, testInfo) => {
+    // สร้าง todo ด้วย text unique ของ test นี้
+    const todo = await createUniqueTodo(request, testInfo);
+    expect(todo.completed).toBe(false);
 
-    // สร้าง order ด้วย customer unique ของ test นี้
-    const orderRes = await request.post('/api/orders', {
-      data: {
-        customerId: customer.id,  // unique ต่อ test — ไม่ conflict
-        items: [{ productId: 'prod-001', quantity: 2 }],
-      },
-    });
-    expect(orderRes.ok()).toBeTruthy();
+    // mark completed ผ่าน PATCH
+    const patchRes = await request.patch(
+      `http://localhost:3000/api/todos/${todo.id}`,
+      { data: { completed: true } }
+    );
+    expect(patchRes.ok()).toBeTruthy();
 
-    const order = await orderRes.json();
-    expect(order.status).toBe('pending');
-
-    // Confirm order
-    const confirmRes = await request.post(`/api/orders/${order.id}/confirm`);
-    expect(confirmRes.ok()).toBeTruthy();
-
-    const confirmed = await confirmRes.json();
-    expect(confirmed.status).toBe('confirmed');
+    const updated = await patchRes.json();
+    expect(updated.completed).toBe(true);
   });
 
-  test('cancel pending order', async ({ request }, testInfo) => {
-    const customer = await createUniqueCustomer(request, testInfo);
+  test('create and delete todo', async ({ request }, testInfo) => {
+    // คนละ todo กับ test ข้างบน — unique text ป้องกัน overlap
+    const todo = await createUniqueTodo(request, testInfo);
 
-    const orderRes = await request.post('/api/orders', {
-      data: {
-        customerId: customer.id,  // คนละ customer กับ test ข้างบน
-        items: [{ productId: 'prod-002', quantity: 1 }],
-      },
-    });
-    const order = await orderRes.json();
+    const deleteRes = await request.delete(
+      `http://localhost:3000/api/todos/${todo.id}`
+    );
+    expect(deleteRes.ok()).toBeTruthy();
 
-    const cancelRes = await request.delete(`/api/orders/${order.id}`);
-    expect(cancelRes.ok()).toBeTruthy();
+    // ยืนยันว่าลบแล้วจริง — GET ตัวเดิมควร return ไม่พบ
+    const checkRes = await request.get('http://localhost:3000/api/todos');
+    const { data: todos } = await checkRes.json();
+    const still = todos.find((t: { id: number }) => t.id === todo.id);
+    expect(still).toBeUndefined();
   });
 });
 ```

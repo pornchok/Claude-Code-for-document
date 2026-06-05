@@ -1163,9 +1163,9 @@ test('download invoice and verify', async ({ page }) => {
   const fs = require('fs');
   expect(fs.existsSync('./downloads/invoice.pdf')).toBe(true);
   
-  // ทดสอบบน mobile
+  // ทดสอบบน mobile — nav ยังต้องแสดงอยู่
   await page.setViewportSize({ width: 375, height: 812 });
-  await expect(page.getByTestId('mobile-menu')).toBeVisible();
+  await expect(page.getByTestId('nav-shop')).toBeVisible();
 });
 ```
 
@@ -1207,7 +1207,7 @@ test('fill payment form in iframe', async ({ page }) => {
 test('delete item shows confirmation', async ({ page }) => {
   page.on('dialog', dialog => dialog.accept()); // register ก่อน
   await page.getByRole('button', { name: 'ลบสินค้า' }).click();
-  await expect(page.getByTestId('cart-empty')).toBeVisible();
+  await expect(page.getByTestId('empty-cart')).toBeVisible();
 });
 ```
 
@@ -1275,26 +1275,28 @@ Hybrid test คือ test ที่ผสม API calls กับ UI verificatio
 
 **Intermediate:**
 ```typescript
-test('email notification sent when order shipped', async ({ page, request }) => {
-  // 1. Setup: สร้าง order ผ่าน API
-  const createRes = await request.post('/api/orders', {
-    data: { productId: 'prod-001', quantity: 1, customerId: 'cust-test' }
+test('completed todo shows strikethrough in UI', async ({ page, request }) => {
+  // 1. Setup: สร้าง todo ผ่าน API (เร็วกว่า UI ~20x)
+  const createRes = await request.post('http://localhost:3000/api/todos', {
+    data: { text: 'Ship order for customer-test' }
   });
   expect(createRes.ok()).toBeTruthy();
-  const { orderId } = await createRes.json();
-  
-  // 2. Update status ผ่าน API
-  const updateRes = await request.patch(`/api/orders/${orderId}`, {
-    data: { status: 'shipped' }
+  const todo = await createRes.json();
+
+  // 2. Mark complete ผ่าน API
+  const patchRes = await request.patch(`http://localhost:3000/api/todos/${todo.id}`, {
+    data: { completed: true }
   });
-  expect(updateRes.ok()).toBeTruthy();
-  
-  // 3. Verify notification ใน UI
-  await page.goto(`/orders/${orderId}`);
-  await expect(page.getByRole('alert')).toContainText('อีเมลแจ้งเตือนถูกส่งแล้ว');
-  
-  // 4. Cleanup
-  await request.delete(`/api/orders/${orderId}`);
+  expect(patchRes.ok()).toBeTruthy();
+
+  // 3. Verify UI แสดง completed state ถูกต้อง
+  await page.goto('http://localhost:3000/todos');
+  await expect(
+    page.locator(`[data-testid="todo-text-${todo.id}"]`)
+  ).toHaveClass(/completed/);
+
+  // 4. Cleanup: ลบ todo ที่สร้าง
+  await request.delete(`http://localhost:3000/api/todos/${todo.id}`);
 });
 ```
 
@@ -1351,8 +1353,9 @@ Trade-off analysis:
 **Intermediate:**
 ```typescript
 test('product card visual and accessibility', async ({ page }) => {
-  await page.goto('/products/sample');
-  const card = page.getByTestId('product-card');
+  await page.goto('/shop');
+  await page.waitForSelector('[data-testid="product-grid"]');
+  const card = page.locator('[data-testid^="product-card-"]').first();
   
   // Visual regression — ต้องรัน update-snapshots ครั้งแรก
   await expect(card).toHaveScreenshot('product-card.png', {
@@ -1361,26 +1364,28 @@ test('product card visual and accessibility', async ({ page }) => {
   
   // Accessibility — ตรวจ structure สำคัญ
   await expect(card).toMatchAriaSnapshot(`
-    - img "รูปสินค้า"
-    - heading "ชื่อสินค้า"
+    - img
+    - text: /.+/
     - text: /฿[\d,]+/
-    - button "เพิ่มลงตะกร้า"
+    - button "Add to Cart"
   `);
   
   // Axe accessibility scan
   const { violations } = await new AxeBuilder({ page })
-    .include('[data-testid="product-card"]')
+    .include('[data-testid^="product-card-"]')
     .analyze();
   expect(violations).toEqual([]);
 });
 
-test('product card with discount badge', async ({ page }) => {
-  await page.goto('/products/sale-item');
-  const card = page.getByTestId('product-card');
+test('product card renders name and price', async ({ page }) => {
+  await page.goto('/shop');
+  await page.waitForSelector('[data-testid="product-grid"]');
+  const card = page.locator('[data-testid^="product-card-"]').first();
   
-  // ตรวจ badge มีอยู่และ accessible
-  await expect(card.getByRole('status')).toHaveText('ลดราคา 20%');
-  await expect(card).toHaveScreenshot('product-card-sale.png');
+  // ตรวจ name และ price แสดงอยู่
+  await expect(page.locator('[data-testid^="product-name-"]').first()).toBeVisible();
+  await expect(page.locator('[data-testid^="product-price-"]').first()).toContainText('฿');
+  await expect(card).toHaveScreenshot('product-card-first.png');
 });
 ```
 
@@ -2111,14 +2116,14 @@ test.use({ storageState: 'playwright/.auth/admin.json' });
 
 test('admin can verify stats match database', async ({ page, request }) => {
   await page.goto('http://localhost:3000/admin');
-  await expect(page.getByTestId('stats-panel')).toBeVisible();
+  await expect(page.getByTestId('admin-content')).toBeVisible();
 
   // DB verification via API — fails with 401
   const statsRes = await request.get('http://localhost:3000/api/admin');
   expect(statsRes.status()).toBe(200);  // ← 401 จริงๆ
   const { stats } = await statsRes.json();
   // cross-verify ว่า UI แสดงตรงกับ API
-  await expect(page.getByTestId('total-todos')).toHaveText(stats.todos.toString());
+  await expect(page.getByTestId('stat-todos')).toContainText(stats.todos.toString());
 });
 ```
 
@@ -2187,7 +2192,7 @@ test.use({ storageState: 'playwright/.auth/admin.json' });
 
 test('admin stats match database', async ({ page, request, adminToken }) => {
   await page.goto('http://localhost:3000/admin');
-  await expect(page.getByTestId('stats-panel')).toBeVisible();
+  await expect(page.getByTestId('admin-content')).toBeVisible();
 
   // request + JWT token
   const statsRes = await request.get('http://localhost:3000/api/admin', {
@@ -2196,7 +2201,7 @@ test('admin stats match database', async ({ page, request, adminToken }) => {
   expect(statsRes.status()).toBe(200);
   const { stats } = await statsRes.json();
 
-  await expect(page.getByTestId('total-todos')).toHaveText(stats.todos.toString());
+  await expect(page.getByTestId('stat-todos')).toContainText(stats.todos.toString());
 });
 ```
 
@@ -2728,6 +2733,83 @@ test('todo count is correct', async ({ request, cleanDb }) => {
 
 ---
 
-*แบบฝึกหัดหลัก: 18 บท × 3 ระดับ = 54 exercises*  
+---
+
+## Ch20: Professional Project Structure
+
+### L1 — Recall
+
+อธิบายด้วยคำตัวเองว่า `helpers/` ต่างจาก `fixtures/` อย่างไร และยกตัวอย่างโค้ดที่ควรอยู่ใน `helpers/` 1 ตัวอย่าง กับโค้ดที่ควรอยู่ใน `fixtures/` 1 ตัวอย่าง
+
+<details>
+<summary>เฉลย</summary>
+
+`helpers/` เก็บ pure functions ที่ไม่ขึ้น Playwright — ไม่ import อะไรจาก `@playwright/test` — เช่น `readDb()` (อ่าน JSON ด้วย `fs`), `generateUniqueEmail()` (string manipulation), `formatPrice()` (calculation) สามารถ test ด้วย Jest/Vitest ได้โดยตรง
+
+`fixtures/` เก็บ Playwright custom fixtures — ขึ้นกับ `base.extend<T>()` จาก `@playwright/test` — เช่น `authToken` (POST login, return token), `authenticatedPage` (inject JWT เข้า localStorage) โดยเนื้อหา fixtures รู้จัก lifecycle ของ Playwright และมี `use()` pattern
+
+ตัวอย่างง่าย: `generateUniqueId()` → `helpers/`; `loggedInPage` → `fixtures/`
+
+</details>
+
+### L2 — Application
+
+ทีมคุณมี test suite ดังนี้: test ตรวจสอบว่า user ที่ลงทะเบียนใหม่เห็น welcome email ในกล่อง inbox (ต้อง navigate browser ไปหน้า inbox แล้ว assert text) แต่ต้อง POST สร้าง user ผ่าน API ก่อน และ POST trigger-email ผ่าน API อีกครั้ง
+
+ควรวาง test นี้ใน `tests/web/` หรือ `tests/api/`? และ API setup 2 ขั้น (create user + trigger email) ควรอยู่ในไฟล์ไหน? อธิบาย reasoning
+
+<details>
+<summary>เฉลย</summary>
+
+ควรวางใน `tests/web/` เพราะ **primary verification เกิดที่ UI** — test assert ว่า browser เห็น text ใน inbox page แม้จะมี API setup ก่อน แต่สิ่งที่กำลัง test คือ "user เห็น inbox ถูกต้องไหม?" ไม่ใช่ "API ส่ง email ถูกไหม?"
+
+API setup 2 ขั้น (`POST /users`, `POST /trigger-email`) ควรอยู่ใน `test.beforeEach` ภายใน test file นั้น หรือถ้าใช้ซ้ำใน 3+ tests ควรแยกเป็น fixture ใน `fixtures/email.fixture.ts` — ไม่ควรอยู่ใน Page Object เพราะ Page Object ไม่ควรรู้จัก API
+
+</details>
+
+### L3 — Synthesis
+
+ดู structure นี้แล้ววินิจฉัยปัญหา:
+
+```
+tests/
+├── login.spec.ts
+├── shop.spec.ts
+├── api-todos.spec.ts
+pages/
+├── LoginPage.ts           # มี loginViaApi() ที่ทำ fetch('/api/auth/login')
+├── ShopPage.ts
+helpers/
+├── auth.ts                # import { test } from '@playwright/test'; ← line 1
+└── db.ts
+fixtures/
+├── auth.fixture.ts        # duplicate loginViaApi() จาก LoginPage.ts
+└── index.ts               # ไม่ export อะไรเลย ← ไฟล์ว่าง
+```
+
+ระบุปัญหาทั้งหมดที่เห็นและแนะนำวิธีแก้สำหรับแต่ละข้อ
+
+<details>
+<summary>เฉลย</summary>
+
+**ปัญหา 1: `LoginPage.ts` มี `loginViaApi()`**
+Page Object ไม่ควรรู้จัก API — ย้าย login-via-API logic ไปไว้ใน `fixtures/auth.fixture.ts` แทน Page Object ทำแค่ fill form + click
+
+**ปัญหา 2: `helpers/auth.ts` import จาก `@playwright/test`**
+`helpers/` ควรเป็น pure functions ที่ไม่ขึ้น Playwright — ถ้าต้องการ Playwright context ให้ย้ายไว้ใน `fixtures/` แทน
+
+**ปัญหา 3: `fixtures/auth.fixture.ts` duplicate `loginViaApi()`**
+เกิดจาก logic ซ้ำกับ LoginPage — หลังแก้ปัญหา 1 แล้ว `auth.fixture.ts` จะเป็นที่เดียวที่ login-via-API อยู่
+
+**ปัญหา 4: `fixtures/index.ts` ว่างเปล่า**
+barrel export ไม่ทำงาน — test files import จาก `fixtures/` แต่ไม่ได้อะไรกลับมา ต้องเพิ่ม `export { test, expect } from './auth.fixture';`
+
+**โครงสร้างที่ถูกต้อง:** ลบ `loginViaApi()` ออกจาก `LoginPage`, ย้าย helpers/auth.ts เป็น `fixtures/` และ export ให้ถูกต้องจาก `fixtures/index.ts`
+
+</details>
+
+---
+
+*แบบฝึกหัดหลัก: 19 บท × 3 ระดับ = 57 exercises*  
 *Ch19: 5 levels (L1–L5) สำหรับ Database State Verification*  
 *Expert Level (L5) เพิ่มเติม: Ch13, Ch15, Ch17, Ch18*

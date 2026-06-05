@@ -563,14 +563,14 @@ test('displays all todos in order', async ({ page, todoFactory }) => {
   await todoFactory.create('Second task');
   await todoFactory.create('Third task');
 
-  await page.goto('/');
+  await page.goto('/todos');
 
   // verify ครบ 3 items
-  const items = page.getByTestId('todo-item');
+  const items = page.locator('[data-testid^="todo-item-"]');
   await expect(items).toHaveCount(3);
-  await expect(items.nth(0)).toHaveText('First task');
-  await expect(items.nth(1)).toHaveText('Second task');
-  await expect(items.nth(2)).toHaveText('Third task');
+  await expect(items.nth(0)).toContainText('First task');
+  await expect(items.nth(1)).toContainText('Second task');
+  await expect(items.nth(2)).toContainText('Third task');
 
   // factory cleanup เกิดขึ้นอัตโนมัติหลัง test จบ
 });
@@ -902,8 +902,8 @@ await page.goto('/login');
 // ❌ ไม่มี cleanup — todos จาก test A ปนกับ test B
 test('A: shows 1 todo', async ({ page, request }) => {
   await request.post('/api/todos', { data: { text: 'Task A' } });
-  await page.goto('/');
-  await expect(page.getByTestId('todo-item')).toHaveCount(1);
+  await page.goto('/todos');
+  await expect(page.locator('[data-testid^="todo-item-"]')).toHaveCount(1);
   // ถ้า test B รันพร้อมกันและเพิ่ม todo ด้วย count จะเป็น 2 ไม่ใช่ 1
 });
 ```

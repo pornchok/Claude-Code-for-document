@@ -524,34 +524,34 @@ for (const { name, device } of mobileDevices) {
   test.describe(`Responsive checkout — ${name}`, () => {
     test.use({ ...device });
 
-    test('checkout button is visible and tappable', async ({ page }) => {
-      await page.goto('/products/laptop-pro');
+    test('add-to-cart button is visible and tappable on shop page', async ({ page }) => {
+      await page.goto('/shop');
+
+      // รอ products โหลด
+      await page.waitForSelector('[data-testid="product-grid"]');
 
       // mobile viewport ควรเห็น add-to-cart button
-      const addToCart = page.getByRole('button', { name: /add to cart/i });
+      const addToCart = page.locator('[data-testid^="btn-add-cart-"]').first();
       await expect(addToCart).toBeVisible();
 
       // ต้องอยู่ใน viewport จริง (ไม่ใช่แค่ exist ใน DOM)
       await expect(addToCart).toBeInViewport();
       await addToCart.tap(); // ใช้ tap() สำหรับ touch device
 
-      // cart badge อัปเดต
+      // cart badge ใน nav อัปเดต
       await expect(page.locator('[data-testid="cart-count"]')).toHaveText('1');
     });
 
-    test('navigation hamburger menu works on mobile', async ({ page }) => {
+    test('navigation links are accessible on mobile', async ({ page }) => {
       await page.goto('/');
 
-      // desktop nav ควร hidden
-      await expect(page.locator('nav.desktop-nav')).not.toBeVisible();
+      // nav links ควรเห็นได้บน mobile
+      const navShop = page.getByTestId('nav-shop');
+      await expect(navShop).toBeVisible();
 
-      // hamburger ควรเห็น
-      const hamburger = page.getByRole('button', { name: /menu/i });
-      await expect(hamburger).toBeVisible();
-      await hamburger.tap();
-
-      // mobile menu เปิด
-      await expect(page.locator('nav.mobile-nav')).toBeVisible();
+      // tap nav link แทน click
+      await navShop.tap();
+      await expect(page).toHaveURL(/\/shop/);
     });
 
     test('product grid shows correct columns in portrait vs landscape', async ({ browser }) => {
@@ -563,7 +563,7 @@ for (const { name, device } of mobileDevices) {
       await portraitPage.goto('/shop');
 
       // portrait ควรแสดง 1 column layout (stacked)
-      const portraitCards = portraitPage.locator('[data-testid="product-card"]');
+      const portraitCards = portraitPage.locator('[data-testid^="product-card-"]');
       const portraitFirstCard = portraitCards.nth(0);
       const portraitSecondCard = portraitCards.nth(1);
 
@@ -584,7 +584,7 @@ for (const { name, device } of mobileDevices) {
       const landscapePage = await landscapeCtx.newPage();
       await landscapePage.goto('/shop');
 
-      const landscapeCards = landscapePage.locator('[data-testid="product-card"]');
+      const landscapeCards = landscapePage.locator('[data-testid^="product-card-"]');
       const landscapeFirstCard = landscapeCards.nth(0);
       const landscapeSecondCard = landscapeCards.nth(1);
 

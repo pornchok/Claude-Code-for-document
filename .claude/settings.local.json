@@ -33,7 +33,9 @@
       "Bash(curl -s https://raw.githubusercontent.com/apache/jmeter/master/src/core/src/main/java/org/apache/jmeter/visualizers/SamplingStatCalculator.java)",
       "Bash(curl -s https://raw.githubusercontent.com/apache/jmeter/master/src/jorphan/src/main/java/org/apache/jorphan/math/StatCalculator.java)",
       "WebFetch(domain:robotframework.org)",
-      "WebFetch(domain:docs.robotframework.org)"
+      "WebFetch(domain:docs.robotframework.org)",
+      "Skill(code-review)",
+      "Skill(code-review:*)"
     ],
     "defaultMode": "bypassPermissions"
   }

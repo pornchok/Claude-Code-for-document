@@ -251,7 +251,7 @@ test('test ที่ใช้ test.slow()', async ({ page }) => {
 // tested: Playwright v1.50+, Node.js 20+
 export default defineConfig({
   webServer: {
-    command: 'cd playwright-course-app && npm start',
+    command: 'cd docs/playwright-typescript/playwright-course-app && npm start',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,   // รอ server start ได้ถึง 2 นาที (default 60 วิ)
@@ -447,7 +447,7 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: 'cd playwright-course-app && npm start',
+    command: 'cd docs/playwright-typescript/playwright-course-app && npm start',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
   },
@@ -485,7 +485,7 @@ import { test, expect } from '@playwright/test';
 test('admin can see dashboard metrics', async ({ page }) => {
   await page.goto('/admin');
   await expect(page.getByRole('heading', { name: 'Admin Dashboard' })).toBeVisible();
-  await expect(page.getByTestId('metric-total-users')).toBeVisible();
+  await expect(page.getByTestId('stat-users')).toBeVisible();
 });
 ```
 
@@ -568,7 +568,7 @@ test('complete checkout with payment', async ({ page }) => {
   await page.click('[data-testid="btn-checkout"]');
 
   // payment API อาจช้า — expect timeout จะ retry assertion ถึง 10 วินาที
-  await expect(page.getByTestId('payment-status')).toContainText('Success', {
+  await expect(page.getByTestId('order-success')).toBeVisible({
     timeout: 20_000,  // per-assertion override สำหรับ step นี้โดยเฉพาะ
   });
 });

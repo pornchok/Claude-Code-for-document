@@ -96,10 +96,10 @@ jobs:
           node-version: lts/*
 
       - name: Install demo app dependencies
-        run: cd playwright-course-app && npm ci
+        run: cd docs/playwright-typescript/playwright-course-app && npm ci
 
       - name: Start demo app
-        run: cd playwright-course-app && npm start &
+        run: cd docs/playwright-typescript/playwright-course-app && npm start &
 
       - name: Install Playwright dependencies
         run: npm ci
@@ -281,9 +281,9 @@ jobs:
         with:
           node-version: lts/*
       - name: Install demo app dependencies
-        run: cd playwright-course-app && npm ci
+        run: cd docs/playwright-typescript/playwright-course-app && npm ci
       - name: Start demo app
-        run: cd playwright-course-app && npm start &
+        run: cd docs/playwright-typescript/playwright-course-app && npm start &
       - name: Install dependencies
         run: npm ci
       - name: Install Playwright browsers
@@ -407,10 +407,10 @@ jobs:
 
       # ── Start demo app ──────────────────────────────────────
       - name: Install demo app dependencies
-        run: cd playwright-course-app && npm ci
+        run: cd docs/playwright-typescript/playwright-course-app && npm ci
 
       - name: Start demo app
-        run: cd playwright-course-app && npm start &
+        run: cd docs/playwright-typescript/playwright-course-app && npm start &
 
       - name: Wait for demo app to be ready
         run: npx wait-on http://localhost:3000 --timeout 30000
@@ -505,10 +505,10 @@ jobs:
           node-version: lts/*
 
       - name: Install demo app dependencies
-        run: cd playwright-course-app && npm ci
+        run: cd docs/playwright-typescript/playwright-course-app && npm ci
 
       - name: Start demo app
-        run: cd playwright-course-app && npm start &
+        run: cd docs/playwright-typescript/playwright-course-app && npm start &
 
       - name: Install Playwright dependencies
         run: npm ci
@@ -663,10 +663,10 @@ jobs:
           node-version: lts/*
 
       - name: Install demo app dependencies
-        run: cd playwright-course-app && npm ci
+        run: cd docs/playwright-typescript/playwright-course-app && npm ci
 
       - name: Start demo app
-        run: cd playwright-course-app && npm start &
+        run: cd docs/playwright-typescript/playwright-course-app && npm start &
 
       - name: Install dependencies
         run: npm ci

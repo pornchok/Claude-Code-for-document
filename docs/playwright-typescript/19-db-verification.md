@@ -591,7 +591,7 @@ test('order created via API is persisted correctly in db.json', async ({
 ```typescript
 // ❌ ผิด
 test('add todo', async ({ page }) => {
-  await page.getByTestId('input-todo').fill('My task');
+  await page.getByTestId('input-new-todo').fill('My task');
   await page.getByTestId('btn-add-todo').click();
   await expect(page.getByTestId('todo-list')).toContainText('My task');
   // จบโดยไม่ verify DB เลย — UI อาจ render จาก local state แทน
@@ -603,7 +603,7 @@ test('add todo', async ({ page }) => {
 ```typescript
 // ✅ ถูก
 test('add todo', async ({ page, request }) => {
-  await page.getByTestId('input-todo').fill('My task');
+  await page.getByTestId('input-new-todo').fill('My task');
   await page.getByTestId('btn-add-todo').click();
   // รอ UI confirm ก่อน — ถ้า UI แสดงแล้ว server น่าจะตอบกลับแล้ว
   await expect(page.getByTestId('todo-list')).toContainText('My task');

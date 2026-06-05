@@ -101,9 +101,9 @@ npx playwright test
 
 ---
 
-## Table of Contents — 19 บท
+## Table of Contents — 20 บท
 
-ทั้งคอร์สสำเร็จใน **~23 ชั่วโมง** (ไม่นับเวลา optional deep-dive)
+ทั้งคอร์สสำเร็จใน **~24 ชั่วโมง** (ไม่นับเวลา optional deep-dive)
 
 | บท | หัวข้อ | ระยะเวลา |
 |------|--------|---------|
@@ -126,6 +126,7 @@ npx playwright test
 | [17](./17-cicd.md) | CI/CD | 60 นาที |
 | [18](./18-production-patterns.md) | Production Patterns | 75 นาที |
 | [19](./19-db-verification.md) | Database State Verification | 75 นาที |
+| [20](./20-professional-project-structure.md) | Professional Project Structure | 75 นาที |
 
 ---
 
@@ -140,7 +141,7 @@ npx playwright test
 - ถ้า copy-paste → ใช้ได้แต่ตอนต่อมาปัญหาจะเยอะ
 
 ### 2. **ทำ Exercise ทุกบท**
-แต่ละบท (Ch02–Ch19) มี **exercises.md** ที่มี:
+แต่ละบท (Ch02–Ch20) มี **exercises.md** ที่มี:
 - **Recall Questions**: ตอบด้วยคำตัวเอง ไม่ใช่มัลติเพิ่ล
 - **Application Exercises**: ใช้สิ่งที่เรียนกับสถานการณ์ใหม่
 - **Synthesis Tasks**: ออกแบบหรือหา bug อย่างมืออาชีพ
