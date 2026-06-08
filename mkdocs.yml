@@ -1,0 +1,155 @@
+site_name: QA Learning Hub
+site_description: คอร์ส QA & Automation Testing ภาษาไทย
+site_url: https://pornchok.github.io/Claude-Code-for-document/
+repo_url: https://github.com/pornchok/Claude-Code-for-document
+repo_name: pornchok/Claude-Code-for-document
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: th
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.footer
+    - search.highlight
+    - search.suggest
+    - content.code.copy
+    - toc.follow
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - tables
+  - toc:
+      permalink: true
+
+plugins:
+  - search:
+      lang: en
+
+nav:
+  - Home: playwright-typescript/00-overview.md
+
+  - Playwright TypeScript:
+    - Overview: playwright-typescript/00-overview.md
+    - บทที่ 1 - ทำไมต้อง Playwright: playwright-typescript/01-why-playwright.md
+    - บทที่ 2 - Setup + TypeScript: playwright-typescript/02-setup-typescript.md
+    - บทที่ 3 - Architecture: playwright-typescript/03-architecture.md
+    - บทที่ 4 - Locators: playwright-typescript/04-locators.md
+    - บทที่ 5 - Actions & Assertions: playwright-typescript/05-actions-assertions.md
+    - บทที่ 6 - Debugging: playwright-typescript/06-debugging.md
+    - บทที่ 7 - Fixtures: playwright-typescript/07-fixtures.md
+    - บทที่ 8 - Page Object Model: playwright-typescript/08-page-object-model.md
+    - บทที่ 9 - Test Organization: playwright-typescript/09-test-organization.md
+    - บทที่ 10 - Configuration & Projects: playwright-typescript/10-configuration-projects.md
+    - บทที่ 11 - Parallelism & Sharding: playwright-typescript/11-parallelism-sharding-reporting.md
+    - บทที่ 12 - Mocking: playwright-typescript/12-mocking-network-time-browser.md
+    - บทที่ 13 - Authentication: playwright-typescript/13-authentication-storage-state.md
+    - บทที่ 14 - Advanced Browser Emulation: playwright-typescript/14-advanced-browser-emulation.md
+    - บทที่ 15 - API Testing & Hybrid: playwright-typescript/15-api-testing-hybrid.md
+    - บทที่ 16 - Visual & Accessibility: playwright-typescript/16-visual-accessibility-testing.md
+    - บทที่ 17 - CI/CD: playwright-typescript/17-cicd.md
+    - บทที่ 18 - Production Patterns: playwright-typescript/18-production-patterns.md
+    - บทที่ 19 - DB Verification: playwright-typescript/19-db-verification.md
+    - บทที่ 20 - Professional Structure: playwright-typescript/20-professional-project-structure.md
+    - Exercises: playwright-typescript/exercises.md
+    - Glossary: playwright-typescript/glossary.md
+
+  - Robot Framework for QA:
+    - Overview: robot-framework-for-qa/00-overview.md
+    - บทที่ 1 - What is RF: robot-framework-for-qa/01-what-is-robot-framework.md
+    - บทที่ 2 - Installation: robot-framework-for-qa/02-installation-setup.md
+    - บทที่ 3 - Test Structure: robot-framework-for-qa/03-test-structure-syntax.md
+    - บทที่ 4 - Keywords & Resources: robot-framework-for-qa/04-keywords-and-resource-files.md
+    - บทที่ 5 - Web Testing: robot-framework-for-qa/05-web-testing.md
+    - บทที่ 6 - Data Driven: robot-framework-for-qa/06-data-driven-testing.md
+    - บทที่ 7 - Reports & Debug: robot-framework-for-qa/07-reports-and-debugging.md
+    - บทที่ 8 - Best Practices: robot-framework-for-qa/08-best-practices.md
+    - Exercises: robot-framework-for-qa/exercises.md
+    - Glossary: robot-framework-for-qa/glossary.md
+
+  - Robot Framework Control Flow:
+    - Overview: robot-framework-control-flow/00-overview.md
+    - บทที่ 1 - If/Else: robot-framework-control-flow/01-if-else.md
+    - บทที่ 2 - For Loop: robot-framework-control-flow/02-for-loop.md
+    - บทที่ 3 - While Loop: robot-framework-control-flow/03-while-loop.md
+    - Exercises: robot-framework-control-flow/exercises.md
+    - Glossary: robot-framework-control-flow/glossary.md
+
+  - RF Mobile Testing:
+    - Overview: rf-mobile-testing/00-overview.md
+    - บทที่ 1 - Mobile Landscape: rf-mobile-testing/01-mobile-testing-landscape.md
+    - บทที่ 2 - Setup: rf-mobile-testing/02-setup-environment.md
+    - บทที่ 3 - Appium Capabilities: rf-mobile-testing/03-appium-capabilities.md
+    - บทที่ 4 - AppiumLibrary Keywords: rf-mobile-testing/04-appiumlibrary-keywords.md
+    - บทที่ 5 - Mobile Locators: rf-mobile-testing/05-mobile-locators.md
+    - บทที่ 6 - Gestures: rf-mobile-testing/06-gestures-interactions.md
+    - บทที่ 7 - Page Object Model: rf-mobile-testing/07-page-object-model.md
+    - Exercises: rf-mobile-testing/exercises.md
+    - Glossary: rf-mobile-testing/glossary.md
+
+  - WebdriverIO Mobile Testing:
+    - Overview: wdio-mobile-testing/00-overview.md
+    - บทที่ 1 - What is WDIO: wdio-mobile-testing/01-what-is-wdio.md
+    - บทที่ 2 - Setup: wdio-mobile-testing/02-setup-wdio-project.md
+    - บทที่ 3 - Appium Config: wdio-mobile-testing/03-wdio-appium-config.md
+    - บทที่ 4 - Writing Tests: wdio-mobile-testing/04-writing-tests.md
+    - บทที่ 5 - Selectors: wdio-mobile-testing/05-selectors-interactions.md
+    - บทที่ 6 - Page Objects: wdio-mobile-testing/06-page-objects-wdio.md
+    - บทที่ 7 - RF vs WDIO: wdio-mobile-testing/07-comparing-rf-wdio.md
+    - Exercises: wdio-mobile-testing/exercises.md
+    - Glossary: wdio-mobile-testing/glossary.md
+
+  - JMeter Performance Testing:
+    - Overview: jmeter-performance-testing/00-overview.md
+    - บทที่ 1 - Fundamentals: jmeter-performance-testing/01-performance-testing-fundamentals.md
+    - บทที่ 2 - Installation: jmeter-performance-testing/02-installation-setup.md
+    - บทที่ 3 - Test Plan Structure: jmeter-performance-testing/03-ui-test-plan-structure.md
+    - บทที่ 4 - First Test Plan: jmeter-performance-testing/04-first-test-plan.md
+    - บทที่ 5 - Thread Group: jmeter-performance-testing/05-thread-group-best-practices.md
+    - บทที่ 6 - Parameterization: jmeter-performance-testing/06-parameterization.md
+    - บทที่ 7 - Assertions: jmeter-performance-testing/07-assertions.md
+    - บทที่ 8 - Reports: jmeter-performance-testing/08-running-reports.md
+    - บทที่ 9 - Distributed Testing: jmeter-performance-testing/09-distributed-testing.md
+    - บทที่ 10 - Best Practices: jmeter-performance-testing/10-anti-patterns-best-practices.md
+    - Exercises: jmeter-performance-testing/exercises.md
+    - Glossary: jmeter-performance-testing/glossary.md
+
+  - English for QA:
+    - Overview: english-for-beginners/00-overview.md
+    - บทที่ 1 - Mindset: english-for-beginners/01-mindset.md
+    - บทที่ 2 - Phonics: english-for-beginners/02-phonics.md
+    - บทที่ 3 - Vocabulary: english-for-beginners/03-vocabulary.md
+    - บทที่ 4 - Sentence Structure: english-for-beginners/04-sentence-structure.md
+    - บทที่ 5 - To Be & Present Simple: english-for-beginners/05-to-be-present-simple.md
+    - บทที่ 6 - Questions & Negatives: english-for-beginners/06-questions-negatives.md
+    - บทที่ 7 - Numbers, Time & Days: english-for-beginners/07-numbers-time-days.md
+    - บทที่ 8 - Phrases: english-for-beginners/08-phrases.md
+    - Exercises: english-for-beginners/exercises.md
+    - Glossary: english-for-beginners/glossary.md
+
+  - Claude Code Guide:
+    - Guide: Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide.md
