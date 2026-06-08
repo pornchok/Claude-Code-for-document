@@ -596,7 +596,7 @@ test.describe('logout invalidates session', () => {
     await expect(page.getByTestId('btn-login')).toBeVisible();
 
     // ขั้นตอน 4: ลองเข้า protected page โดยตรง — ต้อง redirect กลับ login
-    await page.goto('http://localhost:3000/profile');
+    await page.goto('http://localhost:3000/admin');
     await expect(page).toHaveURL(/\/login/);
 
     // ขั้นตอน 5: ตรวจ API ด้วย request context (ยังมี cookies จาก logout อยู่)

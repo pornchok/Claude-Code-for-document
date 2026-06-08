@@ -505,7 +505,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: lts/*
       - run: npm ci
       - run: npx playwright install --with-deps chromium
 
@@ -533,7 +533,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: lts/*
       - run: npm ci
 
       - name: Download all blob reports
@@ -570,69 +570,66 @@ jobs:
 3. **Order tests** — เขียน DB แต่ใช้ unique order IDs
 
 ```typescript
-// tests/auth/login-flow.spec.ts
-// tested: Playwright v1.50+, Node.js 20+
-
+// tests/todos/crud-workflow.spec.ts
 import { test, expect } from '@playwright/test';
 
-// Auth tests: serial เพราะ step 2 พึ่งพา step 1
-test.describe('Authentication Flow', () => {
+// Todo CRUD: serial เพราะ step 2 & 3 ต้องการ id จาก step 1
+// ถ้า step 1 fail → step 2 & 3 จะ skip อัตโนมัติ
+test.describe('Todo CRUD Workflow', () => {
   test.describe.configure({ mode: 'serial' });
 
-  test('1. register new account', async ({ page }) => {
-    await page.goto('/register');
-    await page.fill('[name="email"]', 'newuser@test.com');
-    await page.fill('[name="password"]', 'SecurePass123');
-    await page.click('[type="submit"]');
-    await expect(page).toHaveURL('/dashboard');
+  let createdTodoId: number;
+
+  test('1. สร้าง todo ใหม่', async ({ request }) => {
+    const res = await request.post('/api/todos', {
+      data: { text: 'Task ที่ต้องสร้างก่อน' },
+    });
+    expect(res.ok()).toBeTruthy();
+    const todo = await res.json();
+    createdTodoId = todo.id;  // เก็บ id ไว้ให้ step ต่อไปใช้
   });
 
-  test('2. login with registered account', async ({ page }) => {
-    // test นี้ต้องการ account จาก step 1
-    await page.goto('/login');
-    await page.fill('[name="email"]', 'newuser@test.com');
-    await page.fill('[name="password"]', 'SecurePass123');
-    await page.click('[type="submit"]');
-    await expect(page.locator('.user-menu')).toBeVisible();
+  test('2. mark complete (ต้องการ id จาก step 1)', async ({ request }) => {
+    const res = await request.patch(`/api/todos/${createdTodoId}`, {
+      data: { completed: true },
+    });
+    expect(res.ok()).toBeTruthy();
+    const updated = await res.json();
+    expect(updated.completed).toBe(true);
   });
 
-  test('3. logout and verify redirect', async ({ page }) => {
-    // test นี้ต้องการ logged-in state จาก step 2
-    await page.click('.user-menu');
-    await page.click('[data-action="logout"]');
-    await expect(page).toHaveURL('/login');
+  test('3. ลบ todo (ต้องการ id จาก step 1)', async ({ request }) => {
+    const res = await request.delete(`/api/todos/${createdTodoId}`);
+    expect(res.ok()).toBeTruthy();
   });
 });
 ```
 
 ```typescript
-// tests/products/catalog.spec.ts
-// tested: Playwright v1.50+, Node.js 20+
-
+// tests/shop/catalog.spec.ts
 import { test, expect } from '@playwright/test';
 
 // Product tests: read-only ทั้งหมด — parallel เต็มที่โดยไม่มีความเสี่ยง
 test.describe('Product Catalog', () => {
   test.describe.configure({ mode: 'parallel' });
 
-  test('search by category', async ({ page }) => {
-    await page.goto('/products?category=electronics');
-    await expect(page.locator('.product-card')).toHaveCount(12);
+  test('แสดง product list', async ({ page }) => {
+    await page.goto('/shop');
+    await expect(page.getByTestId('product-grid').getByRole('listitem')).not.toHaveCount(0);
   });
 
-  test('filter by price range', async ({ page }) => {
-    await page.goto('/products');
-    await page.fill('[name="min-price"]', '100');
-    await page.fill('[name="max-price"]', '500');
-    await page.click('[data-filter="apply"]');
-    const products = page.locator('.product-card');
+  test('filter ตาม category Electronics', async ({ page }) => {
+    await page.goto('/shop');
+    await page.getByTestId('filter-category').selectOption('Electronics');
+    const products = page.getByTestId('product-grid').getByRole('listitem');
     await expect(products).not.toHaveCount(0);
   });
 
-  test('product detail page', async ({ page }) => {
-    await page.goto('/products/laptop-pro-x1');
-    await expect(page.locator('h1')).toContainText('Laptop Pro X1');
-    await expect(page.locator('.price')).toBeVisible();
+  test('search product ด้วย keyword', async ({ page }) => {
+    await page.goto('/shop');
+    await page.getByTestId('search-input').fill('iPhone');
+    await page.getByTestId('btn-search').click();
+    await expect(page.getByText('iPhone 15 Pro')).toBeVisible();
   });
 });
 ```

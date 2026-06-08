@@ -411,38 +411,33 @@ test('add a new todo item', async ({ page }) => {
 
 ---
 
-### Intermediate: ตรวจสอบ form validation ด้วย Soft Assertions
+### Intermediate: ตรวจสอบ error state หลาย condition พร้อมกันด้วย Soft Assertions
 
-สถานการณ์: หน้า Register ต้องแสดง error message ทุก field ที่ไม่ถูกต้องพร้อมกัน — คุณต้องการ verify ว่า error ทุก field แสดงถูกต้องในครั้งเดียว
+สถานการณ์: Login ล้มเหลว — ต้องการ verify ว่า error message แสดงถูกต้อง, form ยังอยู่บนหน้า, และ URL ไม่ redirect ออกไป ทั้งหมดในครั้งเดียว
 
 ```typescript
 // tested: Playwright v1.50+, Node.js 20+
 import { test, expect } from '@playwright/test';
 
-test('shows validation errors for all invalid fields simultaneously', async ({ page }) => {
-  await page.goto('http://localhost:3000/register');
+test('แสดง error state ครบทุก condition เมื่อ login ไม่สำเร็จ', async ({ page }) => {
+  await page.goto('/login');
 
-  // กรอกข้อมูลที่ invalid ทุก field
-  await page.getByLabel('Username').fill('ab');              // ต้องการ >= 3 ตัวอักษร
-  await page.getByLabel('Email').fill('not-an-email');       // รูปแบบ email ผิด
-  await page.getByLabel('Password').fill('123');             // ต้องการ >= 8 ตัวอักษร
-  await page.getByLabel('Confirm Password').fill('456');     // ไม่ match password
+  await page.getByLabel('Username').fill('wronguser');
+  await page.getByLabel('Password').fill('wrongpass');
+  await page.getByRole('button', { name: 'Login' }).click();
 
-  // กด Submit เพื่อ trigger validation
-  await page.getByRole('button', { name: 'Register' }).click();
+  // ใช้ soft assertions — ตรวจทุก condition พร้อมกัน แม้บางตัว fail จะไม่หยุด
+  await expect.soft(page.getByTestId('login-error')).toBeVisible();
+  await expect.soft(page.getByTestId('login-error')).toContainText('Invalid credentials');
+  await expect.soft(page.getByLabel('Username')).toBeVisible();   // form ยังแสดงอยู่
+  await expect.soft(page.getByLabel('Password')).toBeVisible();   // password field ยังอยู่
 
-  // ใช้ soft assertions — ตรวจทุก error message แม้บางตัว fail
-  await expect.soft(page.getByTestId('error-username')).toContainText('at least 3 characters');
-  await expect.soft(page.getByTestId('error-email')).toContainText('valid email');
-  await expect.soft(page.getByTestId('error-password')).toContainText('at least 8 characters');
-  await expect.soft(page.getByTestId('error-confirm-password')).toContainText('do not match');
-
-  // ตรวจว่ายังอยู่หน้า register (ไม่ redirect ออกไป)
-  await expect(page).toHaveURL(/\/register/);
+  // ตรวจว่ายังอยู่หน้า login (ไม่ redirect ออกไป)
+  await expect(page).toHaveURL('/login');
 });
 ```
 
-ทำไมใช้ soft assertions ที่นี่? ถ้าใช้ `expect()` ธรรมดา และ `error-username` ไม่แสดง test จะหยุดทันที — คุณจะไม่รู้ว่า field อื่น error หรือไม่ ต้องรัน test ซ้ำหลายรอบ soft assertions ทำให้เห็นภาพรวมของทุก validation ในรอบเดียว
+ทำไมใช้ soft assertions ที่นี่? ถ้าใช้ `expect()` ธรรมดา และ `login-error` ไม่แสดง test จะหยุดทันที — คุณจะไม่รู้ว่า form ยังอยู่หรือไม่ และ URL ยังถูกต้องไหม soft assertions ทำให้เห็นภาพรวมของทุก condition ในรอบเดียว
 
 ---
 
@@ -451,12 +446,13 @@ test('shows validation errors for all invalid fields simultaneously', async ({ p
 สถานการณ์นี้เป็น diagnosis — ทีมรับ bug report ว่า test ที่ทำงานกับ phone number field พัง เหตุผลไม่ชัด
 
 ```typescript
-// tested: Playwright v1.50+, Node.js 20+
+// partial example — สาธิต concept สำหรับ app ที่มี masked input
+// (demo app ไม่มี masked phone field — ปรับ route/selector ให้ตรงกับ app จริงก่อนรัน)
 import { test, expect } from '@playwright/test';
 
 // ❌ TEST ที่พัง — ทีมรายงานว่า phone ไม่ถูก format หลัง submit
 test.skip('broken — fill() with masked input', async ({ page }) => {
-  await page.goto('http://localhost:3000/profile');
+  await page.goto('/profile');
 
   // Phone field มี input mask: (___) ___-____
   // fill() แทนที่ content ทั้งหมดในครั้งเดียว
@@ -469,8 +465,8 @@ test.skip('broken — fill() with masked input', async ({ page }) => {
 });
 
 // ✅ วิธีที่ถูก — ใช้ pressSequentially() กับ masked input
-test('phone number formats correctly with mask', async ({ page }) => {
-  await page.goto('http://localhost:3000/profile');
+test.skip('phone number formats correctly with mask', async ({ page }) => {
+  await page.goto('/profile');
 
   const phoneInput = page.getByLabel('Phone Number');
 

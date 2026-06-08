@@ -169,12 +169,12 @@ test.fixme('checkout flow with discount code', async ({ page }) => {
 **`test.fail()`** — expect ว่า test จะ fail (ใช้น้อย แต่มีประโยชน์)
 
 ```typescript
-test.fail('login with expired token should redirect', async ({ page }) => {
+test.fail('admin redirect should go to clean /login (known: URL has extra query params)', async ({ page }) => {
   // Playwright จะรัน test นี้และ PASS ถ้า test fail
   // ถ้า behavior แก้แล้ว (test ผ่าน) — Playwright จะ warn ว่า
   // "test was expected to fail but it passed"
-  await page.goto('/dashboard');
-  await expect(page).toHaveURL('/login');
+  await page.goto('/admin');  // unauthenticated → redirect
+  await expect(page).toHaveURL('/login');  // fails: actual URL คือ /login?redirect=/admin&unauthorized=1
 });
 // tested: Playwright v1.50+, Node.js 20+
 ```

@@ -125,12 +125,15 @@ test('popup opens and has correct title', async ({ page }) => {
 ```typescript
 // tested: Playwright v1.50+, Node.js 20+
 
+await page.goto('/advanced');
 // ใช้ attribute selector เพื่อ target iframe ที่ต้องการ
 const frame = page.frameLocator('iframe[data-testid="embedded-iframe"]');
 
 // ทุก locator ที่ได้จาก frameLocator จะ scope ภายใน iframe นั้น
-await frame.getByLabel('Username').fill('John');
-await frame.getByRole('button', { name: 'Submit' }).click();
+// iframe ใน demo app embed /todos page
+await frame.getByTestId('input-new-todo').fill('Buy milk');
+await frame.getByRole('button', { name: 'Add' }).click();
+await expect(frame.getByText('Buy milk')).toBeVisible();
 ```
 
 **`locator.contentFrame()`** (เพิ่มใน v1.43) — ใช้เมื่อคุณมี `Locator` ของ iframe element อยู่แล้ว แล้วต้องการ interact กับ content ข้างใน:
@@ -145,7 +148,7 @@ const iframeLocator = page.locator('iframe[data-testid="embedded-iframe"]');
 const frameLocator = iframeLocator.contentFrame();
 
 // ตอนนี้ interact กับ content ภายใน iframe ได้
-await frameLocator.getByRole('button').click();
+await frameLocator.getByRole('button', { name: 'Add' }).click();
 ```
 
 Operation ย้อนกลับ — จาก FrameLocator กลับเป็น Locator (element ของ iframe เอง):
@@ -350,25 +353,27 @@ test('mobile geolocation', async ({ browser }) => {
 ```typescript
 // tested: Playwright v1.50+, Node.js 20+
 
-test('print stylesheet hides navigation', async ({ page }) => {
-  await page.goto('/dashboard');
+test('page renders correctly in print mode', async ({ page }) => {
+  await page.goto('/');
 
   // switch ไป print mode
   await page.emulateMedia({ media: 'print' });
 
-  // navigation ควร hidden ใน print
-  await expect(page.locator('nav')).not.toBeVisible();
+  // verify page ยังแสดงผลถูกต้องใน print mode
+  await expect(page.locator('main')).toBeVisible();
+  await expect(page.locator('nav')).toBeVisible();
 });
 
-test('dark mode shows correct colors', async ({ page }) => {
-  await page.goto('/settings');
+test('dark mode shows correct background color', async ({ page }) => {
+  await page.goto('/visual');
 
-  // เปลี่ยน color scheme ระหว่าง test
-  await page.emulateMedia({ colorScheme: 'dark' });
+  // เปิด dark mode ผ่าน UI toggle
+  await page.getByTestId('btn-theme-toggle').click();
+  await expect(page.getByTestId('current-theme')).toHaveText('Current: Dark');
 
-  // verify dark mode styles
+  // verify dark mode background color (#1a1a1a = rgb(26, 26, 26))
   const body = page.locator('body');
-  await expect(body).toHaveCSS('background-color', 'rgb(18, 18, 18)');
+  await expect(body).toHaveCSS('background-color', 'rgb(26, 26, 26)');
 });
 ```
 
@@ -729,8 +734,8 @@ await frame.fill('#username', 'John');
 
 ```typescript
 // ถูก — stable ใช้ attribute ที่ meaningful
-const frame = page.frameLocator('iframe[data-testid="login-frame"]');
-await frame.getByLabel('Username').fill('John');
+const frame = page.frameLocator('iframe[data-testid="embedded-iframe"]');
+await frame.getByTestId('input-new-todo').fill('Learn Playwright');
 ```
 
 การใช้ index แบบ hardcode พังทันทีที่ order ของ iframe ใน page เปลี่ยน *(source: https://playwright.dev/docs/frames)*

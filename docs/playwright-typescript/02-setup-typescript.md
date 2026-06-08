@@ -267,32 +267,32 @@ Running 1 test using 1 worker
 
 ถ้า test fail จะเห็น error พร้อม screenshot อัตโนมัติใน `test-results/` folder
 
-### Intermediate — ตรวจ form elements ครบถ้วนในหน้า registration
+### Intermediate — ตรวจ form elements ครบถ้วนในหน้า checkout
 
-สถานการณ์: QA team ต้องการ smoke test ว่าหน้า registration มี field ครบก่อนส่ง sprint review
+สถานการณ์: QA team ต้องการ smoke test ว่าหน้า checkout มี field ครบก่อนส่ง sprint review
 
 ```typescript
-// tests/registration-form.spec.ts
+// tests/checkout-form.spec.ts
 // tested: Playwright v1.50+, Node.js 20+
 import { test, expect } from '@playwright/test';
 
-test('registration form has all required fields', async ({ page }) => {
-  await page.goto('/register'); // ใช้ relative path เพราะมี baseURL ใน config
+test('checkout shipping form has all required fields', async ({ page }) => {
+  await page.goto('/checkout'); // ใช้ relative path เพราะมี baseURL ใน config
 
   // ตรวจ title ถูก
-  await expect(page).toHaveTitle(/Register/);
+  await expect(page).toHaveTitle(/Checkout/);
 
   // ตรวจ input fields ครบ
   await expect(page.getByLabel('Full Name')).toBeVisible();
-  await expect(page.getByLabel('Email')).toBeVisible();
-  await expect(page.getByLabel('Password')).toBeVisible();
-  await expect(page.getByLabel('Confirm Password')).toBeVisible();
+  await expect(page.getByLabel('Address')).toBeVisible();
+  await expect(page.getByLabel('City')).toBeVisible();
+  await expect(page.getByLabel('Country')).toBeVisible();
 
-  // ตรวจ submit button ใช้งานได้
-  await expect(page.getByRole('button', { name: 'Create Account' })).toBeEnabled();
+  // ตรวจ Next button ใช้งานได้
+  await expect(page.getByTestId('btn-next-shipping')).toBeEnabled();
 
-  // ตรวจ error messages ซ่อนอยู่ตอนที่ยังไม่ submit
-  await expect(page.getByTestId('form-errors')).toBeHidden();
+  // ตรวจ stepper แสดง step 1 active
+  await expect(page.getByTestId('step-shipping')).toBeVisible();
 });
 ```
 
@@ -316,28 +316,28 @@ async function loginAs(page: Page, username: string, password: string): Promise<
   await page.getByLabel('Username').fill(username);
   await page.getByLabel('Password').fill(password);
   await page.getByRole('button', { name: 'Login' }).click();
-  await expect(page).toHaveURL('/dashboard');
+  await expect(page).toHaveURL('/');  // redirect กลับ homepage หลัง login
 }
 
 test('authenticated user sees all nav links', async ({ page }) => {
-  await loginAs(page, 'testuser', 'password123');
+  await loginAs(page, 'testuser', 'test123');
 
   const links = await getNavLinks(page);
-  await expect(links).toHaveCount(7);
+  await expect(links).toHaveCount(8);  // 7 page links + Logout
 
   // ตรวจว่า link texts ถูกต้อง
   await expect(links).toContainText([
-    'Dashboard', 'Todos', 'Shop', 'Cart', 'Components', 'Advanced', 'Visual'
+    'Dashboard', 'Todos', 'Shop', 'Cart', 'Components', 'Advanced', 'Visual', 'Logout'
   ]);
 });
 
-test('unauthenticated user sees limited nav links', async ({ page }) => {
+test('unauthenticated user sees Login link in nav', async ({ page }) => {
   await page.goto('/');
 
   const links = await getNavLinks(page);
-  // ไม่ได้ login ควรเห็นแค่ Login link
-  await expect(links).toHaveCount(1);
-  await expect(links.first()).toHaveText('Login');
+  // ไม่ได้ login: ยังเห็น nav ทุก link + Login (แทน Logout)
+  await expect(links).toHaveCount(8);  // 7 page links + Login
+  await expect(links.last()).toHaveText('Login');
 });
 ```
 

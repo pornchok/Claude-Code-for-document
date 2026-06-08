@@ -85,7 +85,7 @@ Test ที่ครอบคลุมต้องตรวจทั้ง 3 ช
 // partial example — full runnable version อยู่ใน Section 5
 // tested: Playwright v1.50+, Node.js 20+
 test('todo created via UI appears in database', async ({ page, request }) => {
-  await page.goto('http://localhost:3000/todos');
+  await page.goto('/todos');
   await page.getByTestId('input-new-todo').fill('Buy groceries');
   await page.getByTestId('btn-add-todo').click();
 
@@ -170,7 +170,7 @@ test('completing todo updates all layers correctly', async ({ page, request }) =
   const { id } = await createRes.json();
 
   // Layer 1: UI action — toggle complete
-  await page.goto('http://localhost:3000/todos');
+  await page.goto('/todos');
   await page.getByTestId(`todo-item-${id}`).locator('input[type="checkbox"]').check();
 
   // Layer 2: API verify — ตรวจว่า DB state เปลี่ยนผ่าน API
@@ -213,7 +213,7 @@ test('deleted todo is removed from database', async ({ page, request }) => {
   const { id } = await createRes.json();
 
   // Action: navigate ไปหน้า todos
-  await page.goto('http://localhost:3000/todos');
+  await page.goto('/todos');
   await expect(page.getByTestId(`todo-item-${id}`)).toBeVisible();
 
   // ลบผ่าน API (เพราะ demo app delete ผ่าน UI ต้องการ data-testid ที่ specific)
@@ -363,7 +363,7 @@ test.beforeEach(async ({ request }) => {
 });
 
 test('todo fields are saved correctly in database', async ({ page, request }) => {
-  await page.goto('http://localhost:3000/todos');
+  await page.goto('/todos');
   await page.getByTestId('input-new-todo').fill('Read Playwright docs');
   await page.getByTestId('btn-add-todo').click();
 
@@ -422,7 +422,7 @@ test('completing one todo updates DB without affecting others', async ({ page, r
   const todo2 = await res2.json();
 
   // Layer 1: UI action — complete todo1 เท่านั้น
-  await page.goto('http://localhost:3000/todos');
+  await page.goto('/todos');
   await page.getByTestId(`todo-item-${todo1.id}`).locator('input[type="checkbox"]').check();
 
   // Layer 2: ใช้ expect.poll() รอ PATCH เสร็จก่อน verify

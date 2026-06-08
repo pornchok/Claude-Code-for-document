@@ -53,7 +53,7 @@ mkdir playwright-course
 cd playwright-course
 
 # Install Playwright + TypeScript
-npm init playwright@latest -- --typescript
+npm init playwright@latest
 ```
 
 หลังจาก `npm init` เสร็จ คุณจะได้ folder structure แบบนี้:
@@ -73,27 +73,26 @@ playwright-course/
 npx playwright install
 ```
 
-### ขั้นตอน 3: สร้าง Demo App สำหรับ Practice
-สำหรับบทที่ 2 เป็นต้นไป เราจะเขียน test ไปกับ Demo App นี้:
+### ขั้นตอน 3: รัน Demo App สำหรับ Practice
+สำหรับบทที่ 2 เป็นต้นไป เราจะเขียน test ไปกับ Demo App ที่มีอยู่ในคอร์สนี้แล้ว
+
+**เปิด terminal ใหม่ (แยกจาก terminal ที่ใช้รัน test)** แล้วรัน:
 
 ```bash
-# Clone demo app (ก่อนสร้างไฟล์ example.spec.ts)
-git clone https://github.com/playwright-demo-app/todo-app.git
-cd todo-app
+# ไปที่ folder ของ demo app ที่มาพร้อมกับ course materials
+cd path/to/docs/playwright-typescript/playwright-course-app
 npm install
 npm start
 # → ใช้งาน http://localhost:3000
-# (เปิด browser อื่นหรือ terminal อื่นต่อเพื่อรันการ test)
 ```
 
-**หมายเหตุ**: ในแต่ละบท คุณจะเขียน `.spec.ts` ใหม่ที่ชี้ไปที่ http://localhost:3000 — ให้ทำ `npm start` ตรงนี้ทิ้งไว้ตลอดเวลา
+**หมายเหตุ**: ให้ทิ้ง terminal นี้ไว้ตลอด (ไม่ต้อง Ctrl+C) ส่วน terminal สำหรับรัน test ให้เปิดแยกต่างหาก
 
 ### ขั้นตอน 4: ยืนยันการติดตั้งสำเร็จ
-```bash
-# กลับไปที่ folder playwright-course
-cd ..
+กลับไปที่ **terminal แรก** (ที่อยู่ใน `playwright-course/`) แล้วรัน:
 
-# รัน test ตัวอย่าง
+```bash
+# รัน test ตัวอย่าง (ต้องอยู่ใน playwright-course/ และ demo app ต้องรันอยู่)
 npx playwright test
 
 # ควรเห็น output บอกว่า test passed หมด

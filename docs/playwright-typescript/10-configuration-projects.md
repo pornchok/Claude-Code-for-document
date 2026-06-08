@@ -599,7 +599,7 @@ use: { baseURL: 'http://localhost:3000' }
 
 // test file
 await page.goto('/login');       // relative path เสมอ
-await page.goto('/dashboard');
+await page.goto('/todos');
 ```
 *(source: https://playwright.dev/docs/test-configuration)*
 
