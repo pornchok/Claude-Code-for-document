@@ -1,0 +1,4379 @@
+
+<!doctype html>
+<html lang="th" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="คอร์ส QA & Automation Testing ภาษาไทย">
+      
+      
+      
+        <link rel="canonical" href="https://pornchok.github.io/Claude-Code-for-document/jmeter-performance-testing/07-assertions/">
+      
+      
+        <link rel="prev" href="../06-parameterization/">
+      
+      
+        <link rel="next" href="../08-running-reports/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>บทที่ 7 - Assertions - QA Learning Hub</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#7-assertions-response" class="md-skip">
+          ข้ามไปที่เนื้อหา
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="หัวข้อ">
+    <a href="../.." title="QA Learning Hub" class="md-header__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            QA Learning Hub
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              บทที่ 7 - Assertions
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="ค้นหา" placeholder="ค้นหา" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="ค้นหา">
+        
+        <button type="reset" class="md-search__icon md-icon" title="ล้าง" aria-label="ล้าง" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            กำลังเริ่มต้นการค้นหา
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="แท็บ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../playwright-typescript/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Playwright TypeScript
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../robot-framework-for-qa/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../robot-framework-control-flow/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework Control Flow
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../rf-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  RF Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../wdio-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  WebdriverIO Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-overview/" class="md-tabs__link">
+          
+  
+  
+  JMeter Performance Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../english-for-beginners/00-overview/" class="md-tabs__link">
+          
+  
+  
+  English for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-tabs__link">
+          
+  
+  
+  Claude Code Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ตัวนำทาง" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="QA Learning Hub" class="md-nav__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    QA Learning Hub
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playwright TypeScript
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Playwright TypeScript
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/01-why-playwright/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - ทำไมต้อง Playwright
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/02-setup-typescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup + TypeScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/03-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/04-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/05-actions-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Actions & Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/06-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/07-fixtures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Fixtures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/08-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/09-test-organization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Test Organization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/10-configuration-projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Configuration & Projects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/11-parallelism-sharding-reporting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 11 - Parallelism & Sharding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/12-mocking-network-time-browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 12 - Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/13-authentication-storage-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 13 - Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/14-advanced-browser-emulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 14 - Advanced Browser Emulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/15-api-testing-hybrid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 15 - API Testing & Hybrid
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/16-visual-accessibility-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 16 - Visual & Accessibility
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/17-cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 17 - CI/CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/18-production-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 18 - Production Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/19-db-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 19 - DB Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/20-professional-project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 20 - Professional Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/01-what-is-robot-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is RF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/03-test-structure-syntax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/04-keywords-and-resource-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Keywords & Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/05-web-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Web Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/06-data-driven-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Data Driven
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/07-reports-and-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Reports & Debug
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/08-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework Control Flow
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework Control Flow
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/01-if-else/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - If/Else
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/02-for-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - For Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/03-while-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - While Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RF Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RF Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/01-mobile-testing-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mobile Landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/02-setup-environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/03-appium-capabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Capabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/04-appiumlibrary-keywords/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - AppiumLibrary Keywords
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/05-mobile-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Mobile Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/06-gestures-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Gestures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/07-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WebdriverIO Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    WebdriverIO Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/01-what-is-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/02-setup-wdio-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/03-wdio-appium-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/04-writing-tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Writing Tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/05-selectors-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Selectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/06-page-objects-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Page Objects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/07-comparing-rf-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - RF vs WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMeter Performance Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMeter Performance Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-performance-testing-fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-ui-test-plan-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Plan Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-first-test-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - First Test Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-thread-group-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Thread Group
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-parameterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Parameterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Assertions
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-chapter-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⏰ Pre-chapter Retrieval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. วัตถุประสงค์
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. ทำไมต้องรู้?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-analogy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Analogy: ระบบตรวจสอบในสายการผลิต
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. เนื้อหาหลัก
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. เนื้อหาหลัก">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-response-assertion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Response Assertion: ทำไมถึงต้องใช้?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-json-assertion-json-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 JSON Assertion: ตรวจสอบ JSON Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-duration-assertion-response-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Duration Assertion: ตรวจสอบ Response Time
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-size-assertion-response-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Size Assertion: ตรวจสอบ Response Size
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ตัวอย่าง 3 ระดับ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. ตัวอย่าง 3 ระดับ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beginner-response-assertion-status-code-get-posts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ระดับ Beginner: Response Assertion ตรวจ Status Code สำหรับ GET /posts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-json-assertion-duration-assertion-payment-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ระดับ Intermediate: JSON Assertion + Duration Assertion สำหรับ Payment API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-jsr223-assertion-complex-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ระดับ Advanced: JSR223 Assertion สำหรับ Complex Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Common Mistakes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Common Mistakes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-assertion-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (a) ลืมใส่ Assertion ทำให้ Failure ไม่ถูกนับ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-contains-substring-false-positive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (b) ใช้ Contains แทน Substring ทำให้เกิด False Positive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-json-path-syntax-assertion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (c) JSON Path ผิด Syntax ทำให้ Assertion ไม่ทำงาน
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. สรุปบท
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-running-reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-distributed-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Distributed Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-anti-patterns-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    English for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    English for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/01-mindset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/02-phonics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Phonics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/03-vocabulary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Vocabulary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/04-sentence-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Sentence Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/05-to-be-present-simple/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - To Be & Present Simple
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/06-questions-negatives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Questions & Negatives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/07-numbers-time-days/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Numbers, Time & Days
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/08-phrases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Phrases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Claude Code Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-chapter-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⏰ Pre-chapter Retrieval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. วัตถุประสงค์
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. ทำไมต้องรู้?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-analogy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Analogy: ระบบตรวจสอบในสายการผลิต
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. เนื้อหาหลัก
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. เนื้อหาหลัก">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-response-assertion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Response Assertion: ทำไมถึงต้องใช้?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-json-assertion-json-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 JSON Assertion: ตรวจสอบ JSON Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-duration-assertion-response-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Duration Assertion: ตรวจสอบ Response Time
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-size-assertion-response-size" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Size Assertion: ตรวจสอบ Response Size
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ตัวอย่าง 3 ระดับ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. ตัวอย่าง 3 ระดับ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beginner-response-assertion-status-code-get-posts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ระดับ Beginner: Response Assertion ตรวจ Status Code สำหรับ GET /posts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-json-assertion-duration-assertion-payment-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ระดับ Intermediate: JSON Assertion + Duration Assertion สำหรับ Payment API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-jsr223-assertion-complex-validation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ระดับ Advanced: JSR223 Assertion สำหรับ Complex Validation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Common Mistakes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Common Mistakes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-assertion-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (a) ลืมใส่ Assertion ทำให้ Failure ไม่ถูกนับ
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-contains-substring-false-positive" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (b) ใช้ Contains แทน Substring ทำให้เกิด False Positive
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-json-path-syntax-assertion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (c) JSON Path ผิด Syntax ทำให้ Assertion ไม่ทำงาน
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. สรุปบท
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="7-assertions-response">บทที่ 7: Assertions — ตรวจสอบว่า Response ถูกต้อง<a class="headerlink" href="#7-assertions-response" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>เวลาโดยประมาณ: 30–45 นาที</p>
+</blockquote>
+<hr />
+<h2 id="pre-chapter-retrieval">⏰ Pre-chapter Retrieval<a class="headerlink" href="#pre-chapter-retrieval" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>แนะนำ: อ่านบทนี้หลังจากผ่านไปอย่างน้อย 1 วันหลังบทที่ 6</p>
+</blockquote>
+<p><strong>ก่อนอ่านบทนี้ ลองตอบ:</strong></p>
+<p>ในบทที่ 6 คุณเรียนรู้การใช้ CSV Data Set Config เพื่อ parameterize ข้อมูล เช่น user ID หรือ search term ต่างกันทุก iteration แล้ว HTTP Request ก็ส่ง request พร้อม parameter เหล่านั้นไปยัง server</p>
+<p><strong>คำถาม:</strong> สมมติ test plan ของคุณมี 100 threads วนลูป 10 ครั้ง โดยแต่ละ iteration ใช้ <code>userId</code> ต่างกันจาก CSV ไปเรียก <code>GET /users/${userId}</code> — ถ้า server return HTTP 200 ทุก request แต่ response body บาง request เป็น <code>{"error": "User not found"}</code> สิ่งที่เห็นใน report จะเป็นอย่างไร? JMeter จะนับ request เหล่านั้นว่าสำเร็จหรือล้มเหลว?</p>
+<p>เขียนคำตอบลงกระดาษก่อน — อย่า scroll ข้ามไปดูเฉลย และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น</p>
+<hr />
+<blockquote>
+<p><strong>เฉลย:</strong> JMeter จะนับว่า <strong>สำเร็จทั้งหมด</strong> (0% error rate) เพราะ JMeter ตัดสินผลจาก HTTP status code เป็นหลัก — ถ้า server return 200 JMeter ถือว่า pass แม้ body จะมี error message ก็ตาม</p>
+<p>นั่นคือเหตุผลหลักที่เราต้องมี <strong>Assertions</strong> — เพื่อบอก JMeter ว่า "ไม่ใช่แค่ 200 นะ ต้องตรวจ body ด้วย"</p>
+<p><strong>Generation effect:</strong> ก่อนอ่านต่อ ลองเขียนด้วยคำของตัวเองว่า "Assertion คืออะไร" ในหนึ่งประโยค — เขียนก่อนที่จะรู้คำตอบจากบทนี้ การเดาล่วงหน้าช่วยให้จำได้นานกว่าการอ่านแบบ passive</p>
+<p><strong>Remediation path:</strong> ถ้าตอบว่า "JMeter จะนับเป็น failure เพราะ body มี error" — อ่านส่วน 4.1 แรก แล้วกลับมาตอบคำถามนี้ใหม่ก่อนอ่านต่อ</p>
+</blockquote>
+<hr />
+<h2 id="1">1. วัตถุประสงค์<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>เมื่ออ่านบทนี้จบ คุณจะสามารถ:</p>
+<ul>
+<li><strong>อธิบาย</strong> ว่าทำไมการตรวจแค่ HTTP status code ถึงไม่เพียงพอ และ Assertion แก้ปัญหานี้อย่างไร</li>
+<li><strong>ตั้งค่า</strong> Response Assertion ได้ครบ 4 fields: Apply To, Field to Test, Pattern Matching Rules, Patterns to Test</li>
+<li><strong>ใช้</strong> JSON Assertion เพื่อตรวจ structure และ value ใน response body ที่เป็น JSON</li>
+<li><strong>ใช้</strong> Duration Assertion เพื่อกำหนด threshold response time ที่ยอมรับได้</li>
+<li><strong>เลือก</strong> Pattern Matching Rule ที่ถูกต้อง (Contains vs Equals vs Substring) ตาม use case</li>
+<li><strong>รู้จัก</strong> JSR223 Assertion (Groovy) ว่าเมื่อไหรควรพิจารณาและ trade-off คืออะไร</li>
+</ul>
+<hr />
+<h2 id="2">2. ทำไมต้องรู้?<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>สมมติคุณ deploy feature ใหม่และรัน load test — report บอก error rate 0%, response time ดี ทีมดีใจมาก แต่วันถัดมา customer report ว่า API คืนข้อมูลผิด user มีการปนกันของข้อมูล</p>
+<p>เกิดอะไรขึ้น? API return HTTP 200 ทุก request แต่ logic ข้างในผิด — ดึงข้อมูลผิด record บ้าง return empty object บ้าง</p>
+<p>ถ้ามี Assertion ตรวจ response body load test จะ detect ปัญหานี้ตั้งแต่ตอน test ไม่ใช่ตอนที่ customer เจอ</p>
+<p>JMeter official docs นิยาม Assertions ไว้ว่า:</p>
+<blockquote>
+<p><em>"Assertions allow you to assert facts about responses received from the server being tested."</em>
+<em>(source: https://jmeter.apache.org/usermanual/test_plan.html)</em></p>
+</blockquote>
+<hr />
+<h2 id="3-analogy">3. Analogy: ระบบตรวจสอบในสายการผลิต<a class="headerlink" href="#3-analogy" title="Permanent link">&para;</a></h2>
+<p>นึกภาพสายการผลิตชิ้นส่วนรถยนต์ ทุกชิ้นที่ผ่านสายพานต้องผ่านด่านตรวจ 3 ด่าน:</p>
+<p><strong>ด่านที่ 1 — ตรวจรหัส (Response Assertion):</strong> สแกน barcode ว่าตรงกับ part number ที่ order หรือเปล่า — ถ้าได้ชิ้นส่วนที่มี part number ถูกต้องจึงผ่าน</p>
+<p><strong>ด่านที่ 2 — ตรวจโครงสร้างและขนาด (JSON Assertion):</strong> ชิ้นส่วนต้องมีรูน็อต 4 รู ขนาด M6 — ไม่ใช่แค่ "มีรู" แต่ต้องถูก spec ด้วย</p>
+<p><strong>ด่านที่ 3 — ตรวจความเร็วสายพาน (Duration Assertion):</strong> ถ้าตรวจชิ้นส่วน 1 ชิ้นใช้เวลาเกิน 5 วินาที แสดงว่ากระบวนการมีปัญหา — ต้อง flag ทันที</p>
+<p>⚠️ <strong>ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:</strong> assertion pass แปลว่า response ถูกต้องสมบูรณ์ — ผิด assertion ตรวจเฉพาะสิ่งที่คุณตั้งค่าไว้เท่านั้น ถ้าตั้งผิด (เช่น ตรวจแค่ status code 200 แต่ไม่ตรวจ body) จะเกิด <strong>false positive</strong> — assertion pass ทั้งที่ response มี error ซ่อนอยู่ใน body เช่น <code>{"status": 200, "error": "payment_failed"}</code> จะผ่าน assertion ถ้าคุณตรวจแค่ HTTP 200</p>
+<hr />
+<h2 id="4">4. เนื้อหาหลัก<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<h3 id="41-response-assertion">4.1 Response Assertion: ทำไมถึงต้องใช้?<a class="headerlink" href="#41-response-assertion" title="Permanent link">&para;</a></h3>
+<p>HTTP status code บอกแค่ว่า "server ตอบกลับมาแล้ว" แต่ไม่ได้บอกว่า "ตอบในสิ่งที่ถูกต้อง"</p>
+<p>ตัวอย่างที่พบบ่อย: API บาง design return HTTP 200 พร้อม body เป็น <code>{"success": false, "error": "Unauthorized"}</code> — ถ้าไม่มี Response Assertion JMeter จะนับ request นี้ว่า <strong>สำเร็จ</strong> และไม่นับใน error rate เลย</p>
+<p><strong>วิธีเพิ่ม Response Assertion:</strong>
+คลิกขวาที่ HTTP Request Sampler → Add → Assertions → Response Assertion</p>
+<p><strong>4 fields ที่ต้องตั้งค่า:</strong></p>
+<p><strong>Apply To</strong> — กำหนด scope ของ assertion</p>
+<blockquote>
+<p><em>"Target scope (main sample, sub-samples, etc.)"</em>
+<em>(source: https://jmeter.apache.org/usermanual/component_reference.html)</em></p>
+</blockquote>
+<p>ค่าที่ใช้บ่อย: <code>Main sample only</code> — ตรวจ response ของ request หลัก ไม่รวม sub-resources เช่น images, CSS</p>
+<p><strong>Field to Test</strong> — เลือกว่าจะตรวจอะไร:
+- <code>Response Code</code> — ตรวจ HTTP status code (200, 404, 500)
+- <code>Response Body</code> — ตรวจ content ใน body
+- <code>Response Message</code> — ตรวจข้อความ เช่น "OK", "Not Found"
+- <code>Response Headers</code> — ตรวจ header เช่น <code>Content-Type</code></p>
+<p><strong>Pattern Matching Rules (Test Type)</strong> — กำหนดวิธีเปรียบเทียบ:</p>
+<blockquote>
+<p><em>Options: "Contains, Equals, Matches, Substring"</em>
+<em>(source: https://jmeter.apache.org/usermanual/component_reference.html)</em></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>ความหมาย</th>
+<th>เมื่อไหรควรใช้</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Contains</code></td>
+<td>Pattern เป็น regex ที่ต้องมีอยู่ใน response</td>
+<td>ตรวจว่า body มี key word บางคำ</td>
+</tr>
+<tr>
+<td><code>Equals</code></td>
+<td>Response ทั้งหมดต้องตรงกับ pattern (regex)</td>
+<td>ตรวจ status code หรือ response สั้นๆ ที่แน่นอน</td>
+</tr>
+<tr>
+<td><code>Substring</code></td>
+<td>Pattern เป็น plain text ที่ต้องมีอยู่</td>
+<td>ค้นหาข้อความธรรมดาโดยไม่ใช้ regex</td>
+</tr>
+<tr>
+<td><code>Matches</code></td>
+<td>Response ทั้งหมดต้อง match regex</td>
+<td>ใช้น้อย เหมาะกับ format validation</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ตัวอย่างเปรียบเทียบ Contains vs Matches:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Contains</th>
+<th>Matches</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>success</code></td>
+<td>✅ match ถ้า response มีคำว่า "success" <strong>ที่ใดก็ได้</strong></td>
+<td>✅ match ถ้า response <strong>ทั้งหมด</strong> เป็นแค่ "success" เท่านั้น</td>
+</tr>
+<tr>
+<td><code>^success$</code></td>
+<td>✅ match ถ้า response มี substring ที่ match regex <code>^success$</code></td>
+<td>✅ match ถ้า response ทั้งหมด match <code>^success$</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>กฎง่ายๆ:</strong> Contains = "มีอยู่ที่ไหนก็ได้ใน response" | Matches = "response ทั้งหมดต้อง match"</p>
+<p><strong>Patterns to Test</strong> — ค่าที่ต้องการตรวจ เช่น <code>200</code> สำหรับ status code, <code>"success":true</code> สำหรับ body</p>
+<p>✅ <strong>Best practice:</strong> ใส่ assertion <strong>ทุก request ที่ critical</strong> — ถ้าไม่มี assertion HTTP 200 ที่ return error message ใน body จะไม่ถูกนับเป็น failure ทำให้ report แสดงผลดีเกินจริง</p>
+<p>✅ <strong>Best practice:</strong> ใช้ Response Assertion + JSON Assertion ร่วมกัน ตรวจทั้ง status code และ body content</p>
+<p>⚠️ <strong>ควรเลี่ยง: ใช้แค่ status code assertion โดยไม่ตรวจ body</strong> — เพราะ API บางตัว return 200 แม้มี error ตัวอย่างเช่น GraphQL API มักส่ง HTTP 200 เสมอไม่ว่า query จะ success หรือ fail โดยส่ง error ไว้ใน body แทน</p>
+<hr />
+<h3 id="42-json-assertion-json-response">4.2 JSON Assertion: ตรวจสอบ JSON Response<a class="headerlink" href="#42-json-assertion-json-response" title="Permanent link">&para;</a></h3>
+<p>เมื่อ API return JSON response ต้องการตรวจว่า:
+1. JSON มี field ที่ต้องการอยู่ไหม (structure check)
+2. Field นั้นมีค่าที่ถูกต้องไหม (value check)</p>
+<p><strong>วิธีเพิ่ม:</strong> คลิกขวาที่ HTTP Request Sampler → Add → Assertions → JSON Assertion</p>
+<p><strong>Fields ที่สำคัญ:</strong>
+- <strong>Assert JSON Path exists</strong> — JSON Path expression เช่น <code>$.data.id</code> หรือ <code>$.users[0].name</code>
+- <strong>Additionally assert value</strong> — เปิดเพื่อตรวจค่าด้วย (ไม่ใช่แค่ตรวจว่า field มีอยู่)
+- <strong>Expected value</strong> — ค่าที่คาดหวัง
+- <strong>Match as regular expression</strong> — ถ้าต้องการใช้ regex กับค่าที่ตรวจ</p>
+<p><strong>ตัวอย่าง JSON Path syntax ที่พบบ่อย:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>$.id              → field &quot;id&quot; ที่ root level
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>$.user.name       → field &quot;name&quot; ใน nested object &quot;user&quot;
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>$.users[0].email  → email ของ element แรกใน array &quot;users&quot;
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>$.items.length()  → จำนวน elements ใน array (extension บางตัวรองรับ)
+</code></pre></div>
+<p>⏸ <strong>หยุดคิด (backward retrieval):</strong> ย้อนกลับไปนึกถึงบทที่ 6 — ถ้า CSV มี column <code>expected_status</code> เก็บ expected HTTP status code ต่างกันต่อแต่ละ row จะนำมาใช้ใน Response Assertion ได้อย่างไร? เขียนคำตอบลงกระดาษก่อน — และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น — แล้วค่อยอ่านต่อ</p>
+<blockquote>
+<p><strong>เฉลย:</strong> ใช้ variable จาก CSV ใน Patterns to Test — ตั้งค่าเป็น <code>${expected_status}</code> JMeter จะ substitute ค่าจาก CSV ให้อัตโนมัติก่อน assertion ตรวจ ทำให้ test แต่ละ row สามารถมี expected outcome ต่างกันได้</p>
+</blockquote>
+<hr />
+<h3 id="43-duration-assertion-response-time">4.3 Duration Assertion: ตรวจสอบ Response Time<a class="headerlink" href="#43-duration-assertion-response-time" title="Permanent link">&para;</a></h3>
+<p>Duration Assertion ทำให้ JMeter นับ request ว่า fail ถ้า response ใช้เวลานานเกิน threshold ที่กำหนด</p>
+<blockquote>
+<p><em>"Checks whether sampler responses complete within a specified time duration threshold."</em>
+<em>(source: https://jmeter.apache.org/usermanual/component_reference.html)</em></p>
+</blockquote>
+<p><strong>วิธีเพิ่ม:</strong> คลิกขวาที่ HTTP Request Sampler → Add → Assertions → Duration Assertion</p>
+<p><strong>Field หลัก:</strong></p>
+<blockquote>
+<p><em>"Number of milliseconds to wait — responses exceeding this duration fail the assertion"</em>
+<em>(source: https://jmeter.apache.org/usermanual/component_reference.html)</em></p>
+</blockquote>
+<p>หน่วยเป็น <strong>milliseconds</strong> เสมอ — ถ้า SLA กำหนดว่า response ต้องได้ภายใน 2 วินาที ใส่ <code>2000</code></p>
+<p><strong>ใช้ร่วมกับ Aggregate Report:</strong> Duration Assertion บันทึก failure ใน error rate แต่ตัวเลข response time ใน report แสดงเวลาจริง — ทำให้เห็นทั้ง "มี request ที่ช้าเกิน threshold" และ "ช้าแค่ไหน" ได้พร้อมกัน</p>
+<hr />
+<h3 id="44-size-assertion-response-size">4.4 Size Assertion: ตรวจสอบ Response Size<a class="headerlink" href="#44-size-assertion-response-size" title="Permanent link">&para;</a></h3>
+<p>Size Assertion ตรวจขนาดของ response — มีประโยชน์เมื่อต้องการยืนยันว่า response ไม่ empty หรือขนาดอยู่ในช่วงที่คาดหวัง</p>
+<p><strong>วิธีเพิ่ม:</strong> คลิกขวาที่ HTTP Request Sampler → Add → Assertions → Size Assertion</p>
+<p><strong>Fields:</strong>
+- <strong>Apply To</strong> — เลือก scope (Full Response / Response Body / Response Headers)
+- <strong>Size in bytes</strong> — ขนาดที่ใช้เปรียบเทียบ
+- <strong>Type of Comparison</strong> — <code>=</code>, <code>≠</code>, <code>&gt;</code>, <code>&lt;</code>, <code>≥</code>, <code>≤</code></p>
+<p><strong>Use case ทั่วไป:</strong>
+- ตรวจว่า response ไม่ empty: ตั้ง <code>&gt; 0</code>
+- ตรวจว่า paginated response มี data ครบ: ตั้ง <code>&gt; 1000</code> (bytes ขั้นต่ำที่คาดหวัง)</p>
+<p>⏸ <strong>หยุดคิด (Bloom's L4 — Analysis):</strong> ระบบ e-commerce มี endpoint <code>GET /cart/{cartId}</code> ที่ return รายการสินค้าในตะกร้า ถ้าต้องการ assert ว่า "ตะกร้าไม่ว่างเปล่า" คุณจะใช้ Assertion แบบไหน — Size Assertion หรือ JSON Assertion หรือใช้ทั้งคู่? และเพราะอะไร? คิดถึง trade-off ก่อนอ่านต่อ</p>
+<blockquote>
+<p><strong>เฉลย:</strong> ใช้ทั้งคู่จะดีที่สุด — JSON Assertion ตรวจ <code>$.items.length() &gt; 0</code> หรือ <code>$.items[0]</code> มีอยู่จริง (ตรวจที่ application logic level) ส่วน Size Assertion เป็น fast-fail check ระดับล่าง ถ้า response เล็กผิดปกติ (เช่น empty <code>{}</code> หรือ error message) Size Assertion จะจับได้ก่อน — ใช้ร่วมกันทำให้ detect error ได้ทั้งสองระดับ</p>
+</blockquote>
+<hr />
+<h2 id="5-3">5. ตัวอย่าง 3 ระดับ<a class="headerlink" href="#5-3" title="Permanent link">&para;</a></h2>
+<h3 id="beginner-response-assertion-status-code-get-posts">ระดับ Beginner: Response Assertion ตรวจ Status Code สำหรับ GET /posts<a class="headerlink" href="#beginner-response-assertion-status-code-get-posts" title="Permanent link">&para;</a></h3>
+<p>สถานการณ์: ทดสอบ public API <code>https://jsonplaceholder.typicode.com/posts/1</code></p>
+<p><strong>ขั้นตอน:</strong></p>
+<ol>
+<li>เพิ่ม HTTP Request Sampler:</li>
+<li>Server Name: <code>jsonplaceholder.typicode.com</code></li>
+<li>Method: <code>GET</code></li>
+<li>
+<p>Path: <code>/posts/1</code></p>
+</li>
+<li>
+<p>คลิกขวาที่ HTTP Request → Add → Assertions → Response Assertion</p>
+</li>
+<li>
+<p>ตั้งค่า Response Assertion:</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Apply To:          Main sample only
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>                   # ตรวจเฉพาะ request หลัก ไม่รวม embedded resources
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>Field to Test:     Response Code
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>                   # ตรวจ HTTP status code ไม่ใช่ body
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>                   # เหตุผล: เราต้องการตรวจว่า server ตอบกลับด้วย 200 ก่อน
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>                   # ถ้าตรวจ Response Body โดยตรงแต่ server return 404
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>                   # body จะว่างและ assertion อาจ fail ด้วยข้อความสับสน
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>Pattern Matching Rules: Equals
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>                   # ใช้ Equals ไม่ใช่ Contains เพราะ status code เป็น
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>                   # ตัวเลขที่แน่นอน &quot;200&quot; ต้อง match ทั้งหมด
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>                   # ถ้าใช้ Contains กับ &quot;2&quot; จะ match ทั้ง 200, 201, 204 ด้วย
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>Patterns to Test:  200
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>                   # ค่า expected status code
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>                   # ไม่ต้องใส่ quotes — JMeter ใช้ plain text
+</code></pre></div>
+<ol>
+<li>เพิ่ม Response Assertion อีกตัวสำหรับตรวจ body:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Apply To:          Main sample only
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>Field to Test:     Response Body
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>                   # ตรวจใน body หลังจาก status code ผ่านแล้ว
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>Pattern Matching Rules: Substring
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>                   # ใช้ Substring แทน Contains เพราะ:
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>                   # - Substring: plain text search (เร็วกว่า, ง่ายกว่า)
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>                   # - Contains: treat pattern เป็น regex (กรณีนี้ไม่จำเป็น)
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>Patterns to Test:  &quot;userId&quot;
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>                   # ตรวจว่า body มี field &quot;userId&quot; อยู่
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>                   # บ่งบอกว่า response เป็น post object จริง ไม่ใช่ error
+</code></pre></div>
+<p><strong>ผลที่คาดหวังเมื่อ test ผ่าน:</strong> View Results Tree จะแสดง สีเขียว (pass) ทั้งคู่</p>
+<p><strong>ผลเมื่อ test fail:</strong> assertion ที่ fail จะแสดงใน "Failure Message" เช่น:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Test failed: code expected to equal /200/
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>  *** Found: 404
+</code></pre></div></p>
+<hr />
+<h3 id="intermediate-json-assertion-duration-assertion-payment-api">ระดับ Intermediate: JSON Assertion + Duration Assertion สำหรับ Payment API<a class="headerlink" href="#intermediate-json-assertion-duration-assertion-payment-api" title="Permanent link">&para;</a></h3>
+<p>สถานการณ์: ทดสอบ payment processing API ของระบบ financial — SLA กำหนดว่า payment verification ต้องตอบภายใน 3 วินาที และ response ต้องมี <code>transactionId</code> ที่ไม่ว่าง</p>
+<p><strong>สมมติ response จาก payment API:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="nt">&quot;transactionId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TXN-20260317-001234&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&quot;amount&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1500.00</span><span class="p">,</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span><span class="nt">&quot;currency&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;THB&quot;</span><span class="p">,</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-03-17T10:30:00Z&quot;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">}</span>
+</code></pre></div></p>
+<p><strong>ตั้งค่า JSON Assertion:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Assert JSON Path exists:    $.transactionId
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>                            # ตรวจว่า field transactionId มีอยู่ใน response
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>Additionally assert value:  ✓ (เปิด checkbox)
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>                            # เปิดเพื่อตรวจค่าด้วย ไม่ใช่แค่ตรวจว่า field มีอยู่
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>Expected value:             TXN-\d{8}-\d{6}
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>                            # regex pattern: ขึ้นต้นด้วย TXN- ตามด้วยวันที่ 8 หลัก
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>                            # ขีด และ รหัส 6 หลัก
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>Match as regular expression: ✓ (เปิด)
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>                            # เพราะ transactionId format คงที่แต่ค่าเปลี่ยนทุก transaction
+</code></pre></div>
+<p><strong>ตั้งค่า JSON Assertion สำหรับ status:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Assert JSON Path exists:    $.status
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>Additionally assert value:  ✓
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>Expected value:             success
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>Match as regular expression: ✗ (ปิด — ตรวจ exact match)
+</code></pre></div>
+<p><strong>ตั้งค่า Duration Assertion:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Duration (ms): 3000
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>               # SLA กำหนด 3 วินาที = 3000ms
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>               # ถ้า response ช้ากว่า 3000ms จะถูกนับเป็น failure
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>               # แม้ body จะถูกต้อง — เพราะ payment ที่ช้าเกิน SLA ถือว่า fail จาก business perspective
+</code></pre></div>
+<p><strong>เหตุผลที่ใช้ทั้ง JSON Assertion และ Duration Assertion ร่วมกัน:</strong></p>
+<p>Payment API ที่ดีต้องผ่าน 2 criteria พร้อมกัน:
+1. <strong>Correctness</strong> — ให้ transactionId ที่ valid กลับมา
+2. <strong>Performance</strong> — ตอบภายใน SLA</p>
+<p>ถ้า fail ที่ JSON Assertion = logic ผิด (ไม่ควร go-live)
+ถ้า fail ที่ Duration Assertion เท่านั้น = ต้องการ optimization ก่อน scale</p>
+<hr />
+<h3 id="advanced-jsr223-assertion-complex-validation">ระดับ Advanced: JSR223 Assertion สำหรับ Complex Validation<a class="headerlink" href="#advanced-jsr223-assertion-complex-validation" title="Permanent link">&para;</a></h3>
+<p>สำหรับ validation ที่ซับซ้อนเกินกว่า built-in assertions ทำได้ เช่น ต้องตรวจทุก item ในรายการว่า <code>quantity &gt;= 0</code> พร้อมกัน — JMeter มี <strong>JSR223 Assertion</strong> ที่รัน Groovy script ได้</p>
+<p><strong>เมื่อไหรควรใช้:</strong> เฉพาะเมื่อ built-in assertions (Response/JSON/Duration) ทำไม่ได้จริงๆ เพราะ JSR223 เพิ่ม CPU overhead ต่อ request และต้องการ Groovy knowledge ในการดูแล</p>
+<blockquote>
+<p><em>"Since JMeter 3.1, we advise switching from BeanShell to JSR223 Test Elements"</em>
+<em>(source: https://jmeter.apache.org/usermanual/best-practices.html)</em></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>ข้อดี</th>
+<th>ข้อเสีย</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Validate ได้ทุก logic ที่ซับซ้อน</td>
+<td>เพิ่ม CPU overhead ต่อ request</td>
+</tr>
+<tr>
+<td>Reuse Groovy library ได้</td>
+<td>Script ต้องมี test ของตัวเอง — ถ้า script bug จะ false positive</td>
+</tr>
+<tr>
+<td>—</td>
+<td>Maintenance สูงกว่า built-in assertions มาก</td>
+</tr>
+</tbody>
+</table>
+<p><strong>แนวทางปฏิบัติ:</strong> ลอง Response Assertion + JSON Assertion ก่อนเสมอ ใช้ JSR223 เป็นทางเลือกสุดท้าย ถ้าต้องการรายละเอียดเพิ่มเติม ดูที่ JMeter official docs: <a href="https://jmeter.apache.org/usermanual/best-practices.html">Best Practices — Scripting</a></p>
+<hr />
+<h2 id="6-common-mistakes">6. Common Mistakes<a class="headerlink" href="#6-common-mistakes" title="Permanent link">&para;</a></h2>
+<h3 id="a-assertion-failure">❌ (a) ลืมใส่ Assertion ทำให้ Failure ไม่ถูกนับ<a class="headerlink" href="#a-assertion-failure" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Thread Group
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>└── HTTP Request: POST /login
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>    # ไม่มี assertion เลย
+</code></pre></div></p>
+<p><strong>แบบถูก:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Thread Group
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>└── HTTP Request: POST /login
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>    ├── Response Assertion (status code = 200)
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>    └── JSON Assertion ($.token มีอยู่และไม่ว่าง)
+</code></pre></div></p>
+<p>🔍 <strong>สิ่งที่เกิดขึ้น:</strong> ถ้า POST /login return 200 แต่ body เป็น <code>{"error": "Invalid credentials"}</code> JMeter จะ report 0% error rate — ทำให้ทีมเชื่อว่า login ทำงานปกติทั้งที่จริงๆ ล้มเหลวทุก request</p>
+<p>🤔 <strong>เหตุผล:</strong> JMeter default พิจารณา success จาก HTTP status code เท่านั้น ไม่ได้ parse หรือ validate body เอง</p>
+<p><em>(source: https://jmeter.apache.org/usermanual/test_plan.html — "Assertions allow you to assert facts about responses received")</em></p>
+<hr />
+<h3 id="b-contains-substring-false-positive">❌ (b) ใช้ Contains แทน Substring ทำให้เกิด False Positive<a class="headerlink" href="#b-contains-substring-false-positive" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>Pattern Matching Rules: Contains
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>Patterns to Test:       (active)
+</code></pre></div></p>
+<p><strong>แบบถูก:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>Pattern Matching Rules: Substring
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>Patterns to Test:       active
+</code></pre></div></p>
+<p>หรือถ้าต้องการใช้ regex จริงๆ:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Pattern Matching Rules: Contains  (regex)
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>Patterns to Test:       \bactive\b
+</code></pre></div></p>
+<p>🔍 <strong>สิ่งที่เกิดขึ้น:</strong> <code>Contains</code> treat pattern เป็น regex — ดังนั้น <code>(active)</code> คือ regex group และ <code>active</code> plain text ก็ match ได้ แต่ถ้าพิมพ์ผิดเป็น <code>(active</code> (ไม่ปิด parenthesis) จะเกิด regex error ที่ debug ยาก — ถ้าต้องการ plain text search ให้ใช้ <code>Substring</code> เสมอ</p>
+<p>🤔 <strong>เหตุผล:</strong> ผู้ใช้ JMeter ใหม่มักสับสนระหว่าง "Contains" ที่ฟังดูเหมือน "plain text search" แต่จริงๆ ใช้ regex</p>
+<p><em>(source: https://jmeter.apache.org/usermanual/component_reference.html — Pattern Matching Rules: "Contains, Equals, Matches, Substring")</em></p>
+<hr />
+<h3 id="c-json-path-syntax-assertion">❌ (c) JSON Path ผิด Syntax ทำให้ Assertion ไม่ทำงาน<a class="headerlink" href="#c-json-path-syntax-assertion" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Assert JSON Path exists: data.user.id
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>                         # ลืม $ ที่ root
+</code></pre></div></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Assert JSON Path exists: $[data][user][id]
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>                         # ใช้ bracket notation ผิด — ควรใช้กับ array index เท่านั้น
+</code></pre></div>
+<p><strong>แบบถูก:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Assert JSON Path exists: $.data.user.id
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>                         # ต้องขึ้นต้นด้วย $ เสมอ
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>Assert JSON Path exists: $.users[0].id
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>                         # bracket notation ใช้กับ array index
+</code></pre></div></p>
+<p>🔍 <strong>สิ่งที่เกิดขึ้น:</strong> ถ้า JSON Path syntax ผิด JMeter อาจ report ว่า "path not found" แม้ field จะมีอยู่จริง — หรือบางกรณี assertion pass โดยไม่ตรวจอะไร (ขึ้นอยู่กับ "Invert assertion" setting)</p>
+<p>🤔 <strong>เหตุผล:</strong> JSON Path มี syntax เฉพาะ — <code>$</code> คือ root object, <code>.</code> คือ child, <code>[]</code> คือ array index — ต้องตรวจสอบ path ด้วย View Results Tree → Response Body ก่อนตั้ง assertion เสมอ</p>
+<p><em>(source: https://jmeter.apache.org/usermanual/component_reference.html — JSON Assertion)</em></p>
+<hr />
+<h2 id="7">7. สรุปบท<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<p><strong>คำถาม Retrieval — ตอบก่อนดูเฉลย:</strong></p>
+<p>หยุดอ่าน เขียนคำตอบลงกระดาษก่อน อย่างน้อย 30 วินาทีต่อข้อ — และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น ก่อนดูเฉลย</p>
+<hr />
+<p><strong>คำถามที่ 1:</strong> API ของคุณ return HTTP 200 เสมอไม่ว่าจะสำเร็จหรือ error — โดย success case return <code>{"result": "ok"}</code> และ error case return <code>{"result": "error", "code": "E001"}</code> — คุณจะตั้ง assertion อย่างไรให้ JMeter แยกออกระหว่างสองกรณีนี้ได้? บอก assertion type และค่าที่ตั้ง</p>
+<p>เขียนคำตอบลงกระดาษก่อน</p>
+<hr />
+<blockquote>
+<p><strong>เฉลย:</strong> ใช้ JSON Assertion ตรวจ <code>$.result</code> ด้วย Expected value <code>ok</code> (ปิด regex) — ถ้า response เป็น error case ค่าจะเป็น "error" ไม่ตรงกับ "ok" JMeter จะนับเป็น failure และแสดงใน error rate ถึงแม้ HTTP status จะเป็น 200</p>
+</blockquote>
+<hr />
+<p><strong>คำถามที่ 2 (Code-based):</strong> ดู assertion configuration นี้:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>Field to Test:          Response Body
+<a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>Pattern Matching Rules: Contains
+<a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>Patterns to Test:       \d{3}
+</code></pre></div>
+<p>Assertion นี้ตรวจอะไร? จะ match กับ response ใดบ้าง? มีความเสี่ยงอะไรในการใช้งานจริง?</p>
+<p>เขียนคำตอบก่อนดูเฉลย</p>
+<hr />
+<blockquote>
+<p><strong>เฉลย:</strong> Assertion นี้ตรวจว่า response body มีตัวเลขติดกัน 3 หลัก (regex <code>\d{3}</code>) อยู่หรือเปล่า — จะ match ทุก response ที่มีตัวเลข 3 หลักขึ้นไปอยู่ด้วย เช่น "200", "abc123def", "THB1500.00", หรือแม้แต่ error code เช่น "E001" (ถ้ามีตัวเลข 3 หลักอยู่ในนั้น)</p>
+<p>ความเสี่ยง: false positive — assertion นี้ match ง่ายมาก เพราะ response body ทั่วไปมักมีตัวเลข 3 หลักอยู่เสมอ ทำให้ assertion แทบไม่มีประโยชน์ในการ detect error จริงๆ ควรเขียน pattern ให้ specific กว่านี้</p>
+</blockquote>
+<hr />
+<p><strong>คำถามที่ 3 (Elaborative Interrogation):</strong> ทำไมถึงต้องใช้ Duration Assertion แทนการดูแค่ตัวเลข 90th percentile จาก Aggregate Report? ทั้งสองวิธีให้ข้อมูลอะไรที่ต่างกัน?</p>
+<hr />
+<blockquote>
+<p><strong>เฉลย:</strong> Duration Assertion <strong>นับ slow response เป็น failure แบบ real-time</strong> ทำให้ error rate สะท้อนว่ามีกี่ % ของ request ที่ช้าเกิน SLA — ช่วยในการ set pass/fail criteria อัตโนมัติ เช่น ถ้า error rate &gt; 5% ให้ถือว่า test fail</p>
+<p>90th percentile ใน Aggregate Report บอก<strong>ค่าสถิติ</strong> หลังจบ test แล้ว — ดูว่าภาพรวม latency เป็นอย่างไร แต่ไม่ได้ mark แต่ละ request ว่า pass/fail</p>
+<p>ใช้ทั้งคู่: Duration Assertion เพื่อ automatic pass/fail, Aggregate Report เพื่อ understand distribution</p>
+</blockquote>
+<hr />
+<p><strong>Generation effect:</strong> ก่อนปิดบทนี้ ลองเขียน "เมื่อไหรควรใช้ JSON Assertion แทน Response Assertion?" ด้วยคำของตัวเองโดยไม่เปิดเอกสาร — เขียนแล้วค้นหาจุดที่ยังไม่แน่ใจ</p>
+<p><strong>Remediation path:</strong>
+- ยังสับสน Contains vs Substring → ทดลองสร้าง assertion ใหม่แล้ว test กับ response จริงใน View Results Tree
+- ยังไม่เข้าใจ JSON Path syntax → ลองใช้ online JSON Path tester เช่น https://jsonpath.com ก่อนนำมาใช้ใน JMeter
+- ยังไม่แน่ใจว่าควรใช้ assertion กี่ตัว → เริ่มจาก 2 ตัวเสมอ: Response Assertion (status code) + JSON Assertion (field สำคัญ 1 field) แล้วเพิ่มถ้าจำเป็น</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  กลับไปด้านบนสุด
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="ส่วนท้าย" >
+        
+          
+          <a href="../06-parameterization/" class="md-footer__link md-footer__link--prev" aria-label="ก่อนหน้า: บทที่ 6 - Parameterization">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                ก่อนหน้า
+              </span>
+              <div class="md-ellipsis">
+                บทที่ 6 - Parameterization
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../08-running-reports/" class="md-footer__link md-footer__link--next" aria-label="ต่อไป: บทที่ 8 - Reports">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                ต่อไป
+              </span>
+              <div class="md-ellipsis">
+                บทที่ 8 - Reports
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01\u0e41\u0e25\u0e49\u0e27", "clipboard.copy": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01", "search.result.more.one": "\u0e2d\u0e35\u0e01\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.more.other": "# \u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.none": "\u0e44\u0e21\u0e48\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.one": "\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.other": "\u0e1e\u0e1a # \u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.placeholder": "\u0e1e\u0e34\u0e21\u0e1e\u0e4c\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e40\u0e23\u0e34\u0e48\u0e21\u0e04\u0e49\u0e19\u0e2b\u0e32", "search.result.term.missing": "\u0e44\u0e21\u0e48\u0e1e\u0e1a", "select.version": "\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e40\u0e27\u0e2d\u0e23\u0e4c\u0e0a\u0e31\u0e19"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

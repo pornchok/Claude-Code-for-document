@@ -1,0 +1,4800 @@
+
+<!doctype html>
+<html lang="th" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="คอร์ส QA & Automation Testing ภาษาไทย">
+      
+      
+      
+        <link rel="canonical" href="https://pornchok.github.io/Claude-Code-for-document/playwright-typescript-source-notes/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Playwright TypeScript Course — Source Notes - QA Learning Hub</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#playwright-typescript-course-source-notes" class="md-skip">
+          ข้ามไปที่เนื้อหา
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="หัวข้อ">
+    <a href=".." title="QA Learning Hub" class="md-header__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            QA Learning Hub
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Playwright TypeScript Course — Source Notes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="ค้นหา" placeholder="ค้นหา" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="ค้นหา">
+        
+        <button type="reset" class="md-search__icon md-icon" title="ล้าง" aria-label="ล้าง" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            กำลังเริ่มต้นการค้นหา
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="แท็บ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../playwright-typescript/00-overview/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../playwright-typescript/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Playwright TypeScript
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../robot-framework-for-qa/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../robot-framework-control-flow/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework Control Flow
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../rf-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  RF Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../wdio-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  WebdriverIO Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../jmeter-performance-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  JMeter Performance Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../english-for-beginners/00-overview/" class="md-tabs__link">
+          
+  
+  
+  English for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-tabs__link">
+          
+  
+  
+  Claude Code Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ตัวนำทาง" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="QA Learning Hub" class="md-nav__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    QA Learning Hub
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playwright TypeScript
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Playwright TypeScript
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/01-why-playwright/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - ทำไมต้อง Playwright
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/02-setup-typescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup + TypeScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/03-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/04-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/05-actions-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Actions & Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/06-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/07-fixtures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Fixtures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/08-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/09-test-organization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Test Organization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/10-configuration-projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Configuration & Projects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/11-parallelism-sharding-reporting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 11 - Parallelism & Sharding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/12-mocking-network-time-browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 12 - Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/13-authentication-storage-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 13 - Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/14-advanced-browser-emulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 14 - Advanced Browser Emulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/15-api-testing-hybrid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 15 - API Testing & Hybrid
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/16-visual-accessibility-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 16 - Visual & Accessibility
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/17-cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 17 - CI/CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/18-production-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 18 - Production Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/19-db-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 19 - DB Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/20-professional-project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 20 - Professional Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../playwright-typescript/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-for-qa/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-for-qa/01-what-is-robot-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is RF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-for-qa/02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-for-qa/03-test-structure-syntax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-for-qa/04-keywords-and-resource-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Keywords & Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-for-qa/05-web-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Web Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-for-qa/06-data-driven-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Data Driven
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-for-qa/07-reports-and-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Reports & Debug
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-for-qa/08-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-for-qa/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-for-qa/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework Control Flow
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework Control Flow
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-control-flow/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-control-flow/01-if-else/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - If/Else
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-control-flow/02-for-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - For Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-control-flow/03-while-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - While Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-control-flow/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../robot-framework-control-flow/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RF Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RF Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rf-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rf-mobile-testing/01-mobile-testing-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mobile Landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rf-mobile-testing/02-setup-environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rf-mobile-testing/03-appium-capabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Capabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rf-mobile-testing/04-appiumlibrary-keywords/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - AppiumLibrary Keywords
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rf-mobile-testing/05-mobile-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Mobile Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rf-mobile-testing/06-gestures-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Gestures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rf-mobile-testing/07-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rf-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../rf-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WebdriverIO Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    WebdriverIO Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wdio-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wdio-mobile-testing/01-what-is-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wdio-mobile-testing/02-setup-wdio-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wdio-mobile-testing/03-wdio-appium-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wdio-mobile-testing/04-writing-tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Writing Tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wdio-mobile-testing/05-selectors-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Selectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wdio-mobile-testing/06-page-objects-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Page Objects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wdio-mobile-testing/07-comparing-rf-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - RF vs WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wdio-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wdio-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMeter Performance Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMeter Performance Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/01-performance-testing-fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/03-ui-test-plan-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Plan Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/04-first-test-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - First Test Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/05-thread-group-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Thread Group
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/06-parameterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Parameterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/07-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/08-running-reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/09-distributed-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Distributed Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/10-anti-patterns-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../jmeter-performance-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    English for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    English for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../english-for-beginners/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../english-for-beginners/01-mindset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../english-for-beginners/02-phonics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Phonics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../english-for-beginners/03-vocabulary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Vocabulary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../english-for-beginners/04-sentence-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Sentence Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../english-for-beginners/05-to-be-present-simple/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - To Be & Present Simple
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../english-for-beginners/06-questions-negatives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Questions & Negatives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../english-for-beginners/07-numbers-time-days/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Numbers, Time & Days
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../english-for-beginners/08-phrases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Phrases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../english-for-beginners/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../english-for-beginners/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Claude Code Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#ch13-authentication-storage-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch13: Authentication &amp; Storage State
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#system-requirements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        System Requirements
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#typescript-support" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TypeScript Support
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Installation Methods
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch11-parallelism-sharding-reporting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch11: Parallelism, Sharding &amp; Reporting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch01-why-playwright" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch01: Why Playwright?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch02-setup-typescript-essentials" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch02: Setup + TypeScript Essentials
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch03-architecture-browser-browsercontext-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch03: Architecture — Browser, BrowserContext, Page
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch04-locators-accessibility-first" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch04: Locators — Accessibility-First
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch04-locator-priority-order-verified-fix-2026-05-31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch04: Locator Priority Order — Verified Fix (2026-05-31)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch05-actions-assertions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch05: Actions &amp; Assertions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch06-debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch06: Debugging
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch07-fixtures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch07: Fixtures
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch08-page-object-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch08: Page Object Model
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch09-test-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch09: Test Organization
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch10-configuration-projects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch10: Configuration &amp; Projects
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch11-parallelism-sharding-reporting_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch11: Parallelism, Sharding &amp; Reporting
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch12-mocking-network-time-browser-apis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch12: Mocking — Network, Time &amp; Browser APIs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch14-advanced-browser-features-emulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch14: Advanced Browser Features &amp; Emulation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch15-api-testing-hybrid" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch15: API Testing &amp; Hybrid
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch16-visual-accessibility-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch16: Visual &amp; Accessibility Testing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch17-cicd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch17: CI/CD
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch18-production-patterns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch18: Production Patterns
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ch19-database-state-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ch19: Database State Verification
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="playwright-typescript-course-source-notes">Playwright TypeScript Course — Source Notes<a class="headerlink" href="#playwright-typescript-course-source-notes" title="Permanent link">&para;</a></h1>
+<p>ไฟล์นี้บันทึก QUOTE จาก playwright.dev สำหรับ cross-check accuracy
+ลบไฟล์นี้ได้หลังจาก Quality Review ผ่านทั้ง 18 บทแล้วเท่านั้น</p>
+<hr />
+<h2 id="ch13-authentication-storage-state">Ch13: Authentication &amp; Storage State<a class="headerlink" href="#ch13-authentication-storage-state" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/auth
+VERSION: 2026-05-31
+CONCEPT: storageState captures cookies, localStorage, sessionStorage — and IndexedDB
+QUOTE: "Reusing signed in state covers cookies, local storage and IndexedDB based authentication."
+NOTE: sessionStorage requires custom persistence — docs note "Playwright doesn't provide native support" for sessionStorage across navigations; it is captured at point-in-time but not automatically restored across new pages.</p>
+<p>SOURCE: https://playwright.dev/docs/auth
+VERSION: 2026-05-31
+CONCEPT: Project dependencies for auth setup
+QUOTE: "{ name: 'setup', testMatch: /.*\.setup\.ts/ }, { name: 'chromium', use: { storageState: 'playwright/.auth/user.json' }, dependencies: ['setup'] }"</p>
+<p>SOURCE: https://playwright.dev/docs/auth
+VERSION: 2026-05-31
+CONCEPT: auth files should not be committed to git
+QUOTE: "Add 'playwright/.auth' to .gitignore. Make sure that the files containing the cookies and headers are not shared with anyone outside your team. These files are sensitive and enable account impersonation."</p>
+<p>SOURCE: https://playwright.dev/docs/auth#multiple-signed-in-roles
+VERSION: 2026-05-31
+CONCEPT: multiple roles — specify storageState per test file instead of global config
+QUOTE: "specify storageState for each test file or test group, instead of setting it in the config."</p>
+<p>SOURCE: https://playwright.dev/docs/auth#moderate-one-account-per-parallel-worker
+VERSION: 2026-05-31
+CONCEPT: per-worker auth for tests that modify server-side state
+QUOTE: "Tests that modify server-side state require different accounts per parallel worker to prevent interference."</p>
+<p>SOURCE: https://playwright.dev/docs/auth#moderate-one-account-per-parallel-worker
+VERSION: 2026-05-31
+CONCEPT: storageState in config does NOT accept a function — must use worker-scoped custom fixture
+QUOTE: "storageState: ({ workerStorageState }, use) =&gt; use(workerStorageState)" [from fixtures.ts, not playwright.config.ts]
+NOTE: The official pattern uses baseTest.extend&lt;{}, { workerStorageState: string }&gt; with { scope: 'worker' } fixture. storageState in playwright.config.ts use: block is a static string only. Per-worker selection must happen inside a fixture via test.info().parallelIndex.</p>
+<p>SOURCE: https://playwright.dev/docs/auth
+VERSION: 2026-05-31
+CONCEPT: disable authentication for specific tests
+QUOTE: "test.use({ storageState: { cookies: [], origins: [] } });"</p>
+<p>SOURCE: https://playwright.dev/docs/auth
+VERSION: 2026-05-31
+CONCEPT: UI Mode does not run setup project automatically
+QUOTE: "The setup project will not run...by default to improve testing speed"</p>
+<hr />
+<h2 id="system-requirements">System Requirements<a class="headerlink" href="#system-requirements" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/intro
+VERSION: 2026-05-30
+CONCEPT: Node.js and npm requirements
+QUOTE: "Node.js: latest 20.x, 22.x or 24.x"</p>
+<hr />
+<h2 id="typescript-support">TypeScript Support<a class="headerlink" href="#typescript-support" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: TypeScript native support
+QUOTE: "You just write tests in TypeScript, and Playwright will read them, transform to JavaScript and run."</p>
+<p>SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: tsconfig.json detection
+QUOTE: "Playwright will automatically find and use the closest tsconfig.json when discovering tests."</p>
+<p>SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: Supported tsconfig compiler options
+QUOTE: "Only the following options are supported: allowJs, baseUrl, paths, and references"</p>
+<hr />
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/intro
+VERSION: 2026-05-30
+CONCEPT: Installation command
+QUOTE: "npm init playwright@latest"</p>
+<hr />
+<h2 id="installation-methods">Installation Methods<a class="headerlink" href="#installation-methods" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/intro
+VERSION: 2026-05-30
+CONCEPT: Supported package managers
+QUOTE: "You can use npm, yarn, or pnpm to install Playwright."</p>
+<hr />
+<h2 id="ch11-parallelism-sharding-reporting">Ch11: Parallelism, Sharding &amp; Reporting<a class="headerlink" href="#ch11-parallelism-sharding-reporting" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/api/class-test#test-describe-serial
+VERSION: 2026-05-31
+CONCEPT: test.describe.serial() status — discouraged/deprecated
+QUOTE: "Declares a group of tests that should always be run serially. If one of the tests fails, all subsequent tests are skipped."
+NOTE: docs also state "Using serial is not recommended. It is usually better to make your tests isolated, so they can be run independently." — prefer test.describe.configure({ mode: 'serial' })</p>
+<p>SOURCE: https://playwright.dev/docs/test-parallel
+VERSION: 2026-05-31
+CONCEPT: test.describe.configure() as the canonical API for serial/parallel mode
+QUOTE: test-parallel docs use only test.describe.configure({ mode: 'serial' | 'parallel' | 'default' }) — test.describe.serial() is not mentioned in this page</p>
+<hr />
+<h2 id="ch01-why-playwright">Ch01: Why Playwright?<a class="headerlink" href="#ch01-why-playwright" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-30
+CONCEPT: Auto-waiting / Actionability checks
+QUOTE: "Playwright performs a range of actionability checks on the elements before making actions to ensure these actions behave as expected."</p>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-30
+CONCEPT: Visible check definition
+QUOTE: "Element is considered visible when it has non-empty bounding box and does not have <code>visibility:hidden</code> computed style."</p>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-30
+CONCEPT: Stable check definition
+QUOTE: "Element is considered stable when it has maintained the same bounding box for at least two consecutive animation frames."</p>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-30
+CONCEPT: Enabled check definition
+QUOTE: "Element is considered enabled when it is not disabled."</p>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-30
+CONCEPT: Editable check definition
+QUOTE: "Element is considered editable when it is enabled and is not readonly."</p>
+<p>SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-05-30
+CONCEPT: Locators auto-waiting
+QUOTE: "Locators come with auto waiting and retry-ability. Auto waiting means that Playwright performs a range of actionability checks on the elements, such as ensuring the element is visible and enabled before it performs the click."</p>
+<p>SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-05-30
+CONCEPT: Web-first assertions wait
+QUOTE: "By using web first assertions Playwright will wait until the expected condition is met."</p>
+<p>SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-05-30
+CONCEPT: isVisible() does not wait
+QUOTE: "When using assertions such as <code>isVisible()</code> the test won't wait a single second, it will just check the locator is there and return immediately."</p>
+<p>SOURCE: https://playwright.dev/docs/intro
+VERSION: 2026-05-30
+CONCEPT: Cross-browser support
+QUOTE: "Playwright supports Chromium, WebKit and Firefox on Windows, Linux and macOS, locally or in CI, headless or headed, with native mobile emulation for Chrome (Android) and Mobile Safari."</p>
+<p>SOURCE: https://playwright.dev/docs/intro
+VERSION: 2026-05-30
+CONCEPT: What Playwright Test is
+QUOTE: "Playwright Test is an end-to-end test framework for modern web apps. It bundles test runner, assertions, isolation, parallelization and rich tooling."</p>
+<hr />
+<h2 id="ch02-setup-typescript-essentials">Ch02: Setup + TypeScript Essentials<a class="headerlink" href="#ch02-setup-typescript-essentials" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: TypeScript native support — no separate compilation step
+QUOTE: "You just write tests in TypeScript, and Playwright will read them, transform to JavaScript and run."</p>
+<p>SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: Supported tsconfig compiler options
+QUOTE: "Playwright only supports the following tsconfig options: allowJs, baseUrl, paths and references."</p>
+<p>SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: Separate tsconfig for tests recommended
+QUOTE: "We recommend setting up a separate tsconfig.json in the tests directory so that you can change some preferences specifically for the tests."</p>
+<p>SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: tsc --noEmit for CI type checking
+QUOTE: "For example on GitHub actions: npx tsc -p tsconfig.json --noEmit"</p>
+<p>SOURCE: https://playwright.dev/docs/test-typescript
+VERSION: 2026-05-30
+CONCEPT: tsc watch mode for local development
+QUOTE: "For local development, you can run tsc in watch mode like this: npx tsc -p tsconfig.json --noEmit -w"</p>
+<p>SOURCE: https://playwright.dev/docs/intro
+VERSION: 2026-05-30
+CONCEPT: Installation command description
+QUOTE: "The command below either initializes a new project or adds Playwright to an existing one."</p>
+<p>SOURCE: https://playwright.dev/docs/intro
+VERSION: 2026-05-30
+CONCEPT: Interactive prompts during npm init playwright@latest
+QUOTE: "When prompted, choose / confirm: TypeScript or JavaScript (default: TypeScript), Tests folder name (default: tests, or e2e if tests already exists), Add a GitHub Actions workflow (recommended for CI), Install Playwright browsers (default: yes)"</p>
+<p>SOURCE: https://playwright.dev/docs/intro
+VERSION: 2026-05-30
+CONCEPT: File scaffold created by installer
+QUOTE: "Playwright downloads required browser binaries and creates the scaffold below. playwright.config.ts, package.json, package-lock.json, tests/example.spec.ts"</p>
+<hr />
+<h2 id="ch03-architecture-browser-browsercontext-page">Ch03: Architecture — Browser, BrowserContext, Page<a class="headerlink" href="#ch03-architecture-browser-browsercontext-page" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/browser-contexts
+VERSION: 2026-05-30
+CONCEPT: BrowserContext definition and isolation
+QUOTE: "BrowserContexts which are equivalent to incognito-like profiles. They are fast and cheap to create and are completely isolated, even when running in a single browser."</p>
+<p>SOURCE: https://playwright.dev/docs/browser-contexts
+VERSION: 2026-05-30
+CONCEPT: Default isolation per test
+QUOTE: "each test has its own local storage, session storage, cookies etc."</p>
+<p>SOURCE: https://playwright.dev/docs/browser-contexts
+VERSION: 2026-05-30
+CONCEPT: Playwright creates context per test
+QUOTE: "Playwright creates a context for each test, and provides a default Page in that context."</p>
+<p>SOURCE: https://playwright.dev/docs/browser-contexts
+VERSION: 2026-05-30
+CONCEPT: No failure carry-over between tests
+QUOTE: "No failure carry-over. If one test fails it doesn't affect the other test."</p>
+<p>SOURCE: https://playwright.dev/docs/browser-contexts
+VERSION: 2026-05-30
+CONCEPT: Multiple contexts for multi-user scenarios
+QUOTE: "Playwright can create multiple browser contexts within a single scenario. This is useful when you want to test for multi-user functionality, like a chat."</p>
+<p>SOURCE: https://playwright.dev/docs/browser-contexts
+VERSION: 2026-05-30
+CONCEPT: Context lifecycle per test run
+QUOTE: "Running the test creates a new browser context each time."</p>
+<p>SOURCE: https://playwright.dev/docs/pages
+VERSION: 2026-05-30
+CONCEPT: Page definition
+QUOTE: "A Page refers to a single tab or a popup window within a browser context."</p>
+<p>SOURCE: https://playwright.dev/docs/pages
+VERSION: 2026-05-30
+CONCEPT: Multiple pages per context
+QUOTE: "Each BrowserContext can have multiple pages."</p>
+<p>SOURCE: https://playwright.dev/docs/pages
+VERSION: 2026-05-30
+CONCEPT: Pages respect context-level settings
+QUOTE: "Pages inside a context respect context-level emulation, like viewport sizes, custom network routes or browser locale."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-30
+CONCEPT: page fixture — isolated per test
+QUOTE: "Isolated page for this test run."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-30
+CONCEPT: context fixture — isolated per test
+QUOTE: "Isolated context for this test run. The <code>page</code> fixture belongs to this context as well."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-30
+CONCEPT: Browser fixture — shared across tests (worker-scoped)
+QUOTE: "Browsers are shared across tests to optimize resources."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-30
+CONCEPT: Fixture scope and teardown
+QUOTE: "Test-scoped fixtures are torn down after each test, while worker-scoped fixtures are only torn down when the worker process executing tests is torn down."</p>
+<hr />
+<h2 id="ch04-locators-accessibility-first">Ch04: Locators — Accessibility-First<a class="headerlink" href="#ch04-locators-accessibility-first" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/locators
+VERSION: 2026-05-31
+CONCEPT: Recommended locators list (official list)
+QUOTE: "These are the recommended built-in locators. page.getByRole() to locate by explicit and implicit accessibility attributes. page.getByText() to locate by text content. page.getByLabel() to locate a form control by associated label's text. page.getByPlaceholder() to locate an input by placeholder. page.getByAltText() to locate an element, usually image, by its text alternative. page.getByTitle() to locate an element by its title attribute. page.getByTestId() to locate an element based on its data-testid attribute."</p>
+<p>SOURCE: https://playwright.dev/docs/locators
+VERSION: 2026-05-31
+CONCEPT: Priority recommendation
+QUOTE: "we recommend prioritizing user-facing attributes and explicit contracts such as page.getByRole()"</p>
+<p>SOURCE: https://playwright.dev/docs/locators
+VERSION: 2026-05-31
+CONCEPT: Strict mode definition
+QUOTE: "Locators are strict. This means that all operations on locators that imply some target DOM element will throw an exception if more than one element matches."</p>
+<p>SOURCE: https://playwright.dev/docs/locators
+VERSION: 2026-05-31
+CONCEPT: filter({ visible: true }) — confirmed available
+QUOTE: "This will only find a second button, because it is visible, and then click it: await page.locator('button').filter({ visible: true }).click();"</p>
+<p>SOURCE: https://playwright.dev/docs/locators
+VERSION: 2026-05-31
+CONCEPT: Filtering with hasText and has
+QUOTE: "filter({ hasText: 'text' }), filter({ hasNotText: 'text' }), filter({ has: locator }), filter({ hasNot: locator })"</p>
+<p>SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-05-31
+CONCEPT: Prefer user-facing attributes over CSS/XPath
+QUOTE: "Prefer user-facing attributes to XPath or CSS selectors" and "Your DOM can easily change so having your tests depend on your DOM structure can lead to failing tests."</p>
+<p>SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-05-31
+CONCEPT: CSS class-based locators break on refactor
+QUOTE: "Should the designer change something then the class might change, thus breaking your test."</p>
+<p>SOURCE: https://playwright.dev/docs/other-locators
+VERSION: 2026-05-31
+CONCEPT: Legacy text locator (deprecated)
+QUOTE: "String selectors starting and ending with a quote...are assumed to be a legacy text locators." (deprecated — recommends "modern text locator instead")</p>
+<p>SOURCE: https://playwright.dev/docs/other-locators
+VERSION: 2026-05-31
+CONCEPT: CSS :visible pseudo-class
+QUOTE: ":visible — only matches visible buttons"</p>
+<hr />
+<h2 id="ch04-locator-priority-order-verified-fix-2026-05-31">Ch04: Locator Priority Order — Verified Fix (2026-05-31)<a class="headerlink" href="#ch04-locator-priority-order-verified-fix-2026-05-31" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/locators
+VERSION: 2026-05-31
+CONCEPT: Locator Priority Order — Verified Fix
+QUOTE: "These are the recommended built-in locators. page.getByRole() to locate by explicit and implicit accessibility attributes. page.getByText() to locate by text content. page.getByLabel() to locate a form control by associated label's text. page.getByPlaceholder() to locate an input by placeholder. page.getByAltText() to locate an element, usually image, by its text alternative. page.getByTitle() to locate an element by its title attribute. page.getByTestId() to locate an element based on its data-testid attribute."</p>
+<p>Note: Correct order is getByRole → getByText → getByLabel → getByPlaceholder → getByAltText → getByTitle → getByTestId</p>
+<hr />
+<h2 id="ch05-actions-assertions">Ch05: Actions &amp; Assertions<a class="headerlink" href="#ch05-actions-assertions" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/input
+VERSION: 2026-05-31
+CONCEPT: fill() — replace input content immediately
+QUOTE: "the easiest way to fill out the form fields. It focuses the element and triggers an <code>input</code> event with the entered text. It works for <code>&lt;input&gt;</code>, <code>&lt;textarea&gt;</code> and <code>[contenteditable]</code> elements."</p>
+<p>SOURCE: https://playwright.dev/docs/input
+VERSION: 2026-05-31
+CONCEPT: pressSequentially() — keystroke-by-keystroke typing
+QUOTE: "character by character, as if it was a user with a real keyboard"</p>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: Visible check definition
+QUOTE: "Element is considered visible when it has non-empty bounding box and does not have <code>visibility:hidden</code> computed style."</p>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: Stable check definition
+QUOTE: "Element is considered stable when it has maintained the same bounding box for at least two consecutive animation frames."</p>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: Receives Events check definition
+QUOTE: "Element is considered receiving pointer events when it is the hit target of the pointer event at the action point."</p>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: Enabled check definition
+QUOTE: "Element is considered enabled when it is not disabled."</p>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: Editable check definition
+QUOTE: "Element is considered editable when it is [enabled] and is not readonly."</p>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: Actions with all 5 checks
+QUOTE: "locator.click(), locator.check(), locator.dblclick(), locator.setChecked(), locator.tap(), locator.uncheck()" require all checks</p>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: fill() and clear() actionability checks
+QUOTE: "locator.fill(), locator.clear()" — checks: Visible + Enabled + Editable</p>
+<p>SOURCE: https://playwright.dev/docs/actionability
+VERSION: 2026-05-31
+CONCEPT: press() and pressSequentially() — no actionability checks
+QUOTE: "locator.press(), locator.pressSequentially()" — listed under "No Checks" category</p>
+<p>SOURCE: https://playwright.dev/docs/navigations
+VERSION: 2026-05-31
+CONCEPT: page.goto() waits for load event
+QUOTE: "The code above loads the page and waits for the web page to fire the load event."</p>
+<p>SOURCE: https://playwright.dev/docs/navigations
+VERSION: 2026-05-31
+CONCEPT: Auto-waiting principle
+QUOTE: "It will automatically wait for the target elements to become actionable."</p>
+<p>SOURCE: https://playwright.dev/docs/navigations
+VERSION: 2026-05-31
+CONCEPT: Playwright speed and actionability
+QUOTE: "Playwright operates as a very fast user - the moment it sees the button, it clicks it. In the general case, you don't need to worry about whether all the resources loaded."</p>
+<p>SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-05-31
+CONCEPT: Web-first assertions retry behavior
+QUOTE: "Playwright will be re-testing the element with the test id of <code>status</code> until the fetched element has the <code>\"Submitted\"</code> text."</p>
+<p>SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-05-31
+CONCEPT: Soft assertions with expect.soft()
+QUOTE: "Using expect.soft() allows assertions to fail without terminating test execution, enabling multiple validations per test while still marking failures."</p>
+<p>SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-05-31
+CONCEPT: Custom matchers with expect.extend()
+QUOTE: "The expect.extend() method enables developers to create domain-specific assertions tailored to application requirements."</p>
+<p>SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-05-31
+CONCEPT: toHaveRole() — ARIA role assertion
+QUOTE: "toHaveRole() - validates specific ARIA role"</p>
+<p>SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-05-31
+CONCEPT: toMatchAriaSnapshot() — aria snapshot matching
+QUOTE: "toMatchAriaSnapshot() - Element matches the Aria snapshot"
+Previous version of ch04 had getByLabel at #2 and getByText at #4 — this was wrong. Fixed 2026-05-31.</p>
+<hr />
+<h2 id="ch06-debugging">Ch06: Debugging<a class="headerlink" href="#ch06-debugging" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/debug
+VERSION: 2026-05-31
+CONCEPT: Inspector — opening with --debug flag
+QUOTE: "Run with the --debug flag to open the GUI debugging tool: npx playwright test --debug"</p>
+<p>SOURCE: https://playwright.dev/docs/debug
+VERSION: 2026-05-31
+CONCEPT: page.pause() as code breakpoint
+QUOTE: "Insert breakpoints directly in code: await page.pause(); This pauses execution at that point without stepping through prior actions."</p>
+<p>SOURCE: https://playwright.dev/docs/debug
+VERSION: 2026-05-31
+CONCEPT: PWDEBUG=console for DevTools integration
+QUOTE: "Set PWDEBUG=console environment variable to access a playwright object in DevTools console"</p>
+<p>SOURCE: https://playwright.dev/docs/debug
+VERSION: 2026-05-31
+CONCEPT: headless: false and slowMo for headed mode
+QUOTE: "Launch browsers visually by setting headless: false in configuration or using slowMo to slow execution by milliseconds per operation."</p>
+<p>SOURCE: https://playwright.dev/docs/trace-viewer
+VERSION: 2026-05-31
+CONCEPT: Trace config options
+QUOTE: "'on-first-retry' - Record only on first retry attempt; 'on-all-retries' - Capture traces for all retries; 'off' - Disable tracing; 'on' - Record every test (performance-heavy); 'retain-on-failure' - Trace failed tests only"</p>
+<p>SOURCE: https://playwright.dev/docs/trace-viewer
+VERSION: 2026-05-31
+CONCEPT: Opening trace from command line
+QUOTE: "npx playwright show-trace path/to/trace.zip"</p>
+<p>SOURCE: https://playwright.dev/docs/trace-viewer
+VERSION: 2026-05-31
+CONCEPT: Actions tab shows locator and duration
+QUOTE: "what locator was used for every action and how long each one took"</p>
+<p>SOURCE: https://playwright.dev/docs/trace-viewer
+VERSION: 2026-05-31
+CONCEPT: DOM snapshots show exact click position
+QUOTE: "the exact click position"</p>
+<p>SOURCE: https://playwright.dev/docs/codegen
+VERSION: 2026-05-31
+CONCEPT: Codegen generates tests from browser interactions
+QUOTE: "Playwright comes with the ability to generate tests for you as you perform actions in the browser."</p>
+<p>SOURCE: https://playwright.dev/docs/codegen
+VERSION: 2026-05-31
+CONCEPT: Codegen locator priority
+QUOTE: "prioritizes role, text and test id locators"</p>
+<p>SOURCE: https://playwright.dev/docs/test-ui-mode
+VERSION: 2026-05-31
+CONCEPT: UI Mode — core purpose
+QUOTE: "UI Mode lets you explore, run, and debug tests with a time travel experience complete with a watch mode."</p>
+<p>SOURCE: https://playwright.dev/docs/test-ui-mode
+VERSION: 2026-05-31
+CONCEPT: UI Mode watch mode activation
+QUOTE: "Eye icons activate automatic re-runs when test code changes"</p>
+<hr />
+<h2 id="ch07-fixtures">Ch07: Fixtures<a class="headerlink" href="#ch07-fixtures" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: What fixtures are and why use them
+QUOTE: "Test fixtures are used to establish the environment for each test, giving the test everything it needs and nothing else. Test fixtures are isolated between tests."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Fixtures are on-demand (lazy initialization)
+QUOTE: "Fixtures are on-demand - you can define as many fixtures as you'd like, and Playwright Test will setup only the ones needed by your test."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Fixtures are composable
+QUOTE: "Fixtures are composable - they can depend on each other to provide complex behaviors."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Built-in page fixture
+QUOTE: "Isolated page for this test run."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Built-in context fixture
+QUOTE: "Isolated context for this test run."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Built-in browser fixture
+QUOTE: "Browsers are shared across tests to optimize resources."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Built-in request fixture
+QUOTE: "Isolated APIRequestContext instance for this test run."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Worker-scoped fixture definition
+QUOTE: "Playwright Test uses worker processes to run test files. Similar to how test fixtures are set up for individual test runs, worker fixtures are set up for each worker process."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Worker-scoped tuple syntax
+QUOTE: "Note the tuple-like syntax for the worker fixture - we have to pass <code>{scope: 'worker'}</code> so that test runner sets this fixture up once per worker."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Worker process reuse
+QUOTE: "Playwright Test will reuse the worker process for as many test files as it can, provided their worker fixtures match and hence environments are identical."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Automatic fixtures definition
+QUOTE: "Automatic fixtures are set up for each test/worker, even when the test does not list them directly. To create an automatic fixture, use the tuple syntax and pass <code>{ auto: true }</code>."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: Fixture dependency ordering
+QUOTE: "When fixture A depends on fixture B: B is always set up before A and torn down after A."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: use() callback and teardown
+QUOTE: "Each fixture has a setup and teardown phase before and after the <code>await use()</code> call in the fixture. Setup is executed before the test/hook requiring it is run, and teardown is executed when the fixture is no longer being used."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: mergeTests() for combining fixtures
+QUOTE: (combining fixtures from multiple files) "export const test = mergeTests(dbTest, a11yTest);"</p>
+<hr />
+<h2 id="ch08-page-object-model">Ch08: Page Object Model<a class="headerlink" href="#ch08-page-object-model" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/pom
+VERSION: 2026-05-31
+CONCEPT: POM definition
+QUOTE: "A page object represents a part of your web application."</p>
+<p>SOURCE: https://playwright.dev/docs/pom
+VERSION: 2026-05-31
+CONCEPT: POM primary benefits
+QUOTE: "Page objects simplify authoring by creating a higher-level API which suits your application and simplify maintenance by capturing element selectors in one place and create reusable code to avoid repetition."</p>
+<p>SOURCE: https://playwright.dev/docs/pom
+VERSION: 2026-05-31
+CONCEPT: POM implementation approach
+QUOTE: "We will create a PlaywrightDevPage helper class to encapsulate common operations on the playwright.dev page."</p>
+<p>SOURCE: https://playwright.dev/docs/pom
+VERSION: 2026-05-31
+CONCEPT: POM usage pattern
+QUOTE: "const playwrightDev = new PlaywrightDevPage(page); await playwrightDev.goto(); await playwrightDev.getStarted();"</p>
+<p>SOURCE: https://playwright.dev/docs/pom
+VERSION: 2026-05-31
+CONCEPT: Locator properties in Page Object
+QUOTE: "constructor(page: Page) { this.page = page; this.getStartedLink = page.locator('a', { hasText: 'Get started' });"</p>
+<hr />
+<hr />
+<h2 id="ch09-test-organization">Ch09: Test Organization<a class="headerlink" href="#ch09-test-organization" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: test.skip behavior
+QUOTE: "Skip a test. Playwright will not run the test past the test.skip() call."</p>
+<p>SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: test.fail behavior
+QUOTE: "marks the test as failing. Playwright will run this test and ensure it does indeed fail."</p>
+<p>SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: test.fixme behavior
+QUOTE: "marks the test as failing. Playwright will not run this test, as opposed to the fail annotation."</p>
+<p>SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: test.slow behavior
+QUOTE: "marks the test as slow and triples the test timeout."</p>
+<p>SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: Conditional annotations
+QUOTE: "Built-in annotations can be conditional, in which case they apply when the condition is truthy, and may depend on test fixtures."</p>
+<p>SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: Runtime annotations via testInfo
+QUOTE: "During test execution, you can dynamically add annotations using test.info().annotations.push() with custom type and description properties."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.skip API signature
+QUOTE: "Marks a test as 'should fail'. Playwright runs this test and ensures that it is actually failing."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.fail API signature
+QUOTE: "Marks a test as 'should fail'. Playwright runs this test and ensures that it is actually failing."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.fixme API signature
+QUOTE: "Mark a test as 'fixme', with the intention to fix it. Playwright will not run the test past the test.fixme() call."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.slow API signature
+QUOTE: "Marks a test as 'slow'. Slow test will be given triple the default timeout."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.describe.configure modes
+QUOTE: "mode: 'default' | 'parallel' | 'serial' — Running tests serially, retrying from the start. If one of the serial tests fails, all subsequent tests are skipped."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.step signature and return value
+QUOTE: "The method returns the value returned by the step callback."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: test.step options
+QUOTE: "timeout [number] — The maximum time, in milliseconds, allowed for the step to complete."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: Tags inline syntax
+QUOTE: "Tests can include tags in the test title. Note that each tag must start with @ symbol."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-test
+VERSION: 2026-05-31
+CONCEPT: Tags object syntax and reporting
+QUOTE: "Test tags are displayed in the test report, and are available to a custom reporter via TestCase.tags property."</p>
+<p>SOURCE: https://playwright.dev/docs/test-parameterize
+VERSION: 2026-05-31
+CONCEPT: Parameterized tests with forEach
+QUOTE: "Uses template literals for dynamic test names — Test names must remain unique across iterations"</p>
+<hr />
+<h2 id="ch10-configuration-projects">Ch10: Configuration &amp; Projects<a class="headerlink" href="#ch10-configuration-projects" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/test-configuration
+VERSION: 2026-05-31
+CONCEPT: defineConfig() — fullyParallel option
+QUOTE: "Have all tests in all files run in parallel"</p>
+<p>SOURCE: https://playwright.dev/docs/test-configuration
+VERSION: 2026-05-31
+CONCEPT: defineConfig() — forbidOnly option
+QUOTE: "Exit with error if tests marked as test.only exist; useful for CI"</p>
+<p>SOURCE: https://playwright.dev/docs/test-configuration
+VERSION: 2026-05-31
+CONCEPT: defineConfig() — retries recommended pattern
+QUOTE: "retries: process.env.CI ? 2 : 0"</p>
+<p>SOURCE: https://playwright.dev/docs/test-timeouts
+VERSION: 2026-05-31
+CONCEPT: Test timeout — default value
+QUOTE: "Timeout for each test" — default 30,000 ms</p>
+<p>SOURCE: https://playwright.dev/docs/test-timeouts
+VERSION: 2026-05-31
+CONCEPT: Expect timeout — default value
+QUOTE: "5 seconds for web-first assertions" (expect.timeout default)</p>
+<p>SOURCE: https://playwright.dev/docs/test-timeouts
+VERSION: 2026-05-31
+CONCEPT: Action timeout — no default
+QUOTE: "actionTimeout" in use block — "No default" (no timeout by default)</p>
+<p>SOURCE: https://playwright.dev/docs/test-timeouts
+VERSION: 2026-05-31
+CONCEPT: Navigation timeout — no default
+QUOTE: "navigationTimeout" in use block — "No default" (no timeout by default)</p>
+<p>SOURCE: https://playwright.dev/docs/test-timeouts
+VERSION: 2026-05-31
+CONCEPT: Global timeout — no default
+QUOTE: "Timeout for the whole test run" — globalTimeout — "No default"</p>
+<p>SOURCE: https://playwright.dev/docs/test-timeouts
+VERSION: 2026-05-31
+CONCEPT: beforeAll/afterAll timeout — 30,000 ms default
+QUOTE: "beforeAll/afterAll timeout" — default 30,000 ms, set via test.setTimeout() within hook</p>
+<p>SOURCE: https://playwright.dev/docs/test-webserver
+VERSION: 2026-05-31
+CONCEPT: webServer reuseExistingServer behavior
+QUOTE: "reuseExistingServer — Whether to reuse existing server on port/url" — default false</p>
+<p>SOURCE: https://playwright.dev/docs/test-webserver
+VERSION: 2026-05-31
+CONCEPT: webServer timeout — default
+QUOTE: "How long to wait for the process to start up and be available in milliseconds" — default 60000</p>
+<p>SOURCE: https://playwright.dev/docs/test-webserver
+VERSION: 2026-05-31
+CONCEPT: webServer port option deprecated
+QUOTE: "port — Deprecated; use url instead"</p>
+<p>SOURCE: https://playwright.dev/docs/test-projects
+VERSION: 2026-05-31
+CONCEPT: Project dependencies — setup project runs first
+QUOTE: "Setup projects execute first, and dependent projects only run if dependencies pass."</p>
+<p>SOURCE: https://playwright.dev/docs/test-global-setup-teardown
+VERSION: 2026-05-31
+CONCEPT: Project Dependencies vs globalSetup — modern approach recommended
+QUOTE: "the recommended approach, as it integrates better with the Playwright test runner: your HTML report will include the global setup, traces will be recorded, and fixtures can be used."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-testconfig
+VERSION: 2026-05-31
+CONCEPT: tsconfig property in TestConfig — exact property name
+QUOTE: "Path to a single tsconfig applicable to all imported files." — property name: tsconfig (added v1.49)</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-testconfig
+VERSION: 2026-05-31
+CONCEPT: failOnFlakyTests — confirmed to exist in Playwright v1.52+
+QUOTE: "failOnFlakyTests: !!process.env.CI" — exits with error if any test is marked flaky (added v1.52, NOT an invented property)</p>
+<hr />
+<h2 id="ch11-parallelism-sharding-reporting_1">Ch11: Parallelism, Sharding &amp; Reporting<a class="headerlink" href="#ch11-parallelism-sharding-reporting_1" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/test-parallel
+VERSION: 2026-05-31
+CONCEPT: workers config option
+QUOTE: "workers: process.env.CI ? 2 : undefined" — controls maximum parallel worker processes; "To disable parallelism entirely: workers: 1"</p>
+<p>SOURCE: https://playwright.dev/docs/test-parallel
+VERSION: 2026-05-31
+CONCEPT: fullyParallel setting
+QUOTE: "have all tests in all files to run in parallel" — configurable at testConfig.fullyParallel or per testProject.fullyParallel</p>
+<p>SOURCE: https://playwright.dev/docs/test-parallel
+VERSION: 2026-05-31
+CONCEPT: test.describe.configure() for serial and parallel modes
+QUOTE: "test.describe.configure({ mode: 'serial' });" and "test.describe.configure({ mode: 'parallel' });" — official API; test.describe.serial() and test.describe.parallel() exist as shorthand</p>
+<p>SOURCE: https://playwright.dev/docs/test-parallel
+VERSION: 2026-05-31
+CONCEPT: Parallel test isolation — workers cannot share state
+QUOTE: "Parallel tests are executed in separate worker processes and cannot share any state or global variables."</p>
+<p>SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: --shard flag syntax
+QUOTE: "split[s] the suite into four shards, each running one fourth of the tests" — syntax: --shard=1/4, --shard=2/4, etc.</p>
+<p>SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: Blob reporter for sharding
+QUOTE: "Blob report contains information about all the tests that were run and their results as well as all test attachments such as traces and screenshot diffs."</p>
+<p>SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: merge-reports command syntax
+QUOTE: "npx playwright merge-reports --reporter html ./all-blob-reports"</p>
+<p>SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: fullyParallel improves shard distribution
+QUOTE: "With fullyParallel: true: Tests split at individual test level for balanced distribution. Without fullyParallel: Tests split at file level; uneven file sizes can cause imbalanced shard loads."</p>
+<p>SOURCE: https://playwright.dev/docs/test-reporters
+VERSION: 2026-05-31
+CONCEPT: html reporter — show-report command
+QUOTE: "npx playwright show-report" or "npx playwright show-report my-report"</p>
+<p>SOURCE: https://playwright.dev/docs/test-reporters
+VERSION: 2026-05-31
+CONCEPT: dot reporter characters
+QUOTE: "Very concise - it only produces a single character per successful test run." — · (passed), F (failed), × (failed/timed out retrying), ± (passed on retry/flaky), T (timed out), ° (skipped)</p>
+<p>SOURCE: https://playwright.dev/docs/test-reporters
+VERSION: 2026-05-31
+CONCEPT: multiple reporters configuration
+QUOTE: "reporter: [['list'], ['json', { outputFile: 'test-results.json' }]]"</p>
+<p>SOURCE: https://playwright.dev/docs/test-reporters
+VERSION: 2026-05-31
+CONCEPT: failOnFlakyTests — NOT in reporters docs
+QUOTE: (not documented in test-reporters page — confirmed absent)</p>
+<p>SOURCE: https://playwright.dev/docs/test-cli
+VERSION: 2026-05-31
+CONCEPT: --last-failed flag
+QUOTE: "Only re-run the failures."</p>
+<p>SOURCE: https://playwright.dev/docs/test-cli
+VERSION: 2026-05-31
+CONCEPT: --repeat-each flag
+QUOTE: "Run each test N times (default: 1)."</p>
+<p>SOURCE: https://playwright.dev/docs/test-cli
+VERSION: 2026-05-31
+CONCEPT: --only-changed flag — CONFIRMED EXISTS
+QUOTE: "Only run test files that have been changed between 'HEAD' and 'ref'. Defaults to running all uncommitted changes. Only supports Git."</p>
+<p>SOURCE: https://playwright.dev/docs/test-cli
+VERSION: 2026-05-31
+CONCEPT: --forbid-only flag
+QUOTE: "Fail if test.only is called (default: false). Useful on CI."</p>
+<p>SOURCE: https://playwright.dev/docs/test-cli
+VERSION: 2026-05-31
+CONCEPT: --workers / -j flag
+QUOTE: "Number of concurrent workers or percentage of logical CPU cores, use 1 to run in a single worker (default: 50%)."</p>
+<hr />
+<h2 id="ch12-mocking-network-time-browser-apis">Ch12: Mocking — Network, Time &amp; Browser APIs<a class="headerlink" href="#ch12-mocking-network-time-browser-apis" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/mock
+VERSION: 2026-05-31
+CONCEPT: page.route() basic mock
+QUOTE: "await page.route('<em>/</em>*/api/v1/fruits', async route =&gt; { const json = [{ name: 'Strawberry', id: 21 }]; await route.fulfill({ json }); });"</p>
+<p>SOURCE: https://playwright.dev/docs/mock
+VERSION: 2026-05-31
+CONCEPT: Modify and replay responses with route.fetch()
+QUOTE: "await page.route('<em>/</em>*/api/v1/fruits', async route =&gt; { const response = await route.fetch(); const json = await response.json(); json.push({ name: 'Loquat', id: 100 }); await route.fulfill({ response, json }); });"</p>
+<p>SOURCE: https://playwright.dev/docs/mock
+VERSION: 2026-05-31
+CONCEPT: WebSocket mocking via routeWebSocket
+QUOTE: "await page.routeWebSocket('wss://example.com/ws', ws =&gt; { ws.onMessage(message =&gt; { if (message === 'request') ws.send('response'); }); });"</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-websocketroute
+VERSION: 2026-05-31
+CONCEPT: routeWebSocket added version
+QUOTE: "The WebSocketRoute API was introduced in v1.48 for core methods."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-clock
+VERSION: 2026-05-31
+CONCEPT: clock.setFixedTime — timers still run
+QUOTE: "Makes Date.now and new Date() return fixed fake time while 'keeps all the timers running'. Recommended for simple scenarios with predefined times."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-clock
+VERSION: 2026-05-31
+CONCEPT: clock.install — overrides Date AND timers
+QUOTE: "Installs fake implementations for time-related functions: Date, setTimeout, clearTimeout, setInterval, clearInterval, requestAnimationFrame, cancelAnimationFrame, requestIdleCallback, cancelIdleCallback, and performance"</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-clock
+VERSION: 2026-05-31
+CONCEPT: clock.fastForward
+QUOTE: "Advances time by jumping forward, firing due timers at most once. Equivalent to closing and reopening a laptop after a delay."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-clock
+VERSION: 2026-05-31
+CONCEPT: clock.runFor
+QUOTE: "Advances the clock while firing all time-related callbacks"</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-clock
+VERSION: 2026-05-31
+CONCEPT: All clock methods added version
+QUOTE: "All methods were 'Added in: v1.45' and return Promise<void>."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-clock
+VERSION: 2026-05-31
+CONCEPT: install() must be called before other clock calls
+QUOTE: "If you call install at any point in your test, the call MUST occur before any other clock related calls."</p>
+<p>SOURCE: https://playwright.dev/docs/mock-browser-apis
+VERSION: 2026-05-31
+CONCEPT: page.addInitScript() — inject before page load
+QUOTE: "Since the page may be calling the API very early while loading it's important to setup all the mocks before the page started loading"</p>
+<p>SOURCE: https://playwright.dev/docs/mock-browser-apis
+VERSION: 2026-05-31
+CONCEPT: page.addInitScript() scope — single page
+QUOTE: "await page.addInitScript(() =&gt; { const mockBattery = { level: 0.75, charging: true, ... }; window.navigator.getBattery = async () =&gt; mockBattery; });"</p>
+<p>SOURCE: https://playwright.dev/docs/mock-browser-apis
+VERSION: 2026-05-31
+CONCEPT: page.exposeFunction() — bridge browser to Node.js
+QUOTE: "await page.exposeFunction('logCall', msg =&gt; log.push(msg));"</p>
+<hr />
+<h2 id="ch14-advanced-browser-features-emulation">Ch14: Advanced Browser Features &amp; Emulation<a class="headerlink" href="#ch14-advanced-browser-features-emulation" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/pages
+VERSION: 2026-05-31
+CONCEPT: Popup handling — start listening before click
+QUOTE: "Start waiting for popup before clicking. Note no await." — pattern: const popupPromise = page.waitForEvent('popup'); await page.getByText('...').click(); const popup = await popupPromise;</p>
+<p>SOURCE: https://playwright.dev/docs/pages
+VERSION: 2026-05-31
+CONCEPT: Continuous popup listener
+QUOTE: "page.on('popup', async popup =&gt; { await popup.waitForLoadState(); console.log(await popup.title()); });"</p>
+<p>SOURCE: https://playwright.dev/docs/frames
+VERSION: 2026-05-31
+CONCEPT: frameLocator() usage pattern
+QUOTE: "const username = await page.frameLocator('.frame-class').getByLabel('User Name'); await username.fill('John');"</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-locator#locator-content-frame
+VERSION: 2026-05-31
+CONCEPT: locator.contentFrame() — version added and purpose
+QUOTE: "Added in v1.43" — signature: contentFrame(): FrameLocator — "useful when you have a Locator object obtained somewhere and later need to interact with content inside that iframe."
+NOTE: Reverse operation is frameLocator.owner() which returns Locator of the <iframe> element itself.</p>
+<p>SOURCE: https://playwright.dev/docs/dialogs
+VERSION: 2026-05-31
+CONCEPT: dialog handler must be registered before action
+QUOTE: "page.on('dialog') listener must handle the dialog. Otherwise your action will stall."</p>
+<p>SOURCE: https://playwright.dev/docs/dialogs
+VERSION: 2026-05-31
+CONCEPT: Auto-dismiss if no handler
+QUOTE: "If no listener is registered, all dialogs are automatically dismissed."</p>
+<p>SOURCE: https://playwright.dev/docs/dialogs
+VERSION: 2026-05-31
+CONCEPT: dialog.type() values
+QUOTE: (confirmed types) alert, confirm, prompt, beforeunload — example: "assert(dialog.type() === 'beforeunload');"</p>
+<p>SOURCE: https://playwright.dev/docs/downloads
+VERSION: 2026-05-31
+CONCEPT: download handling — start listening before click
+QUOTE: "const downloadPromise = page.waitForEvent('download'); await page.getByText('Download file').click(); const download = await downloadPromise;"</p>
+<p>SOURCE: https://playwright.dev/docs/downloads
+VERSION: 2026-05-31
+CONCEPT: download.saveAs() with suggestedFilename()
+QUOTE: "await download.saveAs('/path/to/save/at/' + download.suggestedFilename());"</p>
+<p>SOURCE: https://raw.githubusercontent.com/microsoft/playwright/main/packages/playwright-core/src/server/deviceDescriptorsSource.json
+VERSION: 2026-05-31
+CONCEPT: iPhone 15 device names — verified exact strings
+QUOTE: (from deviceDescriptorsSource.json) "iPhone 15", "iPhone 15 landscape", "iPhone 15 Plus", "iPhone 15 Plus landscape", "iPhone 15 Pro", "iPhone 15 Pro landscape", "iPhone 15 Pro Max", "iPhone 15 Pro Max landscape"
+NOTE: 'iPhone 15 Pro' IS a valid device name — confirmed from source JSON.</p>
+<p>SOURCE: https://playwright.dev/docs/emulation
+VERSION: 2026-05-31
+CONCEPT: devices[] usage with spread operator
+QUOTE: "use: { ...devices['iPhone 13'], ...devices['Desktop Chrome'] }" — note: docs example uses iPhone 13; iPhone 15 Pro verified from deviceDescriptorsSource.json</p>
+<p>SOURCE: https://playwright.dev/docs/emulation
+VERSION: 2026-05-31
+CONCEPT: page.emulateMedia() — both use cases
+QUOTE: "await page.emulateMedia({ colorScheme: 'dark' });" and "await page.emulateMedia({ media: 'print' });"</p>
+<p>SOURCE: https://playwright.dev/docs/emulation
+VERSION: 2026-05-31
+CONCEPT: locale and timezoneId — correct property name
+QUOTE: "use: { locale: 'en-GB', timezoneId: 'Europe/Paris' }" — NOTE: property is timezoneId (not timezone)</p>
+<p>SOURCE: https://playwright.dev/docs/emulation
+VERSION: 2026-05-31
+CONCEPT: geolocation requires permissions array
+QUOTE: "use: { geolocation: { longitude: 12.492507, latitude: 41.889938 }, permissions: ['geolocation'] }"
+NOTE: docs also state "you can only change geolocation for all pages in the context" — runtime update via context.setGeolocation()</p>
+<hr />
+<h2 id="ch15-api-testing-hybrid">Ch15: API Testing &amp; Hybrid<a class="headerlink" href="#ch15-api-testing-hybrid" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: request fixture — built-in, respects config options
+QUOTE: "Playwright Test comes with the built-in <code>request</code> fixture that respects configuration options like <code>baseURL</code> or <code>extraHTTPHeaders</code>."</p>
+<p>SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: APIRequestContext — can send all HTTP(S) requests
+QUOTE: "APIRequestContext can send all kinds of HTTP(S) requests over network."</p>
+<p>SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: request fixture internally calls apiRequest.newContext()
+QUOTE: "Behind the scenes, the <code>request</code> fixture will actually call <code>apiRequest.newContext()</code>"</p>
+<p>SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: extraHTTPHeaders configuration at context level
+QUOTE: "extraHTTPHeaders: { 'Accept': 'application/vnd.github.v3+json', 'Authorization': <code>token ${process.env.API_TOKEN}</code> }"</p>
+<p>SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: response.ok() checks 2xx status range
+QUOTE: "expect(newIssue.ok()).toBeTruthy();" — .ok() is boolean indicating success (2xx status)</p>
+<p>SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: expect.objectContaining() for partial match in array
+QUOTE: "expect(await issues.json()).toContainEqual(expect.objectContaining({ title: '[Bug] report 1', body: 'Bug description' }));"</p>
+<p>SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: Hybrid testing — setup via API then verify in UI
+QUOTE: "create a new issue via API and then navigates to the list...to check that it appears at the top of the list."</p>
+<p>SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: Using API to prepare server state before UI test
+QUOTE: "The page emphasizes using APIRequestContext for 'preparing server state before visiting the web application in a test.'"</p>
+<p>SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-05-31
+CONCEPT: storageState interchangeable between BrowserContext and APIRequestContext
+QUOTE: "Storage state is interchangeable between BrowserContext and APIRequestContext."</p>
+<p>SOURCE: https://playwright.dev/docs/test-fixtures
+VERSION: 2026-05-31
+CONCEPT: request fixture is isolated per test
+QUOTE: "Isolated APIRequestContext instance for this test run."</p>
+<hr />
+<h2 id="ch16-visual-accessibility-testing">Ch16: Visual &amp; Accessibility Testing<a class="headerlink" href="#ch16-visual-accessibility-testing" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/test-snapshots
+VERSION: 2026-05-31
+CONCEPT: Platform/OS differences in screenshots
+QUOTE: "Browser rendering can vary based on the host OS, version, settings, hardware, power source (battery vs. power adapter), headless mode, and other factors. For consistent screenshots, run tests in the same environment where the baseline screenshots were generated."</p>
+<p>SOURCE: https://playwright.dev/docs/test-snapshots
+VERSION: 2026-05-31
+CONCEPT: Snapshot naming convention includes browser and platform
+QUOTE: "chromium-darwin - the browser name and the platform. Screenshots differ between browsers and platforms due to different rendering, fonts and more, so you will need different snapshots for them."
+NOTE: Filenames follow pattern <code>{test-name}-{number}-{browser}-{platform}.png</code> e.g. <code>dashboard-1-chromium-linux.png</code></p>
+<p>SOURCE: https://playwright.dev/docs/test-snapshots
+VERSION: 2026-05-31
+CONCEPT: maxDiffPixels option for toHaveScreenshot
+QUOTE: "Playwright Test uses the pixelmatch library. You can pass various options to modify its behavior." and example: <code>await expect(page).toHaveScreenshot({ maxDiffPixels: 100 });</code></p>
+<p>SOURCE: https://playwright.dev/docs/test-snapshots
+VERSION: 2026-05-31
+CONCEPT: stylePath option for hiding dynamic content
+QUOTE: "stylePath: Applies custom CSS during screenshot capture to hide dynamic elements and improve determinism"
+NOTE: animations option confirmed from docs — value 'disabled' stops CSS animations during capture</p>
+<p>SOURCE: https://playwright.dev/docs/test-snapshots
+VERSION: 2026-05-31
+CONCEPT: Update snapshots flag
+QUOTE: "Use the <code>--update-snapshots</code> flag to refresh baseline images after intentional page changes."</p>
+<p>SOURCE: https://playwright.dev/docs/accessibility-testing
+VERSION: 2026-05-31
+CONCEPT: @axe-core/playwright import syntax
+QUOTE: "import AxeBuilder from '@axe-core/playwright';" (TypeScript)
+NOTE: package must be installed separately: <code>npm install @axe-core/playwright</code></p>
+<p>SOURCE: https://playwright.dev/docs/accessibility-testing
+VERSION: 2026-05-31
+CONCEPT: AxeBuilder.analyze() usage
+QUOTE: "Awaits <code>AxeBuilder.analyze()</code> to run the accessibility scan against the page"</p>
+<p>SOURCE: https://playwright.dev/docs/accessibility-testing
+VERSION: 2026-05-31
+CONCEPT: withTags WCAG options
+QUOTE: "to match that behavior, you would use the tags <code>wcag2a</code>, <code>wcag2aa</code>, <code>wcag21a</code>, and <code>wcag21aa</code>"</p>
+<p>SOURCE: https://playwright.dev/docs/accessibility-testing
+VERSION: 2026-05-31
+CONCEPT: AxeBuilder.include() for scoped scan
+QUOTE: "you can use <code>AxeBuilder.include()</code> to constrain an accessibility scan to only run against one specific part of a page"</p>
+<p>SOURCE: https://playwright.dev/docs/accessibility-testing
+VERSION: 2026-05-31
+CONCEPT: AxeBuilder.exclude() for known violations
+QUOTE: "you can use <code>AxeBuilder.exclude()</code> to exclude them from being scanned until you're able to fix the issues"
+NOTE: exclude() excludes the specified elements AND all their descendants</p>
+<p>SOURCE: https://playwright.dev/docs/accessibility-testing
+VERSION: 2026-05-31
+CONCEPT: AxeBuilder.disableRules() for specific rules
+QUOTE: "use <code>AxeBuilder.disableRules()</code> to temporarily disable individual rules"</p>
+<p>SOURCE: https://playwright.dev/docs/aria-snapshots
+VERSION: 2026-05-31
+CONCEPT: toMatchAriaSnapshot syntax and mechanism
+QUOTE: "the accessible structure of the page with a predefined aria snapshot template" — format: YAML-like, <code>- role \"name\" [attribute=value]</code></p>
+<p>SOURCE: https://playwright.dev/docs/aria-snapshots
+VERSION: 2026-05-31
+CONCEPT: toMatchAriaSnapshot matching rules
+QUOTE: "The comparison is case-sensitive and collapses whitespace" and "The comparison is order-sensitive, meaning the order of elements in the snapshot template must match the order"</p>
+<p>SOURCE: https://playwright.dev/docs/aria-snapshots
+VERSION: 2026-05-31
+CONCEPT: toMatchAriaSnapshot update command
+QUOTE: "Snapshots that did not match. Matching snapshots will not be updated." — command: <code>npx playwright test --update-snapshots</code> (shorthand: <code>-u</code>)</p>
+<p>SOURCE: https://playwright.dev/docs/aria-snapshots
+VERSION: 2026-05-31
+CONCEPT: toMatchAriaSnapshot file snapshot option
+QUOTE: "To store your snapshots in a separate file, use the <code>toMatchAriaSnapshot</code> method with the <code>name</code> option, specifying a <code>.aria.yml</code> file extension."
+NOTE: toMatchAriaSnapshot version — docs confirm it exists but exact version not stated in fetched content; task notes indicate v1.49+</p>
+<hr />
+<h2 id="ch17-cicd">Ch17: CI/CD<a class="headerlink" href="#ch17-cicd" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/ci
+VERSION: 2026-05-31
+CONCEPT: npx playwright install --with-deps — installs browsers AND system dependencies
+QUOTE: "npx playwright install --with-deps"
+NOTE: fetched docs confirm --with-deps is the standard CI install command; installs both browser binaries and Linux system libraries (libnss3, libgbm, etc.)</p>
+<p>SOURCE: https://playwright.dev/docs/ci
+VERSION: 2026-05-31
+CONCEPT: workers setting in CI
+QUOTE: "workers: process.env.CI ? 1 : undefined"
+NOTE: confirmed from CI docs; 1 worker for stability in CI, undefined (all cores) on local</p>
+<p>SOURCE: https://playwright.dev/docs/ci-intro
+VERSION: 2026-05-31
+CONCEPT: artifact upload with if: !cancelled()
+QUOTE: "if: ${{ !cancelled() }}"
+NOTE: docs show !cancelled() condition (not always()) — both work; !cancelled() is more precise (skips if job was manually cancelled), always() uploads even on cancellation. Chapter uses always() which is more common in practice.</p>
+<p>SOURCE: https://playwright.dev/docs/ci-intro
+VERSION: 2026-05-31
+CONCEPT: artifact retention days
+QUOTE: "retention-days: 30"
+NOTE: 30 days is the documented default example</p>
+<p>SOURCE: https://playwright.dev/docs/ci-intro
+VERSION: 2026-05-31
+CONCEPT: security note on artifacts
+QUOTE: "Artifacts like trace files, HTML reports or even the console logs contain information about your test execution"
+NOTE: docs note sensitive data may be in artifacts</p>
+<p>SOURCE: https://playwright.dev/docs/docker
+VERSION: 2026-05-31
+CONCEPT: official Docker image name and OS variants
+QUOTE: "mcr.microsoft.com/playwright:v1.60.0-noble" (Noble = Ubuntu 24.04 LTS), "mcr.microsoft.com/playwright:v1.60.0-jammy" (Jammy = Ubuntu 22.04 LTS)
+NOTE: v1.60.0 is current at time of fetch; chapter uses v1.50.0 to match course Playwright version</p>
+<p>SOURCE: https://playwright.dev/docs/docker
+VERSION: 2026-05-31
+CONCEPT: Playwright package NOT included in Docker image
+QUOTE: "The Playwright package/dependency is not included in the image"
+NOTE: must run npm ci inside container to install @playwright/test</p>
+<p>SOURCE: https://playwright.dev/docs/docker
+VERSION: 2026-05-31
+CONCEPT: --ipc=host recommended for Chromium in Docker
+QUOTE: "docker run -it --rm --ipc=host mcr.microsoft.com/playwright:v1.60.0-noble /bin/bash"
+NOTE: --ipc=host needed for Chrome's shared memory renderer processes</p>
+<p>SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: sharding syntax
+QUOTE: "npx playwright test --shard=1/4" / "npx playwright test --shard=2/4"
+NOTE: x/y format confirmed; runs tests in that shard index</p>
+<p>SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: blob reporter for sharding
+QUOTE: "Blob report contains information about all the tests that were run and their results as well as all test attachments."
+NOTE: blob reporter is the correct format for shard merging</p>
+<p>SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: merge-reports command
+QUOTE: "npx playwright merge-reports --reporter html ./all-blob-reports"
+NOTE: confirmed command syntax</p>
+<p>SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: fail-fast: false required for sharding
+QUOTE: "strategy: fail-fast: false"
+NOTE: ensures remaining shards complete even if one fails; needed for complete merged report</p>
+<p>SOURCE: https://playwright.dev/docs/test-sharding
+VERSION: 2026-05-31
+CONCEPT: fullyParallel improves shard balance
+QUOTE: "With <code>fullyParallel: true</code>: Tests are split at the individual test level, leading to more balanced shard execution."
+NOTE: without fullyParallel, tests split at file level requiring evenly-sized test files</p>
+<hr />
+<h2 id="ch18-production-patterns">Ch18: Production Patterns<a class="headerlink" href="#ch18-production-patterns" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-05-31
+CONCEPT: test isolation — each test should be independent
+QUOTE: "Each test should be completely isolated from another test and should run independently with its own local storage, session storage, data, cookies etc."</p>
+<p>SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-05-31
+CONCEPT: web-first assertions wait and retry automatically
+QUOTE: "Employ assertions like toBeVisible() that wait and retry automatically, avoiding manual checks that return immediately without waiting."
+NOTE: source paraphrased "Use web-first assertions" — the direct quote is from best-practices page emphasis on waiting assertions</p>
+<p>SOURCE: https://playwright.dev/docs/test-retries
+VERSION: 2026-05-31
+CONCEPT: retries configuration in defineConfig
+QUOTE: "import { defineConfig } from '@playwright/test'; export default defineConfig({ retries: 3, });"</p>
+<p>SOURCE: https://playwright.dev/docs/test-retries
+VERSION: 2026-05-31
+CONCEPT: test categories — passed, flaky, failed
+QUOTE: "Playwright classifies test outcomes as: 'passed' - succeeded on first run, 'flaky' - failed initially but passed on retry, 'failed' - failed on first attempt and all retries"
+NOTE: source confirms these exact three categories with these exact labels</p>
+<p>SOURCE: https://playwright.dev/docs/test-retries
+VERSION: 2026-05-31
+CONCEPT: testInfo.retry for conditional cleanup
+QUOTE: "test('my test', async ({ page }, testInfo) =&gt; { if (testInfo.retry) await cleanSomeCachesOnTheServer(); });"</p>
+<p>SOURCE: https://playwright.dev/docs/test-retries
+VERSION: 2026-05-31
+CONCEPT: worker restarts on test failure
+QUOTE: "When a test fails, the entire worker process restarts. With retries enabled, the failed test reruns in a new process before continuing with subsequent tests."</p>
+<p>SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: test.fixme() skips the test (unlike test.fail which runs it)
+QUOTE: "test.fixme(): marks the test as failing. Playwright will not run this test, as opposed to the fail annotation."</p>
+<p>SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: test.fail() expects test to fail — warns if it passes
+QUOTE: "test.fail(): marks the test as failing. Playwright will run this test and ensure it does indeed fail."</p>
+<p>SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: tags must begin with @ symbol
+QUOTE: "Tags must begin with the @ symbol."</p>
+<p>SOURCE: https://playwright.dev/docs/test-annotations
+VERSION: 2026-05-31
+CONCEPT: running tagged tests with --grep
+QUOTE: "npx playwright test --grep @fast" and "npx playwright test --grep-invert @fast"</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-testinfo
+VERSION: 2026-05-31
+CONCEPT: testInfo.attach() copies files to reporter-accessible location
+QUOTE: "automatically takes care of copying attached files to a location that is accessible to reporters."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-testinfo
+VERSION: 2026-05-31
+CONCEPT: testInfo.status values
+QUOTE: "passed | failed | timedOut | skipped | interrupted"</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-testinfo
+VERSION: 2026-05-31
+CONCEPT: testInfo.retry tracks retry attempts
+QUOTE: "The first test run has testInfo.retry equal to zero, the first retry has it equal to one, and so on."</p>
+<p>SOURCE: https://playwright.dev/docs/test-reporters
+VERSION: 2026-05-31
+CONCEPT: custom reporter interface with onBegin, onTestEnd, onEnd
+QUOTE: "class MyReporter implements Reporter { onBegin(config: FullConfig, suite: Suite) { ... } onTestEnd(test: TestCase, result: TestResult) { ... } onEnd(result: FullResult) { ... } }"</p>
+<hr />
+<h2 id="ch19-database-state-verification">Ch19: Database State Verification<a class="headerlink" href="#ch19-database-state-verification" title="Permanent link">&para;</a></h2>
+<p>SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-06-04
+CONCEPT: request fixture — APIRequestContext for API testing
+QUOTE: "Playwright Test comes with the built-in <code>request</code> fixture that respects configuration options like <code>baseURL</code> or <code>extraHTTPHeaders</code> we specified and is ready to send some requests."</p>
+<p>SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-06-04
+CONCEPT: APIRequestContext can send all HTTP(S) requests
+QUOTE: "[APIRequestContext] can send all kinds of HTTP(S) requests over network."</p>
+<p>SOURCE: https://playwright.dev/docs/api-testing
+VERSION: 2026-06-04
+CONCEPT: Two types of APIRequestContext
+QUOTE: "There are two types of [APIRequestContext]: associated with a [BrowserContext] [and] isolated instance, created via [apiRequest.newContext()]"</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-fixtures
+VERSION: 2026-06-04
+CONCEPT: request fixture isolation per test
+QUOTE: "Isolated [APIRequestContext] instance for each test."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-apirequestcontext
+VERSION: 2026-06-04
+CONCEPT: APIRequestContext.get() method
+QUOTE: "Sends HTTP(S) GET request and returns its response. The method will populate request cookies from the context and update context cookies from the response."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-apirequestcontext
+VERSION: 2026-06-04
+CONCEPT: APIRequestContext.post() method
+QUOTE: "Sends HTTP(S) POST request and returns its response. The method will populate request cookies from the context and update context cookies from the response."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-apirequestcontext
+VERSION: 2026-06-04
+CONCEPT: APIRequestContext.fetch() method
+QUOTE: "Sends HTTP(S) request and returns its response. The method will populate request cookies from the context and update context cookies from the response."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-apiresponse
+VERSION: 2026-06-04
+CONCEPT: APIResponse.ok() method
+QUOTE: "Contains a boolean stating whether the response was successful (status in the range 200-299) or not."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-apiresponse
+VERSION: 2026-06-04
+CONCEPT: APIResponse.status() method
+QUOTE: "Contains the status code of the response (e.g., 200 for a success)."</p>
+<p>SOURCE: https://playwright.dev/docs/api/class-apiresponse
+VERSION: 2026-06-04
+CONCEPT: APIResponse.json() method
+QUOTE: "Returns the JSON representation of response body."</p>
+<p>SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-06-04
+CONCEPT: expect.poll() for async assertions — description
+QUOTE: "You can convert any synchronous <code>expect</code> to an asynchronous polling one using <code>expect.poll</code>."</p>
+<p>SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-06-04
+CONCEPT: expect.poll() intervals option default values
+QUOTE: "Probe, wait 1s, probe, wait 2s, probe, wait 10s, probe, wait 10s, probe ... Defaults to [100, 250, 500, 1000]."</p>
+<p>SOURCE: https://playwright.dev/docs/test-assertions
+VERSION: 2026-06-04
+CONCEPT: expect.poll() timeout option
+QUOTE: "Poll for 10 seconds; defaults to 5 seconds. Pass 0 to disable timeout."</p>
+<p>SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-06-04
+CONCEPT: Test isolation best practice
+QUOTE: "Each test should be completely isolated from another test and should run independently with its own local storage, session storage, data, cookies etc."</p>
+<p>SOURCE: https://playwright.dev/docs/best-practices
+VERSION: 2026-06-04
+CONCEPT: Test isolation improves reproducibility
+QUOTE: "Test isolation improves reproducibility, makes debugging easier and prevents cascading test failures."</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  กลับไปด้านบนสุด
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01\u0e41\u0e25\u0e49\u0e27", "clipboard.copy": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01", "search.result.more.one": "\u0e2d\u0e35\u0e01\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.more.other": "# \u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.none": "\u0e44\u0e21\u0e48\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.one": "\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.other": "\u0e1e\u0e1a # \u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.placeholder": "\u0e1e\u0e34\u0e21\u0e1e\u0e4c\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e40\u0e23\u0e34\u0e48\u0e21\u0e04\u0e49\u0e19\u0e2b\u0e32", "search.result.term.missing": "\u0e44\u0e21\u0e48\u0e1e\u0e1a", "select.version": "\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e40\u0e27\u0e2d\u0e23\u0e4c\u0e0a\u0e31\u0e19"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

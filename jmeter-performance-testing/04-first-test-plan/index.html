@@ -1,0 +1,4799 @@
+
+<!doctype html>
+<html lang="th" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="คอร์ส QA & Automation Testing ภาษาไทย">
+      
+      
+      
+        <link rel="canonical" href="https://pornchok.github.io/Claude-Code-for-document/jmeter-performance-testing/04-first-test-plan/">
+      
+      
+        <link rel="prev" href="../03-ui-test-plan-structure/">
+      
+      
+        <link rel="next" href="../05-thread-group-best-practices/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>บทที่ 4 - First Test Plan - QA Learning Hub</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#4-test-plan-http-api" class="md-skip">
+          ข้ามไปที่เนื้อหา
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="หัวข้อ">
+    <a href="../.." title="QA Learning Hub" class="md-header__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            QA Learning Hub
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              บทที่ 4 - First Test Plan
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="ค้นหา" placeholder="ค้นหา" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="ค้นหา">
+        
+        <button type="reset" class="md-search__icon md-icon" title="ล้าง" aria-label="ล้าง" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            กำลังเริ่มต้นการค้นหา
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="แท็บ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../playwright-typescript/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Playwright TypeScript
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../robot-framework-for-qa/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../robot-framework-control-flow/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework Control Flow
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../rf-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  RF Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../wdio-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  WebdriverIO Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-overview/" class="md-tabs__link">
+          
+  
+  
+  JMeter Performance Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../english-for-beginners/00-overview/" class="md-tabs__link">
+          
+  
+  
+  English for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-tabs__link">
+          
+  
+  
+  Claude Code Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ตัวนำทาง" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="QA Learning Hub" class="md-nav__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    QA Learning Hub
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playwright TypeScript
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Playwright TypeScript
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/01-why-playwright/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - ทำไมต้อง Playwright
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/02-setup-typescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup + TypeScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/03-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/04-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/05-actions-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Actions & Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/06-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/07-fixtures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Fixtures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/08-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/09-test-organization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Test Organization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/10-configuration-projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Configuration & Projects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/11-parallelism-sharding-reporting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 11 - Parallelism & Sharding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/12-mocking-network-time-browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 12 - Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/13-authentication-storage-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 13 - Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/14-advanced-browser-emulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 14 - Advanced Browser Emulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/15-api-testing-hybrid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 15 - API Testing & Hybrid
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/16-visual-accessibility-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 16 - Visual & Accessibility
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/17-cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 17 - CI/CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/18-production-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 18 - Production Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/19-db-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 19 - DB Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/20-professional-project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 20 - Professional Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/01-what-is-robot-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is RF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/03-test-structure-syntax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/04-keywords-and-resource-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Keywords & Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/05-web-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Web Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/06-data-driven-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Data Driven
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/07-reports-and-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Reports & Debug
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/08-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework Control Flow
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework Control Flow
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/01-if-else/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - If/Else
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/02-for-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - For Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/03-while-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - While Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RF Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RF Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/01-mobile-testing-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mobile Landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/02-setup-environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/03-appium-capabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Capabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/04-appiumlibrary-keywords/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - AppiumLibrary Keywords
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/05-mobile-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Mobile Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/06-gestures-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Gestures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/07-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WebdriverIO Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    WebdriverIO Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/01-what-is-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/02-setup-wdio-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/03-wdio-appium-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/04-writing-tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Writing Tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/05-selectors-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Selectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/06-page-objects-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Page Objects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/07-comparing-rf-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - RF vs WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMeter Performance Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMeter Performance Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-performance-testing-fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-ui-test-plan-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Plan Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - First Test Plan
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - First Test Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-chapter-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⏰ Pre-chapter Retrieval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 1: วัตถุประสงค์
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 2: ทำไมต้องรู้? (Why)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-analogy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 3: Analogy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 3: Analogy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#http-request-sampler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP Request Sampler เหมือน นักสืบที่ถูกส่งไปทำภารกิจ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 4: เนื้อหาหลัก
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 4: เนื้อหาหลัก">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-http-request-sampler-field-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 HTTP Request Sampler — Field ทีละ Field
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-http-header-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 HTTP Header Manager — ทำไมต้องใส่
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-http-cookie-manager-session-based-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 HTTP Cookie Manager — ทำไมต้องใส่สำหรับ Session-based App
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-http-request-defaults-duplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 HTTP Request Defaults — ลด Duplication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-view-results-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 อ่านผลจาก View Results Tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-json-extractor-dynamic-value-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 JSON Extractor — ดึง Dynamic Value จาก Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 5: ตัวอย่าง 3 ระดับ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 5: ตัวอย่าง 3 ระดับ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beginner-get-request-public-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ตัวอย่าง Beginner: GET Request ไปที่ Public API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-login-flow-token-based-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ตัวอย่าง Intermediate: Login Flow ด้วย Token-based Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-test-plan-setup-main-test-teardown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ตัวอย่าง Advanced: Test Plan ที่มี Setup, Main Test, Teardown
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 6: Common Mistakes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 6: Common Mistakes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mistake-1-http-cookie-manager-test-real-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Mistake 1: ลืม HTTP Cookie Manager ทำให้ test ไม่สะท้อน real user
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mistake-2-hardcode-sensitive-body-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Mistake 2: Hardcode ค่า Sensitive ใน Body Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mistake-3-http-request-defaults-duplicate-config-sampler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Mistake 3: ไม่ใช้ HTTP Request Defaults ทำให้ Duplicate Config ทุก Sampler
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 7: สรุปบท
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 7: สรุปบท">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code-based-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Code-Based Task (ทำก่อนดูเฉลย)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elaborative-interrogation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elaborative Interrogation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generation-effect-retrieval-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generation Effect — Retrieval Questions สุดท้าย
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-thread-group-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Thread Group
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-parameterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Parameterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-running-reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-distributed-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Distributed Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-anti-patterns-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    English for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    English for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/01-mindset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/02-phonics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Phonics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/03-vocabulary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Vocabulary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/04-sentence-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Sentence Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/05-to-be-present-simple/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - To Be & Present Simple
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/06-questions-negatives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Questions & Negatives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/07-numbers-time-days/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Numbers, Time & Days
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/08-phrases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Phrases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Claude Code Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-chapter-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⏰ Pre-chapter Retrieval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 1: วัตถุประสงค์
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 2: ทำไมต้องรู้? (Why)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-analogy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 3: Analogy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 3: Analogy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#http-request-sampler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        HTTP Request Sampler เหมือน นักสืบที่ถูกส่งไปทำภารกิจ
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 4: เนื้อหาหลัก
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 4: เนื้อหาหลัก">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-http-request-sampler-field-field" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 HTTP Request Sampler — Field ทีละ Field
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-http-header-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 HTTP Header Manager — ทำไมต้องใส่
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-http-cookie-manager-session-based-app" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 HTTP Cookie Manager — ทำไมต้องใส่สำหรับ Session-based App
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-http-request-defaults-duplication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 HTTP Request Defaults — ลด Duplication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-view-results-tree" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 อ่านผลจาก View Results Tree
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-json-extractor-dynamic-value-response" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 JSON Extractor — ดึง Dynamic Value จาก Response
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 5: ตัวอย่าง 3 ระดับ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 5: ตัวอย่าง 3 ระดับ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beginner-get-request-public-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ตัวอย่าง Beginner: GET Request ไปที่ Public API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-login-flow-token-based-authentication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ตัวอย่าง Intermediate: Login Flow ด้วย Token-based Authentication
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-test-plan-setup-main-test-teardown" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ตัวอย่าง Advanced: Test Plan ที่มี Setup, Main Test, Teardown
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 6: Common Mistakes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 6: Common Mistakes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mistake-1-http-cookie-manager-test-real-user" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Mistake 1: ลืม HTTP Cookie Manager ทำให้ test ไม่สะท้อน real user
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mistake-2-hardcode-sensitive-body-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Mistake 2: Hardcode ค่า Sensitive ใน Body Data
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mistake-3-http-request-defaults-duplicate-config-sampler" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Mistake 3: ไม่ใช้ HTTP Request Defaults ทำให้ Duplicate Config ทุก Sampler
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 7: สรุปบท
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 7: สรุปบท">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#code-based-task" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Code-Based Task (ทำก่อนดูเฉลย)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#elaborative-interrogation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Elaborative Interrogation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#generation-effect-retrieval-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Generation Effect — Retrieval Questions สุดท้าย
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="4-test-plan-http-api">บทที่ 4: สร้าง Test Plan แรกสำหรับ HTTP API<a class="headerlink" href="#4-test-plan-http-api" title="Permanent link">&para;</a></h1>
+<hr />
+<h2 id="pre-chapter-retrieval">⏰ Pre-chapter Retrieval<a class="headerlink" href="#pre-chapter-retrieval" title="Permanent link">&para;</a></h2>
+<p>แนะนำ: อ่านบทนี้หลังจากผ่านไปอย่างน้อย 1 วันจากบทที่ 3</p>
+<p>ก่อนอ่านบทนี้ ลองตอบ 2 คำถามนี้ <strong>โดยไม่เปิดดูบทที่แล้ว</strong>:</p>
+<p><strong>ข้อ 1:</strong> จากบทที่ 3 คุณรู้ว่า Thread Group มี 4 fields หลัก — Number of Threads, Ramp-Up Period, Loop Count, Duration — ถ้าคุณต้องการรัน test นาน 3 นาทีด้วย 200 virtual users โดย start ทีละคนใน 2 นาทีแรก คุณจะตั้งค่า field แต่ละ field อย่างไร?</p>
+<p><strong>ข้อ 2:</strong> Official docs บอกว่า "A minimal test will consist of the Test Plan, a Thread Group and one or more Samplers" — แล้วในบทนี้เราจะเพิ่ม element อีกหลายชนิด (Header Manager, Cookie Manager, HTTP Request Defaults) เพื่ออะไร? ทำไม minimal structure ถึงยังไม่พอสำหรับการทดสอบจริง?</p>
+<p>เขียนคำตอบลงกระดาษก่อน — หยุดอย่างน้อย 30 วินาที พยายาม retrieve ก่อนเขียน และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น</p>
+<hr />
+<blockquote>
+<p><strong>เฉลยข้อ 1:</strong> Number of Threads = 200, Ramp-Up Period = 120 (2 นาที = 120 วินาที), Loop Count = ☐ Infinite, Duration = 180 (3 นาที = 180 วินาที) — 120÷200 = 0.6 วินาทีต่อ thread ใหม่ ถ้าตอบผิด: ทบทวน section 4.2 ของบทที่ 3 โดยเฉพาะ formula Ramp-Up ÷ Threads = เวลาต่อ thread</p>
+<p><strong>เฉลยข้อ 2:</strong> Minimal structure ทำงานได้ แต่ไม่สะท้อน real user — Real users ส่ง headers (Content-Type, Authorization), มี cookies (session tracking), และ API มักมี base URL เดียวกันทุก endpoint การไม่มี Config Elements ทำให้ต้อง duplicate ค่าในทุก Sampler และ test ไม่สะท้อนการใช้งานจริง ถ้าตอบไม่ออก: ไม่ผิด บทนี้จะอธิบายเรื่องนี้โดยละเอียด</p>
+</blockquote>
+<hr />
+<h2 id="1">ส่วนที่ 1: วัตถุประสงค์<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>อ่านบทนี้จบแล้วคุณจะสามารถ:</p>
+<ul>
+<li><strong>สร้าง</strong> Test Plan สำหรับ HTTP GET และ POST request ได้ตั้งแต่ต้นโดยกรอก field ถูกทุก field</li>
+<li><strong>อธิบาย</strong> ว่า HTTP Request Sampler แต่ละ field (Server, Port, Protocol, Path, Method, Body Data) หมายถึงอะไรและส่งผลอย่างไร</li>
+<li><strong>เลือก</strong> ว่าสถานการณ์ไหนต้องใช้ HTTP Header Manager และ HTTP Cookie Manager</li>
+<li><strong>ออกแบบ</strong> Test Plan ที่ใช้ HTTP Request Defaults เพื่อลด duplication และง่ายต่อการบำรุงรักษา</li>
+<li><strong>อ่าน</strong> ผลลัพธ์จาก View Results Tree และบอกได้ว่า request นั้นสำเร็จหรือล้มเหลวและเพราะอะไร</li>
+<li><strong>ประเมิน</strong> tradeoff ระหว่าง Test Plan แบบง่ายกับแบบที่มี setup/teardown สำหรับ production-grade testing</li>
+</ul>
+<hr />
+<h2 id="2-why">ส่วนที่ 2: ทำไมต้องรู้? (Why)<a class="headerlink" href="#2-why" title="Permanent link">&para;</a></h2>
+<p>ลองนึกถึงสถานการณ์จริง:</p>
+<p>คุณเพิ่ง deploy API endpoint ใหม่ที่ให้ผู้ใช้ login และดู profile — ก่อน deploy คุณทดสอบด้วย Postman แล้วผ่าน แต่พอเปิด production จริง มีผู้ใช้ 500 คน login พร้อมกัน response time พุ่งขึ้นจาก 200ms เป็น 8 วินาที</p>
+<p>ปัญหาคือคุณ "ทดสอบถูกต้อง" ด้วย Postman แต่ทดสอบ "กับ 1 คน" เท่านั้น</p>
+<p>HTTP Request Sampler ใน JMeter แก้ปัญหานี้ — มันเป็นสิ่งเดียวกับที่ Postman ทำ แต่ทำพร้อมกันได้หลาย thread มันส่ง request จริงไปที่ server จริง รอ response จริง แล้ว JMeter รวบรวมผลจากทุก virtual user ไว้ให้วิเคราะห์</p>
+<p>บทนี้สำคัญเพราะ HTTP Request Sampler คือ "กล้ามเนื้อหลัก" ของ JMeter — element อื่นๆ ทั้งหมดที่เรียนมา (Thread Group, Listener, Config Elements) ล้วนทำงานเพื่อสนับสนุน Sampler ตัวนี้</p>
+<hr />
+<h2 id="3-analogy">ส่วนที่ 3: Analogy<a class="headerlink" href="#3-analogy" title="Permanent link">&para;</a></h2>
+<h3 id="http-request-sampler">HTTP Request Sampler เหมือน นักสืบที่ถูกส่งไปทำภารกิจ<a class="headerlink" href="#http-request-sampler" title="Permanent link">&para;</a></h3>
+<p>ลองนึกถึง Thread Group เป็น "หัวหน้าฝ่ายสืบสวน" ที่มีทีมนักสืบ 100 คน:</p>
+<p><strong>Mechanism 1 — HTTP Request Sampler เหมือน "คำสั่งภารกิจ" ที่ส่งให้นักสืบแต่ละคน</strong>
+คำสั่งระบุว่า "ไปที่บ้านเลขที่ X (Server + Path), เคาะประตูด้วยวิธีนี้ (Method: GET/POST), นำเอกสารนี้ไปด้วย (Body Data), แล้วรอรับคำตอบ (wait for response)" — นักสืบทุกคนทำตาม spec เดียวกัน แต่ทำพร้อมกัน</p>
+<p><strong>Mechanism 2 — HTTP Header Manager เหมือน "บัตรประจำตัวและเอกสารแนะนำตัว"</strong>
+ก่อนนักสืบเข้าไปพูดคุย ต้องแสดงตัวตนว่าเป็นใคร (Authorization header) และประกาศว่าจะพูดภาษาอะไร (Content-Type: application/json) — ถ้าไม่แสดง เจ้าของบ้านอาจปฏิเสธไม่รับ</p>
+<p><strong>Mechanism 3 — HTTP Cookie Manager เหมือน "ป้ายสมาชิกที่ติดไว้"</strong>
+หลัง login ครั้งแรก server ออก "ป้ายสมาชิก" (cookie) ให้ — นักสืบต้องพกป้ายนี้ไปทุกครั้งที่กลับมา ไม่งั้นจะถูกมองว่าเป็นคนแปลกหน้าและต้อง login ใหม่ทุกครั้ง</p>
+<p><strong>Mechanism 4 — HTTP Request Defaults เหมือน "ที่อยู่ base" ที่นักสืบทุกคนรู้</strong>
+ถ้าทีมสืบสวนต้องไปหลายบ้านในตึกเดียวกัน แทนที่จะบอกชื่อตึกในทุกคำสั่ง หัวหน้าประกาศครั้งเดียวว่า "ตึกทั้งหมดอยู่ที่ถนน api.example.com" — นักสืบแค่รู้ "ห้องที่ต้องไป" (/users, /products) โดยไม่ต้องจำ address เต็ม</p>
+<p>⚠️ <strong>ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:</strong> Cookie Manager เหมือน login ให้เสร็จแล้วถ่าย cookie อัตโนมัติ — ผิด Cookie Manager แค่ <strong>จัดเก็บและส่ง cookies อัตโนมัติ</strong> ตาม HTTP standard เท่านั้น มันไม่ได้ login ให้คุณ คุณต้องมี Login Sampler ก่อน แล้ว Cookie Manager จะเก็บ session cookie ที่ได้จาก login response นั้นไว้ใช้ต่อ — ถ้าลืมใส่ Login Sampler ผู้ใช้ทุกคนจะ call API ในฐานะ anonymous user โดยไม่รู้ตัว</p>
+<hr />
+<h2 id="4">ส่วนที่ 4: เนื้อหาหลัก<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<h3 id="41-http-request-sampler-field-field">4.1 HTTP Request Sampler — Field ทีละ Field<a class="headerlink" href="#41-http-request-sampler-field-field" title="Permanent link">&para;</a></h3>
+<p>HTTP Request Sampler คือ element ที่ส่ง HTTP request จริงไปยัง server official docs อธิบายว่า:</p>
+<blockquote>
+<p>"lets you send an HTTP/HTTPS request to a web server. It also lets you control whether or not JMeter parses HTML files for images and other embedded resources and sends HTTP requests to retrieve them."
+<em>(source: https://jmeter.apache.org/usermanual/component_reference.html)</em></p>
+</blockquote>
+<p><strong>Server Name or IP</strong></p>
+<blockquote>
+<p>"Domain name or IP address of the web server"
+<em>(source: https://jmeter.apache.org/usermanual/component_reference.html)</em></p>
+</blockquote>
+<p>ใส่แค่ domain ไม่รวม protocol — เช่น <code>api.example.com</code> หรือ <code>192.168.1.100</code> ไม่ใช่ <code>https://api.example.com</code></p>
+<p><strong>Port Number</strong></p>
+<blockquote>
+<p>"Port the web server is listening to. Default: 80"
+<em>(source: https://jmeter.apache.org/usermanual/component_reference.html)</em></p>
+</blockquote>
+<p>ถ้าใช้ HTTPS มักเป็น 443 ถ้าใช้ HTTP เป็น 80 ถ้า server รันบน port อื่น (เช่น dev server ที่ 8080) ต้องใส่ให้ตรง</p>
+<p><strong>Protocol</strong>
+ใส่ <code>https</code> หรือ <code>http</code> — ถ้าปล่อยว่างไว้ JMeter ใช้ http ซึ่งไม่ encrypted ควรใช้ https เสมอสำหรับ endpoint จริง</p>
+<p><strong>Path</strong></p>
+<blockquote>
+<p>"The path to resource (for example, /servlets/myServlet)"
+<em>(source: https://jmeter.apache.org/usermanual/component_reference.html)</em></p>
+</blockquote>
+<p>คือส่วน URL หลัง domain — เช่น <code>/api/v1/users</code> หรือ <code>/posts/123</code> ต้องขึ้นต้นด้วย <code>/</code></p>
+<p><strong>HTTP Method</strong></p>
+<blockquote>
+<p>"GET, POST, HEAD, TRACE, OPTIONS, PUT, DELETE, PATCH"
+<em>(source: https://jmeter.apache.org/usermanual/component_reference.html)</em></p>
+</blockquote>
+<p>เลือกตาม API specification — GET สำหรับดูข้อมูล, POST สำหรับสร้าง, PUT/PATCH สำหรับแก้ไข, DELETE สำหรับลบ</p>
+<p><strong>Body Data</strong>
+ใช้สำหรับ POST/PUT/PATCH request ที่ต้องส่ง data ไปด้วย — ถ้า API ใช้ JSON body ให้ใส่ JSON ที่นี่ เช่น:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;testuser&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;testpass123&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">}</span>
+</code></pre></div></p>
+<p><strong>Parameters (แทน Body Data)</strong>
+สำหรับ query string หรือ form data ใช้ tab "Parameters" แทน — JMeter จะ encode ให้อัตโนมัติ</p>
+<hr />
+<h3 id="42-http-header-manager">4.2 HTTP Header Manager — ทำไมต้องใส่<a class="headerlink" href="#42-http-header-manager" title="Permanent link">&para;</a></h3>
+<p>Header Manager เพิ่ม HTTP headers เข้าไปใน request ก่อนส่ง:</p>
+<blockquote>
+<p>"Enables configuration of HTTP headers to send with requests"
+<em>(source: https://jmeter.apache.org/usermanual/component_reference.html)</em></p>
+</blockquote>
+<p><strong>ทำไมต้องมี:</strong> API ส่วนใหญ่ต้องการ headers เพื่อ:
+1. บอก server ว่า body เป็น format อะไร → <code>Content-Type: application/json</code>
+2. ยืนยัน identity → <code>Authorization: Bearer &lt;token&gt;</code> หรือ <code>Authorization: Basic &lt;encoded&gt;</code>
+3. บอก format ที่ client ต้องการรับ → <code>Accept: application/json</code></p>
+<p>ถ้าไม่ส่ง Content-Type สำหรับ POST request ที่มี JSON body server อาจ reject ด้วย 400 Bad Request หรือ parse body ผิด</p>
+<p><strong>วางไว้ที่ไหน:</strong> ถ้า headers เหมือนกันทุก request → วางใต้ Thread Group (scope ครอบทุก Sampler ใน group) ถ้า header เฉพาะ request นั้น → วางใต้ Sampler นั้นโดยตรง</p>
+<hr />
+<h3 id="43-http-cookie-manager-session-based-app">4.3 HTTP Cookie Manager — ทำไมต้องใส่สำหรับ Session-based App<a class="headerlink" href="#43-http-cookie-manager-session-based-app" title="Permanent link">&para;</a></h3>
+<p>Cookie Manager จัดการ cookies ให้อัตโนมัติเหมือน browser จริง:</p>
+<p>ถ้าไม่มี Cookie Manager เกิดสิ่งนี้:
+1. Virtual user ส่ง login request → server ตอบกลับพร้อม Set-Cookie header
+2. Virtual user ส่ง request ถัดไป → <strong>ไม่มี cookie ติดไปด้วย</strong>
+3. Server เห็นว่าไม่มี session → ตอบ 401 Unauthorized หรือ redirect ไป login</p>
+<p>ผลคือ test ของคุณไม่สะท้อน real user เพราะ real browser เก็บและส่ง cookie อัตโนมัติ</p>
+<p><strong>การใส่ Cookie Manager:</strong> Add ที่ระดับ Thread Group หรือ Test Plan — Cookie Manager จะทำงาน per-thread หมายความว่า virtual user แต่ละคนมี cookie jar ของตัวเอง แยกจากกัน สะท้อน independent users จริงๆ</p>
+<hr />
+<h3 id="44-http-request-defaults-duplication">4.4 HTTP Request Defaults — ลด Duplication<a class="headerlink" href="#44-http-request-defaults-duplication" title="Permanent link">&para;</a></h3>
+<p>ถ้า Test Plan มี 10 Sampler ที่เรียก API เดียวกัน คุณจะต้องพิมพ์ <code>api.example.com</code> และ port 443 ซ้ำกัน 10 ครั้ง — ถ้าต้องเปลี่ยน domain ทีหลัง (เช่น deploy ไป staging) ต้องแก้ทีละ field</p>
+<p>HTTP Request Defaults แก้ปัญหานี้:</p>
+<blockquote>
+<p>"A configuration element works closely with a Sampler. Although it does not send requests, it can add to or modify requests."
+<em>(source: https://jmeter.apache.org/usermanual/test_plan.html)</em></p>
+</blockquote>
+<p>ตั้งค่า Server, Port, Protocol ครั้งเดียวใน HTTP Request Defaults → Sampler ทุกตัวใน scope จะใช้ค่านั้นเป็น default โดยอัตโนมัติ</p>
+<p><strong>วิธีใช้:</strong> Add → Config Element → HTTP Request Defaults วางไว้ใต้ Thread Group หรือ Test Plan ก็ได้ แล้วใส่แค่ field ที่ต้องการให้เป็น default — ไม่ต้องกรอก Path เพราะแต่ละ Sampler มี path ต่างกัน</p>
+<p>⚠️ <strong>Best practice:</strong> ใช้ HTTPS ไม่ใช่ HTTP สำหรับ test real endpoints — Protocol ใน HTTP Request Defaults ควรตั้งเป็น <code>https</code> เสมอถ้า endpoint ของคุณใช้ HTTPS</p>
+<hr />
+<p>⏸ <strong>Self-check (Backward Retrieval):</strong> ก่อนอ่านต่อ — จากบทที่ 3 คุณเรียนเรื่อง Listener ไป เมื่อกี้เราเพิ่ง configure HTTP Request Sampler เสร็จ ถ้าคุณกด Run ทันทีโดยไม่มี Listener เลย จะเกิดอะไร? Test Plan ยังรันได้ไหม? เขียนคำตอบลงกระดาษก่อน — และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น — แล้วค่อยอ่านต่อ</p>
+<blockquote>
+<p>เฉลย: Test Plan <strong>รันได้</strong> — Sampler ยังส่ง request ตามปกติ แต่คุณ <strong>ไม่เห็นผลลัพธ์</strong> เพราะไม่มี Listener รวบรวมผล JMeter จะ save ผลลงไฟล์ .jtl ถ้าคุณเพิ่ม <code>-l log.jtl</code> ใน CLI mode แต่ใน GUI mode ถ้าไม่มี Listener = ไม่เห็นข้อมูลอะไรเลย</p>
+</blockquote>
+<hr />
+<h3 id="45-view-results-tree">4.5 อ่านผลจาก View Results Tree<a class="headerlink" href="#45-view-results-tree" title="Permanent link">&para;</a></h3>
+<p>View Results Tree แสดงผล request ทุกตัวเป็นรายการ:</p>
+<p><strong>โครงสร้างที่เห็น:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>View Results Tree
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── ✅ HTTP Request: GET /posts (สีเขียว = success)
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   ├── Request Tab:   แสดง headers ที่ส่งออกไป + body
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   ├── Response Tab:  แสดง response body ที่ได้กลับมา
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   └── Sampler Result: status code, latency, bytes
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>└── ❌ HTTP Request: POST /login (สีแดง = failure)
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    ├── Request Tab
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    ├── Response Tab:  แสดง error message จาก server
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    └── Sampler Result: Response code: 401
+</code></pre></div></p>
+<p><strong>สิ่งที่ต้องดูก่อนเสมอ:</strong>
+1. <strong>Response Code</strong> — 200 = OK, 201 = Created, 4xx = client error, 5xx = server error
+2. <strong>Response Body</strong> — ดูว่า server ส่ง response ที่ถูกต้องหรือเปล่า
+3. <strong>Latency</strong> — เวลาตั้งแต่ JMeter ส่ง request จนได้รับ byte แรกของ response (ms)</p>
+<p><strong>การใช้ Response data tab:</strong> เปลี่ยน dropdown จาก "Text" เป็น "JSON" เพื่อดู JSON response แบบ formatted หรือ "HTML" ถ้า response เป็น web page</p>
+<hr />
+<p>⏸ <strong>Self-check (Bloom's L4 — Analysis):</strong> คุณรัน Test Plan แล้วเห็นใน View Results Tree ว่า POST /login ได้ response code 200 แต่ response body เป็น <code>{"error": "Invalid credentials"}</code> — JMeter จะ mark request นี้ว่า "สำเร็จ" หรือ "ล้มเหลว"? และนี่บอกอะไรเกี่ยวกับ Test Plan ของคุณ? เขียนคำตอบลงกระดาษก่อน — และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น — แล้วค่อยอ่านต่อ</p>
+<blockquote>
+<p>เฉลย: JMeter จะ mark ว่า <strong>"สำเร็จ"</strong> (สีเขียว) เพราะมองแค่ HTTP status code 200 — แต่จริงๆ business logic ล้มเหลว เพราะ response บอก "Invalid credentials" นี่คือเหตุผลที่ต้องใช้ <strong>Response Assertion</strong> เพื่อ verify ว่า response body มีเนื้อหาที่ถูกต้อง ไม่ใช่แค่ status code ที่ถูก (เรื่องนี้จะเรียนในบทที่ 7)</p>
+</blockquote>
+<hr />
+<h3 id="46-json-extractor-dynamic-value-response">4.6 JSON Extractor — ดึง Dynamic Value จาก Response<a class="headerlink" href="#46-json-extractor-dynamic-value-response" title="Permanent link">&para;</a></h3>
+<p>Real API ส่วนใหญ่ใช้ token-based authentication — ผู้ใช้ login แล้วได้ token กลับมา แล้วส่ง token นั้นในทุก request ถัดไป ปัญหาคือ token เปลี่ยนทุก session และต่างกันทุก virtual user ดังนั้นการ hardcode token ไม่ได้ — ต้องใช้ <strong>JSON Extractor</strong> ดึงค่าจาก response แล้วเก็บเป็น variable อัตโนมัติ</p>
+<p><strong>วิธีทำงาน:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>POST /auth/login  →  server return: {&quot;token&quot;: &quot;eyJhbGciOi...&quot;}
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>         ↓
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>   JSON Extractor อ่าน response body
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>   ดึงค่า token ด้วย JSON Path: $.token
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>   เก็บไว้ใน variable: ${auth_token}
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>         ↓
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>GET /api/profile  →  Authorization: Bearer ${auth_token}  ← ใช้ค่าที่เพิ่งดึงมา
+</code></pre></div>
+<p><strong>วิธีเพิ่ม JSON Extractor:</strong></p>
+<p>Right-click ที่ HTTP Request (Sampler ที่ return token) → Add → <strong>Post Processors</strong> → JSON Extractor</p>
+<p><strong>Fields ที่ต้องตั้งค่า:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>ค่า</th>
+<th>ความหมาย</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Names of created variables</td>
+<td><code>auth_token</code></td>
+<td>ชื่อ variable ที่จะสร้าง ใช้ด้วย <code>${auth_token}</code></td>
+</tr>
+<tr>
+<td>JSON Path expressions</td>
+<td><code>$.token</code></td>
+<td>JSON Path บอก path ของค่าที่ต้องการ</td>
+</tr>
+<tr>
+<td>Match No.</td>
+<td><code>0</code></td>
+<td>0 = random, 1 = first match, -1 = all matches</td>
+</tr>
+<tr>
+<td>Default Values</td>
+<td><code>NOT_FOUND</code></td>
+<td>ค่า fallback ถ้าไม่เจอ path ที่กำหนด</td>
+</tr>
+</tbody>
+</table>
+<p><strong>ตัวอย่าง JSON Path expressions ที่ใช้บ่อย:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Response:  {&quot;data&quot;: {&quot;user&quot;: {&quot;id&quot;: 42, &quot;token&quot;: &quot;abc123&quot;}}}
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>$.token                    ← ❌ ไม่เจอ (token อยู่ใน nested object)
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>$.data.user.token          ← ✅ ได้ &quot;abc123&quot;
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>$.data.user.id             ← ✅ ได้ 42
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>$.data.user.token          ← เก็บใน ${auth_token}
+</code></pre></div>
+<p><strong>ใช้ token ที่ดึงมาใน request ถัดไป:</strong></p>
+<p>ใน HTTP Header Manager ของ Sampler ถัดไปใส่:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>Bearer ${auth_token}</td>
+</tr>
+</tbody>
+</table>
+<p>JMeter จะแทนค่า <code>${auth_token}</code> ด้วยค่าที่ JSON Extractor ดึงมาจาก login response อัตโนมัติ — แต่ละ thread มี variable แยกกัน ดังนั้น virtual user แต่ละคนใช้ token ของตัวเองอย่างถูกต้อง</p>
+<blockquote>
+<p>⚠️ <strong>สังเกต scope:</strong> variable ที่สร้างจาก JSON Extractor มีอายุอยู่ใน thread เดียวกัน ข้าม thread ไม่ได้ — นี่คือพฤติกรรมที่ถูกต้องและต้องการ เพราะ token ของ user แต่ละคนต้องแยกกัน</p>
+</blockquote>
+<hr />
+<h2 id="5-3">ส่วนที่ 5: ตัวอย่าง 3 ระดับ<a class="headerlink" href="#5-3" title="Permanent link">&para;</a></h2>
+<h3 id="beginner-get-request-public-api">ตัวอย่าง Beginner: GET Request ไปที่ Public API<a class="headerlink" href="#beginner-get-request-public-api" title="Permanent link">&para;</a></h3>
+<p><strong>เป้าหมาย:</strong> สร้าง Test Plan ที่ส่ง GET request ไปที่ <code>https://jsonplaceholder.typicode.com/posts</code> และดูผลใน View Results Tree</p>
+<p><strong>ทำไม API นี้:</strong> JSONPlaceholder เป็น free fake REST API ที่ใช้ทดสอบได้โดยไม่ต้อง setup server เอง ไม่มี authentication ทำให้เหมาะสำหรับฝึก</p>
+<hr />
+<p><strong>Step 1: สร้าง Test Plan ใหม่</strong></p>
+<p>เปิด JMeter → ไม่ต้องทำอะไร เพราะมี Test Plan ว่างๆ ให้อยู่แล้ว
+- เปลี่ยน Name จาก "Test Plan" เป็น "JSONPlaceholder GET Test"</p>
+<p><strong>Step 2: เพิ่ม Thread Group</strong></p>
+<p>Right-click ที่ Test Plan → Add → Threads (Users) → Thread Group</p>
+<p>ตั้งค่า:
+- Name: <code>Single User Test</code>
+- Number of Threads: <code>1</code> ← ทดสอบก่อนด้วย 1 user
+- Ramp-Up Period: <code>1</code>
+- Loop Count: <code>1</code> ← ส่งครั้งเดียว</p>
+<p><strong>Step 3: เพิ่ม HTTP Request Defaults (Config Element)</strong></p>
+<p>Right-click ที่ Thread Group → Add → Config Element → HTTP Request Defaults</p>
+<p>ตั้งค่า:
+- Server Name or IP: <code>jsonplaceholder.typicode.com</code>
+  ← ทำไม: base domain เหมือนกันทุก request ตั้งครั้งเดียว
+- Port Number: <code>443</code>
+  ← ทำไม: HTTPS ใช้ port 443
+- Protocol: <code>https</code>
+  ← ทำไม: endpoint นี้ใช้ HTTPS ไม่ใช่ HTTP</p>
+<p><strong>Step 4: เพิ่ม HTTP Request Sampler</strong></p>
+<p>Right-click ที่ Thread Group → Add → Sampler → HTTP Request</p>
+<p>ตั้งค่า:
+- Name: <code>GET All Posts</code>
+- Server Name or IP: <em>(ว่างไว้ — ใช้ค่าจาก Defaults)</em>
+  ← ทำไม: ถ้าว่างไว้ JMeter ดึงค่าจาก HTTP Request Defaults อัตโนมัติ
+- Path: <code>/posts</code>
+  ← ทำไม: endpoint ที่ต้องการ ใส่เฉพาะ path ไม่ใส่ domain
+- Method: <code>GET</code>
+  ← ทำไม: เราแค่ดึงข้อมูล ไม่ได้ส่งอะไรไป</p>
+<p><strong>Step 5: เพิ่ม HTTP Header Manager</strong></p>
+<p>Right-click ที่ HTTP Request (GET All Posts) → Add → Config Element → HTTP Header Manager</p>
+<p>คลิก "Add" แล้วเพิ่ม:
+- Name: <code>Accept</code>  Value: <code>application/json</code>
+  ← ทำไม: บอก server ว่าต้องการรับ JSON response</p>
+<p><strong>Step 6: เพิ่ม View Results Tree</strong></p>
+<p>Right-click ที่ Thread Group → Add → Listener → View Results Tree</p>
+<p>(ไม่ต้องตั้งค่าอะไรเพิ่ม — default พอ)</p>
+<p><strong>Step 7: Save และ Run</strong></p>
+<p>File → Save As → บันทึกเป็น <code>jsonplaceholder-get-test.jmx</code></p>
+<p>กด Run → Start (Ctrl+R)</p>
+<hr />
+<p><strong>ผลลัพธ์ที่ควรเห็นใน View Results Tree:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>View Results Tree
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>└── ✅ GET All Posts (สีเขียว)
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>    Sampler Result tab:
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>      Thread Name: Thread Group 1-1
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>      Sample Start: [timestamp]
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>      Load time: [xxx]ms
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>      Connect Time: [xxx]ms
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>      Latency: [xxx]ms
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>      Size in bytes: [ประมาณ 26,xxx bytes]
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>      Sent bytes: [xxx]
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>      Response code: 200
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>      Response message: OK
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    Response data tab (JSON):
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>      [
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a>        {
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a>          &quot;userId&quot;: 1,
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>          &quot;id&quot;: 1,
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a>          &quot;title&quot;: &quot;sunt aut facere repellat provident occaecati excepturi optio reprehenderit&quot;,
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a>          &quot;body&quot;: &quot;quia et suscipit\n...&quot;
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a>        },
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a>        ...
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>      ]
+</code></pre></div>
+<p><strong>JMX XML ของ Test Plan นี้:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="cm">&lt;!-- # label: JMX snippet — ยังไม่ได้ทดสอบแบบ standalone; ต้องการ JMeter 5.6.3 --&gt;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nt">&lt;jmeterTestPlan</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;1.2&quot;</span><span class="w"> </span><span class="na">properties=</span><span class="s">&quot;5.0&quot;</span><span class="w"> </span><span class="na">jmeter=</span><span class="s">&quot;5.6.3&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">&lt;hashTree&gt;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">&lt;TestPlan</span><span class="w"> </span><span class="na">guiclass=</span><span class="s">&quot;TestPlanGui&quot;</span><span class="w"> </span><span class="na">testclass=</span><span class="s">&quot;TestPlan&quot;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">              </span><span class="na">testname=</span><span class="s">&quot;JSONPlaceholder GET Test&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">      </span><span class="nt">&lt;boolProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;TestPlan.functional_mode&quot;</span><span class="nt">&gt;</span>false<span class="nt">&lt;/boolProp&gt;</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">    </span><span class="nt">&lt;/TestPlan&gt;</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="nt">&lt;hashTree&gt;</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">      </span><span class="nt">&lt;ThreadGroup</span><span class="w"> </span><span class="na">guiclass=</span><span class="s">&quot;ThreadGroupGui&quot;</span><span class="w"> </span><span class="na">testclass=</span><span class="s">&quot;ThreadGroup&quot;</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">                   </span><span class="na">testname=</span><span class="s">&quot;Single User Test&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">        </span><span class="nt">&lt;intProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.num_threads&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/intProp&gt;</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">        </span><span class="nt">&lt;intProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.ramp_time&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/intProp&gt;</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">        </span><span class="nt">&lt;elementProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.main_controller&quot;</span><span class="w"> </span><span class="na">elementType=</span><span class="s">&quot;LoopController&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">          </span><span class="nt">&lt;boolProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;LoopController.continue_forever&quot;</span><span class="nt">&gt;</span>false<span class="nt">&lt;/boolProp&gt;</span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">          </span><span class="nt">&lt;intProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;LoopController.loops&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/intProp&gt;</span>
+<a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">        </span><span class="nt">&lt;/elementProp&gt;</span>
+<a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">      </span><span class="nt">&lt;/ThreadGroup&gt;</span>
+<a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">      </span><span class="nt">&lt;hashTree&gt;</span>
+<a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">        </span><span class="cm">&lt;!-- HTTP Request Defaults: ตั้ง base URL ครั้งเดียว --&gt;</span>
+<a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">        </span><span class="nt">&lt;ConfigTestElement</span><span class="w"> </span><span class="na">guiclass=</span><span class="s">&quot;HttpDefaultsGui&quot;</span><span class="w"> </span><span class="na">testclass=</span><span class="s">&quot;ConfigTestElement&quot;</span>
+<a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">                           </span><span class="na">testname=</span><span class="s">&quot;HTTP Request Defaults&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">          </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.domain&quot;</span><span class="nt">&gt;</span>jsonplaceholder.typicode.com<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">          </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.port&quot;</span><span class="nt">&gt;</span>443<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">          </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.protocol&quot;</span><span class="nt">&gt;</span>https<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">        </span><span class="nt">&lt;/ConfigTestElement&gt;</span>
+<a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="w">        </span><span class="nt">&lt;hashTree/&gt;</span>
+<a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">        </span><span class="cm">&lt;!-- HTTP Header Manager: ส่ง Accept header --&gt;</span>
+<a id="__codelineno-5-29" name="__codelineno-5-29" href="#__codelineno-5-29"></a><span class="w">        </span><span class="nt">&lt;HeaderManager</span><span class="w"> </span><span class="na">guiclass=</span><span class="s">&quot;HeaderPanel&quot;</span><span class="w"> </span><span class="na">testclass=</span><span class="s">&quot;HeaderManager&quot;</span>
+<a id="__codelineno-5-30" name="__codelineno-5-30" href="#__codelineno-5-30"></a><span class="w">                       </span><span class="na">testname=</span><span class="s">&quot;HTTP Header Manager&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-5-31" name="__codelineno-5-31" href="#__codelineno-5-31"></a><span class="w">          </span><span class="nt">&lt;collectionProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HeaderManager.headers&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-5-32" name="__codelineno-5-32" href="#__codelineno-5-32"></a><span class="w">            </span><span class="nt">&lt;elementProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;&quot;</span><span class="w"> </span><span class="na">elementType=</span><span class="s">&quot;Header&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-5-33" name="__codelineno-5-33" href="#__codelineno-5-33"></a><span class="w">              </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Header.name&quot;</span><span class="nt">&gt;</span>Accept<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-5-34" name="__codelineno-5-34" href="#__codelineno-5-34"></a><span class="w">              </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;Header.value&quot;</span><span class="nt">&gt;</span>application/json<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-5-35" name="__codelineno-5-35" href="#__codelineno-5-35"></a><span class="w">            </span><span class="nt">&lt;/elementProp&gt;</span>
+<a id="__codelineno-5-36" name="__codelineno-5-36" href="#__codelineno-5-36"></a><span class="w">          </span><span class="nt">&lt;/collectionProp&gt;</span>
+<a id="__codelineno-5-37" name="__codelineno-5-37" href="#__codelineno-5-37"></a><span class="w">        </span><span class="nt">&lt;/HeaderManager&gt;</span>
+<a id="__codelineno-5-38" name="__codelineno-5-38" href="#__codelineno-5-38"></a><span class="w">        </span><span class="nt">&lt;hashTree/&gt;</span>
+<a id="__codelineno-5-39" name="__codelineno-5-39" href="#__codelineno-5-39"></a><span class="w">        </span><span class="cm">&lt;!-- HTTP Request Sampler: GET /posts --&gt;</span>
+<a id="__codelineno-5-40" name="__codelineno-5-40" href="#__codelineno-5-40"></a><span class="w">        </span><span class="nt">&lt;HTTPSamplerProxy</span><span class="w"> </span><span class="na">guiclass=</span><span class="s">&quot;HttpTestSampleGui&quot;</span><span class="w"> </span><span class="na">testclass=</span><span class="s">&quot;HTTPSamplerProxy&quot;</span>
+<a id="__codelineno-5-41" name="__codelineno-5-41" href="#__codelineno-5-41"></a><span class="w">                          </span><span class="na">testname=</span><span class="s">&quot;GET All Posts&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-5-42" name="__codelineno-5-42" href="#__codelineno-5-42"></a><span class="w">          </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.path&quot;</span><span class="nt">&gt;</span>/posts<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-5-43" name="__codelineno-5-43" href="#__codelineno-5-43"></a><span class="w">          </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.method&quot;</span><span class="nt">&gt;</span>GET<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-5-44" name="__codelineno-5-44" href="#__codelineno-5-44"></a><span class="w">          </span><span class="nt">&lt;boolProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.follow_redirects&quot;</span><span class="nt">&gt;</span>true<span class="nt">&lt;/boolProp&gt;</span>
+<a id="__codelineno-5-45" name="__codelineno-5-45" href="#__codelineno-5-45"></a><span class="w">          </span><span class="nt">&lt;boolProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.use_keepalive&quot;</span><span class="nt">&gt;</span>true<span class="nt">&lt;/boolProp&gt;</span>
+<a id="__codelineno-5-46" name="__codelineno-5-46" href="#__codelineno-5-46"></a><span class="w">        </span><span class="nt">&lt;/HTTPSamplerProxy&gt;</span>
+<a id="__codelineno-5-47" name="__codelineno-5-47" href="#__codelineno-5-47"></a><span class="w">        </span><span class="nt">&lt;hashTree/&gt;</span>
+<a id="__codelineno-5-48" name="__codelineno-5-48" href="#__codelineno-5-48"></a><span class="w">        </span><span class="cm">&lt;!-- View Results Tree: ดูผลรายตัว (ใช้ตอน debug เท่านั้น) --&gt;</span>
+<a id="__codelineno-5-49" name="__codelineno-5-49" href="#__codelineno-5-49"></a><span class="w">        </span><span class="nt">&lt;ResultCollector</span><span class="w"> </span><span class="na">guiclass=</span><span class="s">&quot;ViewResultsFullVisualizer&quot;</span><span class="w"> </span><span class="na">testclass=</span><span class="s">&quot;ResultCollector&quot;</span>
+<a id="__codelineno-5-50" name="__codelineno-5-50" href="#__codelineno-5-50"></a><span class="w">                         </span><span class="na">testname=</span><span class="s">&quot;View Results Tree&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-5-51" name="__codelineno-5-51" href="#__codelineno-5-51"></a><span class="w">          </span><span class="nt">&lt;boolProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ResultCollector.error_logging&quot;</span><span class="nt">&gt;</span>false<span class="nt">&lt;/boolProp&gt;</span>
+<a id="__codelineno-5-52" name="__codelineno-5-52" href="#__codelineno-5-52"></a><span class="w">        </span><span class="nt">&lt;/ResultCollector&gt;</span>
+<a id="__codelineno-5-53" name="__codelineno-5-53" href="#__codelineno-5-53"></a><span class="w">        </span><span class="nt">&lt;hashTree/&gt;</span>
+<a id="__codelineno-5-54" name="__codelineno-5-54" href="#__codelineno-5-54"></a><span class="w">      </span><span class="nt">&lt;/hashTree&gt;</span>
+<a id="__codelineno-5-55" name="__codelineno-5-55" href="#__codelineno-5-55"></a><span class="w">    </span><span class="nt">&lt;/hashTree&gt;</span>
+<a id="__codelineno-5-56" name="__codelineno-5-56" href="#__codelineno-5-56"></a><span class="w">  </span><span class="nt">&lt;/hashTree&gt;</span>
+<a id="__codelineno-5-57" name="__codelineno-5-57" href="#__codelineno-5-57"></a><span class="nt">&lt;/jmeterTestPlan&gt;</span>
+</code></pre></div>
+<hr />
+<h3 id="intermediate-login-flow-token-based-authentication">ตัวอย่าง Intermediate: Login Flow ด้วย Token-based Authentication<a class="headerlink" href="#intermediate-login-flow-token-based-authentication" title="Permanent link">&para;</a></h3>
+<p><strong>Scenario:</strong> ระบบ e-learning มี API 2 ขั้นตอน — ต้อง login ก่อนเพื่อรับ JWT token แล้วจึงเรียก <code>/api/v1/courses</code> พร้อม token นั้นได้ ต้องการ load test flow นี้กับ instructor 50 คนพร้อมกัน</p>
+<p><strong>ทำไม scenario นี้สำคัญ:</strong> นี่คือ pattern ที่พบมากที่สุดใน real-world API — ถ้าทดสอบแค่ step เดียวโดยไม่มี login flow จริง ผลการทดสอบจะไม่สะท้อน production</p>
+<p><strong>Test Plan structure:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Test Plan: E-Learning Auth + Course API Test
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>└── Thread Group: Instructor Users (50 threads, Ramp-Up 30s)
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>    ├── HTTP Request Defaults
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    │   └── Server: api.elearning-platform.example
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    │       Port: 443, Protocol: https
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>    ├── HTTP Cookie Manager              ← เก็บ cookies อัตโนมัติ
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    ├── HTTP Header Manager              ← Content-Type + Accept (ทุก request)
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>    │
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>    ├── HTTP Request: POST /auth/login   ← Step 1: Login
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>    │   ├── Body Data: {&quot;email&quot;: &quot;${email}&quot;, &quot;password&quot;: &quot;${password}&quot;}
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>    │   └── [JSON Extractor]             ← Post Processor: ดึง token จาก response
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>    │       variables: auth_token
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>    │       JSON Path: $.token
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>    │
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>    └── HTTP Request: GET /api/v1/courses  ← Step 2: ใช้ token ที่ดึงมา
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>        └── HTTP Header Manager (local)
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>            └── Authorization: Bearer ${auth_token}
+</code></pre></div>
+<p><strong>ทำไมต้อง JSON Extractor ตรงนั้น:</strong> server return <code>{"token": "eyJhbGci..."}</code> หลัง login สำเร็จ — JSON Extractor อ่านค่า <code>$.token</code> จาก response แล้วเก็บเป็น <code>${auth_token}</code> ซึ่ง Sampler ถัดไปจะดึงไปใส่ใน Authorization header ให้อัตโนมัติ</p>
+<p><strong>HTTP Header Manager (global — ใต้ Thread Group):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+<th>ทำไม</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Content-Type</td>
+<td>application/json</td>
+<td>ทุก request ส่ง JSON body</td>
+</tr>
+<tr>
+<td>Accept</td>
+<td>application/json</td>
+<td>ต้องการรับ JSON response</td>
+</tr>
+</tbody>
+</table>
+<p><strong>HTTP Header Manager (local — ใต้ GET /api/v1/courses เท่านั้น):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Value</th>
+<th>ทำไม</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authorization</td>
+<td>Bearer ${auth_token}</td>
+<td>ส่ง token ที่ดึงมาจาก login response</td>
+</tr>
+</tbody>
+</table>
+<p><strong>JSON Extractor configuration:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>ค่า</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Names of created variables</td>
+<td><code>auth_token</code></td>
+</tr>
+<tr>
+<td>JSON Path expressions</td>
+<td><code>$.token</code></td>
+</tr>
+<tr>
+<td>Match No.</td>
+<td><code>1</code> (first match)</td>
+</tr>
+<tr>
+<td>Default Values</td>
+<td><code>LOGIN_FAILED</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>ถ้า <code>${auth_token}</code> เท่ากับ <code>LOGIN_FAILED</code> ใน request ถัดไป → แสดงว่า login ล้มเหลวหรือ JSON Path ผิด — ให้ดู Response Body ของ POST /auth/login ใน View Results Tree</p>
+</blockquote>
+<p><strong>ผลที่ควรได้จาก Aggregate Report:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th># Samples</th>
+<th>Average</th>
+<th>90th %</th>
+<th>Error%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST /auth/login</td>
+<td>50</td>
+<td>&lt;300ms</td>
+<td>&lt;600ms</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>GET /api/v1/courses</td>
+<td>50</td>
+<td>&lt;500ms</td>
+<td>&lt;1000ms</td>
+<td>0%</td>
+</tr>
+</tbody>
+</table>
+<p>ถ้า Error% ของ GET courses สูงแต่ login เป็น 0% → ปัญหาอยู่ที่ authorization หรือ endpoint นั้นโดยตรง ไม่ใช่ login</p>
+<hr />
+<h3 id="advanced-test-plan-setup-main-test-teardown">ตัวอย่าง Advanced: Test Plan ที่มี Setup, Main Test, Teardown<a class="headerlink" href="#advanced-test-plan-setup-main-test-teardown" title="Permanent link">&para;</a></h3>
+<p><strong>Scenario:</strong> Production-grade Test Plan สำหรับ e-commerce checkout API ที่ต้องมี:
+1. <strong>Setup phase:</strong> ลงทะเบียน test data (สร้าง test users, สร้าง test products)
+2. <strong>Main test:</strong> Load test checkout flow จริง
+3. <strong>Teardown phase:</strong> ลบ test data ออกจาก system</p>
+<p><strong>Test Plan structure:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Test Plan: E-Commerce Checkout Load Test
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>├── HTTP Request Defaults (global)
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>├── setUp Thread Group: Test Data Setup      ← รันก่อน
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>│   ├── HTTP Request: POST /api/users (สร้าง test users)
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>│   └── HTTP Request: POST /api/products (สร้าง test products)
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>│
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>├── Thread Group: Main Load Test             ← รันหลัก
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>│   ├── HTTP Cookie Manager
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a>│   ├── HTTP Header Manager
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a>│   ├── HTTP Request: POST /api/auth/login
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>│   ├── HTTP Request: GET /api/products
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>│   ├── HTTP Request: POST /api/cart/add
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a>│   ├── HTTP Request: POST /api/orders/checkout
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a>│   ├── Constant Timer: 2000ms (think time)
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a>│   └── Aggregate Report
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>│
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>└── tearDown Thread Group: Cleanup           ← รันหลังสุด
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a>    ├── HTTP Request: DELETE /api/test/users
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a>    └── HTTP Request: DELETE /api/test/products
+</code></pre></div>
+<p><strong>ทำไมต้องมี setUp และ tearDown Thread Group:</strong></p>
+<p>JMeter มี Thread Group ชนิดพิเศษ 2 ชนิด:
+- <code>setUp Thread Group</code> — รันก่อน Thread Group อื่นทั้งหมด เหมาะสำหรับ prepare test data
+- <code>tearDown Thread Group</code> — รันหลัง Thread Group อื่นทั้งหมดเสร็จ เหมาะสำหรับ cleanup</p>
+<p><strong>Trade-off ที่ต้องพิจารณา:</strong></p>
+<table>
+<thead>
+<tr>
+<th>ด้าน</th>
+<th>Test Plan ง่าย (ไม่มี setup/teardown)</th>
+<th>Test Plan ครบ (มี setup/teardown)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ความซับซ้อน</td>
+<td>ต่ำ — เริ่มได้เร็ว</td>
+<td>สูง — ใช้เวลา design มากกว่า</td>
+</tr>
+<tr>
+<td>ความน่าเชื่อถือ</td>
+<td>ต่ำ — ต้องเตรียม data มือทุกครั้ง</td>
+<td>สูง — data สดใหม่ทุก run</td>
+</tr>
+<tr>
+<td>ผลกระทบต่อระบบ</td>
+<td>อาจทิ้ง dirty data ไว้</td>
+<td>Clean หลัง test เสร็จ</td>
+</tr>
+<tr>
+<td>เหมาะกับ</td>
+<td>Development + quick smoke test</td>
+<td>Staging + CI/CD pipeline</td>
+</tr>
+</tbody>
+</table>
+<p><strong>คำแนะนำ:</strong> เริ่มด้วย Test Plan ง่ายก่อน (เหมือน Beginner example) แล้วค่อยเพิ่ม setUp/tearDown เมื่อ test stable แล้วและต้องการ automate ใน pipeline</p>
+<hr />
+<h2 id="6-common-mistakes">ส่วนที่ 6: Common Mistakes<a class="headerlink" href="#6-common-mistakes" title="Permanent link">&para;</a></h2>
+<h3 id="mistake-1-http-cookie-manager-test-real-user">❌ Mistake 1: ลืม HTTP Cookie Manager ทำให้ test ไม่สะท้อน real user<a class="headerlink" href="#mistake-1-http-cookie-manager-test-real-user" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong> Test Plan ที่ test login flow แต่ไม่มี Cookie Manager</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Thread Group
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>├── HTTP Request: POST /login        ← ได้ Set-Cookie header กลับมา
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>├── HTTP Request: GET /dashboard     ← ❌ ไม่มี cookie → server เห็นว่าไม่ได้ login
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>└── HTTP Request: GET /profile       ← ❌ 401 Unauthorized ทุกครั้ง
+</code></pre></div>
+<p><strong>แบบถูก:</strong> เพิ่ม HTTP Cookie Manager ก่อน Sampler แรก</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Thread Group
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>├── HTTP Cookie Manager              ← ✅ เก็บ cookie จาก login response อัตโนมัติ
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>├── HTTP Request: POST /login
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>├── HTTP Request: GET /dashboard     ← ✅ cookie ติดไปอัตโนมัติ
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>└── HTTP Request: GET /profile       ← ✅ server รู้ว่า logged in
+</code></pre></div>
+<p>🔍 <strong>เหตุผล:</strong> ถ้าไม่มี Cookie Manager ผล test จะบอกว่า dashboard และ profile endpoint ช้าและ error rate สูง — แต่จริงๆ ปัญหาคือ test ไม่ได้ส่ง session cookie ไปด้วย ไม่ใช่ปัญหาของ endpoint เหล่านั้น ผลการทดสอบ misleading มาก</p>
+<p>🤔 <strong>วิธีตรวจสอบ:</strong> ดูใน View Results Tree → tab Response Headers ของ POST /login ว่ามี <code>Set-Cookie</code> header ไหม ถ้ามีแต่ request ถัดไป error 401 → Cookie Manager หายไปหรือวางผิดที่</p>
+<p><em>(source: https://jmeter.apache.org/usermanual/component_reference.html — HTTP Cookie Manager)</em></p>
+<hr />
+<h3 id="mistake-2-hardcode-sensitive-body-data">❌ Mistake 2: Hardcode ค่า Sensitive ใน Body Data<a class="headerlink" href="#mistake-2-hardcode-sensitive-body-data" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong> ใส่ password และ API key โดยตรงใน Body Data</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;admin&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;MySecretPassword123&quot;</span><span class="p">,</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">  </span><span class="nt">&quot;api_key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sk-live-abc123xyz&quot;</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="p">}</span>
+</code></pre></div>
+<p><strong>แบบถูก:</strong> ใช้ JMeter Properties หรือ User Defined Variables</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">&quot;username&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${test_username}&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">  </span><span class="nt">&quot;password&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${test_password}&quot;</span><span class="p">,</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">  </span><span class="nt">&quot;api_key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;${api_key}&quot;</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="p">}</span>
+</code></pre></div>
+<p>แล้วกำหนดค่าผ่าน:
+- JMeter Properties file (<code>user.properties</code>)
+- CLI argument: <code>jmeter -n -t test.jmx -Jtest_username=testuser -Jtest_password=testpass</code>
+- User Defined Variables ใน Test Plan (สำหรับ non-sensitive values)</p>
+<p>🔍 <strong>เหตุผล:</strong> ถ้า hardcode ค่า sensitive ใน .jmx file และ commit เข้า version control → credentials จะรั่วไปในประวัติ git ที่ใครก็ clone ได้ นอกจากนี้ถ้าต้องเปลี่ยน environment (dev → staging → prod) ต้องแก้ file ทุกครั้ง</p>
+<p>🤔 <strong>Best practice เพิ่มเติม:</strong> ตั้งค่า <code>.gitignore</code> เพื่อกันไม่ให้ properties file ที่มี sensitive data ถูก commit ด้วย</p>
+<p><em>(source: OWASP CI/CD Security Risks CICD-SEC-06 — "Code containing credentials being pushed to one of the branches of an SCM repository... the credentials are exposed to anyone with read access to the repository" — https://owasp.org/www-project-top-10-ci-cd-security-risks/CICD-SEC-06-Insufficient-Credential-Hygiene | JMeter official mailing list — JMeter committer sebb confirmed: "Which stores its passwords in plain text in the JMX file" — https://jmeter.apache.org/usermanual/best-practices.html — properties management)</em></p>
+<hr />
+<h3 id="mistake-3-http-request-defaults-duplicate-config-sampler">❌ Mistake 3: ไม่ใช้ HTTP Request Defaults ทำให้ Duplicate Config ทุก Sampler<a class="headerlink" href="#mistake-3-http-request-defaults-duplicate-config-sampler" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong> กรอก Server, Port, Protocol ซ้ำในทุก Sampler</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>Thread Group
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>├── HTTP Request: GET /users       (Server: api.example.com, Port: 443, Protocol: https)
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>├── HTTP Request: GET /products    (Server: api.example.com, Port: 443, Protocol: https)
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>├── HTTP Request: POST /orders     (Server: api.example.com, Port: 443, Protocol: https)
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>└── HTTP Request: GET /payments    (Server: api.example.com, Port: 443, Protocol: https)
+</code></pre></div>
+<p><strong>แบบถูก:</strong> ตั้งค่า base config ครั้งเดียวใน HTTP Request Defaults</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Thread Group
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>├── HTTP Request Defaults          (Server: api.example.com, Port: 443, Protocol: https)
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>├── HTTP Request: GET /users       (ว่างไว้ — ดึงจาก Defaults)
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>├── HTTP Request: GET /products    (ว่างไว้ — ดึงจาก Defaults)
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>├── HTTP Request: POST /orders     (ว่างไว้ — ดึงจาก Defaults)
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>└── HTTP Request: GET /payments    (ว่างไว้ — ดึงจาก Defaults)
+</code></pre></div>
+<p>🔍 <strong>เหตุผล:</strong> ถ้าต้อง deploy test ไป staging environment ที่ใช้ domain ต่างกัน — แบบผิดต้องแก้ทุก Sampler (อาจหลายสิบตัว) แบบถูกแก้ที่เดียวใน HTTP Request Defaults ทุก Sampler update อัตโนมัติ</p>
+<p>🤔 <strong>กฎ:</strong> ถ้าค่า field เดียวกันซ้ำกันมากกว่า 2 ตัว → ย้ายไปใส่ใน HTTP Request Defaults</p>
+<p><em>(source: https://jmeter.apache.org/usermanual/test_plan.html — Configuration Elements)</em></p>
+<hr />
+<h2 id="7">ส่วนที่ 7: สรุปบท<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<h3 id="code-based-task">Code-Based Task (ทำก่อนดูเฉลย)<a class="headerlink" href="#code-based-task" title="Permanent link">&para;</a></h3>
+<p><strong>Task:</strong> ดู JMX XML snippet ด้านล่าง แล้วตอบ 3 ข้อ</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="cm">&lt;!-- # label: JMX snippet — ยังไม่ได้ทดสอบแบบ standalone; ต้องการ JMeter 5.6.3 --&gt;</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="nt">&lt;ThreadGroup</span><span class="w"> </span><span class="na">testname=</span><span class="s">&quot;API Test&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">  </span><span class="nt">&lt;intProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.num_threads&quot;</span><span class="nt">&gt;</span>200<span class="nt">&lt;/intProp&gt;</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">  </span><span class="nt">&lt;intProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.ramp_time&quot;</span><span class="nt">&gt;</span>0<span class="nt">&lt;/intProp&gt;</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">  </span><span class="nt">&lt;elementProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.main_controller&quot;</span><span class="w"> </span><span class="na">elementType=</span><span class="s">&quot;LoopController&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="w">    </span><span class="nt">&lt;boolProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;LoopController.continue_forever&quot;</span><span class="nt">&gt;</span>false<span class="nt">&lt;/boolProp&gt;</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="w">    </span><span class="nt">&lt;intProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;LoopController.loops&quot;</span><span class="nt">&gt;</span>5<span class="nt">&lt;/intProp&gt;</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="w">  </span><span class="nt">&lt;/elementProp&gt;</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="nt">&lt;/ThreadGroup&gt;</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="nt">&lt;hashTree&gt;</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="w">  </span><span class="nt">&lt;HTTPSamplerProxy</span><span class="w"> </span><span class="na">testname=</span><span class="s">&quot;Create Order&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="w">    </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.domain&quot;</span><span class="nt">&gt;</span>api.shop.example.com<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a><span class="w">    </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.port&quot;</span><span class="nt">&gt;</span>80<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="w">    </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.protocol&quot;</span><span class="nt">&gt;</span>http<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="w">    </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.path&quot;</span><span class="nt">&gt;</span>/api/orders<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="w">    </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.method&quot;</span><span class="nt">&gt;</span>POST<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="w">    </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;HTTPSampler.postBodyRaw&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="w">      </span>{&quot;user_id&quot;:<span class="w"> </span>&quot;123&quot;,<span class="w"> </span>&quot;product_id&quot;:<span class="w"> </span>&quot;456&quot;,<span class="w"> </span>&quot;payment_key&quot;:<span class="w"> </span>&quot;sk-live-secret999&quot;}
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="w">    </span><span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a><span class="w">  </span><span class="nt">&lt;/HTTPSamplerProxy&gt;</span>
+<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a><span class="w">  </span><span class="nt">&lt;hashTree/&gt;</span>
+<a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a><span class="w">  </span><span class="nt">&lt;ResultCollector</span><span class="w"> </span><span class="na">guiclass=</span><span class="s">&quot;ViewResultsFullVisualizer&quot;</span><span class="w"> </span><span class="na">testname=</span><span class="s">&quot;View Results Tree&quot;</span><span class="nt">/&gt;</span>
+<a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a><span class="w">  </span><span class="nt">&lt;hashTree/&gt;</span>
+<a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a><span class="nt">&lt;/hashTree&gt;</span>
+</code></pre></div>
+<p><strong>คำถาม:</strong>
+1. มีปัญหาอะไรใน configuration นี้บ้าง? (ระบุอย่างน้อย 3 จุด)
+2. ถ้า Thread Group นี้รันไป — request ทั้งหมดจะส่งไปกี่ครั้ง?
+3. ถ้าต้องการ run test นี้ใน production environment จริง ต้องแก้อะไรบ้างก่อน?</p>
+<hr />
+<p><strong>เฉลย</strong></p>
+<blockquote>
+<p><strong>ข้อ 1 — ปัญหาที่พบ:</strong>
+- <code>ramp_time = 0</code> → thread ทั้ง 200 start พร้อมกัน เกิด spike ทันที ไม่สะท้อน real traffic
+- <code>protocol: http, port: 80</code> → ถ้า endpoint นี้เป็น production API ควรใช้ HTTPS (port 443) ไม่ใช่ HTTP ที่ไม่ encrypted
+- <code>payment_key: "sk-live-secret999"</code> hardcode อยู่ใน Body Data → ถ้า save เป็น .jmx และ commit ไป git credentials รั่ว
+- ไม่มี HTTP Cookie Manager → ถ้า order API ต้องการ login session จะ error ทันที
+- ไม่มี HTTP Header Manager → ไม่มี Content-Type: application/json ทั้งๆ ที่ส่ง JSON body server อาจ parse ผิด
+- View Results Tree ถูก add ไว้ → ถ้ารัน load test จริงกับ 200 threads × 5 loops = 1,000 requests จะใช้ memory สูงมาก</p>
+<p><strong>ข้อ 2:</strong> 200 threads × 5 loops = <strong>1,000 requests</strong> ทั้งหมด</p>
+<p><strong>ข้อ 3:</strong> ก่อน run production:
+- เปลี่ยน <code>ramp_time</code> เป็นค่าที่สมเหตุสมผล เช่น 60-120 วินาที
+- เปลี่ยน protocol เป็น <code>https</code> และ port เป็น <code>443</code>
+- ย้าย <code>payment_key</code> ออกไปใส่ใน properties file แล้วใช้ <code>${__P(payment_key)}</code> แทน
+- เพิ่ม HTTP Cookie Manager และ HTTP Header Manager
+- แทน View Results Tree ด้วย Aggregate Report สำหรับ load test</p>
+</blockquote>
+<hr />
+<h3 id="elaborative-interrogation">Elaborative Interrogation<a class="headerlink" href="#elaborative-interrogation" title="Permanent link">&para;</a></h3>
+<p><strong>ทำไม HTTP Request Defaults ถึงสำคัญกว่าที่คิด?</strong></p>
+<p>ลองนึกว่าคุณมี Test Plan ที่มี 30 Sampler และต้องย้ายไปทดสอบ staging environment ซึ่งใช้ domain ต่างกัน — ถ้าไม่ใช้ HTTP Request Defaults คุณต้องแก้ 30 ตัว ถ้าใช้แก้ตัวเดียว</p>
+<p>แต่มีเหตุผลที่ลึกกว่านั้น: เมื่อ Test Plan ซับซ้อนขึ้น (หลาย Thread Group, หลาย Sampler) การที่แต่ละ Sampler มี domain hardcode ของตัวเองทำให้ยากมากที่จะ maintain และเพิ่ม risk ของ human error (พิมพ์ผิด 1 Sampler แต่อีก 29 ตัวถูก → ผลการทดสอบ inconsistent)</p>
+<p>HTTP Request Defaults บังคับ single source of truth ซึ่งเป็น engineering best practice ที่ใช้ได้กับโค้ดและ config ทุกชนิด</p>
+<hr />
+<h3 id="generation-effect-retrieval-questions">Generation Effect — Retrieval Questions สุดท้าย<a class="headerlink" href="#generation-effect-retrieval-questions" title="Permanent link">&para;</a></h3>
+<p>หยุดอ่าน เขียนคำตอบลงกระดาษก่อน ห้ามดูเฉลยจนกว่าจะเขียนเสร็จ</p>
+<p><strong>ข้อ 1:</strong> อธิบายด้วยคำพูดตัวเองว่า HTTP Cookie Manager ทำงานอย่างไรและทำไมถึงจำเป็นสำหรับ session-based application (ห้าม copy จากบทความ)</p>
+<p><strong>ข้อ 2:</strong> ถ้า Test Plan มี HTTP Request Defaults ตั้ง Protocol = <code>https</code> และ Sampler ตัวหนึ่งตั้ง Protocol = <code>http</code> ด้วย — อะไรจะชนะ? และนี่อาจเป็น bug ได้อย่างไร?</p>
+<hr />
+<blockquote>
+<p><strong>เฉลยข้อ 1:</strong> Cookie Manager ทำงานเหมือน browser — เมื่อ server ส่ง Set-Cookie header กลับมา Cookie Manager เก็บ cookie ไว้ใน "jar" ของ thread นั้น และส่ง cookie กลับไปในทุก request ถัดไปอัตโนมัติ ถ้าไม่มี Cookie Manager ทุก request จะเหมือน "ผู้ใช้ใหม่" ที่ไม่เคย login ซึ่งไม่สะท้อนความเป็นจริง</p>
+<p><strong>เฉลยข้อ 2:</strong> ค่าใน <strong>Sampler ชนะ</strong> เพราะ Sampler-level config override Defaults — ถ้า developer ตั้ง Protocol = <code>http</code> ผิดพลาดใน Sampler หนึ่งตัว JMeter จะส่ง request นั้นผ่าน HTTP แทน HTTPS โดยที่ไม่มี warning ตัวอย่างที่เป็น bug จริง: Sampler ที่ส่ง Authorization token ผ่าน HTTP แทน HTTPS ทำให้ token ไม่ encrypted ระหว่างทาง</p>
+</blockquote>
+<p><strong>ถ้าตอบไม่ออก:</strong> กลับไปอ่าน section 4.4 (HTTP Request Defaults) แล้วลองอธิบายด้วยการวาด diagram ว่า Defaults กับ Sampler interact กันอย่างไร — visualization ช่วยให้เข้าใจ scope rules ได้ดีกว่าการอ่านซ้ำ</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  กลับไปด้านบนสุด
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="ส่วนท้าย" >
+        
+          
+          <a href="../03-ui-test-plan-structure/" class="md-footer__link md-footer__link--prev" aria-label="ก่อนหน้า: บทที่ 3 - Test Plan Structure">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                ก่อนหน้า
+              </span>
+              <div class="md-ellipsis">
+                บทที่ 3 - Test Plan Structure
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../05-thread-group-best-practices/" class="md-footer__link md-footer__link--next" aria-label="ต่อไป: บทที่ 5 - Thread Group">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                ต่อไป
+              </span>
+              <div class="md-ellipsis">
+                บทที่ 5 - Thread Group
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01\u0e41\u0e25\u0e49\u0e27", "clipboard.copy": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01", "search.result.more.one": "\u0e2d\u0e35\u0e01\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.more.other": "# \u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.none": "\u0e44\u0e21\u0e48\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.one": "\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.other": "\u0e1e\u0e1a # \u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.placeholder": "\u0e1e\u0e34\u0e21\u0e1e\u0e4c\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e40\u0e23\u0e34\u0e48\u0e21\u0e04\u0e49\u0e19\u0e2b\u0e32", "search.result.term.missing": "\u0e44\u0e21\u0e48\u0e1e\u0e1a", "select.version": "\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e40\u0e27\u0e2d\u0e23\u0e4c\u0e0a\u0e31\u0e19"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

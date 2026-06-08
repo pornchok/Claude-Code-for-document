@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RF Control Flow — Overview</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Robot Framework</div>
+    <div class="sidebar-subtitle">Control Flow · v2</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">เนื้อหา</div>
+    <a href="index.html" class="active">🏠 Overview</a>
+    <a href="01-if-else.html">🔀 บทที่ 1 — IF / ELSE</a>
+    <a href="02-for-loop.html">🔁 บทที่ 2 — FOR Loop</a>
+    <a href="03-while-loop.html">⏳ บทที่ 3 — WHILE + BREAK</a>
+    <a href="04-selenium.html">🌐 บทที่ 4 — Selenium จริง</a>
+    <div class="nav-label">ฝึกหัด</div>
+    <a href="exercises.html">✏️ แบบฝึกหัด</a>
+    <a href="glossary.html">📖 Glossary</a>
+  </nav>
+  <div class="sidebar-footer">RF 7.3.2 · Python 3.14</div>
+</aside>
+<div class="main"><div class="content">
+
+  <div class="ch-label">เริ่มต้น</div>
+  <h1>Control Flow ใน Robot Framework</h1>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;">
+    <span class="badge badge-green">✅ RF 7.3.2 tested</span>
+    <span class="badge badge-orange">⚠️ ต้องใช้ RF 5.0+</span>
+  </div>
+
+  <h2>Prerequisites</h2>
+  <h3>โครงสร้างไฟล์ .robot</h3>
+  <pre><code class="language-robotframework">*** Settings ***
+Library    Collections
+
+*** Keywords ***
+Say Hello
+    [Arguments]    ${name}
+    Log    Hello, ${name}!
+
+*** Test Cases ***
+My First Test
+    Say Hello    Bob</code></pre>
+
+  <h3>ตัวแปรที่ใช้บ่อย</h3>
+  <table>
+    <tr><th>รูปแบบ</th><th>ใช้เมื่อ</th><th>ตัวอย่าง</th></tr>
+    <tr><td><code>${variable}</code></td><td>เก็บค่าทั่วไป (string, number, object)</td><td><code>${score}=    Set Variable    85</code></td></tr>
+    <tr><td><code>@{list}</code></td><td>เก็บ list — ใช้ใน FOR loop เพื่อ unpack</td><td><code>@{items}=    Create List    a    b    c</code></td></tr>
+  </table>
+
+  <div class="info-box"><strong>สำคัญ:</strong> <code>FOR    ${x}    IN    @{list}</code> วนทีละ item แต่ <code>FOR    ${x}    IN    ${list}</code> ได้ list ทั้งก้อนเป็น item เดียว</div>
+
+  <h3>Built-in Keywords ที่ใช้บ่อยในเอกสารนี้</h3>
+  <table>
+    <tr><th>Keyword</th><th>ทำอะไร</th></tr>
+    <tr><td><code>Log</code></td><td>print ข้อความลง log</td></tr>
+    <tr><td><code>Set Variable</code></td><td>กำหนดค่าให้ตัวแปร</td></tr>
+    <tr><td><code>Evaluate</code></td><td>คำนวณ Python expression — ใช้บ่อยใน WHILE เพื่อ update ค่า เช่น <code>${i}=    Evaluate    ${i} + 1</code></td></tr>
+    <tr><td><code>Should Be Equal</code></td><td>assert ว่าค่าสองอันเท่ากัน</td></tr>
+    <tr><td><code>Create List</code></td><td>สร้าง list ใหม่</td></tr>
+    <tr><td><code>Run Keyword And Return Status</code></td><td>รัน keyword แล้วคืน True/False แทนที่จะ fail ทันที</td></tr>
+  </table>
+
+  <h2>กฎพื้นฐาน</h2>
+  <table>
+    <tr><th>กฎ</th><th>รายละเอียด</th></tr>
+    <tr><td>UPPERCASE ทุกตัว</td><td><code>IF  ELSE IF  ELSE  FOR  WHILE  BREAK  CONTINUE  END</code></td></tr>
+    <tr><td>ปิดด้วย <code>END</code></td><td>ทุก block ต้องมี END — ยกเว้น Inline IF</td></tr>
+    <tr><td>Indent 4 spaces</td><td>keyword ข้างใน block เว้น 4 spaces</td></tr>
+    <tr><td>Condition คือ Python expression</td><td><code>IF    ${x} > 10 and '${env}' == 'prod'</code></td></tr>
+  </table>
+
+  <h2>เนื้อหา</h2>
+  <div style="display:grid;gap:10px;margin-top:4px;">
+    <a href="01-if-else.html" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:#fff;border:1px solid #e2e8f0;border-radius:9px;text-decoration:none;color:#1e293b;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='#e2e8f0'">
+      <span style="font-size:24px;">🔀</span>
+      <div><div style="font-weight:700;">บทที่ 1 — IF / ELSE</div><div style="font-size:13px;color:#64748b;">IF block · ELSE IF · Inline IF · Common mistakes</div></div>
+      <span style="margin-left:auto;color:#94a3b8;">→</span>
+    </a>
+    <a href="02-for-loop.html" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:#fff;border:1px solid #e2e8f0;border-radius:9px;text-decoration:none;color:#1e293b;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='#e2e8f0'">
+      <span style="font-size:24px;">🔁</span>
+      <div><div style="font-weight:700;">บทที่ 2 — FOR Loop</div><div style="font-size:13px;color:#64748b;">IN · IN RANGE · IN ENUMERATE · IN ZIP</div></div>
+      <span style="margin-left:auto;color:#94a3b8;">→</span>
+    </a>
+    <a href="03-while-loop.html" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:#fff;border:1px solid #e2e8f0;border-radius:9px;text-decoration:none;color:#1e293b;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='#e2e8f0'">
+      <span style="font-size:24px;">⏳</span>
+      <div><div style="font-weight:700;">บทที่ 3 — WHILE + BREAK + CONTINUE</div><div style="font-size:13px;color:#64748b;">WHILE · limit · BREAK · CONTINUE</div></div>
+      <span style="margin-left:auto;color:#94a3b8;">→</span>
+    </a>
+    <a href="04-selenium.html" style="display:flex;align-items:center;gap:14px;padding:14px 18px;background:#fff;border:1px solid #e2e8f0;border-radius:9px;text-decoration:none;color:#1e293b;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='#e2e8f0'">
+      <span style="font-size:24px;">🌐</span>
+      <div><div style="font-weight:700;">บทที่ 4 — Loop + Selenium หน้างานจริง</div><div style="font-size:13px;color:#64748b;">Get WebElements · Table · Pagination · Retry</div></div>
+      <span style="margin-left:auto;color:#94a3b8;">→</span>
+    </a>
+  </div>
+
+  <div class="page-nav">
+    <span></span>
+    <a href="01-if-else.html" class="next"><span class="pn-label">บทถัดไป</span>บทที่ 1 — IF / ELSE →</a>
+  </div>
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-robotframework.min.js"></script>
+</body></html>

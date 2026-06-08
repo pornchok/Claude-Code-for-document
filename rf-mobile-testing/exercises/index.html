@@ -1,0 +1,4652 @@
+
+<!doctype html>
+<html lang="th" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="คอร์ส QA & Automation Testing ภาษาไทย">
+      
+      
+      
+        <link rel="canonical" href="https://pornchok.github.io/Claude-Code-for-document/rf-mobile-testing/exercises/">
+      
+      
+        <link rel="prev" href="../07-page-object-model/">
+      
+      
+        <link rel="next" href="../glossary/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Exercises - QA Learning Hub</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#rf-appiumlibrary-mobile-testing" class="md-skip">
+          ข้ามไปที่เนื้อหา
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="หัวข้อ">
+    <a href="../.." title="QA Learning Hub" class="md-header__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            QA Learning Hub
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Exercises
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="ค้นหา" placeholder="ค้นหา" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="ค้นหา">
+        
+        <button type="reset" class="md-search__icon md-icon" title="ล้าง" aria-label="ล้าง" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            กำลังเริ่มต้นการค้นหา
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="แท็บ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../playwright-typescript/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Playwright TypeScript
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../robot-framework-for-qa/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../robot-framework-control-flow/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework Control Flow
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-overview/" class="md-tabs__link">
+          
+  
+  
+  RF Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../wdio-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  WebdriverIO Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../jmeter-performance-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  JMeter Performance Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../english-for-beginners/00-overview/" class="md-tabs__link">
+          
+  
+  
+  English for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-tabs__link">
+          
+  
+  
+  Claude Code Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ตัวนำทาง" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="QA Learning Hub" class="md-nav__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    QA Learning Hub
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playwright TypeScript
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Playwright TypeScript
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/01-why-playwright/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - ทำไมต้อง Playwright
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/02-setup-typescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup + TypeScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/03-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/04-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/05-actions-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Actions & Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/06-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/07-fixtures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Fixtures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/08-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/09-test-organization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Test Organization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/10-configuration-projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Configuration & Projects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/11-parallelism-sharding-reporting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 11 - Parallelism & Sharding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/12-mocking-network-time-browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 12 - Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/13-authentication-storage-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 13 - Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/14-advanced-browser-emulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 14 - Advanced Browser Emulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/15-api-testing-hybrid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 15 - API Testing & Hybrid
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/16-visual-accessibility-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 16 - Visual & Accessibility
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/17-cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 17 - CI/CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/18-production-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 18 - Production Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/19-db-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 19 - DB Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/20-professional-project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 20 - Professional Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/01-what-is-robot-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is RF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/03-test-structure-syntax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/04-keywords-and-resource-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Keywords & Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/05-web-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Web Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/06-data-driven-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Data Driven
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/07-reports-and-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Reports & Debug
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/08-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework Control Flow
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework Control Flow
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/01-if-else/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - If/Else
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/02-for-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - For Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/03-while-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - While Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RF Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RF Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-mobile-testing-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mobile Landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-setup-environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-appium-capabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Capabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-appiumlibrary-keywords/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - AppiumLibrary Keywords
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-mobile-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Mobile Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-gestures-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Gestures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-mobile-testing-landscape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 1: Mobile Testing Landscape
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 1: Mobile Testing Landscape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-setup-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 2: Setup Environment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 2: Setup Environment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-appium-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 3: Appium Capabilities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 3: Appium Capabilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-appiumlibrary-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 4: AppiumLibrary Keywords
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 4: AppiumLibrary Keywords">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-mobile-locators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 5: Mobile Locators
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 5: Mobile Locators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-gestures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 6: Gestures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 6: Gestures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-page-object-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 7: Page Object Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 7: Page Object Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        เฉลย
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WebdriverIO Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    WebdriverIO Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/01-what-is-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/02-setup-wdio-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/03-wdio-appium-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/04-writing-tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Writing Tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/05-selectors-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Selectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/06-page-objects-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Page Objects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/07-comparing-rf-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - RF vs WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMeter Performance Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMeter Performance Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/01-performance-testing-fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/03-ui-test-plan-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Plan Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/04-first-test-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - First Test Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/05-thread-group-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Thread Group
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/06-parameterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Parameterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/07-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/08-running-reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/09-distributed-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Distributed Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/10-anti-patterns-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../jmeter-performance-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    English for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    English for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/01-mindset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/02-phonics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Phonics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/03-vocabulary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Vocabulary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/04-sentence-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Sentence Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/05-to-be-present-simple/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - To Be & Present Simple
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/06-questions-negatives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Questions & Negatives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/07-numbers-time-days/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Numbers, Time & Days
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/08-phrases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Phrases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Claude Code Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-mobile-testing-landscape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 1: Mobile Testing Landscape
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 1: Mobile Testing Landscape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-setup-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 2: Setup Environment
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 2: Setup Environment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-appium-capabilities" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 3: Appium Capabilities
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 3: Appium Capabilities">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-appiumlibrary-keywords" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 4: AppiumLibrary Keywords
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 4: AppiumLibrary Keywords">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-mobile-locators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 5: Mobile Locators
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 5: Mobile Locators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-gestures" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 6: Gestures
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 6: Gestures">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-page-object-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        บทที่ 7: Page Object Model
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="บทที่ 7: Page Object Model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recall-beginner_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Recall (ระดับ Beginner)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#application-intermediate_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Application (ระดับ Intermediate)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#synthesis-advanced_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synthesis (ระดับ Advanced)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        เฉลย
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="rf-appiumlibrary-mobile-testing">แบบฝึกหัด: RF + AppiumLibrary Mobile Testing<a class="headerlink" href="#rf-appiumlibrary-mobile-testing" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>คำแนะนำ:</strong> ลองทำทุกข้อด้วยตัวเองก่อน แล้วค่อยดูเฉลย — ประโยชน์ของ exercise อยู่ที่กระบวนการคิด ไม่ใช่คำตอบ</p>
+</blockquote>
+<hr />
+<h2 id="1-mobile-testing-landscape">บทที่ 1: Mobile Testing Landscape<a class="headerlink" href="#1-mobile-testing-landscape" title="Permanent link">&para;</a></h2>
+<h3 id="recall-beginner">Recall (ระดับ Beginner)<a class="headerlink" href="#recall-beginner" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 1.1:</strong> อธิบายด้วยคำของคุณเองว่า Appium ทำงานยังไง ไม่ต้องใช้ศัพท์เทคนิค — อธิบายให้ designer ในทีมเข้าใจได้ภายใน 5 ประโยค</p>
+<p><strong>ข้อ 1.2:</strong> วาด architecture diagram อย่างง่าย (แม้แต่ในกระดาษ) แสดงว่า Robot Framework, AppiumLibrary, Appium Server, UIAutomator2, และ Android emulator เชื่อมกันยังไง และ HTTP request เดินทางยังไง</p>
+<h3 id="application-intermediate">Application (ระดับ Intermediate)<a class="headerlink" href="#application-intermediate" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 1.3:</strong> ทีมคุณมี web app และ mobile app ของระบบธนาคาร หัวหน้าถามว่า "เราจะ reuse test ของ web ไปใช้กับ mobile ได้ไหม?" — คุณจะตอบว่าอะไร? ระบุว่าส่วนไหนเหมือนกัน ส่วนไหนต่างกัน</p>
+<h3 id="synthesis-advanced">Synthesis (ระดับ Advanced)<a class="headerlink" href="#synthesis-advanced" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 1.4:</strong> ทีม QA ใหม่มาถามว่า "เราควรเลือก Appium หรือ native test framework ของ platform (Espresso สำหรับ Android, XCUITest สำหรับ iOS)?" — ออกแบบ decision framework ว่าจะเลือกอะไรเมื่อไหร่ โดยคำนึงถึง: team skills, cross-platform testing needs, CI/CD integration, และ test maintenance cost</p>
+<hr />
+<h2 id="2-setup-environment">บทที่ 2: Setup Environment<a class="headerlink" href="#2-setup-environment" title="Permanent link">&para;</a></h2>
+<h3 id="recall-beginner_1">Recall (ระดับ Beginner)<a class="headerlink" href="#recall-beginner_1" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 2.1:</strong> ถ้าทำ checklist setup ใหม่ — รายการ verify command ที่คุณต้องรัน 8 อย่างมีอะไรบ้าง? (ห้ามดูเอกสาร — จำเอง)</p>
+<p><strong>ข้อ 2.2:</strong> <code>appium-doctor --android</code> report ว่า <code>✘ ANDROID_HOME is not set</code> — คุณต้องทำอะไรบ้างเพื่อแก้ปัญหานี้? (step by step)</p>
+<h3 id="application-intermediate_1">Application (ระดับ Intermediate)<a class="headerlink" href="#application-intermediate_1" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 2.3:</strong> เพื่อนที่ทำงานใช้ Windows และติดตั้งครบแล้ว แต่รัน <code>adb devices</code> ไม่เห็น emulator ทั้งที่เปิด Android Studio และ emulator ขึ้นมาแล้ว — คุณจะ troubleshoot ยังไง? ลิสต์ขั้นตอนการตรวจสอบตามลำดับความน่าจะเป็น</p>
+<h3 id="synthesis-advanced_1">Synthesis (ระดับ Advanced)<a class="headerlink" href="#synthesis-advanced_1" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 2.4:</strong> ทีมต้องการรัน mobile test บน CI/CD pipeline (เช่น GitHub Actions) — ออกแบบ infrastructure plan ว่าจะ setup emulator ใน CI environment ยังไง มีปัญหาอะไรที่ต้องระวัง และจะ handle ยังไง</p>
+<hr />
+<h2 id="3-appium-capabilities">บทที่ 3: Appium Capabilities<a class="headerlink" href="#3-appium-capabilities" title="Permanent link">&para;</a></h2>
+<h3 id="recall-beginner_2">Recall (ระดับ Beginner)<a class="headerlink" href="#recall-beginner_2" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 3.1:</strong> หลังจากรัน <code>adb shell dumpsys window | grep mCurrentFocus</code> ได้ output นี้:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>mCurrentFocus=Window{... com.myshop.app/com.myshop.app.screens.home.HomeFragment}
+</code></pre></div>
+คุณจะเขียน <code>appPackage</code> และ <code>appActivity</code> ใน capabilities ยังไง?</p>
+<p><strong>ข้อ 3.2:</strong> ต่างกันยังไงระหว่าง <code>appium:noReset=True</code> กับ <code>appium:fullReset=True</code>? ให้ยกตัวอย่าง scenario จริงที่ควรใช้แต่ละตัว</p>
+<h3 id="application-intermediate_2">Application (ระดับ Intermediate)<a class="headerlink" href="#application-intermediate_2" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 3.3:</strong> ทีมกำลังทดสอบ app ที่มี 2 environment: staging (<code>com.myapp.staging</code>) และ production (<code>com.myapp</code>). ออกแบบ variables structure ที่ทำให้รัน test กับทั้งสอง environment ได้โดยไม่ต้องแก้ code (hint: ใช้ command-line variable override)</p>
+<h3 id="synthesis-advanced_2">Synthesis (ระดับ Advanced)<a class="headerlink" href="#synthesis-advanced_2" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 3.4:</strong> app ทดสอบอยู่ดี ๆ test เริ่ม fail ด้วย error "Session not created: An unknown server-side error occurred" — วาง troubleshooting plan โดยระบุ: สาเหตุที่เป็นไปได้, วิธีตรวจสอบแต่ละสาเหตุ, และวิธีแก้</p>
+<hr />
+<h2 id="4-appiumlibrary-keywords">บทที่ 4: AppiumLibrary Keywords<a class="headerlink" href="#4-appiumlibrary-keywords" title="Permanent link">&para;</a></h2>
+<h3 id="recall-beginner_3">Recall (ระดับ Beginner)<a class="headerlink" href="#recall-beginner_3" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 4.1:</strong> เขียน keyword <code>ทำการ Logout</code> สำหรับ app ที่มี:
+- ปุ่ม Menu ที่ <code>accessibility_id=menu_button</code>
+- Menu item Logout ที่ <code>accessibility_id=logout_item</code>
+- Dialog confirmation ที่ <code>accessibility_id=confirm_logout_btn</code>
+- หลัง logout จะกลับมา Login screen ที่ <code>accessibility_id=login_button</code></p>
+<h3 id="application-intermediate_3">Application (ระดับ Intermediate)<a class="headerlink" href="#application-intermediate_3" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 4.2:</strong> สร้าง test case สำหรับ "แก้ไข profile" ที่:
+1. Login แล้วไปหน้า Profile
+2. กด Edit
+3. เปลี่ยน Display Name
+4. Save
+5. ตรวจสอบว่า name อัปเดตแล้ว</p>
+<p>โดยใช้แค่ keyword ที่เรียนมา ไม่ต้องมี locator จริง (ตั้งชื่อ accessibility_id เองที่สมเหตุสมผล)</p>
+<h3 id="synthesis-advanced_3">Synthesis (ระดับ Advanced)<a class="headerlink" href="#synthesis-advanced_3" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 4.3:</strong> test ของคุณ fail intermittently (บางครั้ง pass บางครั้ง fail โดยไม่มีเหตุผลชัดเจน) ที่ step <code>Click Element accessibility_id=submit_button</code> — วิเคราะห์สาเหตุที่เป็นไปได้อย่างน้อย 3 อย่าง และเสนอวิธีแก้สำหรับแต่ละอย่าง</p>
+<hr />
+<h2 id="5-mobile-locators">บทที่ 5: Mobile Locators<a class="headerlink" href="#5-mobile-locators" title="Permanent link">&para;</a></h2>
+<h3 id="recall-beginner_4">Recall (ระดับ Beginner)<a class="headerlink" href="#recall-beginner_4" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 5.1:</strong> Appium Inspector แสดง element นี้:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>content-desc: &quot;&quot;
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>resource-id: &quot;com.shopapp:id/btn_add_to_cart&quot;
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>class: &quot;android.widget.Button&quot;
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>text: &quot;เพิ่มลงตะกร้า&quot;
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>clickable: true
+</code></pre></div>
+เรียงลำดับ locator ที่คุณจะใช้จากดีที่สุดไปแย่ที่สุด พร้อมเหตุผล</p>
+<h3 id="application-intermediate_4">Application (ระดับ Intermediate)<a class="headerlink" href="#application-intermediate_4" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 5.2:</strong> คุณต้องทดสอบ "คลิก notification ที่ 3 ในรายการ" บน notification center ที่มี element แบบนี้:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>resource-id: com.app:id/notification_item  (ซ้ำกันทุก item)
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>text: แตกต่างกันแต่ละ item
+</code></pre></div>
+เขียน keyword ที่ click notification ตาม index ที่รับมาเป็น argument</p>
+<h3 id="synthesis-advanced_4">Synthesis (ระดับ Advanced)<a class="headerlink" href="#synthesis-advanced_4" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 5.3:</strong> ทีมมี test suite 200 cases ที่ใช้ xpath เป็นหลัก รัน test suite ทั้งหมดใช้เวลา 4 ชั่วโมง หัวหน้าขอให้ลดเวลาลงเหลือ 2 ชั่วโมง — วางแผน migration strategy โดยไม่ต้องเขียน test ใหม่ทั้งหมด ระบุว่าจะ prioritize เปลี่ยน locator ไหนก่อน และวิธีวัดผลว่าดีขึ้น</p>
+<hr />
+<h2 id="6-gestures">บทที่ 6: Gestures<a class="headerlink" href="#6-gestures" title="Permanent link">&para;</a></h2>
+<h3 id="recall-beginner_5">Recall (ระดับ Beginner)<a class="headerlink" href="#recall-beginner_5" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 6.1:</strong> เขียน <code>Swipe</code> command สำหรับ screen ขนาด 1080x2340 pixels เพื่อ:
+a) Scroll down (เนื้อหาขยับขึ้น)
+b) Scroll up (เนื้อหาขยับลง)
+c) Swipe left (เปลี่ยนหน้าถัดไป)</p>
+<h3 id="application-intermediate_5">Application (ระดับ Intermediate)<a class="headerlink" href="#application-intermediate_5" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 6.2:</strong> เขียน keyword <code>Scroll ลงจนเจอ Element พร้อม timeout</code> ที่:
+- รับ locator และ max_scroll_count เป็น argument
+- Scroll ลงทีละครั้ง ตรวจสอบว่าเห็น element หรือยัง
+- ถ้าหาได้ return สำเร็จ
+- ถ้าครบ max_scroll_count แล้วยังไม่เจอ ให้ Fail พร้อม message ที่อธิบายชัด</p>
+<h3 id="synthesis-advanced_5">Synthesis (ระดับ Advanced)<a class="headerlink" href="#synthesis-advanced_5" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 6.3:</strong> app มี "infinite scroll list" ที่ load data เพิ่มเมื่อ scroll ถึงด้านล่าง — คุณต้องทดสอบว่า "item ที่ต้องการมีอยู่ใน list" โดยไม่รู้ว่า item อยู่ที่ position เท่าไหร่ ออกแบบ keyword ที่ handle กรณีนี้ได้ พร้อม edge cases: item ไม่มีใน list, list ว่างเปล่า, server error ระหว่าง scroll</p>
+<hr />
+<h2 id="7-page-object-model">บทที่ 7: Page Object Model<a class="headerlink" href="#7-page-object-model" title="Permanent link">&para;</a></h2>
+<h3 id="recall-beginner_6">Recall (ระดับ Beginner)<a class="headerlink" href="#recall-beginner_6" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 7.1:</strong> สร้าง page file สำหรับ "Settings Screen" ที่มี:
+- Toggle notification ที่ <code>accessibility_id=notif_toggle</code>
+- Dropdown language ที่ <code>accessibility_id=language_dropdown</code>
+- ปุ่ม Save ที่ <code>accessibility_id=save_settings_btn</code>
+- Back button ที่ <code>accessibility_id=back_btn</code></p>
+<p>ให้มี variables และ keywords ที่เหมาะสม</p>
+<h3 id="application-intermediate_6">Application (ระดับ Intermediate)<a class="headerlink" href="#application-intermediate_6" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 7.2:</strong> เขียน test case สำหรับ flow นี้โดยใช้ Page Object pattern:
+1. Login
+2. ไปหน้า Settings
+3. เปลี่ยน language เป็น English
+4. Save
+5. Logout
+6. Login ใหม่ — ตรวจสอบว่า language ยังเป็น English</p>
+<p>สร้าง page files ที่จำเป็น และ test file</p>
+<h3 id="synthesis-advanced_6">Synthesis (ระดับ Advanced)<a class="headerlink" href="#synthesis-advanced_6" title="Permanent link">&para;</a></h3>
+<p><strong>ข้อ 7.3:</strong> ทีมมี test suite ที่ไม่ได้ใช้ Page Object — locators กระจายอยู่ใน test files 50 ไฟล์ Developer บอกว่า app จะ redesign ใน 2 เดือน ซึ่งจะเปลี่ยน locators เกือบทุกหน้า — เสนอ migration plan ที่ realistic สำหรับ refactor ภายใน 2 เดือน โดยไม่หยุด delivery test ใหม่</p>
+<hr />
+<h2 id="_1">เฉลย<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<details>
+<summary>เฉลยบทที่ 1</summary>
+
+**1.1:** ตัวอย่างคำตอบ — "Appium เป็นเหมือนล่ามที่แปลคำสั่งจากโปรแกรม test ของเรา ให้ Android หรือ iOS เข้าใจ เราเขียน test ใน Robot Framework สั่งให้ 'กดปุ่ม Login' — Appium รับคำสั่งนั้นแล้วแปลงเป็นภาษาที่ Android เข้าใจ แล้ว Android ก็ทำการกดปุ่มจริงๆ บน emulator หรือ device"
+
+**1.3:** ส่วนที่เหมือน: test structure (keyword-driven), assertion keywords, Wait keywords, Page Object pattern — ส่วนที่ต่าง: locator strategies (CSS/XPath web vs accessibility_id/resource-id mobile), library (SeleniumLibrary vs AppiumLibrary), setup complexity (Selenium เรียบง่ายกว่า), gesture interactions (mobile only)
+
+**1.4:** เลือก Appium เมื่อ: ทีมเดียวต้องทดสอบทั้ง Android และ iOS, ต้องการ reuse test infrastructure กับ web testing, ทีมมี QA ที่รู้ Python/RF — เลือก Espresso/XCUITest เมื่อ: ต้องการ performance สูงสุด, ทดสอบ platform เดียว, ทีมเป็น developer ที่รู้ Java/Kotlin/Swift อยู่แล้ว
+
+</details>
+
+<details>
+<summary>เฉลยบทที่ 2</summary>
+
+**2.1:** Verify commands ที่ต้องรัน 8 อย่าง:
+1. `java -version` — ตรวจ JDK
+2. `echo $JAVA_HOME` — ตรวจ environment variable
+3. `adb version` — ตรวจ Android Debug Bridge
+4. `echo $ANDROID_HOME` — ตรวจ Android SDK path
+5. `node --version` — ตรวจ Node.js
+6. `appium --version` — ตรวจ Appium server
+7. `appium driver list --installed` — ตรวจ UIAutomator2 driver
+8. `adb devices` (หลังเปิด emulator) — ตรวจว่า device พร้อม
+
+**2.2:** ขั้นตอนแก้ `ANDROID_HOME is not set`:
+1. หา Android SDK path: ใน Android Studio → Settings → Android SDK → ดู SDK Location
+2. เพิ่มใน `~/.zshrc` หรือ `~/.bashrc` (macOS/Linux):
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">ANDROID_HOME</span><span class="o">=</span><span class="nv">$HOME</span>/Library/Android/sdk
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:<span class="nv">$ANDROID_HOME</span>/platform-tools
+</code></pre></div>
+   Windows: เพิ่มใน System Environment Variables → `ANDROID_HOME` = `C:\Users\YourName\AppData\Local\Android\Sdk`
+3. Restart terminal (environment variables ไม่ update แบบ real-time)
+4. รัน `appium-doctor --android` ใหม่เพื่อยืนยัน
+
+**2.3:** Troubleshoot adb ไม่เห็น emulator บน Windows (เรียงตามความน่าจะเป็น):
+1. **ตรวจว่า emulator boot ครบ** — emulator ต้องแสดง Android home screen ก่อน adb จะเห็น
+2. **Restart ADB server:**
+   <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>adb<span class="w"> </span>kill-server
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>adb<span class="w"> </span>start-server
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>adb<span class="w"> </span>devices
+</code></pre></div>
+3. **ตรวจ ANDROID_HOME** — path ต้องไม่มี space และ restart terminal หลังตั้งค่า
+4. **ตรวจว่า platform-tools ใน PATH** — `adb` ต้องอยู่ใน `%ANDROID_HOME%\platform-tools`
+5. **BIOS virtualization** — ถ้า emulator เปิดได้แต่ช้ามากหรือ freeze ให้เปิด Intel VT-x / AMD-V ใน BIOS
+6. **USB debugging** — ถ้าใช้ physical device ต้องเปิด Developer Options + USB debugging
+
+**2.4:** Infrastructure plan สำหรับ CI/CD (เช่น GitHub Actions):
+- ใช้ `reactivecircus/android-emulator-runner@v2` action ซึ่งจัดการ emulator lifecycle ใน CI
+- ระวัง: emulator ใน CI ต้องใช้ `x86` / `x86_64` image ไม่ใช่ ARM เพราะ CI servers ส่วนใหญ่เป็น x86
+- ปัญหาที่พบบ่อย: (1) emulator boot timeout — เพิ่ม `emulator-boot-timeout` ถึง 300s (2) QEMU hardware acceleration — GitHub Actions รองรับ KVM บน Ubuntu (3) headless mode — ต้องตั้ง display เช่น `DISPLAY=:99`
+
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># .github/workflows/mobile-test.yml</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">uses</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">reactivecircus/android-emulator-runner@v2</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">  </span><span class="nt">with</span><span class="p">:</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="nt">api-level</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">33</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="nt">arch</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">x86_64</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="nt">script</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">      </span><span class="no">appium &amp;</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">      </span><span class="no">sleep 5</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">      </span><span class="no">robot tests/</span>
+</code></pre></div>
+
+</details>
+
+<details>
+<summary>เฉลยบทที่ 3</summary>
+
+**3.1:**
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>appPackage=com.myshop.app
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>appActivity=.screens.home.HomeFragment
+</code></pre></div>
+
+**3.3:**
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c"># variables/staging.robot</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c">${APP_PACKAGE}</span><span class="p">    </span><span class="c">com.myapp.staging</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="c">${APP_ENV}</span><span class="p">        </span><span class="c">staging</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="c"># variables/production.robot</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="c">${APP_PACKAGE}</span><span class="p">    </span><span class="c">com.myapp</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c">${APP_ENV}</span><span class="p">        </span><span class="c">production</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># รัน staging</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>robot<span class="w"> </span>--variablefile<span class="w"> </span>variables/staging.robot<span class="w"> </span>tests/
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="c1"># รัน production</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>robot<span class="w"> </span>--variablefile<span class="w"> </span>variables/production.robot<span class="w"> </span>tests/
+</code></pre></div>
+
+</details>
+
+<details>
+<summary>เฉลยบทที่ 4</summary>
+
+**4.1:**
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c">ทำการ Logout</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="p">    </span><span class="c">Click Element</span><span class="p">    </span><span class="c">accessibility_id=menu_button</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="p">    </span><span class="c">Wait Until Element Is Visible</span><span class="p">    </span><span class="c">accessibility_id=logout_item</span><span class="p">    </span><span class="c">10s</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="p">    </span><span class="c">Click Element</span><span class="p">    </span><span class="c">accessibility_id=logout_item</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="p">    </span><span class="c">Wait Until Element Is Visible</span><span class="p">    </span><span class="c">accessibility_id=confirm_logout_btn</span><span class="p">    </span><span class="c">10s</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="p">    </span><span class="c">Click Element</span><span class="p">    </span><span class="c">accessibility_id=confirm_logout_btn</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="p">    </span><span class="c">Wait Until Element Is Visible</span><span class="p">    </span><span class="c">accessibility_id=login_button</span><span class="p">    </span><span class="c">15s</span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="p">    </span><span class="c">Page Should Contain Element</span><span class="p">    </span><span class="c">accessibility_id=login_button</span>
+</code></pre></div>
+
+**4.2:**
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="gh">*** Settings ***</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kn">Library</span><span class="p">    </span><span class="nn">AppiumLibrary</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="gh">*** Variables ***</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="p">${</span><span class="nv">APPIUM</span><span class="p">}           </span><span class="s">http://localhost:4723</span>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="p">${</span><span class="nv">PKG</span><span class="p">}              </span><span class="s">com.example.app</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="p">${</span><span class="nv">ACT</span><span class="p">}              </span><span class="s">.MainActivity</span>
+<a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+<a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="gh">*** Keywords ***</span>
+<a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="gu">เปิดแอป</span>
+<a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="p">    </span><span class="nf">Open Application</span><span class="p">    ${</span><span class="nv">APPIUM</span><span class="p">}</span>
+<a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="p">    ...    </span><span class="s">platformName=Android</span>
+<a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="p">    ...    </span><span class="s">appium:automationName=UIAutomator2</span>
+<a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="p">    ...    </span><span class="s">appium:deviceName=emulator-5554</span>
+<a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a><span class="p">    ...    </span><span class="s">appium:appPackage=</span><span class="p">${</span><span class="nv">PKG</span><span class="p">}</span>
+<a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="p">    ...    </span><span class="s">appium:appActivity=</span><span class="p">${</span><span class="nv">ACT</span><span class="p">}</span>
+<a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="p">    ...    </span><span class="s">appium:noReset=True</span>
+<a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a>
+<a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="gh">*** Test Cases ***</span>
+<a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a><span class="gu">แก้ไข Profile Display Name สำเร็จ</span>
+<a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="p">    [</span><span class="kn">Setup</span><span class="p">]    </span><span class="nf">เปิดแอป</span>
+<a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="p">    </span><span class="c"># Login ก่อน</span>
+<a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="p">    </span><span class="nf">Wait Until Element Is Visible</span><span class="p">    </span><span class="s">accessibility_id=username_input</span><span class="p">    </span><span class="s">15s</span>
+<a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="p">    </span><span class="nf">Input Text</span><span class="p">    </span><span class="s">accessibility_id=username_input</span><span class="p">    </span><span class="s">test_user</span>
+<a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="p">    </span><span class="nf">Input Text</span><span class="p">    </span><span class="s">accessibility_id=password_input</span><span class="p">    </span><span class="s">test_pass</span>
+<a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="p">    </span><span class="nf">Hide Keyboard</span>
+<a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="p">    </span><span class="nf">Click Element</span><span class="p">    </span><span class="s">accessibility_id=login_button</span>
+<a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="p">    </span><span class="c"># ไปหน้า Profile</span>
+<a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a><span class="p">    </span><span class="nf">Wait Until Element Is Visible</span><span class="p">    </span><span class="s">accessibility_id=profile_tab</span><span class="p">    </span><span class="s">15s</span>
+<a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="p">    </span><span class="nf">Click Element</span><span class="p">    </span><span class="s">accessibility_id=profile_tab</span>
+<a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="p">    </span><span class="nf">Wait Until Element Is Visible</span><span class="p">    </span><span class="s">accessibility_id=edit_button</span><span class="p">    </span><span class="s">10s</span>
+<a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a><span class="p">    </span><span class="nf">Click Element</span><span class="p">    </span><span class="s">accessibility_id=edit_button</span>
+<a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a><span class="p">    </span><span class="c"># เปลี่ยน Display Name</span>
+<a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="p">    </span><span class="nf">Wait Until Element Is Visible</span><span class="p">    </span><span class="s">accessibility_id=display_name_field</span><span class="p">    </span><span class="s">10s</span>
+<a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a><span class="p">    </span><span class="nf">Clear Text</span><span class="p">    </span><span class="s">accessibility_id=display_name_field</span>
+<a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a><span class="p">    </span><span class="nf">Input Text</span><span class="p">    </span><span class="s">accessibility_id=display_name_field</span><span class="p">    </span><span class="s">My New Name</span>
+<a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a><span class="p">    </span><span class="nf">Hide Keyboard</span>
+<a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a><span class="p">    </span><span class="c"># Save</span>
+<a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a><span class="p">    </span><span class="nf">Click Element</span><span class="p">    </span><span class="s">accessibility_id=save_button</span>
+<a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a><span class="p">    </span><span class="c"># ตรวจสอบ</span>
+<a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a><span class="p">    </span><span class="nf">Wait Until Element Is Visible</span><span class="p">    </span><span class="s">accessibility_id=profile_name</span><span class="p">    </span><span class="s">10s</span>
+<a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a><span class="p">    ${</span><span class="nv">name</span><span class="p">}=    </span><span class="nf">Get Text</span><span class="p">    </span><span class="s">accessibility_id=profile_name</span>
+<a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a><span class="p">    </span><span class="nf">Should Be Equal</span><span class="p">    ${</span><span class="nv">name</span><span class="p">}    </span><span class="s">My New Name</span>
+<a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a><span class="p">    [</span><span class="kn">Teardown</span><span class="p">]    </span><span class="nf">Close Application</span>
+</code></pre></div>
+
+**4.3:** สาเหตุ intermittent fail ที่ `Click Element accessibility_id=submit_button`:
+1. **Timing issue** — element visible แต่ยังไม่ ready (เช่น disabled ชั่วคราวระหว่าง animation)
+   → แก้: ใช้ `Wait Until Element Is Enabled` ก่อน click แทน `Wait Until Element Is Visible`
+2. **Keyboard บัง element** — submit button อยู่ใต้ keyboard ที่เปิดอยู่
+   → แก้: เพิ่ม `Hide Keyboard` ก่อน click submit
+3. **Element ยังไม่ load** (race condition กับ API response) — form validation ทำงานช้า
+   → แก้: เพิ่ม wait ที่ยาวขึ้น หรือรอ loading spinner หายก่อน
+
+</details>
+
+<details>
+<summary>เฉลยบทที่ 5</summary>
+
+**5.1:** ลำดับ: (1) `id=com.shopapp:id/btn_add_to_cart` — resource-id unique ดีที่สุดเมื่อ content-desc ว่าง (2) `xpath=//android.widget.Button[@text='เพิ่มลงตะกร้า']` — fallback ใช้ text (3) `class=android.widget.Button` — ไม่แนะนำ เพราะอาจมีหลายปุ่มบนหน้า
+
+**5.2:**
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c">คลิก Notification ตาม Index</span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p">    </span><span class="c">[Arguments]</span><span class="p">    </span><span class="c">${index}</span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="p">    </span><span class="c">${items}=</span><span class="p">    </span><span class="c">Get WebElements</span><span class="p">    </span><span class="c">id=com.app:id/notification_item</span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="p">    </span><span class="c">${count}=</span><span class="p">    </span><span class="c">Get Length</span><span class="p">    </span><span class="c">${items}</span>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="p">    </span><span class="c">Should Be True</span><span class="p">    </span><span class="c">${index} &lt; ${count}</span><span class="p">    </span><span class="c">มีแค่ ${count} items ไม่มี index ${index}</span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="p">    </span><span class="c">Click Element</span><span class="p">    </span><span class="c">${items}[${index}]</span>
+</code></pre></div>
+
+</details>
+
+<details>
+<summary>เฉลยบทที่ 6</summary>
+
+**6.1:** screen ขนาด 1080x2340 pixels:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c"># a) Scroll down (เนื้อหาขยับขึ้น) — swipe from bottom to top</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="c">Swipe</span><span class="p">    </span><span class="c">540</span><span class="p">    </span><span class="c">1800</span><span class="p">    </span><span class="c">540</span><span class="p">    </span><span class="c">500</span><span class="p">    </span><span class="c">800</span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c"># b) Scroll up (เนื้อหาขยับลง) — swipe from top to bottom</span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="c">Swipe</span><span class="p">    </span><span class="c">540</span><span class="p">    </span><span class="c">500</span><span class="p">    </span><span class="c">540</span><span class="p">    </span><span class="c">1800</span><span class="p">    </span><span class="c">800</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="c"># c) Swipe left (เปลี่ยนหน้าถัดไป) — swipe from right to left</span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="c">Swipe</span><span class="p">    </span><span class="c">900</span><span class="p">    </span><span class="c">1170</span><span class="p">    </span><span class="c">180</span><span class="p">    </span><span class="c">1170</span><span class="p">    </span><span class="c">600</span>
+</code></pre></div>
+หลักการ: center X = 540 (1080/2), center Y = 1170 (2340/2) — ใช้ ~80% ของ screen height เป็น distance
+
+**6.2:**
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c">Scroll ลงจนเจอ Element พร้อม timeout</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="p">    </span><span class="c">[Arguments]</span><span class="p">    </span><span class="c">${locator}</span><span class="p">    </span><span class="c">${max_scroll_count}=5</span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="p">    </span><span class="c">FOR</span><span class="p">    </span><span class="c">${i}</span><span class="p">    </span><span class="c">IN RANGE</span><span class="p">    </span><span class="c">${max_scroll_count}</span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="p">        </span><span class="c">${found}=</span><span class="p">    </span><span class="c">Run Keyword And Return Status</span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="p">        </span><span class="c">...</span><span class="p">    </span><span class="c">Element Should Be Visible</span><span class="p">    </span><span class="c">${locator}</span>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="p">        </span><span class="c">IF</span><span class="p">    </span><span class="c">${found}</span><span class="p">    </span><span class="c">RETURN</span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="p">        </span><span class="c">Swipe</span><span class="p">    </span><span class="c">540</span><span class="p">    </span><span class="c">1600</span><span class="p">    </span><span class="c">540</span><span class="p">    </span><span class="c">600</span><span class="p">    </span><span class="c">800</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="p">    </span><span class="c">END</span>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="p">    </span><span class="c">Fail</span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="p">    </span><span class="c">...</span><span class="p">    </span><span class="c">ไม่พบ element &#39;${locator}&#39; หลังจาก scroll ${max_scroll_count} ครั้ง</span>
+</code></pre></div>
+
+**6.3:**
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c">หา Item ใน Infinite Scroll List</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="p">    </span><span class="c">[Arguments]</span><span class="p">    </span><span class="c">${item_text}</span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="p">    </span><span class="c">${found}=</span><span class="p">    </span><span class="c">Set Variable</span><span class="p">    </span><span class="c">${False}</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="p">    </span><span class="c">${prev_last_item}=</span><span class="p">    </span><span class="c">Set Variable</span><span class="p">    </span><span class="c">${EMPTY}</span>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="p">    </span><span class="c">FOR</span><span class="p">    </span><span class="c">${attempt}</span><span class="p">    </span><span class="c">IN RANGE</span><span class="p">    </span><span class="c">20</span>
+<a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="p">        </span><span class="c"># ตรวจ empty list</span>
+<a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a><span class="p">        </span><span class="c">${is_empty}=</span><span class="p">    </span><span class="c">Run Keyword And Return Status</span>
+<a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a><span class="p">        </span><span class="c">...</span><span class="p">    </span><span class="c">Page Should Contain Element</span><span class="p">    </span><span class="c">accessibility_id=empty_list_message</span>
+<a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="p">        </span><span class="c">IF</span><span class="p">    </span><span class="c">${is_empty}</span>
+<a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a><span class="p">            </span><span class="c">Fail</span><span class="p">    </span><span class="c">List ว่างเปล่า — ไม่มี item ใดเลย</span>
+<a id="__codelineno-14-12" name="__codelineno-14-12" href="#__codelineno-14-12"></a><span class="p">        </span><span class="c">END</span>
+<a id="__codelineno-14-13" name="__codelineno-14-13" href="#__codelineno-14-13"></a>
+<a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="p">        </span><span class="c"># ตรวจ server error</span>
+<a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="p">        </span><span class="c">${has_error}=</span><span class="p">    </span><span class="c">Run Keyword And Return Status</span>
+<a id="__codelineno-14-16" name="__codelineno-14-16" href="#__codelineno-14-16"></a><span class="p">        </span><span class="c">...</span><span class="p">    </span><span class="c">Page Should Contain Element</span><span class="p">    </span><span class="c">accessibility_id=error_banner</span>
+<a id="__codelineno-14-17" name="__codelineno-14-17" href="#__codelineno-14-17"></a><span class="p">        </span><span class="c">IF</span><span class="p">    </span><span class="c">${has_error}</span>
+<a id="__codelineno-14-18" name="__codelineno-14-18" href="#__codelineno-14-18"></a><span class="p">            </span><span class="c">Fail</span><span class="p">    </span><span class="c">Server error ระหว่าง scroll — ไม่สามารถดึงข้อมูลเพิ่มได้</span>
+<a id="__codelineno-14-19" name="__codelineno-14-19" href="#__codelineno-14-19"></a><span class="p">        </span><span class="c">END</span>
+<a id="__codelineno-14-20" name="__codelineno-14-20" href="#__codelineno-14-20"></a>
+<a id="__codelineno-14-21" name="__codelineno-14-21" href="#__codelineno-14-21"></a><span class="p">        </span><span class="c"># หา item ที่ต้องการ</span>
+<a id="__codelineno-14-22" name="__codelineno-14-22" href="#__codelineno-14-22"></a><span class="p">        </span><span class="c">${item_found}=</span><span class="p">    </span><span class="c">Run Keyword And Return Status</span>
+<a id="__codelineno-14-23" name="__codelineno-14-23" href="#__codelineno-14-23"></a><span class="p">        </span><span class="c">...</span><span class="p">    </span><span class="c">Page Should Contain Text</span><span class="p">    </span><span class="c">${item_text}</span>
+<a id="__codelineno-14-24" name="__codelineno-14-24" href="#__codelineno-14-24"></a><span class="p">        </span><span class="c">IF</span><span class="p">    </span><span class="c">${item_found}</span>
+<a id="__codelineno-14-25" name="__codelineno-14-25" href="#__codelineno-14-25"></a><span class="p">            </span><span class="c">RETURN</span>
+<a id="__codelineno-14-26" name="__codelineno-14-26" href="#__codelineno-14-26"></a><span class="p">        </span><span class="c">END</span>
+<a id="__codelineno-14-27" name="__codelineno-14-27" href="#__codelineno-14-27"></a>
+<a id="__codelineno-14-28" name="__codelineno-14-28" href="#__codelineno-14-28"></a><span class="p">        </span><span class="c"># ตรวจว่าถึง end of list หรือยัง (last item ไม่เปลี่ยน)</span>
+<a id="__codelineno-14-29" name="__codelineno-14-29" href="#__codelineno-14-29"></a><span class="p">        </span><span class="c">${items}=</span><span class="p">    </span><span class="c">Get WebElements</span><span class="p">    </span><span class="c">accessibility_id=list_item</span>
+<a id="__codelineno-14-30" name="__codelineno-14-30" href="#__codelineno-14-30"></a><span class="p">        </span><span class="c">${last_item_text}=</span><span class="p">    </span><span class="c">Get Text</span><span class="p">    </span><span class="c">${items}[-1]</span>
+<a id="__codelineno-14-31" name="__codelineno-14-31" href="#__codelineno-14-31"></a><span class="p">        </span><span class="c">IF</span><span class="p">    </span><span class="c">&#39;${last_item_text}&#39; == &#39;${prev_last_item}&#39;</span>
+<a id="__codelineno-14-32" name="__codelineno-14-32" href="#__codelineno-14-32"></a><span class="p">            </span><span class="c">Fail</span><span class="p">    </span><span class="c">ถึง end of list แล้ว — ไม่พบ &#39;${item_text}&#39; ใน list</span>
+<a id="__codelineno-14-33" name="__codelineno-14-33" href="#__codelineno-14-33"></a><span class="p">        </span><span class="c">END</span>
+<a id="__codelineno-14-34" name="__codelineno-14-34" href="#__codelineno-14-34"></a><span class="p">        </span><span class="c">${prev_last_item}=</span><span class="p">    </span><span class="c">Set Variable</span><span class="p">    </span><span class="c">${last_item_text}</span>
+<a id="__codelineno-14-35" name="__codelineno-14-35" href="#__codelineno-14-35"></a>
+<a id="__codelineno-14-36" name="__codelineno-14-36" href="#__codelineno-14-36"></a><span class="p">        </span><span class="c"># scroll ลงต่อ</span>
+<a id="__codelineno-14-37" name="__codelineno-14-37" href="#__codelineno-14-37"></a><span class="p">        </span><span class="c">Swipe</span><span class="p">    </span><span class="c">540</span><span class="p">    </span><span class="c">1600</span><span class="p">    </span><span class="c">540</span><span class="p">    </span><span class="c">600</span><span class="p">    </span><span class="c">800</span>
+<a id="__codelineno-14-38" name="__codelineno-14-38" href="#__codelineno-14-38"></a><span class="p">        </span><span class="c">Sleep</span><span class="p">    </span><span class="c">1s</span><span class="p">    </span><span class="c"># รอ new items load</span>
+<a id="__codelineno-14-39" name="__codelineno-14-39" href="#__codelineno-14-39"></a><span class="p">    </span><span class="c">END</span>
+<a id="__codelineno-14-40" name="__codelineno-14-40" href="#__codelineno-14-40"></a><span class="p">    </span><span class="c">Fail</span><span class="p">    </span><span class="c">ไม่พบ &#39;${item_text}&#39; หลังจาก scroll 20 ครั้ง</span>
+</code></pre></div>
+
+</details>
+
+<details>
+<summary>เฉลยบทที่ 7</summary>
+
+**7.1:**
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="c"># pages/settings_page.robot</span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="gh">*** Variables ***</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="p">${</span><span class="nv">SETTINGS_NOTIF_TOGGLE</span><span class="p">}     </span><span class="s">accessibility_id=notif_toggle</span>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="p">${</span><span class="nv">SETTINGS_LANGUAGE_DD</span><span class="p">}      </span><span class="s">accessibility_id=language_dropdown</span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="p">${</span><span class="nv">SETTINGS_SAVE_BTN</span><span class="p">}         </span><span class="s">accessibility_id=save_settings_btn</span>
+<a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="p">${</span><span class="nv">SETTINGS_BACK_BTN</span><span class="p">}         </span><span class="s">accessibility_id=back_btn</span>
+<a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a>
+<a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="gh">*** Keywords ***</span>
+<a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a><span class="gu">เปิด-ปิด Notification</span>
+<a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="p">    </span><span class="nf">Click Element</span><span class="p">    ${</span><span class="nv">SETTINGS_NOTIF_TOGGLE</span><span class="p">}</span>
+<a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>
+<a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="gu">เลือก Language</span>
+<a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="p">    [</span><span class="kn">Arguments</span><span class="p">]    ${</span><span class="nv">language</span><span class="p">}</span>
+<a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="p">    </span><span class="nf">Click Element</span><span class="p">    ${</span><span class="nv">SETTINGS_LANGUAGE_DD</span><span class="p">}</span>
+<a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="p">    </span><span class="nf">Wait Until Element Is Visible</span><span class="p">    </span><span class="s">accessibility_id=language_option_</span><span class="p">${</span><span class="nv">language</span><span class="p">}    </span><span class="s">5s</span>
+<a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="p">    </span><span class="nf">Click Element</span><span class="p">    </span><span class="s">accessibility_id=language_option_</span><span class="p">${</span><span class="nv">language</span><span class="p">}</span>
+<a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a>
+<a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="gu">บันทึก Settings</span>
+<a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a><span class="p">    </span><span class="nf">Click Element</span><span class="p">    ${</span><span class="nv">SETTINGS_SAVE_BTN</span><span class="p">}</span>
+<a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="p">    </span><span class="nf">Wait Until Element Is Not Visible</span><span class="p">    ${</span><span class="nv">SETTINGS_SAVE_BTN</span><span class="p">}    </span><span class="s">5s</span>
+<a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a>
+<a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a><span class="gu">กลับหน้าก่อนหน้า</span>
+<a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a><span class="p">    </span><span class="nf">Click Element</span><span class="p">    ${</span><span class="nv">SETTINGS_BACK_BTN</span><span class="p">}</span>
+</code></pre></div>
+
+</details>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  กลับไปด้านบนสุด
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="ส่วนท้าย" >
+        
+          
+          <a href="../07-page-object-model/" class="md-footer__link md-footer__link--prev" aria-label="ก่อนหน้า: บทที่ 7 - Page Object Model">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                ก่อนหน้า
+              </span>
+              <div class="md-ellipsis">
+                บทที่ 7 - Page Object Model
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../glossary/" class="md-footer__link md-footer__link--next" aria-label="ต่อไป: Glossary">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                ต่อไป
+              </span>
+              <div class="md-ellipsis">
+                Glossary
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01\u0e41\u0e25\u0e49\u0e27", "clipboard.copy": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01", "search.result.more.one": "\u0e2d\u0e35\u0e01\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.more.other": "# \u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.none": "\u0e44\u0e21\u0e48\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.one": "\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.other": "\u0e1e\u0e1a # \u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.placeholder": "\u0e1e\u0e34\u0e21\u0e1e\u0e4c\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e40\u0e23\u0e34\u0e48\u0e21\u0e04\u0e49\u0e19\u0e2b\u0e32", "search.result.term.missing": "\u0e44\u0e21\u0e48\u0e1e\u0e1a", "select.version": "\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e40\u0e27\u0e2d\u0e23\u0e4c\u0e0a\u0e31\u0e19"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

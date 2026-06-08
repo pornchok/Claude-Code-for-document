@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual Testing — Playwright Course App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="main-nav"></div>
+  <main>
+    <h1 data-testid="visual-heading">Visual Testing Page</h1>
+    <p style="color:var(--text-muted);margin-bottom:1.5rem">Stable layout for screenshot baseline comparison.</p>
+
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:2rem">
+      <label for="theme-toggle" style="font-weight:600">Theme:</label>
+      <button id="theme-toggle" data-testid="btn-theme-toggle" class="btn btn-secondary"
+              onclick="toggleTheme()" aria-label="Toggle dark/light theme">
+        Switch to Dark Mode
+      </button>
+      <span id="current-theme" data-testid="current-theme">Current: Light</span>
+    </div>
+
+    <div class="card-grid" data-testid="visual-grid">
+      <div class="card" data-testid="visual-card-1" style="text-align:center">
+        <div style="font-size:3rem">🎭</div>
+        <h2>Playwright</h2>
+        <p>Reliable end-to-end testing</p>
+        <span class="badge">v1.50+</span>
+      </div>
+      <div class="card" data-testid="visual-card-2" style="text-align:center">
+        <div style="font-size:3rem">📘</div>
+        <h2>TypeScript</h2>
+        <p>Type-safe test code</p>
+        <span class="badge" style="background:var(--success)">First-class</span>
+      </div>
+      <div class="card" data-testid="visual-card-3" style="text-align:center">
+        <div style="font-size:3rem">⚡</div>
+        <h2>Fast &amp; Reliable</h2>
+        <p>Auto-waiting built in</p>
+        <span class="badge" style="background:#7c3aed">Auto-wait</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:1rem" data-testid="visual-text-block">
+      <h2>Stable Content Block</h2>
+      <p>This section has predictable content for visual regression testing.</p>
+      <p>Line 2: consistent text that should not change between runs.</p>
+      <p>Line 3: no timestamps or dynamic data here.</p>
+    </div>
+  </main>
+
+  <script src="/client.js"></script>
+  <script>
+    function toggleTheme() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
+      document.getElementById('theme-toggle').textContent = isDark ? 'Switch to Dark Mode' : 'Switch to Light Mode';
+      document.getElementById('current-theme').textContent = `Current: ${isDark ? 'Light' : 'Dark'}`;
+    }
+  </script>
+</body>
+</html>

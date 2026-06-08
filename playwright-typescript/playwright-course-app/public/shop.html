@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop — Playwright Course App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="main-nav"></div>
+  <main>
+    <h1>Product Shop</h1>
+    <div class="filter-row">
+      <div>
+        <label for="filter-category">Category</label>
+        <select id="filter-category" data-testid="filter-category">
+          <option value="">All Categories</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Books">Books</option>
+          <option value="Clothing">Clothing</option>
+        </select>
+      </div>
+      <div style="flex:1">
+        <label for="search-input">Search</label>
+        <div class="search-bar">
+          <input type="text" id="search-input" data-testid="search-input" placeholder="Search products...">
+          <button class="btn btn-primary" id="btn-search" data-testid="btn-search">Search</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="product-grid" class="card-grid" data-testid="product-grid" role="list"></div>
+    <div class="pagination" id="pagination" data-testid="pagination" aria-label="Product pagination"></div>
+    <p id="no-results" data-testid="no-results" style="display:none;color:var(--text-muted)">
+      No products found.
+    </p>
+  </main>
+
+  <script src="/client.js"></script>
+  <script>
+    let currentPage = 1;
+    const LIMIT = 5;
+
+    async function loadProducts() {
+      const category = document.getElementById('filter-category').value;
+      const search = document.getElementById('search-input').value.trim();
+      const params = new URLSearchParams({ page: currentPage, limit: LIMIT });
+      if (category) params.set('category', category);
+      if (search) params.set('search', search);
+
+      const data = await apiFetch(`/api/products?${params}`);
+      renderProducts(data);
+      renderPagination(data);
+    }
+
+    function renderProducts({ data }) {
+      const grid = document.getElementById('product-grid');
+      const noResults = document.getElementById('no-results');
+      if (!data.length) { grid.innerHTML = ''; noResults.style.display = 'block'; return; }
+      noResults.style.display = 'none';
+      grid.innerHTML = data.map(p => `
+        <div class="card product-card" data-testid="product-card-${p.id}" role="listitem">
+          <img src="${p.image}" alt="Product: ${p.name}" data-testid="product-image-${p.id}">
+          <span class="category" data-testid="product-category-${p.id}">${p.category}</span>
+          <h3 data-testid="product-name-${p.id}">${p.name}</h3>
+          <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:.5rem">${p.description}</p>
+          <p class="price" data-testid="product-price-${p.id}">$${p.price}</p>
+          <button class="btn btn-primary btn-sm" style="margin-top:.75rem;width:100%"
+                  data-testid="btn-add-cart-${p.id}"
+                  onclick="addToCart(${p.id},'${p.name.replace(/'/g,"\\'")}',${p.price})">Add to Cart</button>
+        </div>`).join('');
+    }
+
+    function renderPagination({ page, totalPages }) {
+      const el = document.getElementById('pagination');
+      let html = `<button data-testid="btn-prev-page" ${page <= 1 ? 'disabled' : ''} onclick="gotoPage(${page - 1})">&#8249; Prev</button>`;
+      for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="${i === page ? 'active' : ''}" data-testid="btn-page-${i}" onclick="gotoPage(${i})">${i}</button>`;
+      }
+      html += `<button data-testid="btn-next-page" ${page >= totalPages ? 'disabled' : ''} onclick="gotoPage(${page + 1})">Next &#8250;</button>`;
+      el.innerHTML = html;
+    }
+
+    function gotoPage(p) { currentPage = p; loadProducts(); }
+
+    function addToCart(id, name, price) {
+      const cart = Cart.get();
+      const existing = cart.find(i => i.id === id);
+      if (existing) existing.qty++;
+      else cart.push({ id, name, price, qty: 1 });
+      Cart.set(cart);
+      updateCartCount();
+    }
+
+    document.getElementById('btn-search').addEventListener('click', () => { currentPage = 1; loadProducts(); });
+    document.getElementById('filter-category').addEventListener('change', () => { currentPage = 1; loadProducts(); });
+    document.getElementById('search-input').addEventListener('keydown', e => { if (e.key === 'Enter') { currentPage = 1; loadProducts(); } });
+
+    loadProducts();
+  </script>
+</body>
+</html>

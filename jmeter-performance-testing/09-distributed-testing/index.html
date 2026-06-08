@@ -1,0 +1,4308 @@
+
+<!doctype html>
+<html lang="th" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="คอร์ส QA & Automation Testing ภาษาไทย">
+      
+      
+      
+        <link rel="canonical" href="https://pornchok.github.io/Claude-Code-for-document/jmeter-performance-testing/09-distributed-testing/">
+      
+      
+        <link rel="prev" href="../08-running-reports/">
+      
+      
+        <link rel="next" href="../10-anti-patterns-best-practices/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>บทที่ 9 - Distributed Testing - QA Learning Hub</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#9-distributed-testing" class="md-skip">
+          ข้ามไปที่เนื้อหา
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="หัวข้อ">
+    <a href="../.." title="QA Learning Hub" class="md-header__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            QA Learning Hub
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              บทที่ 9 - Distributed Testing
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="ค้นหา" placeholder="ค้นหา" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="ค้นหา">
+        
+        <button type="reset" class="md-search__icon md-icon" title="ล้าง" aria-label="ล้าง" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            กำลังเริ่มต้นการค้นหา
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="แท็บ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../playwright-typescript/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Playwright TypeScript
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../robot-framework-for-qa/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../robot-framework-control-flow/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework Control Flow
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../rf-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  RF Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../wdio-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  WebdriverIO Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-overview/" class="md-tabs__link">
+          
+  
+  
+  JMeter Performance Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../english-for-beginners/00-overview/" class="md-tabs__link">
+          
+  
+  
+  English for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-tabs__link">
+          
+  
+  
+  Claude Code Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ตัวนำทาง" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="QA Learning Hub" class="md-nav__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    QA Learning Hub
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playwright TypeScript
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Playwright TypeScript
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/01-why-playwright/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - ทำไมต้อง Playwright
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/02-setup-typescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup + TypeScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/03-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/04-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/05-actions-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Actions & Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/06-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/07-fixtures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Fixtures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/08-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/09-test-organization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Test Organization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/10-configuration-projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Configuration & Projects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/11-parallelism-sharding-reporting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 11 - Parallelism & Sharding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/12-mocking-network-time-browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 12 - Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/13-authentication-storage-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 13 - Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/14-advanced-browser-emulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 14 - Advanced Browser Emulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/15-api-testing-hybrid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 15 - API Testing & Hybrid
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/16-visual-accessibility-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 16 - Visual & Accessibility
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/17-cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 17 - CI/CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/18-production-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 18 - Production Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/19-db-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 19 - DB Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/20-professional-project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 20 - Professional Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/01-what-is-robot-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is RF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/03-test-structure-syntax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/04-keywords-and-resource-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Keywords & Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/05-web-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Web Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/06-data-driven-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Data Driven
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/07-reports-and-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Reports & Debug
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/08-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework Control Flow
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework Control Flow
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/01-if-else/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - If/Else
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/02-for-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - For Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/03-while-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - While Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RF Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RF Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/01-mobile-testing-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mobile Landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/02-setup-environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/03-appium-capabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Capabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/04-appiumlibrary-keywords/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - AppiumLibrary Keywords
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/05-mobile-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Mobile Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/06-gestures-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Gestures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/07-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WebdriverIO Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    WebdriverIO Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/01-what-is-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/02-setup-wdio-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/03-wdio-appium-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/04-writing-tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Writing Tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/05-selectors-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Selectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/06-page-objects-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Page Objects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/07-comparing-rf-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - RF vs WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMeter Performance Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMeter Performance Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-performance-testing-fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-ui-test-plan-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Plan Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-first-test-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - First Test Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-thread-group-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Thread Group
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-parameterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Parameterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-running-reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Distributed Testing
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Distributed Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-chapter-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⏰ Pre-chapter Retrieval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. วัตถุประสงค์
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. ทำไมต้องรู้? (Why)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-analogy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Analogy: ศูนย์บัญชาการกับทีมสายลับ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. เนื้อหาหลัก
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. เนื้อหาหลัก">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-distributed-testing-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Distributed Testing Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-distributed-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 เมื่อไหรควรใช้ Distributed Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-setup-remote_hosts-property" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Setup: remote_hosts Property
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-best-practice-version-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Best Practice: Version Matching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-distributed-test-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 รัน Distributed Test ด้วย CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-best-practice-network-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 Best Practice: Network Topology
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-alternative-cloud-based-load-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 Alternative: Cloud-Based Load Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ตัวอย่าง 3 ระดับ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. ตัวอย่าง 3 ระดับ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beginner-configure-jmeterproperties-2-worker-nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Beginner: Configure jmeter.properties สำหรับ 2 Worker Nodes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-distributed-setup-2000-concurrent-users-fintech-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intermediate: ออกแบบ Distributed Setup สำหรับ 2,000 Concurrent Users ใน Fintech Application
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-containerized-jmeter-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced: Containerized JMeter Workers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Common Mistakes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-retrieval-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. สรุปบท — Retrieval Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-anti-patterns-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    English for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    English for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/01-mindset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/02-phonics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Phonics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/03-vocabulary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Vocabulary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/04-sentence-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Sentence Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/05-to-be-present-simple/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - To Be & Present Simple
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/06-questions-negatives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Questions & Negatives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/07-numbers-time-days/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Numbers, Time & Days
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/08-phrases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Phrases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Claude Code Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-chapter-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⏰ Pre-chapter Retrieval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. วัตถุประสงค์
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. ทำไมต้องรู้? (Why)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-analogy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Analogy: ศูนย์บัญชาการกับทีมสายลับ
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. เนื้อหาหลัก
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. เนื้อหาหลัก">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-distributed-testing-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Distributed Testing Architecture
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-distributed-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 เมื่อไหรควรใช้ Distributed Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-setup-remote_hosts-property" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Setup: remote_hosts Property
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-best-practice-version-matching" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Best Practice: Version Matching
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-distributed-test-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 รัน Distributed Test ด้วย CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#46-best-practice-network-topology" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.6 Best Practice: Network Topology
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#47-alternative-cloud-based-load-testing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.7 Alternative: Cloud-Based Load Testing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ตัวอย่าง 3 ระดับ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. ตัวอย่าง 3 ระดับ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beginner-configure-jmeterproperties-2-worker-nodes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Beginner: Configure jmeter.properties สำหรับ 2 Worker Nodes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-distributed-setup-2000-concurrent-users-fintech-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intermediate: ออกแบบ Distributed Setup สำหรับ 2,000 Concurrent Users ใน Fintech Application
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-containerized-jmeter-workers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Advanced: Containerized JMeter Workers
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Common Mistakes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-retrieval-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. สรุปบท — Retrieval Questions
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="9-distributed-testing">บทที่ 9: Distributed Testing เบื้องต้น<a class="headerlink" href="#9-distributed-testing" title="Permanent link">&para;</a></h1>
+<hr />
+<h2 id="pre-chapter-retrieval">⏰ Pre-chapter Retrieval<a class="headerlink" href="#pre-chapter-retrieval" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>แนะนำ: อ่านบทนี้หลังจากผ่านไปอย่างน้อย 1 วันนับจากที่อ่านบทที่ 8</p>
+</blockquote>
+<p><strong>ก่อนอ่านบทนี้ ลองตอบ:</strong></p>
+<p>คุณเพิ่ง run load test ด้วย CLI mode บนเครื่องเดียว และ generate HTML report ได้แล้ว ตอนนี้ลูกค้าบอกว่าต้องการ simulate ผู้ใช้พร้อมกัน 5,000 คน</p>
+<p>ลองตอบ 2 ข้อนี้ก่อน scroll ลงไปดูเฉลย:
+1. เครื่อง JMeter เดียวที่ CPU 2-3 GHz รับ load ได้ประมาณกี่ threads ก่อนที่ตัว JMeter เองจะกลายเป็น bottleneck?
+2. ถ้า single machine รับไม่ไหว — คุณจะแก้ปัญหานี้ด้วยวิธีใด? (เขียนก่อนอ่านต่อ)</p>
+<p>หยุดคิดอย่างน้อย 1 นาที แล้วเขียนคำตอบลงกระดาษ และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น</p>
+<hr />
+<blockquote>
+<p><strong>เฉลย:</strong>
+1. ประมาณ <strong>1,000–2,000 threads</strong> ต่อ single JMeter client ที่ CPU 2-3 GHz ตามที่ official docs ระบุ — ถ้ามากกว่านี้ JMeter เองจะใช้ CPU สูงจน skew ผลลัพธ์
+2. คำตอบที่ถูกต้องคือ <strong>Distributed Testing</strong> — รัน JMeter หลาย instance บนหลายเครื่อง แล้วให้เครื่องหลัก (Controller) บังคับบัญชาทุกเครื่องพร้อมกัน นี่คือสิ่งที่บทนี้จะสอน</p>
+<p><strong>Remediation path:</strong> ถ้าตอบข้อ 1 ไม่ได้ — กลับอ่านบทที่ 5 section "Thread Sizing Best Practice" / ถ้าตอบข้อ 2 ได้แล้ว บทนี้จะเติม detail ว่า setup อย่างไรให้ถูกต้อง</p>
+</blockquote>
+<hr />
+<h2 id="1">1. วัตถุประสงค์<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>อ่านจบบทนี้แล้วคุณจะทำได้:</p>
+<ul>
+<li><strong>อธิบาย</strong> architecture ของ JMeter distributed testing ได้ว่า Controller และ Worker node ทำหน้าที่อะไร และต่างกันอย่างไร</li>
+<li><strong>ระบุ</strong> ได้ว่าเมื่อไหรควรเลือกใช้ distributed testing แทน single-machine testing (threshold จริง)</li>
+<li><strong>ออกแบบ</strong> distributed setup เบื้องต้นได้ รวมถึงการ configure <code>remote_hosts</code> ใน <code>jmeter.properties</code></li>
+<li><strong>รัน</strong> distributed test ด้วย CLI mode และ collect ผลลัพธ์</li>
+<li><strong>ตัดสินใจ</strong> ได้ว่าเมื่อไหรควรเลือก cloud-based load testing แทน on-premise distributed JMeter</li>
+<li><strong>ป้องกัน</strong> ข้อผิดพลาดที่พบบ่อยใน distributed setup (version mismatch, firewall, CSV sync)</li>
+</ul>
+<hr />
+<h2 id="2-why">2. ทำไมต้องรู้? (Why)<a class="headerlink" href="#2-why" title="Permanent link">&para;</a></h2>
+<p>เครื่องคอมพิวเตอร์เดียวมีข้อจำกัด — CPU, RAM, network bandwidth มีเพดาน ถ้า test plan ต้องการ 5,000 concurrent users แต่ single JMeter client รับได้แค่ 1,000–2,000 threads คุณกำลังสร้างสถานการณ์ที่ <strong>JMeter เองกลายเป็น bottleneck</strong> ไม่ใช่ระบบที่ทดสอบ ผลลัพธ์ที่ได้จะผิดเพี้ยน</p>
+<p>Distributed testing แก้ปัญหานี้โดยกระจาย load ออกไปยังหลายเครื่อง — แต่ละเครื่องรัน JMeter ในฐานะ "Worker" ที่ส่ง requests ไปยัง server จริง ขณะที่ Controller จัดการภาพรวม</p>
+<p>นอกจากนี้ยังมีเหตุผลเรื่อง <strong>geography</strong> — ถ้า users จริงมาจากหลาย region การมี Worker nodes ที่กระจายอยู่หลายที่ทำให้ simulate realistic latency ได้ดีกว่า</p>
+<hr />
+<h2 id="3-analogy">3. Analogy: ศูนย์บัญชาการกับทีมสายลับ<a class="headerlink" href="#3-analogy" title="Permanent link">&para;</a></h2>
+<p>ลองนึกภาพ <strong>ผู้อำนวยการฝ่ายปฏิบัติการ (Controller)</strong> ที่นั่งอยู่ในห้อง command center พร้อม <strong>ทีมสายลับ (Workers)</strong> ที่กระจายอยู่ทั่วประเทศ</p>
+<ul>
+<li><strong>Controller</strong> = ผู้อำนวยการ — ส่ง mission brief (Test Plan) ให้ทีมทุกคน, กำหนดเวลาเริ่ม, รวบรวม report ที่ส่งกลับมา</li>
+<li><strong>Worker nodes</strong> = สายลับแต่ละคน — รับ mission เดียวกัน แล้วลงมือทำพร้อมกัน ส่ง result กลับ HQ</li>
+<li><strong><code>remote_hosts</code></strong> = รายชื่อสายลับที่ผู้อำนวยการรู้จัก — ถ้าชื่อไม่อยู่ในรายการ สั่งงานไม่ได้</li>
+<li><strong>RMI</strong> = วิทยุสื่อสารระหว่าง HQ กับสายลับ — ถ้าช่องสัญญาณถูกบล็อก (firewall) สั่งงานไม่ถึง</li>
+<li><strong>Test Plan ที่ส่งให้ทุกคน</strong> = mission brief ฉบับเดียวกันทุกใบ — ทุกคนทำ <strong>ภารกิจเดียวกัน</strong> ไม่ใช่แบ่งงานกัน</li>
+</ul>
+<blockquote>
+<p>⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า: <strong>"Worker แต่ละคนรับส่วนต่างกัน เหมือนแบ่งงาน"</strong> — ผิดทั้งหมด official docs ระบุชัดว่า <em>"The same test plan is run by all the servers. JMeter does not distribute the load between servers, each runs the full test plan."</em> — ถ้ามี 3 Workers ที่ตั้ง 100 threads แต่ละตัว load จริงที่ระบบรับคือ 300 concurrent requests ไม่ใช่ 100</p>
+</blockquote>
+<hr />
+<h2 id="4">4. เนื้อหาหลัก<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<h3 id="41-distributed-testing-architecture">4.1 Distributed Testing Architecture<a class="headerlink" href="#41-distributed-testing-architecture" title="Permanent link">&para;</a></h3>
+<p>JMeter distributed testing ใช้โครงสร้าง <strong>Controller–Worker</strong> (บางที่เรียกว่า Master–Slave แต่ JMeter docs ใช้คำว่า "client" และ "server nodes")</p>
+<blockquote>
+<p><em>"Controller Node: the system running JMeter GUI, which controls the test"</em>
+— Apache JMeter Distributed Testing Step-by-Step (jmeter_distributed_testing_step_by_step.html)</p>
+<p><em>"Worker Node: the system running jmeter-server, which takes commands from the GUI and send requests to the target system(s)"</em>
+— Apache JMeter Distributed Testing Step-by-Step (jmeter_distributed_testing_step_by_step.html)</p>
+</blockquote>
+<p><strong>Controller</strong> ทำหน้าที่:
+- ส่ง Test Plan ไปยัง Workers ทุกตัว
+- สั่ง start/stop test
+- รวบรวม results จาก Workers ทั้งหมดมา merge ใน JTL เดียว</p>
+<p><strong>Workers</strong> ทำหน้าที่:
+- รัน <code>jmeter-server</code> process (ไม่ใช่ <code>jmeter</code> ปกติ)
+- รับ Test Plan จาก Controller แล้วรันพร้อมกัน
+- ส่ง sample results กลับ Controller แบบ real-time</p>
+<blockquote>
+<p><em>"control multiple, remote JMeter engines from a single JMeter client. By running JMeter remotely, you can replicate a test across many low-end computers and thus simulate a larger load on the server."</em>
+— Apache JMeter Remote Testing (remote-test.html)</p>
+</blockquote>
+<p><strong>จุดสำคัญที่ต้องเข้าใจ:</strong> Workers แต่ละตัวรัน Test Plan เต็มๆ ไม่ใช่แบ่งกัน</p>
+<blockquote>
+<p><em>"The same test plan is run by all the servers. JMeter does not distribute the load between servers, each runs the full test plan."</em>
+— Apache JMeter Remote Testing (remote-test.html)</p>
+</blockquote>
+<p>ดังนั้น ถ้า Test Plan กำหนด 500 threads และมี Workers 4 ตัว — load รวมที่ server รับคือ <strong>2,000 concurrent requests</strong> (500 × 4)</p>
+<hr />
+<h3 id="42-distributed-testing">4.2 เมื่อไหรควรใช้ Distributed Testing<a class="headerlink" href="#42-distributed-testing" title="Permanent link">&para;</a></h3>
+<p>✅ <strong>ควรใช้ distributed testing เมื่อ:</strong>
+- ต้องการ thread count ที่เกิน capacity ของ single machine (&gt;= 500–1,000 threads ขึ้นอยู่กับ hardware)
+- single JMeter instance เริ่มแสดงอาการ: CPU spike, memory pressure, หรือ JMeter warning ใน console</p>
+<blockquote>
+<p><em>"A single JMeter client running on a 2-3 GHz CPU can handle 1000-2000 threads depending on test type."</em>
+— Apache JMeter Distributed Testing Step-by-Step (jmeter_distributed_testing_step_by_step.html)</p>
+</blockquote>
+<ul>
+<li>ต้องการ simulate load จากหลาย geographic location พร้อมกัน</li>
+<li>ต้องการ test network configuration ที่ใกล้เคียง production จริง</li>
+</ul>
+<p>⚠️ <strong>ควรเลี่ยง:</strong> ใช้ distributed testing เพื่อแก้ปัญหา test plan ที่ไม่มีประสิทธิภาพ — ถ้า single-machine test ยังไม่ผ่าน tuning ขั้นพื้นฐาน (Thread Group ถูก, Think Time ถูก, Listeners ปิดแล้ว) ให้แก้จุดนั้นก่อน</p>
+<hr />
+<h3 id="43-setup-remote_hosts-property">4.3 Setup: remote_hosts Property<a class="headerlink" href="#43-setup-remote_hosts-property" title="Permanent link">&para;</a></h3>
+<p><strong>ขั้นตอนที่ 1:</strong> เปิด Worker nodes ทุกเครื่อง</p>
+<p>บนเครื่อง Worker แต่ละเครื่อง ไปที่ directory <code>jmeter/bin/</code> แล้วรัน:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># บน Linux/macOS</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>./jmeter-server
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># บน Windows</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>jmeter-server.bat
+</code></pre></div>
+<blockquote>
+<p><em>"On the worker nodes, go to jmeter/bin directory and execute jmeter-server.bat (jmeter-server on unix)."</em>
+— Apache JMeter Distributed Testing Step-by-Step (jmeter_distributed_testing_step_by_step.html)</p>
+</blockquote>
+<p><strong>ขั้นตอนที่ 2:</strong> Configure <code>remote_hosts</code> บน Controller</p>
+<p>เปิดไฟล์ <code>jmeter/bin/jmeter.properties</code> บนเครื่อง Controller แล้วแก้ไข property นี้:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># jmeter.properties (บนเครื่อง Controller)</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># format: IP address หรือ hostname ของ Workers คั่นด้วย comma</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="na">remote_hosts</span><span class="o">=</span><span class="s">192.168.1.10,192.168.1.11,192.168.1.12</span>
+</code></pre></div>
+<blockquote>
+<p><em>"remote_hosts=192.168.0.10,192.168.0.11,192.168.0.12,192.168.0.13,192.168.0.14"</em>
+— Apache JMeter Distributed Testing Step-by-Step (jmeter_distributed_testing_step_by_step.html)</p>
+<p><em>"Edit the properties file on the controlling JMeter machine...find the property named 'remote_hosts'"</em>
+— Apache JMeter Remote Testing (remote-test.html)</p>
+</blockquote>
+<hr />
+<h3 id="44-best-practice-version-matching">4.4 Best Practice: Version Matching<a class="headerlink" href="#44-best-practice-version-matching" title="Permanent link">&para;</a></h3>
+<p>✅ <strong>บังคับ:</strong> Controller และ Workers ทุกตัวต้องใช้ JMeter version เดียวกัน — และ Java version เดียวกัน</p>
+<blockquote>
+<p><em>"Make sure you use the same version of JMeter and Java on all the systems. Mixing versions will not work correctly."</em>
+— Apache JMeter Distributed Testing Step-by-Step (jmeter_distributed_testing_step_by_step.html)</p>
+<p><em>"Make sure that all the nodes (client and servers) are running exactly the same version of JMeter."</em>
+— Apache JMeter Remote Testing (remote-test.html)</p>
+</blockquote>
+<p>⚠️ <strong>ควรเลี่ยง:</strong> ใช้ version ต่างกันระหว่าง Controller และ Workers — เพราะ JMeter ส่ง test plan และ results ผ่าน Java object serialization และถ้า version ต่างกัน class definitions อาจไม่ตรงกัน ทำให้ serialize/deserialize ผิดพลาดหรือ crash แบบ silent</p>
+<p>วิธีตรวจสอบ version บนทุกเครื่อง:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>jmeter<span class="w"> </span>--version
+</code></pre></div></p>
+<hr />
+<h3 id="45-distributed-test-cli">4.5 รัน Distributed Test ด้วย CLI<a class="headerlink" href="#45-distributed-test-cli" title="Permanent link">&para;</a></h3>
+<p>เมื่อ Workers ทุกตัว start แล้ว และ <code>remote_hosts</code> configured แล้ว รัน distributed test บน Controller:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># รัน test บน Workers ทุกตัวที่ระบุใน remote_hosts</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>test.jmx<span class="w"> </span>-r<span class="w"> </span>-l<span class="w"> </span>results.jtl
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># ถ้าต้องการระบุ Workers แบบ explicit (override remote_hosts)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>test.jmx<span class="w"> </span>-R<span class="w"> </span><span class="m">192</span>.168.1.10,192.168.1.11<span class="w"> </span>-l<span class="w"> </span>results.jtl
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="c1"># รัน test + generate HTML report</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>test.jmx<span class="w"> </span>-r<span class="w"> </span>-l<span class="w"> </span>results.jtl<span class="w"> </span>-e<span class="w"> </span>-o<span class="w"> </span>report/
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>ความหมาย</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-n</code></td>
+<td>Non-GUI (CLI) mode</td>
+</tr>
+<tr>
+<td><code>-t test.jmx</code></td>
+<td>Test Plan file</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>รัน test บน Workers ทุกตัวใน <code>remote_hosts</code></td>
+</tr>
+<tr>
+<td><code>-R ip1,ip2</code></td>
+<td>รัน test บน Workers ที่ระบุ (override <code>remote_hosts</code>)</td>
+</tr>
+<tr>
+<td><code>-l results.jtl</code></td>
+<td>บันทึก results (รวมจากทุก Workers)</td>
+</tr>
+<tr>
+<td><code>-e -o report/</code></td>
+<td>Generate HTML report หลังเสร็จ</td>
+</tr>
+</tbody>
+</table>
+<p>Results จากทุก Workers จะถูก merge โดยอัตโนมัติมาใน <code>results.jtl</code> เดียวบน Controller</p>
+<blockquote>
+<p><em>"When using distributed mode the result file is combined on the Controller node"</em>
+— Apache JMeter best practices (best-practices.html)</p>
+</blockquote>
+<p>⏸ <strong>Self-check (Backward Retrieval):</strong> ถ้ามี Workers 3 ตัว และ Test Plan มี 200 threads — server ที่ทดสอบจะรับ concurrent requests กี่ requests ในขณะที่ test รัน peak? เขียนคำตอบลงกระดาษก่อน — และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น — แล้วค่อย scroll</p>
+<hr />
+<blockquote>
+<p><strong>เฉลย:</strong> 600 concurrent requests (200 threads × 3 Workers) — เพราะ JMeter ส่ง Test Plan ฉบับเดียวกันให้ Workers ทุกตัว และทุกตัวรัน full test plan พร้อมกัน — ถ้าตอบผิด กลับอ่าน section 4.1 เรื่อง load distribution อีกครั้ง</p>
+</blockquote>
+<hr />
+<h3 id="46-best-practice-network-topology">4.6 Best Practice: Network Topology<a class="headerlink" href="#46-best-practice-network-topology" title="Permanent link">&para;</a></h3>
+<p>✅ <strong>Workers ไม่ควรอยู่บน network เดียวกับ SUT (System Under Test)</strong></p>
+<p>เหตุผล: ถ้า Workers อยู่บน network เดียวกับ server ที่ทดสอบ network traffic จาก load test จะแย่ง bandwidth กับ traffic จริง ทำให้ผลลัพธ์ skewed — ตัวเลข response time ที่ได้จะต่ำกว่าความเป็นจริงที่ users ข้างนอกจะเจอ</p>
+<p><strong>แนะนำ:</strong> วาง Workers บน network ที่ simulate traffic path ของ users จริง เช่น external network หรือ DMZ</p>
+<blockquote>
+<p><em>"JMeter/RMI requires a connection from the client to the server...JMeter/RMI also requires a reverse connection in order to return sample results from the server to the client."</em>
+— Apache JMeter Remote Testing (remote-test.html)</p>
+</blockquote>
+<p>RMI (Java Remote Method Invocation) คือ protocol ที่ JMeter ใช้สื่อสารระหว่าง Controller กับ Workers — ต้องให้ port ผ่าน firewall ทั้งสองทิศทาง (default port: 1099 สำหรับ RMI registry, และ random port สำหรับ callback)</p>
+<blockquote>
+<p><em>"RMI cannot communicate across subnets without a proxy; therefore neither can JMeter without a proxy."</em>
+— Apache JMeter Distributed Testing Step-by-Step (jmeter_distributed_testing_step_by_step.html)</p>
+</blockquote>
+<hr />
+<h3 id="47-alternative-cloud-based-load-testing">4.7 Alternative: Cloud-Based Load Testing<a class="headerlink" href="#47-alternative-cloud-based-load-testing" title="Permanent link">&para;</a></h3>
+<p>สำหรับ use case บางอย่าง distributed JMeter อาจไม่ใช่ทางเลือกที่ดีที่สุด — ลองพิจารณา <strong>cloud-based load testing</strong> เช่น:</p>
+<ul>
+<li><strong>BlazeMeter</strong> — รัน JMeter scripts บน cloud infrastructure ได้โดยตรง เหมาะถ้าต้องการ geo-distributed load</li>
+<li><strong>Grafana k6 Cloud</strong> — ใช้ k6 script format (ไม่ใช่ JMX) แต่ infrastructure และ reporting พร้อมใช้ทันที</li>
+<li><strong>Azure Load Testing</strong> — integrate กับ Azure ecosystem ได้ดี</li>
+</ul>
+<p><strong>เลือก cloud-based เมื่อ:</strong>
+- ไม่มี on-premise infrastructure ที่จะวาง Worker nodes
+- ต้องการ Workers ใน geographic regions ที่เฉพาะเจาะจง (เช่น Southeast Asia, Europe พร้อมกัน)
+- ต้องการ scale Workers up/down อย่างรวดเร็วโดยไม่ต้องดูแล server
+- team ไม่มี bandwidth จัดการ distributed JMeter infrastructure</p>
+<p><strong>เลือก on-premise distributed JMeter เมื่อ:</strong>
+- ต้องการ control เต็มที่ และ data ไม่ออกนอก network
+- มี infrastructure อยู่แล้วและต้องการประหยัดค่าใช้จ่าย cloud
+- ต้องการ custom plugin หรือ configuration ที่ cloud tools ไม่รองรับ</p>
+<p>⏸ <strong>Self-check (L4+ Application):</strong> ทีม fintech ต้องการทดสอบ payment API ด้วย 3,000 concurrent users แต่มีนโยบาย data residency ว่าทุก test traffic ต้องอยู่ภายใน Thailand เท่านั้น — คุณจะเลือก distributed JMeter หรือ cloud-based solution และทำไม? เขียนคำตอบลงกระดาษก่อน — และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น — แล้วค่อยอ่านต่อ</p>
+<hr />
+<blockquote>
+<p><strong>แนวทางตอบ:</strong> ควรเลือก <strong>on-premise distributed JMeter</strong> เพราะ data residency requirement ห้าม traffic ออกนอก Thailand — cloud-based tools ส่วนใหญ่รัน Workers บน cloud infrastructure ต่างประเทศ ซึ่งขัดกับ policy | ต้องเตรียม Worker nodes ประมาณ 3-6 เครื่อง (ขึ้นอยู่กับ spec) บน network ใน Thailand | ต้องดูแล version management, firewall rules, และ CSV sync เอง</p>
+</blockquote>
+<hr />
+<h2 id="5-3">5. ตัวอย่าง 3 ระดับ<a class="headerlink" href="#5-3" title="Permanent link">&para;</a></h2>
+<h3 id="beginner-configure-jmeterproperties-2-worker-nodes">Beginner: Configure jmeter.properties สำหรับ 2 Worker Nodes<a class="headerlink" href="#beginner-configure-jmeterproperties-2-worker-nodes" title="Permanent link">&para;</a></h3>
+<p>สถานการณ์: คุณมีเครื่อง 3 เครื่องใน local network — เครื่องที่ 1 เป็น Controller, เครื่องที่ 2-3 เป็น Workers</p>
+<p><strong>ขั้นตอน 1:</strong> บนเครื่อง Worker ทั้งสอง (192.168.1.20 และ 192.168.1.21) ตรวจสอบ JMeter version ก่อน:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># บน Worker nodes ทั้งสอง</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="c1"># ตรวจ version ให้ตรงกับ Controller</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>./jmeter<span class="w"> </span>--version
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># ควรเห็น: Apache JMeter 5.6.3</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="c1"># เปิด jmeter-server process</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>./jmeter-server
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="c1"># ควรเห็น: Created remote object: UnicastServerRef2</span>
+</code></pre></div>
+<p><strong>ขั้นตอน 2:</strong> บนเครื่อง Controller — แก้ไข <code>jmeter.properties</code>:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># ไฟล์: apache-jmeter-5.6.3/bin/jmeter.properties</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1"># ยังไม่ได้ทดสอบ — ต้องการ JMeter 5.6.3</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># ระบุ IP addresses ของ Worker nodes ทุกตัว</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># format: IP:port ถ้าต้องการ custom port, หรือแค่ IP ถ้าใช้ default port 1099</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="na">remote_hosts</span><span class="o">=</span><span class="s">192.168.1.20,192.168.1.21</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="c1"># ทำไม: Controller จะ connect ไปหา Workers เหล่านี้เมื่อสั่ง remote start</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="c1"># (optional) ตั้ง RMI port ให้ตายตัว เพื่อง่ายต่อ firewall rules</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="na">server.rmi.port</span><span class="o">=</span><span class="s">4000</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="c1"># ทำไม: ถ้าไม่ตั้ง JMeter จะ pick random port ซึ่งยากต่อการ configure firewall</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="c1"># (optional) ปิด SSL สำหรับ RMI — ใช้เฉพาะ internal network ที่ trust ได้</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="na">server.rmi.ssl.disable</span><span class="o">=</span><span class="s">true</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="c1"># ทำไม: SSL setup ซับซ้อน — บน internal trusted network สามารถปิดได้</span>
+</code></pre></div>
+<p><strong>ขั้นตอน 3:</strong> รัน distributed test จาก Controller:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># ยังไม่ได้ทดสอบ — ต้องการ JMeter 5.6.3</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">cd</span><span class="w"> </span>apache-jmeter-5.6.3/bin/
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># รัน test บน Workers ทั้งหมดใน remote_hosts</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>/path/to/my_test.jmx<span class="w"> </span>-r<span class="w"> </span>-l<span class="w"> </span>/path/to/results.jtl
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># Output ที่ควรเห็น:</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="c1"># Starting distributed test with remote engines: [192.168.1.20, 192.168.1.21]</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="c1"># ...</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1"># summary + 500 in 00:00:30 = 16.7/s Avg: 150 ...</span>
+</code></pre></div>
+<hr />
+<h3 id="intermediate-distributed-setup-2000-concurrent-users-fintech-application">Intermediate: ออกแบบ Distributed Setup สำหรับ 2,000 Concurrent Users ใน Fintech Application<a class="headerlink" href="#intermediate-distributed-setup-2000-concurrent-users-fintech-application" title="Permanent link">&para;</a></h3>
+<p>สถานการณ์: ธนาคารแห่งหนึ่งต้องการทดสอบระบบ internet banking ก่อน launch ครั้งใหญ่ team lead ให้โจทย์ว่า "simulate 2,000 concurrent sessions ที่ทำ fund transfer พร้อมกัน" งบประมาณมี server on-premise 5 เครื่อง</p>
+<p><strong>วิเคราะห์ความต้องการ:</strong>
+- Target: 2,000 concurrent threads
+- Single machine capacity: ~1,000 threads (conservative สำหรับ fund transfer ที่ response time อาจนาน)
+- จำนวน Workers ที่ต้องการ: อย่างน้อย 3 เครื่อง (2,000 / ~700 threads ต่อเครื่อง เพื่อ safety margin)</p>
+<p><strong>การออกแบบ setup:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>[Controller]          [Workers]                [SUT]
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>192.168.1.10    →    192.168.1.20 (700 threads)
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>                →    192.168.1.21 (700 threads)   →   banking-api.internal:8443
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>                →    192.168.1.22 (600 threads)
+</code></pre></div>
+<p><strong>ข้อพิจารณา:</strong></p>
+<ol>
+<li><strong>CSV Data สำหรับ test users:</strong> ถ้า test plan ใช้ CSV file ของ user credentials (ดูบทที่ 6) ต้องมี CSV file ครบบน <strong>ทุก</strong> Worker node โดยใช้ path เดียวกัน — ไม่งั้น Workers จะ error เพราะหา file ไม่เจอ</li>
+<li><strong>Thread distribution:</strong> ตั้ง Thread Group ที่ 700 threads (ไม่ใช่ 2,000) เพราะ 3 Workers × 700 = 2,100 concurrent ≈ target ที่ต้องการ</li>
+<li><strong>Network placement:</strong> Workers ไม่ควรอยู่ใน data center เดียวกับ banking-api.internal เพื่อหลีกเลี่ยง network interference</li>
+</ol>
+<p><strong>jmeter.properties บน Controller:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># ยังไม่ได้ทดสอบ — ต้องการ JMeter 5.6.3</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="na">remote_hosts</span><span class="o">=</span><span class="s">192.168.1.20,192.168.1.21,192.168.1.22</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="na">server.rmi.ssl.disable</span><span class="o">=</span><span class="s">true</span>
+</code></pre></div>
+<p><strong>CLI command:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># ยังไม่ได้ทดสอบ — ต้องการ JMeter 5.6.3</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>fund_transfer_test.jmx<span class="w"> </span>-r<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span>-l<span class="w"> </span>results/banking_<span class="k">$(</span>date<span class="w"> </span>+%Y%m%d_%H%M%S<span class="k">)</span>.jtl<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span>-e<span class="w"> </span>-o<span class="w"> </span>results/report/
+</code></pre></div>
+<hr />
+<h3 id="advanced-containerized-jmeter-workers">Advanced: Containerized JMeter Workers<a class="headerlink" href="#advanced-containerized-jmeter-workers" title="Permanent link">&para;</a></h3>
+<p>สำหรับ CI/CD environments ที่ต้องการ spin up Workers อย่างรวดเร็ว Docker เป็นตัวเลือกที่น่าสนใจ — แต่มี trade-off สำคัญที่ต้องรู้ก่อน</p>
+<p><strong>Container networking อาจทำให้ JMeter RMI มีปัญหา:</strong> container มี internal IP ที่ต่างจาก host IP ทำให้ Workers report ตัวเองด้วย IP ผิดเมื่อ Controller พยายาม connect กลับมา — ต้องตั้ง <code>java.rmi.server.hostname</code> ให้ตรงกับ host IP เสมอ</p>
+<p><strong>Trade-off สรุป:</strong>
+- Docker: provisioning เร็ว, version consistent แต่มี networking complexity และ ~5-10% performance overhead
+- Bare metal: ใช้ resource เต็ม 100%, RMI ทำงานตรงกว่า แต่ setup ช้ากว่า</p>
+<p>สำหรับ production load tests ที่ต้องการ accuracy สูงสุด bare metal ยังเป็นตัวเลือกที่ดีกว่า รายละเอียดการ setup Docker สำหรับ JMeter ดูได้ที่ <a href="https://jmeter.apache.org/usermanual/jmeter_distributed_testing_step_by_step.html">JMeter distributed testing guide</a></p>
+<hr />
+<h2 id="6-common-mistakes">6. Common Mistakes<a class="headerlink" href="#6-common-mistakes" title="Permanent link">&para;</a></h2>
+<p>❌ <strong>ใช้ JMeter version ต่างกันระหว่าง Controller กับ Workers</strong>
+✅ ตรวจสอบ version ด้วย <code>jmeter --version</code> บนทุกเครื่องก่อนเริ่ม test และใช้ version เดียวกันทั้งหมด
+🔍 <strong>วิธีสังเกต:</strong> Test อาจ start ไม่ได้เลย หรือ start แล้ว Workers หลุดออกกลางคัน หรือ results ผิดเพี้ยนแบบอธิบายไม่ได้
+🤔 <strong>เหตุผล:</strong> JMeter ใช้ Java serialization ส่ง objects ระหว่าง Controller และ Workers — class definition ที่ต่าง version ต่างกันทำให้ deserialize ผิดพลาด
+<em>(source: https://jmeter.apache.org/usermanual/jmeter_distributed_testing_step_by_step.html — "Make sure you use the same version of JMeter and Java on all the systems. Mixing versions will not work correctly.")</em></p>
+<hr />
+<p>❌ <strong>Firewall บล็อก RMI ports ระหว่าง Controller กับ Workers</strong>
+✅ เปิด port 1099 (RMI registry) และ port สำหรับ callback connection บน Workers (ถ้าใช้ fixed port ให้เปิด port นั้นด้วย)
+🔍 <strong>วิธีสังเกต:</strong> JMeter แสดง error "Connection refused" หรือ "Cannot connect to remote host" ตอน start remote test
+🤔 <strong>เหตุผล:</strong> JMeter/RMI ต้องการ bidirectional connection — Controller connect ไปหา Workers และ Workers ต้อง connect กลับมาหา Controller เพื่อส่ง results
+<em>(source: https://jmeter.apache.org/usermanual/remote-test.html — "JMeter/RMI requires a connection from the client to the server...JMeter/RMI also requires a reverse connection")</em></p>
+<hr />
+<p>❌ <strong>CSV file ไม่ sync ไปยัง Worker nodes</strong>
+✅ ก่อนรัน distributed test ให้ copy CSV files (user data, test data ทุกไฟล์) ไปยัง path เดียวกันบน Worker ทุกตัว — หรือใช้ network share / shared volume
+🔍 <strong>วิธีสังเกต:</strong> Workers บางตัว error ว่า "File not found" หรือ CSV data ซ้ำกันเพราะ Worker บางตัวใช้ data คนละชุด
+🤔 <strong>เหตุผล:</strong> Controller ส่ง Test Plan (JMX) ไปให้ Workers แต่ไม่ได้ส่ง external files เช่น CSV — Workers ต้องหา files เหล่านั้นด้วยตัวเองบน local filesystem
+<em>(source: https://jmeter.apache.org/usermanual/remote-test.html — ข้อจำกัดของ distributed mode ที่ต้องดูแล file sync เอง)</em></p>
+<hr />
+<h2 id="7-retrieval-questions">7. สรุปบท — Retrieval Questions<a class="headerlink" href="#7-retrieval-questions" title="Permanent link">&para;</a></h2>
+<p>ลองตอบคำถามต่อไปนี้ด้วยตัวเอง <strong>ก่อน</strong> ดูเฉลย — เขียนคำตอบลงกระดาษหรือพิมพ์ออกมา และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น:</p>
+<p><strong>คำถามที่ 1 (Elaborative Interrogation):</strong> ทำไม JMeter distributed testing ถึง "replicate" Test Plan บน Workers ทุกตัวแทนที่จะ "split" load ออกไป? ถ้า JMeter ออกแบบให้ split load แทน จะเกิดปัญหาอะไรในทางปฏิบัติ?</p>
+<p><strong>คำถามที่ 2 (Code-based task):</strong> นี่คือ <code>jmeter.properties</code> snippet ที่มีปัญหา — ระบุว่ามีข้อผิดพลาดอะไรบ้างและแก้อย่างไร:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="na">remote_hosts</span><span class="o">=</span><span class="s">192.168.1.10, 192.168.1.11, 192.168.1.12</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="na">server.rmi.ssl.disable</span><span class="o">=</span><span class="s">false</span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># ใช้ JMeter 5.6.3 บน Controller แต่ Workers ยังใช้ 5.5.0</span>
+</code></pre></div></p>
+<p><strong>คำถามที่ 3 (Synthesis):</strong> ทีม DevOps ต้องการ run distributed JMeter test ใน Kubernetes cluster — Controller เป็น pod หนึ่ง, Workers เป็น 5 pods — ระบุ challenges หลัก 3 ข้อที่จะต้องแก้ไข และ solution approach สำหรับแต่ละข้อ</p>
+<hr />
+<details>
+<summary>ดูเฉลย (คลิกหลังจากตอบแล้ว)</summary>
+
+**เฉลยที่ 1:** JMeter replicate แทน split เพราะ (1) ง่ายกว่าในการ implement — Controller ไม่ต้อง track ว่า sampler ไหนอยู่บน Worker ไหน (2) ถ้า split แล้ว Worker หนึ่งตาย load จะหายไปส่วนหนึ่ง ทำให้ผลไม่ถูกต้อง | ถ้า split: ปัญหาที่จะเกิดคือ Test Plan ที่มี dependency ระหว่าง steps (login → browse → checkout) จะแตกออกเป็น partial flows บน Workers ต่างๆ ทำให้ flow ไม่สมบูรณ์
+
+**เฉลยที่ 2:** ปัญหา 3 จุด: (1) space หลัง comma ใน remote_hosts — บางเวอร์ชันอาจ parse ไม่ถูก ควรเป็น `192.168.1.10,192.168.1.11,192.168.1.12` (2) `server.rmi.ssl.disable=false` หมายความว่า SSL enable — ต้องตั้งค่า SSL certificates ด้วย ถ้าไม่ต้องการ SSL ให้เปลี่ยนเป็น `true` (3) JMeter version ต่างกัน (5.6.3 vs 5.5.0) จะ fail — ต้อง update Workers ทุกตัวให้เป็น 5.6.3 ก่อน
+
+**เฉลยที่ 3:** Challenges หลัก: (1) **RMI hostname resolution** — pods มี dynamic IP ที่เปลี่ยนได้ ต้องใช้ Kubernetes Service + static DNS names แทน IP | solution: สร้าง headless Service สำหรับ Worker pods (2) **Bidirectional connectivity** — Worker pods ต้อง connect กลับมาหา Controller pod เพื่อส่ง results | solution: Controller pod ต้องมี stable hostname/IP ผ่าน Service (3) **File sync** — CSV files ต้องอยู่บน Worker pods ทุกตัว | solution: ใช้ Kubernetes ConfigMap สำหรับ small files หรือ PersistentVolume shared สำหรับ large CSV
+
+</details>
+
+<blockquote>
+<p><strong>Generation Effect Reminder:</strong> ถ้าเพิ่งอ่านจบ ลองปิดเอกสารและเขียน 3 สิ่งที่จำได้จากบทนี้ด้วยคำพูดตัวเอง — แล้วค่อยกลับมาเปรียบเทียบกับเนื้อหา การเขียนออกมาเองทำให้จำได้นานกว่าการอ่านซ้ำ</p>
+<p><strong>Remediation path:</strong> ถ้าตอบ คำถามที่ 1 ไม่ได้ → กลับอ่าน section 4.1 | ถ้าตอบคำถามที่ 2 ไม่ได้ → กลับอ่าน section 4.3 และ 4.4 | ถ้าตอบคำถามที่ 3 ไม่ได้ → บทนี้ให้ foundation แล้ว แนะนำให้ลอง setup จริงบนเครื่อง 2 เครื่องก่อน แล้วค่อย scale ไปยัง container environment</p>
+</blockquote>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  กลับไปด้านบนสุด
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="ส่วนท้าย" >
+        
+          
+          <a href="../08-running-reports/" class="md-footer__link md-footer__link--prev" aria-label="ก่อนหน้า: บทที่ 8 - Reports">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                ก่อนหน้า
+              </span>
+              <div class="md-ellipsis">
+                บทที่ 8 - Reports
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../10-anti-patterns-best-practices/" class="md-footer__link md-footer__link--next" aria-label="ต่อไป: บทที่ 10 - Best Practices">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                ต่อไป
+              </span>
+              <div class="md-ellipsis">
+                บทที่ 10 - Best Practices
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01\u0e41\u0e25\u0e49\u0e27", "clipboard.copy": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01", "search.result.more.one": "\u0e2d\u0e35\u0e01\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.more.other": "# \u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.none": "\u0e44\u0e21\u0e48\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.one": "\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.other": "\u0e1e\u0e1a # \u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.placeholder": "\u0e1e\u0e34\u0e21\u0e1e\u0e4c\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e40\u0e23\u0e34\u0e48\u0e21\u0e04\u0e49\u0e19\u0e2b\u0e32", "search.result.term.missing": "\u0e44\u0e21\u0e48\u0e1e\u0e1a", "select.version": "\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e40\u0e27\u0e2d\u0e23\u0e4c\u0e0a\u0e31\u0e19"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

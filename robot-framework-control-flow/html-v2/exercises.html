@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แบบฝึกหัด — RF Control Flow</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Robot Framework</div>
+    <div class="sidebar-subtitle">Control Flow · v2</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">เนื้อหา</div>
+    <a href="index.html">🏠 Overview</a>
+    <a href="01-if-else.html">🔀 บทที่ 1 — IF / ELSE</a>
+    <a href="02-for-loop.html">🔁 บทที่ 2 — FOR Loop</a>
+    <a href="03-while-loop.html">⏳ บทที่ 3 — WHILE + BREAK</a>
+    <a href="04-selenium.html">🌐 บทที่ 4 — Selenium จริง</a>
+    <div class="nav-label">ฝึกหัด</div>
+    <a href="exercises.html" class="active">✏️ แบบฝึกหัด</a>
+    <a href="glossary.html">📖 Glossary</a>
+  </nav>
+  <div class="sidebar-footer">RF 7.3.2 · Python 3.14</div>
+</aside>
+
+<div class="main">
+<div class="content">
+
+  <div class="chapter-label">ฝึกหัด</div>
+  <h1>แบบฝึกหัด</h1>
+  <p style="color:#64748b;margin-bottom:32px;">9 โจทย์ ไล่ระดับ Recall → Application → Synthesis พร้อมเฉลย</p>
+
+  <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px 20px;margin-bottom:32px;font-size:13.5px;">
+    <strong>วิธีใช้:</strong>
+    <ul style="margin:8px 0 0 16px;">
+      <li><strong>Recall</strong> — อธิบายด้วยคำตัวเอง ไม่ต้องเขียนโค้ด</li>
+      <li><strong>Application</strong> — เขียนโค้ดที่ run ได้จริง (test กับ <code>robot</code> command)</li>
+      <li><strong>Synthesis</strong> — วิเคราะห์ / หา bug / ออกแบบระบบ</li>
+    </ul>
+  </div>
+
+  <!-- IF / ELSE -->
+  <h2>ส่วนที่ 1: IF / ELSE</h2>
+
+  <div class="exercise-item">
+    <span class="exercise-badge badge-recall">📝 Recall</span>
+    <div class="exercise-title">ข้อ 1 — ลำดับ Condition</div>
+    <p>ถ้าเขียน IF/ELSE IF โดยเรียง condition จากน้อยไปมาก เช่น:</p>
+    <pre><code class="language-robotframework">IF    ${temp} > 10
+    Log    อุ่น
+ELSE IF    ${temp} > 30
+    Log    ร้อน
+END</code></pre>
+    <p>ถ้า <code>${temp} = 35</code> จะ log อะไร? มีปัญหาอะไรกับโค้ดนี้ไหม? อธิบายด้วยคำตัวเอง</p>
+    <details class="answer">
+      <summary>ดูเฉลย</summary>
+      <div class="answer-body">
+        <p>log "อุ่น" — เพราะ <code>35 > 10</code> เป็น True ตั้งแต่ condition แรก RF จะข้าม ELSE IF ไป</p>
+        <p><strong>ปัญหา:</strong> ไม่มีทางได้ "ร้อน" เลย ควรเรียงจาก "เข้มงวดที่สุด" ก่อน:</p>
+        <pre><code class="language-robotframework">IF    ${temp} > 30
+    Log    ร้อน
+ELSE IF    ${temp} > 10
+    Log    อุ่น
+END</code></pre>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise-item">
+    <span class="exercise-badge badge-application">💻 Application</span>
+    <div class="exercise-title">ข้อ 2 — Classify File Size</div>
+    <p>เขียน keyword ชื่อ <code>Classify File Size</code> ที่รับ argument <code>${size_mb}</code> แล้ว log ว่า:</p>
+    <ul>
+      <li>น้อยกว่า 1 MB → "Small"</li>
+      <li>1–100 MB → "Medium"</li>
+      <li>มากกว่า 100 MB → "Large"</li>
+    </ul>
+    <p>พร้อมเขียน test case ที่ call keyword นี้ด้วย 3 ค่าที่ครอบคลุมทุก branch</p>
+    <details class="answer">
+      <summary>ดูเฉลย</summary>
+      <div class="answer-body">
+        <pre><code class="language-robotframework">*** Keywords ***
+Classify File Size
+    [Arguments]    ${size_mb}
+    IF    ${size_mb} < 1
+        Log    Small
+    ELSE IF    ${size_mb} <= 100
+        Log    Medium
+    ELSE
+        Log    Large
+    END
+
+*** Test Cases ***
+Test File Size Classification
+    Classify File Size    0.5
+    Classify File Size    50
+    Classify File Size    200</code></pre>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise-item">
+    <span class="exercise-badge badge-synthesis">🔬 Synthesis</span>
+    <div class="exercise-title">ข้อ 3 — หา Bug ใน Check Login Status</div>
+    <p>ดูโค้ดต่อไปนี้แล้วหา bug — มีปัญหากี่จุด? แต่ละจุดเกิดอะไรขึ้น? เขียนโค้ดที่แก้แล้วด้วย</p>
+    <pre><code class="language-robotframework">Check Login Status
+    [Arguments]    ${username}    ${role}
+    IF    ${role} == admin
+        Log    Welcome Admin
+    ELSE IF    ${role} == user
+        Log    Welcome User
+    ELSE
+        Log    Unknown role
+    END</code></pre>
+    <details class="answer">
+      <summary>ดูเฉลย</summary>
+      <div class="answer-body">
+        <p><strong>Bug 2 จุด:</strong></p>
+        <ul>
+          <li><code>${role} == admin</code> → ขาด quote รอบ string ทั้งสองฝั่ง</li>
+          <li><code>${role} == user</code> → เช่นเดียวกัน</li>
+        </ul>
+        <pre><code class="language-robotframework">Check Login Status
+    [Arguments]    ${username}    ${role}
+    IF    '${role}' == 'admin'
+        Log    Welcome Admin
+    ELSE IF    '${role}' == 'user'
+        Log    Welcome User
+    ELSE
+        Log    Unknown role
+    END</code></pre>
+      </div>
+    </details>
+  </div>
+
+  <!-- FOR Loop -->
+  <h2>ส่วนที่ 2: FOR Loop</h2>
+
+  <div class="exercise-item">
+    <span class="exercise-badge badge-recall">📝 Recall</span>
+    <div class="exercise-title">ข้อ 4 — FOR IN ENUMERATE vs FOR IN</div>
+    <p>อธิบายให้เพื่อนที่ไม่รู้จัก RF ฟังว่า FOR IN ENUMERATE ต่างจาก FOR IN อย่างไร และควรใช้เมื่อไหร่ (ใช้ภาษาไทยธรรมดา ไม่ต้องมีโค้ด)</p>
+    <details class="answer">
+      <summary>ดูเฉลย</summary>
+      <div class="answer-body">
+        <p>FOR IN วนผ่าน list ปกติ เราได้แค่ตัว item เอง ไม่รู้ว่า item อยู่ตำแหน่งที่เท่าไหร่</p>
+        <p>FOR IN ENUMERATE เพิ่มตัวแปร index มาให้ด้วย เหมือนมีป้ายเลขกำกับทุก item</p>
+        <p>ใช้ ENUMERATE เมื่อต้องรู้ว่า item อยู่แถวที่เท่าไหร่ เช่น print "ข้อที่ 1/2/3" หรือ check ข้อมูลตามลำดับแถวในตาราง</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise-item">
+    <span class="exercise-badge badge-application">💻 Application</span>
+    <div class="exercise-title">ข้อ 5 — แสดงรายชื่อเมืองพร้อมลำดับ</div>
+    <p>มี <code>@{cities}</code> = <code>["Bangkok", "Chiang Mai", "Phuket", "Khon Kaen"]</code></p>
+    <p>เขียน FOR loop ที่ log ออกมาแบบนี้ (index เริ่มที่ 1 ไม่ใช่ 0):</p>
+    <div class="output-box">
+      <div class="output-label">Expected Output</div>
+      เมืองที่ 1: Bangkok<br>
+      เมืองที่ 2: Chiang Mai<br>
+      เมืองที่ 3: Phuket<br>
+      เมืองที่ 4: Khon Kaen
+    </div>
+    <details class="answer">
+      <summary>ดูเฉลย</summary>
+      <div class="answer-body">
+        <pre><code class="language-robotframework">*** Test Cases ***
+City List
+    @{cities}=    Create List    Bangkok    Chiang Mai    Phuket    Khon Kaen
+    FOR    ${index}    ${city}    IN ENUMERATE    @{cities}    start=1
+        Log    เมืองที่ ${index}: ${city}
+    END</code></pre>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise-item">
+    <span class="exercise-badge badge-synthesis">🔬 Synthesis</span>
+    <div class="exercise-title">ข้อ 6 — Validate Users (ZIP + Safety)</div>
+    <p>ออกแบบ keyword ชื่อ <code>Validate Users</code> ที่รับ 2 list: <code>${usernames}</code> และ <code>${expected_roles}</code> แล้ว log ว่า username แต่ละคนมี role ที่ต้องการ</p>
+    <p><strong>Challenge:</strong> ถ้า list ทั้ง 2 มีความยาวต่างกัน ต้องจัดการอย่างไร? (อย่าให้ test ผ่านโดยไม่รู้ตัว)</p>
+    <details class="answer">
+      <summary>ดูเฉลย</summary>
+      <div class="answer-body">
+        <pre><code class="language-robotframework">*** Keywords ***
+Validate Users
+    [Arguments]    ${usernames}    ${expected_roles}
+    ${len_users}=      Get Length    ${usernames}
+    ${len_roles}=      Get Length    ${expected_roles}
+    Should Be Equal As Integers    ${len_users}    ${len_roles}
+    ...    List length mismatch: ${len_users} users vs ${len_roles} roles
+    FOR    ${username}    ${expected}    IN ZIP    ${usernames}    ${expected_roles}
+        Log    ${username}: expected role = ${expected}
+    END</code></pre>
+        <p><strong>หลักการ:</strong> ตรวจสอบความยาวก่อน ZIP เพื่อ fail fast แทนที่จะวนแค่ list ที่สั้นกว่าโดยไม่รู้ตัว</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- WHILE -->
+  <h2>ส่วนที่ 3: WHILE + BREAK + CONTINUE</h2>
+
+  <div class="exercise-item">
+    <span class="exercise-badge badge-recall">📝 Recall</span>
+    <div class="exercise-title">ข้อ 7 — WHILE limit</div>
+    <p>อธิบายว่า <code>limit</code> parameter ของ WHILE มีไว้ทำอะไร ถ้าไม่ใส่จะเกิดอะไรขึ้นเมื่อ condition ไม่เคยเป็น False?</p>
+    <details class="answer">
+      <summary>ดูเฉลย</summary>
+      <div class="answer-body">
+        <p><code>limit</code> กำหนดจำนวนรอบสูงสุดที่ WHILE จะวน ถ้าไม่ใส่ default คือ 10,000 รอบ</p>
+        <p>ถ้า condition ไม่เคยเป็น False และไม่มี BREAK → loop จะวนจนครบ limit แล้ว <strong>FAIL ทันที</strong> (ไม่ใช่ค้างตลอดไป)</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise-item">
+    <span class="exercise-badge badge-application">💻 Application</span>
+    <div class="exercise-title">ข้อ 8 — Find First Even</div>
+    <p>เขียน keyword ชื่อ <code>Find First Even</code> ที่รับ <code>@{numbers}</code> แล้ว:</p>
+    <ul>
+      <li>วน loop ผ่านทุกตัวเลข</li>
+      <li>ถ้าเจอเลขคู่ → log ว่า "Found even: [number]" แล้วหยุด</li>
+      <li>ถ้าไม่มีเลขคู่เลย → log ว่า "No even number found"</li>
+    </ul>
+    <p>ทดสอบกับ <code>${1}    ${3}    ${7}    ${4}    ${9}</code> (expect: หยุดที่ 4)</p>
+    <details class="answer">
+      <summary>ดูเฉลย</summary>
+      <div class="answer-body">
+        <pre><code class="language-robotframework">*** Keywords ***
+Find First Even
+    [Arguments]    @{numbers}
+    ${found}=    Set Variable    False
+    FOR    ${num}    IN    @{numbers}
+        ${is_even}=    Evaluate    ${num} % 2 == 0
+        IF    ${is_even}
+            Log    Found even: ${num}
+            ${found}=    Set Variable    True
+            BREAK
+        END
+    END
+    IF    '${found}' == 'False'
+        Log    No even number found
+    END
+
+*** Test Cases ***
+Test Find First Even
+    Find First Even    ${1}    ${3}    ${7}    ${4}    ${9}</code></pre>
+        <div class="output-box" style="margin-top:10px;">
+          <div class="output-label">Output</div>
+          Found even: 4
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div class="exercise-item">
+    <span class="exercise-badge badge-synthesis">🔬 Synthesis</span>
+    <div class="exercise-title">ข้อ 9 — วิเคราะห์ Retry Until Success</div>
+    <p>ดูโค้ดต่อไปนี้แล้วตอบ 3 คำถาม:</p>
+    <pre><code class="language-robotframework">Retry Until Success
+    [Arguments]    ${max_attempts}
+    ${attempt}=    Set Variable    1
+    WHILE    ${attempt} <= ${max_attempts}
+        ${result}=    Run Keyword And Return Status    Flaky Keyword
+        IF    ${result}    BREAK
+        ${attempt}=    Evaluate    ${attempt} + 1
+    END
+    Should Be True    ${result}    Keyword failed after ${max_attempts} attempts</code></pre>
+    <ol>
+      <li>ถ้า <code>Flaky Keyword</code> สำเร็จในรอบที่ 2 จาก 5 — <code>${attempt}</code> จะเป็นค่าอะไรหลัง BREAK?</li>
+      <li>ถ้า <code>Flaky Keyword</code> ล้มเหลวทุกรอบ — <code>Should Be True</code> จะได้รับค่าอะไร? test จะ pass หรือ fail?</li>
+      <li>มีจุดไหนที่อาจเป็น bug ไหม? (hint: ลองคิดถึงกรณีที่ <code>max_attempts = 0</code>)</li>
+    </ol>
+    <details class="answer">
+      <summary>ดูเฉลย</summary>
+      <div class="answer-body">
+        <p><strong>ข้อ 1:</strong> <code>${attempt}</code> = 2 — BREAK หยุด loop แต่ <code>${attempt}</code> ยังมีค่าของ iteration ที่ BREAK เกิดขึ้น</p>
+        <p><strong>ข้อ 2:</strong> <code>${result}</code> = False → <code>Should Be True    False</code> → <strong>test FAIL</strong> พร้อมข้อความ "Keyword failed after N attempts" — ซึ่งถูกต้อง</p>
+        <p><strong>ข้อ 3:</strong> Bug — ถ้า <code>max_attempts = 0</code> → <code>WHILE    1 <= 0</code> = False ตั้งแต่แรก loop ไม่ทำงานเลย แต่ <code>${result}</code> ยังไม่ถูก assign → <code>Should Be True    ${result}</code> จะ error เพราะ <code>${result}</code> ไม่มีค่า</p>
+        <p><strong>Fix:</strong> เพิ่ม <code>${result}=    Set Variable    ${False}</code> ก่อน WHILE</p>
+        <pre><code class="language-robotframework">Retry Until Success
+    [Arguments]    ${max_attempts}
+    ${attempt}=    Set Variable    1
+    ${result}=     Set Variable    ${False}    # ← initialize ก่อน WHILE
+    WHILE    ${attempt} <= ${max_attempts}
+        ${result}=    Run Keyword And Return Status    Flaky Keyword
+        IF    ${result}    BREAK
+        ${attempt}=    Evaluate    ${attempt} + 1
+    END
+    Should Be True    ${result}    Keyword failed after ${max_attempts} attempts</code></pre>
+      </div>
+    </details>
+  </div>
+
+  <div class="page-nav">
+    <a href="03-while-loop.html">← บทที่ 3 — WHILE</a>
+    <a href="glossary.html" class="next">
+      <div><span class="label">ถัดไป</span>Glossary →</div>
+    </a>
+  </div>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-robotframework.min.js"></script>
+</body>
+</html>

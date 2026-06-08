@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 3: WHILE — RF Control Flow</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Robot Framework</div>
+    <div class="sidebar-subtitle">Control Flow · v2</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">เนื้อหา</div>
+    <a href="index.html">🏠 Overview</a>
+    <a href="01-if-else.html">🔀 บทที่ 1 — IF / ELSE</a>
+    <a href="02-for-loop.html">🔁 บทที่ 2 — FOR Loop</a>
+    <a href="03-while-loop.html" class="active">⏳ บทที่ 3 — WHILE + BREAK</a>
+    <a href="04-selenium.html">🌐 บทที่ 4 — Selenium จริง</a>
+    <div class="nav-label">ฝึกหัด</div>
+    <a href="exercises.html">✏️ แบบฝึกหัด</a>
+    <a href="glossary.html">📖 Glossary</a>
+  </nav>
+  <div class="sidebar-footer">RF 7.3.2 · Python 3.14</div>
+</aside>
+<div class="main"><div class="content">
+
+  <div class="pre-ch">
+    <div class="pre-ch-label">🔄 ทบทวนบทที่แล้ว</div>
+    <p style="font-size:14px;"><code>FOR    ${i}    IN RANGE    3    9    2</code> ได้ค่าอะไรบ้าง? | FOR IN ZIP หยุดเมื่อไหร่ถ้า list ยาวไม่เท่ากัน?</p>
+    <details class="reveal"><summary>ดูเฉลย</summary>
+      <div class="reveal-body">3, 5, 7 | หยุดเมื่อ list ที่สั้นกว่าหมด</div>
+    </details>
+  </div>
+
+  <div class="ch-label">บทที่ 3</div>
+  <h1>WHILE Loop, BREAK และ CONTINUE</h1>
+  <span class="badge badge-orange">⚠️ RF 5.0+</span>
+
+  <div class="obj-box">
+    <h4>🎯 อ่านจบแล้วทำได้</h4>
+    <ul>
+      <li>เขียน WHILE loop ที่วนจนเงื่อนไขเปลี่ยน</li>
+      <li>ตั้ง limit ป้องกัน infinite loop</li>
+      <li>ใช้ BREAK ออกจาก loop กลางคัน</li>
+      <li>ใช้ CONTINUE ข้าม iteration ที่ไม่ต้องการ</li>
+    </ul>
+  </div>
+
+  <h2>WHILE ต่างจาก FOR ยังไง?</h2>
+  <p>FOR ใช้เมื่อรู้จำนวนรอบล่วงหน้า — WHILE ใช้เมื่อไม่รู้ เช่น รอ API response, retry จนสำเร็จ</p>
+  <p>WHILE เช็ค condition <strong>ก่อน</strong> ทุกรอบ — ถ้า False ตั้งแต่แรก loop body ไม่ทำงานเลย</p>
+
+  <h2>ดูการทำงาน — counter < 3</h2>
+
+  <div class="stepper">
+    <div class="st-header">WHILE loop — counter < 3</div>
+    <div data-stepper='{
+      "code": "${counter}=    Set Variable    0\nWHILE    ${counter} < 3\n    Log    Counter: ${counter}\n    ${counter}=    Evaluate    ${counter} + 1\nEND",
+      "steps": [
+        {"hi":[1],"vars":{"counter":0},"out":[],"note":"กำหนด counter = 0"},
+        {"hi":[2],"vars":{"counter":0},"out":[],"note":"เช็ค condition: 0 < 3 → True เข้า loop"},
+        {"hi":[3],"vars":{"counter":0},"out":["Counter: 0"],"note":"Log Counter: 0"},
+        {"hi":[4],"vars":{"counter":1},"out":["Counter: 0"],"note":"counter = 0 + 1 = 1"},
+        {"hi":[2],"vars":{"counter":1},"out":["Counter: 0"],"note":"เช็ค condition: 1 < 3 → True วนรอบใหม่"},
+        {"hi":[3],"vars":{"counter":1},"out":["Counter: 0","Counter: 1"],"note":"Log Counter: 1"},
+        {"hi":[4],"vars":{"counter":2},"out":["Counter: 0","Counter: 1"],"note":"counter = 1 + 1 = 2"},
+        {"hi":[2],"vars":{"counter":2},"out":["Counter: 0","Counter: 1"],"note":"เช็ค condition: 2 < 3 → True วนรอบใหม่"},
+        {"hi":[3],"vars":{"counter":2},"out":["Counter: 0","Counter: 1","Counter: 2"],"note":"Log Counter: 2"},
+        {"hi":[4],"vars":{"counter":3},"out":["Counter: 0","Counter: 1","Counter: 2"],"note":"counter = 2 + 1 = 3"},
+        {"hi":[2],"vars":{"counter":3},"out":["Counter: 0","Counter: 1","Counter: 2"],"note":"เช็ค condition: 3 < 3 → False ออกจาก loop"},
+        {"hi":[5],"vars":{"counter":3},"out":["Counter: 0","Counter: 1","Counter: 2"],"note":"END — loop จบ"}
+      ]
+    }'></div>
+  </div>
+
+  <h2>Limit — ป้องกัน Infinite Loop</h2>
+  <p>WHILE มี limit default = <strong>10,000 รอบ</strong> เมื่อถึงจะ FAIL ทันที ปรับได้ด้วย parameter <code>limit</code>:</p>
+
+  <table>
+    <tr><th>รูปแบบ</th><th>ความหมาย</th></tr>
+    <tr><td><code>WHILE    cond    limit=100</code></td><td>สูงสุด 100 รอบ</td></tr>
+    <tr><td><code>WHILE    cond    limit=30 seconds</code></td><td>สูงสุด 30 วินาที</td></tr>
+    <tr><td><code>WHILE    cond    limit=NONE</code></td><td>ไม่มี limit — ต้องมั่นใจว่ามี BREAK</td></tr>
+  </table>
+
+  <h2>BREAK — ออกจาก Loop ทันที</h2>
+
+  <div class="stepper">
+    <div class="st-header">BREAK — หยุดเมื่อเจอเลข 4</div>
+    <div data-stepper='{
+      "code": "FOR    ${i}    IN RANGE    10\n    IF    ${i} == 4    BREAK\n    Log    ${i}\nEND\nLog    หลัง loop",
+      "steps": [
+        {"hi":[1],"vars":{"i":0},"out":[],"note":"รอบที่ 1: i = 0"},
+        {"hi":[2],"vars":{"i":0},"out":[],"note":"เช็ค: 0 == 4 → False ไม่ BREAK"},
+        {"hi":[3],"vars":{"i":0},"out":["0"],"note":"Log 0"},
+        {"hi":[1],"vars":{"i":1},"out":["0"],"note":"รอบที่ 2: i = 1"},
+        {"hi":[2],"vars":{"i":1},"out":["0"],"note":"เช็ค: 1 == 4 → False"},
+        {"hi":[3],"vars":{"i":1},"out":["0","1"],"note":"Log 1 (ข้ามแสดง i=2, i=3...)"},
+        {"hi":[1],"vars":{"i":4},"out":["0","1","2","3"],"note":"รอบที่ 5: i = 4"},
+        {"hi":[2],"vars":{"i":4},"out":["0","1","2","3"],"note":"เช็ค: 4 == 4 → True → BREAK!"},
+        {"hi":[5],"vars":{"i":4},"out":["0","1","2","3","หลัง loop"],"note":"ออกจาก loop ข้าม END ไปรัน keyword ถัดไป"}
+      ]
+    }'></div>
+  </div>
+
+  <h2>CONTINUE — ข้าม Iteration นี้</h2>
+
+  <div class="stepper">
+    <div class="st-header">CONTINUE — ข้ามเลขคู่</div>
+    <div data-stepper='{
+      "code": "FOR    ${i}    IN RANGE    6\n    IF    ${i} % 2 == 0    CONTINUE\n    Log    เลขคี่: ${i}\nEND",
+      "steps": [
+        {"hi":[1],"vars":{"i":0},"out":[],"note":"รอบที่ 1: i = 0"},
+        {"hi":[2],"vars":{"i":0},"out":[],"note":"0 % 2 == 0 → True → CONTINUE ข้ามไปรอบถัดไปเลย"},
+        {"hi":[1],"vars":{"i":1},"out":[],"note":"รอบที่ 2: i = 1"},
+        {"hi":[2],"vars":{"i":1},"out":[],"note":"1 % 2 == 0 → False → ไม่ CONTINUE"},
+        {"hi":[3],"vars":{"i":1},"out":["เลขคี่: 1"],"note":"Log เลขคี่: 1"},
+        {"hi":[1],"vars":{"i":2},"out":["เลขคี่: 1"],"note":"รอบที่ 3: i = 2 → CONTINUE (ข้าม)"},
+        {"hi":[1],"vars":{"i":3},"out":["เลขคี่: 1"],"note":"รอบที่ 4: i = 3"},
+        {"hi":[3],"vars":{"i":3},"out":["เลขคี่: 1","เลขคี่: 3"],"note":"Log เลขคี่: 3"},
+        {"hi":[4],"vars":{"i":5},"out":["เลขคี่: 1","เลขคี่: 3","เลขคี่: 5"],"note":"ผ่านทุกรอบแล้ว — END"}
+      ]
+    }'></div>
+  </div>
+
+  <h2>Common Mistakes</h2>
+
+  <div class="mistake">
+    <div class="wrong">❌ ลืมอัปเดต condition variable → infinite loop</div>
+    <pre><code class="language-robotframework">${x}=    Set Variable    0
+WHILE    ${x} < 10
+    Log    วนตลอดกาล
+    # ลืม update ${x} → วนจนถึง 10,000 แล้ว FAIL
+END</code></pre>
+    <div class="right">✅ อัปเดตตัวแปรใน loop body เสมอ</div>
+    <pre><code class="language-robotframework">    ${x}=    Evaluate    ${x} + 1</code></pre>
+    <div class="mistake-src">source: RF User Guide</div>
+  </div>
+
+  <div class="mistake">
+    <div class="wrong">❌ BREAK / CONTINUE นอก loop</div>
+    <pre><code class="language-robotframework">BREAK    # error — ต้องอยู่ใน FOR หรือ WHILE เท่านั้น</code></pre>
+    <div class="right">✅ ใช้ได้เฉพาะภายใน loop body</div>
+    <div class="mistake-src">source: RF User Guide</div>
+  </div>
+
+  <div class="quiz">
+    <h3>🧠 เช็คความเข้าใจ</h3>
+    <div class="quiz-item">
+      <p class="q-text"><span>ข้อ 1.</span> ถ้า WHILE condition เป็น False ตั้งแต่แรก loop body ทำงานกี่รอบ?</p>
+      <details class="ans"><summary>ดูเฉลย</summary>
+        <div class="ans-body">0 รอบ — RF เช็ค condition ก่อนทุกรอบ ถ้า False ตั้งแต่แรกข้ามทั้ง loop ไปเลย</div>
+      </details>
+    </div>
+    <div class="quiz-item">
+      <p class="q-text"><span>ข้อ 2.</span> ต่างกันยังไงระหว่าง BREAK กับ CONTINUE?</p>
+      <details class="ans"><summary>ดูเฉลย</summary>
+        <div class="ans-body"><strong>BREAK</strong> หยุด loop ทั้งหมด ออกไปรัน keyword ถัดจาก END | <strong>CONTINUE</strong> หยุดแค่ iteration ปัจจุบัน แล้วไปเริ่มรอบถัดไป</div>
+      </details>
+    </div>
+    <div class="quiz-item">
+      <p class="q-text"><span>ข้อ 3.</span> เมื่อไหร่ควรใช้ WHILE แทน FOR?</p>
+      <details class="ans"><summary>ดูเฉลย</summary>
+        <div class="ans-body">เมื่อไม่รู้จำนวนรอบล่วงหน้า เช่น รอ element โหลด, poll API จน status เปลี่ยน, retry จนสำเร็จ</div>
+      </details>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="02-for-loop.html">← บทที่ 2 — FOR Loop</a>
+    <a href="04-selenium.html" class="next"><span class="pn-label">บทถัดไป</span>บทที่ 4 — Selenium →</a>
+  </div>
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-robotframework.min.js"></script>
+<script src="anim.js"></script>
+</body></html>

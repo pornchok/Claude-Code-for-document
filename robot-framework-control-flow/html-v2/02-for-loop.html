@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>บทที่ 2: FOR Loop — RF Control Flow</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+</head>
+<body>
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-title">Robot Framework</div>
+    <div class="sidebar-subtitle">Control Flow · v2</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-label">เนื้อหา</div>
+    <a href="index.html">🏠 Overview</a>
+    <a href="01-if-else.html">🔀 บทที่ 1 — IF / ELSE</a>
+    <a href="02-for-loop.html" class="active">🔁 บทที่ 2 — FOR Loop</a>
+    <a href="03-while-loop.html">⏳ บทที่ 3 — WHILE + BREAK</a>
+    <a href="04-selenium.html">🌐 บทที่ 4 — Selenium จริง</a>
+    <div class="nav-label">ฝึกหัด</div>
+    <a href="exercises.html">✏️ แบบฝึกหัด</a>
+    <a href="glossary.html">📖 Glossary</a>
+  </nav>
+  <div class="sidebar-footer">RF 7.3.2 · Python 3.14</div>
+</aside>
+<div class="main"><div class="content">
+
+  <div class="pre-ch">
+    <div class="pre-ch-label">🔄 ทบทวนบทที่แล้ว</div>
+    <p style="font-size:14px;">RF ประเมิน condition ใน IF ยังไง? ถ้าเจอ True ตัวแรกแล้วทำอะไร?</p>
+    <details class="reveal"><summary>ดูเฉลย</summary>
+      <div class="reveal-body">RF อ่านจากบนลงล่าง เจอ condition แรกที่ True ก็รัน แล้วข้ามที่เหลือทั้งหมด</div>
+    </details>
+  </div>
+
+  <div class="ch-label">บทที่ 2</div>
+  <h1>FOR Loop</h1>
+  <span class="badge badge-green">✅ RF 4.0+ (IN ENUMERATE start=: RF 6.0+)</span>
+
+  <div class="obj-box">
+    <h4>🎯 อ่านจบแล้วทำได้</h4>
+    <ul>
+      <li>วน loop ผ่าน list ด้วย FOR IN</li>
+      <li>วนตามตัวเลขด้วย FOR IN RANGE</li>
+      <li>ดึง index พร้อมค่าด้วย FOR IN ENUMERATE</li>
+      <li>วน 2 list คู่ขนานด้วย FOR IN ZIP</li>
+    </ul>
+  </div>
+
+  <h2>FOR IN — วน list ทีละ item</h2>
+  <p>ใช้เมื่อมี list อยู่แล้วและต้องการทำอะไรกับทุก item</p>
+
+  <div class="stepper">
+    <div class="st-header">FOR IN — วนผ่าน list ผลไม้</div>
+    <div data-stepper='{
+      "code": "@{fruits}=    Create List    apple    banana    cherry\n\nFOR    ${fruit}    IN    @{fruits}\n    Log    ${fruit}\nEND",
+      "steps": [
+        {"hi":[1],"vars":{"fruits":"[apple, banana, cherry]"},"out":[],"note":"สร้าง list มี 3 items"},
+        {"hi":[3],"vars":{"fruits":"[apple, banana, cherry]","fruit":"apple"},"out":[],"note":"รอบที่ 1: ${fruit} = apple"},
+        {"hi":[4],"vars":{"fruits":"[apple, banana, cherry]","fruit":"apple"},"out":["apple"],"note":"Log apple"},
+        {"hi":[3],"vars":{"fruits":"[apple, banana, cherry]","fruit":"banana"},"out":["apple"],"note":"รอบที่ 2: ${fruit} = banana"},
+        {"hi":[4],"vars":{"fruits":"[apple, banana, cherry]","fruit":"banana"},"out":["apple","banana"],"note":"Log banana"},
+        {"hi":[3],"vars":{"fruits":"[apple, banana, cherry]","fruit":"cherry"},"out":["apple","banana"],"note":"รอบที่ 3: ${fruit} = cherry"},
+        {"hi":[4],"vars":{"fruits":"[apple, banana, cherry]","fruit":"cherry"},"out":["apple","banana","cherry"],"note":"Log cherry"},
+        {"hi":[5],"vars":{"fruits":"[apple, banana, cherry]","fruit":"cherry"},"out":["apple","banana","cherry"],"note":"หมด list แล้ว → ออกจาก loop"}
+      ]
+    }'></div>
+  </div>
+
+  <h2>FOR IN RANGE — วนตามตัวเลข</h2>
+
+  <table>
+    <tr><th>Syntax</th><th>ได้ค่า</th></tr>
+    <tr><td><code>IN RANGE    5</code></td><td>0, 1, 2, 3, 4</td></tr>
+    <tr><td><code>IN RANGE    1    6</code></td><td>1, 2, 3, 4, 5</td></tr>
+    <tr><td><code>IN RANGE    0    10    2</code></td><td>0, 2, 4, 6, 8</td></tr>
+    <tr><td><code>IN RANGE    10    0    -1</code></td><td>10, 9, 8 ... 1</td></tr>
+  </table>
+
+  <p>ค่า <strong>end ไม่ถูกรวม</strong> — เหมือน Python <code>range()</code> ทุกอย่าง</p>
+
+  <div class="stepper">
+    <div class="st-header">FOR IN RANGE — 0 ถึง 4</div>
+    <div data-stepper='{
+      "code": "FOR    ${i}    IN RANGE    5\n    Log    ${i}\nEND",
+      "steps": [
+        {"hi":[1],"vars":{"i":0},"out":[],"note":"รอบที่ 1: i = 0, เช็ค 0 < 5 → True เข้า loop"},
+        {"hi":[2],"vars":{"i":0},"out":["0"],"note":"Log 0"},
+        {"hi":[1],"vars":{"i":1},"out":["0"],"note":"รอบที่ 2: i = 1, เช็ค 1 < 5 → True"},
+        {"hi":[2],"vars":{"i":1},"out":["0","1"],"note":"Log 1"},
+        {"hi":[1],"vars":{"i":2},"out":["0","1"],"note":"รอบที่ 3: i = 2 (แสดงเฉพาะตัวอย่าง...)"},
+        {"hi":[1],"vars":{"i":5},"out":["0","1","2","3","4"],"note":"i = 5, เช็ค 5 < 5 → False → ออกจาก loop"},
+        {"hi":[3],"vars":{"i":5},"out":["0","1","2","3","4"],"note":"END — loop จบแล้ว"}
+      ]
+    }'></div>
+  </div>
+
+  <h2>FOR IN ENUMERATE — วนพร้อม index</h2>
+  <p>เมื่อต้องรู้ว่า item อยู่ลำดับที่เท่าไหร่ เช่น log "แถวที่ N" หรือ validate ตาราง</p>
+
+  <pre><code class="language-robotframework">@{items}=    Create List    alpha    beta    gamma
+
+# index เริ่มที่ 0 (default)
+FOR    ${index}    ${item}    IN ENUMERATE    @{items}
+    Log    [${index}] ${item}
+END</code></pre>
+  <div class="out-box"><div class="out-label">Output</div>[0] alpha<br>[1] beta<br>[2] gamma</div>
+
+  <pre><code class="language-robotframework"># เริ่ม index จาก 1 (RF 6.0+)
+FOR    ${index}    ${item}    IN ENUMERATE    @{items}    start=1
+    Log    [${index}] ${item}
+END</code></pre>
+  <div class="out-box"><div class="out-label">Output</div>[1] alpha<br>[2] beta<br>[3] gamma</div>
+
+  <h2>FOR IN ZIP — วน 2 list พร้อมกัน</h2>
+  <p>ใช้จับคู่ข้อมูลจาก 2 list เช่น ชื่อ + คะแนน, input + expected output</p>
+
+  <pre><code class="language-robotframework">${names}=    Create List    Alice    Bob    Carol
+${scores}=   Create List    90       75     88
+FOR    ${name}    ${score}    IN ZIP    ${names}    ${scores}
+    Log    ${name}: ${score}
+END</code></pre>
+  <div class="out-box"><div class="out-label">Output</div>Alice: 90<br>Bob: 75<br>Carol: 88</div>
+
+  <div class="info-box">
+    <strong>ข้อจำกัด IN ZIP:</strong> ต้องใช้ตัวแปร list เท่านั้น ไม่รับ inline string — <code>IN ZIP    Alice    Bob    1    2</code> จะ error<br>
+    และถ้า list ยาวไม่เท่ากัน จะวนตาม list ที่สั้นกว่า items ที่เหลือจะถูกข้ามโดยไม่แจ้งเตือน
+  </div>
+
+  <h2>เลือก variant ไหนดี?</h2>
+  <table>
+    <tr><th>สถานการณ์</th><th>ใช้</th></tr>
+    <tr><td>วน list ไม่ต้องรู้ index</td><td><code>FOR IN</code></td></tr>
+    <tr><td>วนตามจำนวนรอบที่รู้ล่วงหน้า</td><td><code>FOR IN RANGE</code></td></tr>
+    <tr><td>ต้องรู้ว่า item อยู่ตำแหน่งที่เท่าไหร่</td><td><code>FOR IN ENUMERATE</code></td></tr>
+    <tr><td>จับคู่ข้อมูลจาก 2 list</td><td><code>FOR IN ZIP</code></td></tr>
+  </table>
+
+  <h2>Common Mistakes</h2>
+
+  <div class="mistake">
+    <div class="wrong">❌ ใช้ ${} แทน @{} — ได้ list ทั้งก้อนเป็น item เดียว</div>
+    <pre><code class="language-robotframework">FOR    ${x}    IN    ${myList}    # วนแค่รอบเดียว!</code></pre>
+    <div class="right">✅ ใช้ @{} เพื่อ unpack</div>
+    <pre><code class="language-robotframework">FOR    ${x}    IN    @{myList}</code></pre>
+    <div class="mistake-src">source: RF User Guide — "@ prefix unpacks the list"</div>
+  </div>
+
+  <div class="mistake">
+    <div class="wrong">❌ IN RANGE ใส่ expression ตรงๆ</div>
+    <pre><code class="language-robotframework">FOR    ${i}    IN RANGE    ${count} + 1    # ไม่ทำงาน</code></pre>
+    <div class="right">✅ Evaluate ก่อน</div>
+    <pre><code class="language-robotframework">${end}=    Evaluate    ${count} + 1
+FOR    ${i}    IN RANGE    ${end}</code></pre>
+    <div class="mistake-src">source: RF User Guide — IN RANGE รับแค่ตัวเลขหรือ variable เดี่ยว</div>
+  </div>
+
+  <div class="quiz">
+    <h3>🧠 เช็คความเข้าใจ</h3>
+    <div class="quiz-item">
+      <p class="q-text"><span>ข้อ 1.</span> <code>FOR    ${i}    IN RANGE    2    8    3</code> — ${i} จะมีค่าอะไรบ้าง?</p>
+      <details class="ans"><summary>ดูเฉลย</summary>
+        <div class="ans-body">2, 5 — เริ่มที่ 2, บวก step 3 ทุกรอบ, หยุดก่อนถึง 8</div>
+      </details>
+    </div>
+    <div class="quiz-item">
+      <p class="q-text"><span>ข้อ 2.</span> FOR IN ZIP หยุดเมื่อไหร่ถ้า list A มี 4 items, list B มี 2 items?</p>
+      <details class="ans"><summary>ดูเฉลย</summary>
+        <div class="ans-body">วน 2 รอบ แล้วหยุด เพราะ ZIP หยุดเมื่อ list ที่สั้นกว่าหมด — items ที่เหลือใน A ถูกข้ามไปเงียบๆ</div>
+      </details>
+    </div>
+  </div>
+
+  <div class="page-nav">
+    <a href="01-if-else.html">← บทที่ 1 — IF / ELSE</a>
+    <a href="03-while-loop.html" class="next"><span class="pn-label">บทถัดไป</span>บทที่ 3 — WHILE →</a>
+  </div>
+</div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-robotframework.min.js"></script>
+<script src="anim.js"></script>
+</body></html>

@@ -1,0 +1,4525 @@
+
+<!doctype html>
+<html lang="th" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="คอร์ส QA & Automation Testing ภาษาไทย">
+      
+      
+      
+        <link rel="canonical" href="https://pornchok.github.io/Claude-Code-for-document/jmeter-performance-testing/03-ui-test-plan-structure/">
+      
+      
+        <link rel="prev" href="../02-installation-setup/">
+      
+      
+        <link rel="next" href="../04-first-test-plan/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>บทที่ 3 - Test Plan Structure - QA Learning Hub</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#3-jmeter-ui-test-plan-structure" class="md-skip">
+          ข้ามไปที่เนื้อหา
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="หัวข้อ">
+    <a href="../.." title="QA Learning Hub" class="md-header__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            QA Learning Hub
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              บทที่ 3 - Test Plan Structure
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="ค้นหา" placeholder="ค้นหา" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="ค้นหา">
+        
+        <button type="reset" class="md-search__icon md-icon" title="ล้าง" aria-label="ล้าง" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            กำลังเริ่มต้นการค้นหา
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="แท็บ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../playwright-typescript/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Playwright TypeScript
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../robot-framework-for-qa/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../robot-framework-control-flow/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework Control Flow
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../rf-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  RF Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../wdio-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  WebdriverIO Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-overview/" class="md-tabs__link">
+          
+  
+  
+  JMeter Performance Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../english-for-beginners/00-overview/" class="md-tabs__link">
+          
+  
+  
+  English for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-tabs__link">
+          
+  
+  
+  Claude Code Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ตัวนำทาง" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="QA Learning Hub" class="md-nav__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    QA Learning Hub
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playwright TypeScript
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Playwright TypeScript
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/01-why-playwright/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - ทำไมต้อง Playwright
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/02-setup-typescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup + TypeScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/03-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/04-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/05-actions-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Actions & Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/06-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/07-fixtures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Fixtures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/08-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/09-test-organization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Test Organization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/10-configuration-projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Configuration & Projects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/11-parallelism-sharding-reporting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 11 - Parallelism & Sharding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/12-mocking-network-time-browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 12 - Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/13-authentication-storage-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 13 - Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/14-advanced-browser-emulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 14 - Advanced Browser Emulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/15-api-testing-hybrid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 15 - API Testing & Hybrid
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/16-visual-accessibility-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 16 - Visual & Accessibility
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/17-cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 17 - CI/CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/18-production-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 18 - Production Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/19-db-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 19 - DB Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/20-professional-project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 20 - Professional Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/01-what-is-robot-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is RF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/03-test-structure-syntax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/04-keywords-and-resource-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Keywords & Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/05-web-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Web Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/06-data-driven-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Data Driven
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/07-reports-and-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Reports & Debug
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/08-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework Control Flow
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework Control Flow
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/01-if-else/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - If/Else
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/02-for-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - For Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/03-while-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - While Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RF Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RF Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/01-mobile-testing-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mobile Landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/02-setup-environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/03-appium-capabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Capabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/04-appiumlibrary-keywords/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - AppiumLibrary Keywords
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/05-mobile-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Mobile Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/06-gestures-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Gestures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/07-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WebdriverIO Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    WebdriverIO Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/01-what-is-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/02-setup-wdio-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/03-wdio-appium-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/04-writing-tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Writing Tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/05-selectors-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Selectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/06-page-objects-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Page Objects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/07-comparing-rf-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - RF vs WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMeter Performance Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMeter Performance Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-performance-testing-fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Plan Structure
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Plan Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-chapter-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⏰ Pre-chapter Retrieval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 1: วัตถุประสงค์
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 2: ทำไมต้องรู้? (Why)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-analogy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 3: Analogy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 3: Analogy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test-plan-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Plan เหมือน Script การแสดงละครเวที
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 4: เนื้อหาหลัก
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 4: เนื้อหาหลัก">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-test-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Test Plan คืออะไร — โครงสร้างรวม
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-thread-group-test-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Thread Group — หัวใจของ Test Plan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-element-test-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Element ประเภทต่างๆ ใน Test Plan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#431-elements-execution-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.1 ลำดับการทำงานของ Elements (Execution Order)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-jmeter-ui-panels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 JMeter UI Panels — รู้จักหน้าต่าง
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-listener-use-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Listener ที่เหมาะกับแต่ละ Use Case
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 5: ตัวอย่าง 3 ระดับ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 5: ตัวอย่าง 3 ระดับ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beginner-jmeter-ui-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ตัวอย่าง Beginner: ทำความเข้าใจ JMeter UI ผ่าน structure จริง
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-thread-group-config-healthcare-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ตัวอย่าง Intermediate: Thread Group config สำหรับ Healthcare API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-multiple-thread-groups-user-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ตัวอย่าง Advanced: Multiple Thread Groups สำหรับ User Types ต่างกัน
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 6: Common Mistakes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 6: Common Mistakes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mistake-1-listener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Mistake 1: ใส่ Listener ผิดตำแหน่ง ทำให้ไม่เก็บผล
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mistake-2-ramp-up-period-0-spike" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Mistake 2: ตั้ง Ramp-Up Period = 0 ทำให้เกิด spike ทันที
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mistake-3-loop-count-vs-duration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Mistake 3: สับสนระหว่าง Loop Count vs Duration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 7: สรุปบท
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 7: สรุปบท">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retrieval-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retrieval Questions — ตอบก่อนดูเฉลย
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-first-test-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - First Test Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-thread-group-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Thread Group
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-parameterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Parameterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-running-reports/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-distributed-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Distributed Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-anti-patterns-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    English for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    English for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/01-mindset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/02-phonics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Phonics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/03-vocabulary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Vocabulary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/04-sentence-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Sentence Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/05-to-be-present-simple/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - To Be & Present Simple
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/06-questions-negatives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Questions & Negatives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/07-numbers-time-days/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Numbers, Time & Days
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/08-phrases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Phrases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Claude Code Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-chapter-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⏰ Pre-chapter Retrieval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 1: วัตถุประสงค์
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-why" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 2: ทำไมต้องรู้? (Why)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-analogy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 3: Analogy
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 3: Analogy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#test-plan-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Test Plan เหมือน Script การแสดงละครเวที
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 4: เนื้อหาหลัก
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 4: เนื้อหาหลัก">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-test-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Test Plan คืออะไร — โครงสร้างรวม
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-thread-group-test-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Thread Group — หัวใจของ Test Plan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-element-test-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Element ประเภทต่างๆ ใน Test Plan
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#431-elements-execution-order" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3.1 ลำดับการทำงานของ Elements (Execution Order)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-jmeter-ui-panels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 JMeter UI Panels — รู้จักหน้าต่าง
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-listener-use-case" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 Listener ที่เหมาะกับแต่ละ Use Case
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 5: ตัวอย่าง 3 ระดับ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 5: ตัวอย่าง 3 ระดับ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beginner-jmeter-ui-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ตัวอย่าง Beginner: ทำความเข้าใจ JMeter UI ผ่าน structure จริง
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-thread-group-config-healthcare-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ตัวอย่าง Intermediate: Thread Group config สำหรับ Healthcare API
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-multiple-thread-groups-user-types" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ตัวอย่าง Advanced: Multiple Thread Groups สำหรับ User Types ต่างกัน
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 6: Common Mistakes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 6: Common Mistakes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mistake-1-listener" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Mistake 1: ใส่ Listener ผิดตำแหน่ง ทำให้ไม่เก็บผล
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mistake-2-ramp-up-period-0-spike" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Mistake 2: ตั้ง Ramp-Up Period = 0 ทำให้เกิด spike ทันที
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mistake-3-loop-count-vs-duration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ Mistake 3: สับสนระหว่าง Loop Count vs Duration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ส่วนที่ 7: สรุปบท
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ส่วนที่ 7: สรุปบท">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retrieval-questions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retrieval Questions — ตอบก่อนดูเฉลย
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="3-jmeter-ui-test-plan-structure">บทที่ 3: JMeter UI &amp; Test Plan Structure<a class="headerlink" href="#3-jmeter-ui-test-plan-structure" title="Permanent link">&para;</a></h1>
+<hr />
+<h2 id="pre-chapter-retrieval">⏰ Pre-chapter Retrieval<a class="headerlink" href="#pre-chapter-retrieval" title="Permanent link">&para;</a></h2>
+<p>แนะนำ: อ่านบทนี้หลังจากผ่านไปอย่างน้อย 1 วันจากบทที่ 2</p>
+<p>ก่อนอ่านบทนี้ ลองตอบคำถาม 2 ข้อนี้ <strong>โดยไม่เปิดดูบทที่แล้ว</strong>:</p>
+<p><strong>ข้อ 1:</strong> จากบทที่ 2 คุณรู้ว่า official docs บอกว่า "GUI mode should only be used for creating the test script, CLI mode must be used for load testing" — ถ้าอย่างนั้น ในบทนี้ที่เราจะเรียน JMeter UI อย่างละเอียด เราเรียนไปเพื่ออะไร? GUI มีประโยชน์ตรงไหนที่ CLI ทำแทนไม่ได้?</p>
+<p><strong>ข้อ 2:</strong> JMeter ต้องการ Java เพราะเป็น pure Java application — แล้ว Test Plan ที่คุณสร้างใน GUI จะถูก save เป็นไฟล์ format อะไร? คุณเดาได้ไหมว่าทำไมถึงเป็น format นั้น?</p>
+<p>เขียนคำตอบลงกระดาษก่อน — หยุดอย่างน้อย 30 วินาที พยายาม retrieve ก่อนเขียน และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น</p>
+<hr />
+<blockquote>
+<p><strong>เฉลยข้อ 1:</strong> GUI มีประโยชน์ในการ <strong>design และ debug</strong> — คุณเห็น tree hierarchy ได้ชัดเจน, click เพื่อแก้ field ทีละ element ได้ทันที, และ run ทดสอบแบบ small scale เพื่อ verify ว่า config ถูกต้องก่อนรัน load test จริงด้วย CLI. ถ้าตอบผิดหรือคลุมเครือ: ทบทวนบทที่ 2 ส่วน "GUI mode vs CLI mode"</p>
+<p><strong>เฉลยข้อ 2:</strong> Test Plan ถูก save เป็นไฟล์ <strong>.jmx</strong> ซึ่งเป็น XML format — เหตุผลที่เป็น XML เพราะ Java ecosystem ใช้ XML เป็น standard สำหรับ serialization configuration มาตั้งแต่ยุคแรก และ JMeter ซึ่งเป็น Java application ก็เลือก format นี้ด้วย ถ้าเดาไม่ออก: ไม่ผิด เพราะยังไม่ได้เรียน — แต่ให้จำไว้ว่า .jmx = XML</p>
+</blockquote>
+<hr />
+<h2 id="1">ส่วนที่ 1: วัตถุประสงค์<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>อ่านบทนี้จบแล้วคุณจะสามารถ:</p>
+<ul>
+<li><strong>ระบุ</strong> ส่วนประกอบทุกชนิดใน Test Plan tree ได้ (Thread Group, Sampler, Listener, Assertion, Config Element, Timer) และอธิบายได้ว่าแต่ละชนิดทำหน้าที่อะไรในกระบวนการ testing</li>
+<li><strong>อธิบาย</strong> ว่า Thread Group fields แต่ละ field (Number of Threads, Ramp-Up Period, Loop Count, Duration) ส่งผลต่อพฤติกรรมของ test อย่างไร โดยยกตัวอย่างตัวเลขจริง</li>
+<li><strong>เลือก</strong> Listener ที่เหมาะสมกับแต่ละ use case (debug vs load test จริง) และอธิบายได้ว่าทำไมถึงเลือกแบบนั้น</li>
+<li><strong>วางแผน</strong> Test Plan structure ที่ถูกต้องสำหรับ scenario ง่ายๆ ได้ก่อนลงมือสร้างจริงในบทที่ 4</li>
+</ul>
+<hr />
+<h2 id="2-why">ส่วนที่ 2: ทำไมต้องรู้? (Why)<a class="headerlink" href="#2-why" title="Permanent link">&para;</a></h2>
+<p>ลองนึกถึงสถานการณ์นี้:</p>
+<p>คุณเปิด JMeter GUI ครั้งแรก เห็น panel ซ้ายมีต้นไม้ (tree) อยู่ คุณ right-click สุ่มเพิ่ม element หลายอย่าง แล้วกด Run — JMeter รันบางอย่าง บางอย่างไม่รัน ผลลัพธ์แปลกๆ ออกมา คุณไม่รู้ว่าผิดตรงไหน</p>
+<p>ปัญหานี้เกิดจากการไม่เข้าใจ <strong>ว่าทำไม JMeter ถึงออกแบบ UI เป็น tree hierarchy</strong> และ <strong>element แต่ละชนิดทำงานยังไง</strong></p>
+<p>JMeter ออกแบบ Test Plan เป็น tree hierarchy เพราะ:
+1. <strong>Scope inheritance</strong> — element ลูกได้รับ config จาก element พ่อ ทำให้ไม่ต้อง copy ซ้ำ
+2. <strong>Execution order</strong> — JMeter รัน element ตามลำดับที่เห็นใน tree จากบนลงล่าง ทำให้คาดเดาได้
+3. <strong>Modularity</strong> — Thread Group แยกกันทำงานได้อิสระ เหมาะกับ scenario ที่มี user หลายประเภท</p>
+<p>ถ้าคุณเข้าใจ logic ของ tree นี้ คุณจะไม่ต้องลองผิดลองถูก — คุณจะรู้ทันทีว่าต้อง add element ตรงไหนและทำไม</p>
+<hr />
+<h2 id="3-analogy">ส่วนที่ 3: Analogy<a class="headerlink" href="#3-analogy" title="Permanent link">&para;</a></h2>
+<h3 id="test-plan-script">Test Plan เหมือน Script การแสดงละครเวที<a class="headerlink" href="#test-plan-script" title="Permanent link">&para;</a></h3>
+<p>ลองนึกถึงการแสดงละครเวทีที่มีนักแสดงหลายคน:</p>
+<p><strong>Mechanism 1 — Test Plan เหมือน Script หลัก</strong>
+Script ทั้งเล่มคือ blueprint — มันไม่ "แสดง" เอง แต่เป็นที่รวมทุกอย่าง ทุกฉาก ทุกบทพูด Test Plan ก็เช่นกัน มันเป็น container หลักที่รวม Thread Groups และ elements ทั้งหมด</p>
+<p><strong>Mechanism 2 — Thread Group เหมือน กลุ่มนักแสดงประเภทเดียวกัน</strong>
+ละครอาจมีกลุ่มตัวเอก, กลุ่มตัวร้าย, กลุ่มนักแสดงประกอบ — แต่ละกลุ่มทำสิ่งที่แตกต่างกัน Thread Group ก็เหมือนกัน คุณอาจมี Thread Group สำหรับ admin users และอีกอันสำหรับ regular users ที่ทำ action ต่างกัน</p>
+<p><strong>Mechanism 3 — Sampler เหมือน "บทพูด" แต่ละบท</strong>
+แต่ละ sampler คือ action เดียวที่ virtual user ทำ — เหมือนบทพูดแต่ละบรรทัดที่นักแสดงต้องพูด HTTP Request Sampler คือการส่ง request ไปที่ server หนึ่งครั้ง</p>
+<p><strong>Mechanism 4 — Listener เหมือน กล้องถ่ายทำที่บันทึกการแสดง</strong>
+กล้องไม่ได้มีส่วนร่วมในการแสดง แต่บันทึกทุกอย่างไว้ Listener ก็ไม่ได้ส่ง request แต่รวบรวมผลลัพธ์ไว้แสดงและ save</p>
+<p>⚠️ <strong>ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:</strong> threads ทำงานทีละตัวตามลำดับเหมือนนักแสดงที่รอฉากก่อนหน้าจบก่อน — จริงๆ threads ทำงาน <strong>concurrent</strong> พร้อมกัน ไม่ใช่ sequential — thread ที่ 2 ไม่ต้องรอ thread ที่ 1 ทำเสร็จก่อน ทำให้ load บน server เป็น simultaneous จริง นี่คือเหตุผลที่ 100 threads ≠ 100 requests ที่ส่งทีละอัน แต่คือ requests ที่ส่งพร้อมกัน</p>
+<hr />
+<h2 id="4">ส่วนที่ 4: เนื้อหาหลัก<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<h3 id="41-test-plan">4.1 Test Plan คืออะไร — โครงสร้างรวม<a class="headerlink" href="#41-test-plan" title="Permanent link">&para;</a></h3>
+<p>เมื่อคุณเปิด JMeter ครั้งแรก สิ่งที่เห็นในส่วน Tree Panel (panel ซ้าย) คือ "Test Plan" อยู่บนสุด — นั่นคือ root node ของทุกอย่าง</p>
+<p>Official docs ระบุว่า:</p>
+<blockquote>
+<p>"A minimal test will consist of the Test Plan, a Thread Group and one or more Samplers."
+<em>(source: https://jmeter.apache.org/usermanual/test_plan.html)</em></p>
+</blockquote>
+<p>แปลว่า structure ที่เล็กที่สุดที่จะรัน test ได้คือ:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Test Plan
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>└── Thread Group
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    └── HTTP Request Sampler (อย่างน้อย 1 ตัว)
+</code></pre></div>
+<p>ในทางปฏิบัติ Test Plan ของคุณจะซับซ้อนกว่านี้ — แต่ให้จำ minimal structure นี้ไว้เป็น mental model</p>
+<p>JMeter รัน request ตามลำดับที่เห็นใน tree จากบนลงล่าง:</p>
+<blockquote>
+<p>"JMeter sends requests in the order that they appear in the tree."
+<em>(source: https://jmeter.apache.org/usermanual/build-web-test-plan.html)</em></p>
+</blockquote>
+<hr />
+<h3 id="42-thread-group-test-plan">4.2 Thread Group — หัวใจของ Test Plan<a class="headerlink" href="#42-thread-group-test-plan" title="Permanent link">&para;</a></h3>
+<p>Thread Group เป็น element ที่สำคัญที่สุดเพราะมันกำหนดว่า "จะจำลองผู้ใช้กี่คน ทำอะไร นานแค่ไหน"</p>
+<blockquote>
+<p>"The thread group element controls the number of threads JMeter will use to execute your test."
+<em>(source: https://jmeter.apache.org/usermanual/test_plan.html)</em></p>
+<p>"The Thread Group tells JMeter the number of users you want to simulate, how often the users should send requests, and how many requests they should send."
+<em>(source: https://jmeter.apache.org/usermanual/build-web-test-plan.html)</em></p>
+</blockquote>
+<p>Thread Group มี field สำคัญดังนี้:</p>
+<p><strong>Number of Threads (Users)</strong>
+คือจำนวน virtual users ที่ JMeter จะจำลอง แต่ละ thread ทำงานอิสระจากกัน — ถ้าตั้ง 100 threads JMeter จะมี 100 virtual users รันพร้อมกัน</p>
+<p><strong>Ramp-Up Period (seconds)</strong>
+คือเวลา (หน่วยวินาที) ที่ JMeter ใช้ในการ start thread ทั้งหมด official docs ให้ตัวอย่างที่ชัดเจนมาก:</p>
+<blockquote>
+<p>"If 10 threads are used, and the ramp-up period is 100 seconds, then JMeter will take 100 seconds to get all 10 threads up and running."
+<em>(source: https://jmeter.apache.org/usermanual/test_plan.html)</em></p>
+</blockquote>
+<p>แปลว่าถ้า Ramp-Up Period = 100 วินาทีและมี 10 threads → JMeter จะ start thread ใหม่ทุกๆ 10 วินาที (100 ÷ 10 = 10 วินาทีต่อ thread)</p>
+<p><strong>Loop Count</strong></p>
+<blockquote>
+<p>"This property tells JMeter how many times to repeat your test."
+<em>(source: https://jmeter.apache.org/usermanual/build-web-test-plan.html)</em></p>
+</blockquote>
+<p>ถ้าตั้ง Loop Count = 5 แต่ละ thread จะวน test ครบ 5 รอบแล้วหยุด ถ้าเลือก "Infinite" thread จะวนไม่หยุดจนกว่าคุณจะกด Stop หรือหมดเวลาที่กำหนด</p>
+<p><strong>Duration (seconds)</strong>
+ใช้คู่กับ Infinite loop — กำหนดว่าให้รัน test นานกี่วินาทีแล้วหยุดเอง เหมาะกับ soak test ที่ต้องการรัน 1 ชั่วโมง = Duration 3600 วินาที</p>
+<hr />
+<p>⏸ <strong>Self-check:</strong> ก่อนอ่านต่อ ลองตอบ: ถ้าคุณตั้ง Ramp-Up Period = 0 จะเกิดอะไรขึ้น? (นึกถึง formula ที่คำนวณได้จากตัวอย่าง 10 threads / 100 วินาที ข้างบน) เขียนคำตอบลงกระดาษก่อน — และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น — แล้วค่อยอ่านต่อ</p>
+<blockquote>
+<p>เฉลย: Ramp-Up Period = 0 หมายความว่า JMeter จะ start ทุก thread <strong>พร้อมกันทันที</strong> ไม่มีการทยอย start ตามลำดับ — ผลคือเกิด load spike ขนาดใหญ่ในวินาทีแรก ซึ่งอาจทำให้ server รับไม่ไหวและผลการทดสอบ skewed (ไม่สะท้อนการใช้งานจริงที่ user ทยอยเข้า)</p>
+</blockquote>
+<hr />
+<h3 id="43-element-test-plan">4.3 Element ประเภทต่างๆ ใน Test Plan<a class="headerlink" href="#43-element-test-plan" title="Permanent link">&para;</a></h3>
+<p><strong>Samplers — คนส่ง Request</strong></p>
+<blockquote>
+<p>"Samplers tell JMeter to send requests to a server and wait for a response. They are processed in the order they appear in the tree."
+<em>(source: https://jmeter.apache.org/usermanual/test_plan.html)</em></p>
+</blockquote>
+<p>Sampler คือ element เดียวในบรรดาทั้งหมดที่ "ทำงาน" จริงๆ — มันส่ง request และรอ response ชนิดที่ใช้บ่อยสุดคือ HTTP Request Sampler</p>
+<p><strong>Listeners — คนเก็บผล</strong></p>
+<blockquote>
+<p>"Listeners provide access to the information JMeter gathers about the test cases while JMeter runs."
+<em>(source: https://jmeter.apache.org/usermanual/test_plan.html)</em></p>
+<p>"A listener is a component that shows the results of the samples. The results can be shown in a tree, tables, graphs or simply written to a log file."
+<em>(source: https://jmeter.apache.org/usermanual/listeners.html)</em></p>
+</blockquote>
+<p>Listener ไม่ส่ง request เอง แต่ "ฟัง" ผลลัพธ์จาก Sampler แล้วแสดงหรือบันทึกไว้</p>
+<p><strong>Assertions — คนตรวจสอบ</strong></p>
+<blockquote>
+<p>"Assertions allow you to assert facts about responses received from the server being tested."
+<em>(source: https://jmeter.apache.org/usermanual/test_plan.html)</em></p>
+</blockquote>
+<p>Assertion เปรียบได้กับ automated checker — ถ้า server ส่ง response 200 แต่ body ไม่มีคำว่า "success" Assertion จะ mark request นั้นว่า fail</p>
+<p><strong>Configuration Elements — คนตั้งค่า</strong></p>
+<blockquote>
+<p>"A configuration element works closely with a Sampler. Although it does not send requests, it can add to or modify requests."
+<em>(source: https://jmeter.apache.org/usermanual/test_plan.html)</em></p>
+</blockquote>
+<p>Config Element เช่น HTTP Request Defaults หรือ HTTP Header Manager ทำงานก่อน Sampler จะส่ง request — มันเพิ่มหรือแก้ไข request ตาม config ที่ตั้งไว้</p>
+<p><strong>Timers — คนหน่วงเวลา</strong></p>
+<blockquote>
+<p>"A timer will cause JMeter to delay a certain amount of time before each sampler which is in its scope."
+<em>(source: https://jmeter.apache.org/usermanual/test_plan.html)</em></p>
+</blockquote>
+<p>Timer จำลอง "think time" ของผู้ใช้จริง — ผู้ใช้ไม่ได้คลิกปุ่มถัดไปทันทีหลัง page โหลด แต่ใช้เวลาอ่านหน้าก่อน การใส่ Timer ทำให้ผล test สะท้อนความเป็นจริงมากขึ้น</p>
+<p><strong>Controllers — คนกำหนดเส้นทาง</strong></p>
+<blockquote>
+<p>"JMeter has two types of Controllers: Samplers and Logical Controllers. These drive the processing of a test."
+<em>(source: https://jmeter.apache.org/usermanual/test_plan.html)</em></p>
+</blockquote>
+<p>Logical Controllers เช่น If Controller, Loop Controller ใช้กำหนด logic ว่า Sampler ไหนรัน เมื่อไหร่ และกี่ครั้ง</p>
+<hr />
+<h3 id="431-elements-execution-order">4.3.1 ลำดับการทำงานของ Elements (Execution Order)<a class="headerlink" href="#431-elements-execution-order" title="Permanent link">&para;</a></h3>
+<p>เมื่อ Sampler ถูก execute JMeter ประมวลผล elements ที่อยู่ใน scope เดียวกันตามลำดับนี้เสมอ:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Pre-Processors → Timers → Sampler → Post-Processors → Assertions → Listeners
+</code></pre></div>
+<p><strong>ตัวอย่างเพื่อให้เข้าใจ:</strong> ถ้า Thread Group มี Uniform Random Timer (Pre-Processor), HTTP Request Sampler, JSON Extractor (Post-Processor), Response Assertion, และ Aggregate Report (Listener) — JMeter จะ:
+1. รัน Timer ก่อน (หน่วงเวลา)
+2. ส่ง HTTP Request (Sampler)
+3. ดึง JSON value จาก response (Post-Processor)
+4. ตรวจว่า response ผ่าน Assertion ไหม
+5. บันทึกผลลัพธ์ใน Aggregate Report (Listener)</p>
+<p><strong>ทำไมต้องรู้?</strong> เพราะการวาง element ผิดที่ทำให้ logic ผิด เช่น ถ้าวาง JSON Extractor ก่อน Sampler — ยังไม่มี response ให้ดึงค่า, ถ้าวาง Assertion ก่อน Post-Processor — ยังไม่มี extracted variable ให้ assert</p>
+<blockquote>
+<p><em>(source: https://jmeter.apache.org/usermanual/test_plan.html — "Elements of a Test Plan")</em></p>
+</blockquote>
+<hr />
+<h3 id="44-jmeter-ui-panels">4.4 JMeter UI Panels — รู้จักหน้าต่าง<a class="headerlink" href="#44-jmeter-ui-panels" title="Permanent link">&para;</a></h3>
+<p>JMeter GUI แบ่งเป็น 3 ส่วนหลัก:</p>
+<p><strong>Left Pane (Tree Panel)</strong>
+แสดง Test Plan structure ทั้งหมดเป็น tree hierarchy ที่คุณ expand/collapse ได้ — นี่คือ "ภาพรวม" ของ test ทั้งหมด การ click element ใน tree จะทำให้ Right Pane แสดง config ของ element นั้น</p>
+<p><strong>Right Pane (Configuration Panel)</strong>
+แสดง field ที่แก้ไขได้ของ element ที่ selected อยู่ — เมื่อ click Thread Group จะเห็น fields ของ Thread Group เมื่อ click HTTP Request จะเห็น fields ของ HTTP Request</p>
+<p><strong>Log Viewer (ด้านล่าง)</strong>
+แสดง log messages real-time ระหว่างรัน test — ถ้ามี error หรือ warning จะปรากฏที่นี่ก่อน มีประโยชน์มากตอน debug</p>
+<p><strong>Menu Bar (ด้านบน)</strong>
+มี menu File (save/open .jmx), Edit (add/remove elements), Run (start/stop/shut down test), Options (language, log level) ฯลฯ</p>
+<hr />
+<h3 id="45-listener-use-case">4.5 Listener ที่เหมาะกับแต่ละ Use Case<a class="headerlink" href="#45-listener-use-case" title="Permanent link">&para;</a></h3>
+<p>ไม่ใช่ทุก Listener เหมาะกับทุกสถานการณ์ — เลือกผิดทำให้ JMeter ช้าและผลไม่น่าเชื่อถือ</p>
+<p><strong>View Results Tree</strong>
+- <strong>เหมาะกับ:</strong> Debug phase — ดู request/response รายตัว
+- <strong>ไม่เหมาะกับ:</strong> Load test จริง — render ทุก request ทำให้ JMeter ใช้ memory สูงมาก</p>
+<blockquote>
+<p>⚠️ <strong>ควรเลี่ยง:</strong> ใช้ View Results Tree ตอนรัน load test จริง — เพราะ render ทุก request ทำให้ JMeter ช้ามาก และอาจทำให้ผลการทดสอบ skewed เพราะ JMeter เองกลายเป็น bottleneck</p>
+</blockquote>
+<p>Official docs เตือนชัดเจน:</p>
+<blockquote>
+<p>"Don't use 'View Results Tree' or 'View Results in Table' listeners during the load test, use them only during scripting phase to debug your scripts."
+<em>(source: https://jmeter.apache.org/usermanual/best-practices.html)</em></p>
+</blockquote>
+<p><strong>Aggregate Report</strong>
+- <strong>เหมาะกับ:</strong> Load test จริง — แสดงสถิติสรุป (Average, 90th Percentile, Throughput, Error%)
+- <strong>ข้อดี:</strong> ใช้ memory น้อยกว่า View Results Tree มาก เพราะ aggregate samples ที่มี elapsed time เดียวกัน</p>
+<blockquote>
+<p>"samples with the same elapsed time are aggregated. Less memory is now needed."
+<em>(source: https://jmeter.apache.org/usermanual/listeners.html)</em></p>
+</blockquote>
+<p><strong>Summary Report</strong>
+- <strong>เหมาะกับ:</strong> Load test ที่ต้องการประหยัด memory สูงสุด
+- <strong>ข้อเสีย:</strong> ไม่มี Median และ 90th Percentile column ซึ่งสำคัญสำหรับการวิเคราะห์</p>
+<blockquote>
+<p>"Simpler (lower memory) version of Aggregate Report. Excludes the Median and 90% columns, which are expensive in memory terms"
+<em>(source: https://jmeter.apache.org/api/org/apache/jmeter/visualizers/SummaryReport.html)</em></p>
+</blockquote>
+<p><strong>สรุปการเลือก Listener:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Use Case</th>
+<th>แนะนำ Listener</th>
+<th>เหตุผล</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Debug / ตรวจ request-response รายตัว</td>
+<td>View Results Tree</td>
+<td>เห็น detail ครบ</td>
+</tr>
+<tr>
+<td>Load test — ต้องการ percentile stats</td>
+<td>Aggregate Report</td>
+<td>memory พอดี + มี 90th percentile</td>
+</tr>
+<tr>
+<td>Load test — memory จำกัดมาก</td>
+<td>Summary Report</td>
+<td>เบาที่สุด แต่ขาด percentile</td>
+</tr>
+<tr>
+<td>Save ผลเป็น file สำหรับวิเคราะห์ภายหลัง</td>
+<td>Simple Data Writer (CSV)</td>
+<td>CSV เล็กกว่า XML มาก</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>"CSV files are much smaller than XML files, so use CSV if you are generating lots of samples."
+<em>(source: https://jmeter.apache.org/usermanual/listeners.html)</em></p>
+</blockquote>
+<hr />
+<p>⏸ <strong>Self-check (Bloom's L3 — Application):</strong> คุณกำลังออกแบบ Test Plan สำหรับ API ที่ต้องทดสอบว่ารับ 500 concurrent users ได้ไหม คุณจะ add Listener ชนิดไหน และวางไว้ที่ไหนใน tree hierarchy? (นึกถึง scope inheritance ที่อธิบายไว้ใน Why section) เขียนคำตอบลงกระดาษก่อน — และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น — แล้วค่อยอ่านต่อ</p>
+<blockquote>
+<p>เฉลย: ใช้ <strong>Aggregate Report</strong> (ไม่ใช่ View Results Tree) เพราะนี่คือ load test จริง ไม่ใช่ debug phase — วาง Listener ไว้ใต้ <strong>Thread Group</strong> เพื่อให้ scope ครอบคลุมทุก Sampler ใน Thread Group นั้น หรือใต้ <strong>Test Plan</strong> ถ้าต้องการรวบรวมผลจากทุก Thread Group พร้อมกัน</p>
+</blockquote>
+<hr />
+<h2 id="5-3">ส่วนที่ 5: ตัวอย่าง 3 ระดับ<a class="headerlink" href="#5-3" title="Permanent link">&para;</a></h2>
+<h3 id="beginner-jmeter-ui-structure">ตัวอย่าง Beginner: ทำความเข้าใจ JMeter UI ผ่าน structure จริง<a class="headerlink" href="#beginner-jmeter-ui-structure" title="Permanent link">&para;</a></h3>
+<p><strong>คำอธิบาย UI (แทน screenshot):</strong></p>
+<p>เมื่อเปิด JMeter ครั้งแรก คุณจะเห็น:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>[Left Pane — Tree Panel]          [Right Pane — Config Panel]
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>┌─────────────────────┐          ┌────────────────────────────┐
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│ 📋 Test Plan         │──click──→│ Name: Test Plan            │
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   └─ Thread Group   │          │ Comments: (text area)       │
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│                     │          │ ☐ Functional Test Mode      │
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│                     │          │ ☐ Add directory...          │
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>└─────────────────────┘          └────────────────────────────┘
+</code></pre></div>
+<p>เมื่อ click "Thread Group" ใน tree จะเห็น Right Pane เปลี่ยนเป็น:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>[Right Pane เมื่อ Thread Group selected]
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>┌──────────────────────────────────────────────┐
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│ Name: Thread Group                           │
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│ Comments:                                    │
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│                                              │
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│ Action to be taken after a Sampler error:    │
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│ ● Continue  ○ Start Next Thread Loop         │
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>│ ○ Stop Thread  ○ Stop Test  ○ Stop Test Now  │
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>│                                              │
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>│ Thread Properties                            │
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>│ Number of Threads (users): [1        ]       │
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>│ Ramp-Up Period (seconds):  [1        ]       │
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>│ Loop Count:  ☐ Infinite   [1        ]       │
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a>│                                              │
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>│ Same user on each iteration ☐               │
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>│ Delay Thread creation until needed ☐        │
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a>│ Specify Thread lifetime                      │
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a>│   Duration (seconds):     [          ]      │
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>│   Startup delay (seconds):[          ]      │
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a>└──────────────────────────────────────────────┘
+</code></pre></div>
+<p><strong>JMX XML ที่ตรงกับ structure ข้างบน:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="cm">&lt;!-- # label: JMX snippet — ยังไม่ได้ทดสอบแบบ standalone; ต้องใช้กับ JMeter 5.6.3 --&gt;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="nt">&lt;jmeterTestPlan</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;1.2&quot;</span><span class="w"> </span><span class="na">properties=</span><span class="s">&quot;5.0&quot;</span><span class="w"> </span><span class="na">jmeter=</span><span class="s">&quot;5.6.3&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="nt">&lt;hashTree&gt;</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="nt">&lt;TestPlan</span><span class="w"> </span><span class="na">guiclass=</span><span class="s">&quot;TestPlanGui&quot;</span><span class="w"> </span><span class="na">testclass=</span><span class="s">&quot;TestPlan&quot;</span><span class="w"> </span><span class="na">testname=</span><span class="s">&quot;Test Plan&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">      </span><span class="nt">&lt;boolProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;TestPlan.functional_mode&quot;</span><span class="nt">&gt;</span>false<span class="nt">&lt;/boolProp&gt;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="nt">&lt;/TestPlan&gt;</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="nt">&lt;hashTree&gt;</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">      </span><span class="cm">&lt;!-- Thread Group: 1 virtual user, Ramp-Up 1 วินาที, Loop 1 ครั้ง --&gt;</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">      </span><span class="nt">&lt;ThreadGroup</span><span class="w"> </span><span class="na">guiclass=</span><span class="s">&quot;ThreadGroupGui&quot;</span><span class="w"> </span><span class="na">testclass=</span><span class="s">&quot;ThreadGroup&quot;</span><span class="w"> </span><span class="na">testname=</span><span class="s">&quot;Thread Group&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="nt">&lt;intProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.num_threads&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/intProp&gt;</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="nt">&lt;intProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.ramp_time&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/intProp&gt;</span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span><span class="nt">&lt;boolProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.same_user_on_next_iteration&quot;</span><span class="nt">&gt;</span>true<span class="nt">&lt;/boolProp&gt;</span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">        </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.on_sample_error&quot;</span><span class="nt">&gt;</span>continue<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">        </span><span class="nt">&lt;elementProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.main_controller&quot;</span><span class="w"> </span><span class="na">elementType=</span><span class="s">&quot;LoopController&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">          </span><span class="nt">&lt;boolProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;LoopController.continue_forever&quot;</span><span class="nt">&gt;</span>false<span class="nt">&lt;/boolProp&gt;</span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">          </span><span class="nt">&lt;intProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;LoopController.loops&quot;</span><span class="nt">&gt;</span>1<span class="nt">&lt;/intProp&gt;</span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">        </span><span class="nt">&lt;/elementProp&gt;</span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">      </span><span class="nt">&lt;/ThreadGroup&gt;</span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">      </span><span class="nt">&lt;hashTree&gt;</span>
+<a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">        </span><span class="cm">&lt;!-- Samplers, Listeners, etc. จะอยู่ใน hashTree นี้ --&gt;</span>
+<a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">      </span><span class="nt">&lt;/hashTree&gt;</span>
+<a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="w">    </span><span class="nt">&lt;/hashTree&gt;</span>
+<a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">  </span><span class="nt">&lt;/hashTree&gt;</span>
+<a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="nt">&lt;/jmeterTestPlan&gt;</span>
+</code></pre></div>
+<p><strong>สังเกตสิ่งสำคัญในโครงสร้าง XML:</strong>
+- <code>&lt;hashTree&gt;</code> ที่ซ้อนกันคือสิ่งที่สร้าง hierarchy ใน tree — ยิ่ง nest ลึก ยิ่งเป็น child element
+- <code>&lt;ThreadGroup&gt;</code> อยู่ใน <code>&lt;hashTree&gt;</code> ของ <code>&lt;TestPlan&gt;</code>
+- Samplers จะอยู่ใน <code>&lt;hashTree&gt;</code> ของ <code>&lt;ThreadGroup&gt;</code></p>
+<hr />
+<h3 id="intermediate-thread-group-config-healthcare-api">ตัวอย่าง Intermediate: Thread Group config สำหรับ Healthcare API<a class="headerlink" href="#intermediate-thread-group-config-healthcare-api" title="Permanent link">&para;</a></h3>
+<p><strong>Scenario:</strong> ทีมพัฒนา Patient Portal API ของโรงพยาบาลต้องทดสอบว่า API รับ load ได้เท่าไหร่ในช่วง morning peak hour (8:00-9:00 น. ที่แพทย์และพยาบาลเข้าระบบพร้อมกัน)</p>
+<p><strong>Target:</strong> จำลอง 100 healthcare staff เข้าระบบพร้อมกัน โดย ramp up ใน 60 วินาที (สมจริงกว่าการ start พร้อมกัน) รันนาน 5 นาที</p>
+<p><strong>Thread Group configuration:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>ค่า</th>
+<th>เหตุผล</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Number of Threads (Users)</td>
+<td>100</td>
+<td>จำนวน staff ที่คาดว่า concurrent ใน peak hour</td>
+</tr>
+<tr>
+<td>Ramp-Up Period</td>
+<td>60</td>
+<td>ให้ thread ทยอย start — 100÷60 ≈ 1.67 thread/วินาที สะท้อนการ login ทีละคน</td>
+</tr>
+<tr>
+<td>Loop Count</td>
+<td>☐ Infinite</td>
+<td>เพราะต้องการรันตามเวลา ไม่ใช่ตามจำนวนรอบ</td>
+</tr>
+<tr>
+<td>Duration</td>
+<td>300</td>
+<td>5 นาที = 300 วินาที</td>
+</tr>
+</tbody>
+</table>
+<p><strong>XML snippet สำหรับ config นี้:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="cm">&lt;!-- # label: JMX snippet — ยังไม่ได้ทดสอบแบบ standalone; ต้องการ JMeter 5.6.3 --&gt;</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">&lt;ThreadGroup</span><span class="w"> </span><span class="na">guiclass=</span><span class="s">&quot;ThreadGroupGui&quot;</span><span class="w"> </span><span class="na">testclass=</span><span class="s">&quot;ThreadGroup&quot;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">             </span><span class="na">testname=</span><span class="s">&quot;Healthcare Staff - Peak Hour&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">&lt;intProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.num_threads&quot;</span><span class="nt">&gt;</span>100<span class="nt">&lt;/intProp&gt;</span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">&lt;intProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.ramp_time&quot;</span><span class="nt">&gt;</span>60<span class="nt">&lt;/intProp&gt;</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">  </span><span class="nt">&lt;boolProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.scheduler&quot;</span><span class="nt">&gt;</span>true<span class="nt">&lt;/boolProp&gt;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.duration&quot;</span><span class="nt">&gt;</span>300<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">  </span><span class="nt">&lt;stringProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.on_sample_error&quot;</span><span class="nt">&gt;</span>continue<span class="nt">&lt;/stringProp&gt;</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="nt">&lt;elementProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;ThreadGroup.main_controller&quot;</span><span class="w"> </span><span class="na">elementType=</span><span class="s">&quot;LoopController&quot;</span><span class="nt">&gt;</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="nt">&lt;boolProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;LoopController.continue_forever&quot;</span><span class="nt">&gt;</span>true<span class="nt">&lt;/boolProp&gt;</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="nt">&lt;intProp</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;LoopController.loops&quot;</span><span class="nt">&gt;</span>-1<span class="nt">&lt;/intProp&gt;</span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">  </span><span class="nt">&lt;/elementProp&gt;</span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="nt">&lt;/ThreadGroup&gt;</span>
+</code></pre></div>
+<p><strong>ทำไม Ramp-Up 60 วินาทีถึงสำคัญ:</strong> ถ้าตั้ง Ramp-Up = 0 แพทย์ 100 คนจะ login พร้อมกันในวินาทีเดียว — ไม่สะท้อนความเป็นจริง และ server อาจ spike ผิดปกติ ทำให้ผลการทดสอบ misleading</p>
+<hr />
+<h3 id="advanced-multiple-thread-groups-user-types">ตัวอย่าง Advanced: Multiple Thread Groups สำหรับ User Types ต่างกัน<a class="headerlink" href="#advanced-multiple-thread-groups-user-types" title="Permanent link">&para;</a></h3>
+<p><strong>Scenario:</strong> ระบบ e-learning platform มี user 3 ประเภทที่ทำ action ต่างกัน:
+- <strong>Student (80%):</strong> Browse course, watch video, submit quiz
+- <strong>Instructor (15%):</strong> Upload content, review submissions
+- <strong>Admin (5%):</strong> Generate reports, manage users</p>
+<p><strong>Test Plan structure:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Test Plan
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>├── HTTP Request Defaults         ← Config ส่วนกลาง (base URL)
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>├── HTTP Cookie Manager           ← Cookie จัดการ session (global scope)
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>│
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>├── Thread Group: Students        ← 800 threads, Ramp-Up 120s
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>│   ├── HTTP Request: GET /courses
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>│   ├── HTTP Request: GET /videos/{id}
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>│   ├── Constant Timer: 5000ms    ← Think time จำลองการดู video
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>│   └── HTTP Request: POST /quiz/submit
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>│
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>├── Thread Group: Instructors     ← 150 threads, Ramp-Up 60s
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>│   ├── HTTP Request: POST /content/upload
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>│   └── HTTP Request: GET /submissions
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>│
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>├── Thread Group: Admins          ← 50 threads, Ramp-Up 30s
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>│   ├── HTTP Request: GET /reports/generate
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a>│   └── HTTP Request: GET /admin/users
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>│
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a>└── Aggregate Report              ← รวบรวมผลจากทุก Thread Group
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>    └── (save to results.csv)
+</code></pre></div>
+<p><strong>ข้อดีของ Multiple Thread Groups:</strong>
+- กำหนด load profile ต่างกันสำหรับ user แต่ละประเภท
+- ดูผลแยกตาม Thread Group ได้ใน Aggregate Report
+- เพิ่ม/ลด thread จาก user type ไหนก็ได้โดยไม่กระทบอื่น</p>
+<p><strong>Trade-off ที่ต้องรู้:</strong>
+- Thread Group ทำงาน parallel กันโดย default — ถ้าต้องการให้รัน sequential ต้องเปิด "Run Thread Groups consecutively" ใน Test Plan settings
+- ยิ่ง Thread Group มาก ยิ่ง monitor ยากขึ้น — ถ้าระบบช้า ต้องระบุให้ได้ว่า Thread Group ไหนเป็น culprit</p>
+<hr />
+<h2 id="6-common-mistakes">ส่วนที่ 6: Common Mistakes<a class="headerlink" href="#6-common-mistakes" title="Permanent link">&para;</a></h2>
+<h3 id="mistake-1-listener">❌ Mistake 1: ใส่ Listener ผิดตำแหน่ง ทำให้ไม่เก็บผล<a class="headerlink" href="#mistake-1-listener" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong> เพิ่ม Aggregate Report ไว้ใน Test Plan level แต่วาง <strong>ข้างนอก</strong> Thread Group แทนที่จะให้ครอบคลุม sampler</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Test Plan
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>├── Aggregate Report    ← ✓ อยู่ที่นี่ถูกต้อง (scope = Test Plan ทั้งหมด)
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>└── Thread Group
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    ├── HTTP Request 1
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    └── HTTP Request 2  ← ⚠️ ถ้า Listener อยู่หลัง HTTP Request 2
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>                            ใน tree ลำดับเดียวกัน — บางกรณี scope ไม่ครอบคลุม
+</code></pre></div>
+<p><strong>แบบถูก:</strong> เข้าใจ scope rule ของ JMeter — Listener ที่อยู่ใน parent element จะเก็บผลจาก child ทั้งหมด ถ้าวาง Listener ใน Test Plan level จะครอบทุก Thread Group ถ้าวางใน Thread Group จะครอบเฉพาะ Thread Group นั้น</p>
+<p>🔍 <strong>เหตุผล:</strong> Listener ทำงานตาม scope hierarchy เหมือน Config Element — วางผิดที่ = เก็บผลไม่ครบหรือเก็บซ้ำ</p>
+<p>🤔 <strong>วิธีตรวจสอบ:</strong> รัน test ด้วย 1 thread ก่อน แล้วดูว่า Listener แสดงผลหรือเปล่า ถ้าไม่มีผลเลย = scope ผิด</p>
+<p><em>(source: https://jmeter.apache.org/usermanual/test_plan.html — scope hierarchy)</em></p>
+<hr />
+<h3 id="mistake-2-ramp-up-period-0-spike">❌ Mistake 2: ตั้ง Ramp-Up Period = 0 ทำให้เกิด spike ทันที<a class="headerlink" href="#mistake-2-ramp-up-period-0-spike" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Number of Threads: 500
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>Ramp-Up Period: 0         ← ผิด — thread ทั้ง 500 start พร้อมกัน
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>Loop Count: 10
+</code></pre></div></p>
+<p><strong>แบบถูก:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>Number of Threads: 500
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>Ramp-Up Period: 120       ← 2 นาที — ทยอย start ~4 threads/วินาที
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>Loop Count: 10
+</code></pre></div></p>
+<p>🔍 <strong>เหตุผล:</strong> Real users ไม่ได้เข้าระบบพร้อมกันพอดีทุกคน — Ramp-Up Period = 0 สร้าง artificial spike ที่ไม่สะท้อนการใช้งานจริง ผลการทดสอบ (response time, error rate) จะดูแย่กว่าความเป็นจริง</p>
+<p>🤔 <strong>Guideline:</strong> ตั้ง Ramp-Up Period ให้เท่ากับ "เวลาที่ user ทยอยเข้าระบบในชีวิตจริง" เช่น ถ้า peak hour ใช้เวลา 10 นาทีในการ login ก็ตั้ง Ramp-Up = 600 วินาที</p>
+<p><em>(source: https://jmeter.apache.org/usermanual/test_plan.html — Ramp-Up Period example)</em></p>
+<hr />
+<h3 id="mistake-3-loop-count-vs-duration">❌ Mistake 3: สับสนระหว่าง Loop Count vs Duration<a class="headerlink" href="#mistake-3-loop-count-vs-duration" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong> ต้องการรัน test 10 นาที แต่ตั้ง Loop Count = 10 โดยคิดว่า = 10 นาที</p>
+<p><strong>แบบถูก:</strong>
+- ถ้าต้องการรัน <strong>ตามเวลา</strong> → เลือก Infinite loop + ตั้ง Duration = 600 (วินาที)
+- ถ้าต้องการรัน <strong>ตามจำนวนรอบ</strong> → ตั้ง Loop Count ให้ตรง + ปล่อย Duration ว่าง</p>
+<p>🔍 <strong>เหตุผล:</strong> Loop Count กำหนดจำนวนรอบ ไม่ใช่เวลา — ถ้า response time ของแต่ละ request เปลี่ยน เวลารัน total ก็เปลี่ยนตาม แต่ถ้าใช้ Duration จะรันนานตามที่กำหนดเสมอ</p>
+<p>🤔 <strong>เมื่อใช้ Duration:</strong> เหมาะสำหรับ soak test หรือ endurance test ที่ต้องการ run นานแน่นอน เช่น "รัน 1 ชั่วโมงแล้วดูว่า memory leak ไหม"</p>
+<p><em>(source: https://jmeter.apache.org/usermanual/build-web-test-plan.html — Loop Count field)</em></p>
+<hr />
+<h2 id="7">ส่วนที่ 7: สรุปบท<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<h3 id="retrieval-questions">Retrieval Questions — ตอบก่อนดูเฉลย<a class="headerlink" href="#retrieval-questions" title="Permanent link">&para;</a></h3>
+<p>หยุดอ่าน เขียนคำตอบลงกระดาษก่อน อย่างน้อย 30 วินาทีต่อข้อ — และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น ก่อนดูเฉลย</p>
+<p><strong>ข้อ 1:</strong> JMeter official docs บอกว่า Test Plan ขั้นต่ำต้องมีอะไรบ้าง? และทำไม element ทั้งสามนั้นถึงขาดกันไม่ได้?</p>
+<p><strong>ข้อ 2:</strong> ถ้าคุณมี Thread Group ที่ตั้งค่า Number of Threads = 50, Ramp-Up = 25 วินาที — JMeter จะ start thread ใหม่ทุกกี่วินาที? และถ้าเปลี่ยน Ramp-Up เป็น 0 จะเกิดอะไรขึ้น?</p>
+<p><strong>ข้อ 3:</strong> คุณได้รับ task ให้ debug ว่า API ส่ง response body อะไรกลับมา แต่อีก task คือรัน load test จริงกับ 1,000 users — คุณจะเลือก Listener ต่างกันอย่างไรสำหรับสองงานนี้ และเพราะอะไร?</p>
+<hr />
+<p><strong>เฉลย</strong></p>
+<blockquote>
+<p><strong>ข้อ 1:</strong> "A minimal test will consist of the Test Plan, a Thread Group and one or more Samplers" — Test Plan คือ container ที่ขาดไม่ได้, Thread Group กำหนดว่ามี virtual users กี่คนและทำงานอย่างไร, Sampler คือ element เดียวที่ส่ง request จริง — ขาด Sampler = ไม่มีการทดสอบ, ขาด Thread Group = ไม่มี virtual user ที่จะรัน Sampler</p>
+<p><strong>ข้อ 2:</strong> 25 ÷ 50 = 0.5 วินาทีต่อ thread (start thread ใหม่ทุกครึ่งวินาที) — ถ้า Ramp-Up = 0 thread ทั้ง 50 จะ start พร้อมกันทันที เกิด spike load ทันที</p>
+<p><strong>ข้อ 3:</strong> Debug → <strong>View Results Tree</strong> (เห็น request/response detail ทุก field) | Load test 1,000 users → <strong>Aggregate Report</strong> (เบากว่า, มี percentile metrics ที่ต้องการ) — ห้ามใช้ View Results Tree ตอน load test เพราะ official docs เตือนว่า "don't use during load test, use only during scripting phase"</p>
+</blockquote>
+<p><strong>ถ้าตอบผิด:</strong> ทบทวน section 4.2 (Thread Group fields) และ 4.5 (Listener selection guide) แล้วลองอธิบายเองว่าเข้าใจผิดตรงไหน — การระบุจุดที่เข้าใจผิดได้แม่นยำกว่าการอ่านซ้ำตรงๆ</p>
+<p><strong>ถ้าตอบข้อ 3 ได้ แต่อธิบายเหตุผลไม่ได้:</strong> ลองทำ Feynman Technique — อธิบาย scope inheritance ของ Listener ให้เพื่อนฟังโดยไม่ดูโน้ต ถ้าติดตรงไหน = ยังไม่เข้าใจจริง</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  กลับไปด้านบนสุด
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="ส่วนท้าย" >
+        
+          
+          <a href="../02-installation-setup/" class="md-footer__link md-footer__link--prev" aria-label="ก่อนหน้า: บทที่ 2 - Installation">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                ก่อนหน้า
+              </span>
+              <div class="md-ellipsis">
+                บทที่ 2 - Installation
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../04-first-test-plan/" class="md-footer__link md-footer__link--next" aria-label="ต่อไป: บทที่ 4 - First Test Plan">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                ต่อไป
+              </span>
+              <div class="md-ellipsis">
+                บทที่ 4 - First Test Plan
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01\u0e41\u0e25\u0e49\u0e27", "clipboard.copy": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01", "search.result.more.one": "\u0e2d\u0e35\u0e01\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.more.other": "# \u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.none": "\u0e44\u0e21\u0e48\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.one": "\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.other": "\u0e1e\u0e1a # \u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.placeholder": "\u0e1e\u0e34\u0e21\u0e1e\u0e4c\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e40\u0e23\u0e34\u0e48\u0e21\u0e04\u0e49\u0e19\u0e2b\u0e32", "search.result.term.missing": "\u0e44\u0e21\u0e48\u0e1e\u0e1a", "select.version": "\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e40\u0e27\u0e2d\u0e23\u0e4c\u0e0a\u0e31\u0e19"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

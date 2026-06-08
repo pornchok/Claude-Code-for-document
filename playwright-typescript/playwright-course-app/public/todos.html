@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todos — Playwright Course App</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div id="main-nav"></div>
+  <main>
+    <h1>
+      Todo List
+      <span class="badge" id="todo-count-badge" data-testid="todo-count">0</span>
+      <small class="todo-count">items</small>
+    </h1>
+
+    <form id="add-form" data-testid="add-todo-form" style="display:flex;gap:.5rem;margin-bottom:1.5rem">
+      <input type="text" id="new-todo" data-testid="input-new-todo"
+             placeholder="What needs to be done?" aria-label="New todo text" style="flex:1">
+      <button type="submit" class="btn btn-primary" data-testid="btn-add-todo">Add</button>
+    </form>
+
+    <ul class="todo-list" id="todo-list" data-testid="todo-list" role="list" aria-label="Todo items"></ul>
+
+    <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
+      <button class="btn btn-secondary btn-sm" id="btn-clear-completed" data-testid="btn-clear-completed">
+        Clear Completed
+      </button>
+      <button class="btn btn-danger btn-sm" id="btn-reset" data-testid="btn-reset">
+        Reset All
+      </button>
+    </div>
+  </main>
+
+  <script src="/client.js"></script>
+  <script>
+    let todos = [];
+    let dragSrcIdx = null;
+
+    async function loadTodos() {
+      todos = await apiFetch('/api/todos');
+      renderTodos();
+    }
+
+    function renderTodos() {
+      const list = document.getElementById('todo-list');
+      const badge = document.getElementById('todo-count-badge');
+      badge.textContent = todos.length;
+      badge.setAttribute('data-testid', 'todo-count');
+
+      list.innerHTML = todos.map((t, i) => `
+        <li class="todo-item" data-id="${t.id}" data-idx="${i}" draggable="true"
+            data-testid="todo-item-${t.id}" role="listitem">
+          <input type="checkbox" ${t.completed ? 'checked' : ''}
+                 aria-label="Mark '${t.text}' as completed"
+                 data-testid="todo-checkbox-${t.id}">
+          <span class="todo-text ${t.completed ? 'completed' : ''}"
+                data-testid="todo-text-${t.id}"
+                title="Double-click to edit">${t.text}</span>
+          <button class="btn btn-danger btn-sm" data-testid="btn-delete-${t.id}" title="Delete todo">✕</button>
+        </li>`).join('');
+
+      // Checkbox toggle
+      list.querySelectorAll('input[type=checkbox]').forEach(cb => {
+        cb.addEventListener('change', async () => {
+          const id = Number(cb.closest('li').dataset.id);
+          await apiFetch(`/api/todos/${id}`, { method: 'PATCH', body: JSON.stringify({ completed: cb.checked }) });
+          await loadTodos();
+        });
+      });
+
+      // Delete
+      list.querySelectorAll('[data-testid^="btn-delete-"]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const id = Number(btn.closest('li').dataset.id);
+          await apiFetch(`/api/todos/${id}`, { method: 'DELETE' });
+          await loadTodos();
+        });
+      });
+
+      // Double-click to edit inline
+      list.querySelectorAll('.todo-text').forEach(span => {
+        span.addEventListener('dblclick', () => {
+          span.contentEditable = 'true';
+          span.focus();
+          const range = document.createRange();
+          range.selectNodeContents(span);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+        });
+        span.addEventListener('keydown', async (e) => {
+          if (e.key === 'Enter') { e.preventDefault(); span.blur(); }
+          if (e.key === 'Escape') { span.contentEditable = 'false'; await loadTodos(); }
+        });
+        span.addEventListener('blur', async () => {
+          if (span.contentEditable !== 'true') return;
+          span.contentEditable = 'false';
+          const id = Number(span.closest('li').dataset.id);
+          const newText = span.textContent.trim();
+          if (newText) await apiFetch(`/api/todos/${id}`, { method: 'PATCH', body: JSON.stringify({ text: newText }) });
+          await loadTodos();
+        });
+      });
+
+      // Drag-drop reorder
+      list.querySelectorAll('.todo-item').forEach(li => {
+        li.addEventListener('dragstart', () => { dragSrcIdx = Number(li.dataset.idx); li.classList.add('dragging'); });
+        li.addEventListener('dragend', () => li.classList.remove('dragging'));
+        li.addEventListener('dragover', e => { e.preventDefault(); li.classList.add('drag-over'); });
+        li.addEventListener('dragleave', () => li.classList.remove('drag-over'));
+        li.addEventListener('drop', async () => {
+          li.classList.remove('drag-over');
+          const destIdx = Number(li.dataset.idx);
+          if (dragSrcIdx === destIdx) return;
+          const moved = todos.splice(dragSrcIdx, 1)[0];
+          todos.splice(destIdx, 0, moved);
+          renderTodos();
+        });
+      });
+    }
+
+    document.getElementById('add-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = document.getElementById('new-todo');
+      const text = input.value.trim();
+      if (!text) return;
+      await apiFetch('/api/todos', { method: 'POST', body: JSON.stringify({ text }) });
+      input.value = '';
+      await loadTodos();
+    });
+
+    document.getElementById('btn-clear-completed').addEventListener('click', async () => {
+      const completed = todos.filter(t => t.completed);
+      await Promise.all(completed.map(t => apiFetch(`/api/todos/${t.id}`, { method: 'DELETE' })));
+      await loadTodos();
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', async () => {
+      if (confirm('Delete all todos?')) {
+        await apiFetch('/api/reset', { method: 'POST' });
+        await loadTodos();
+      }
+    });
+
+    loadTodos();
+  </script>
+</body>
+</html>

@@ -1,0 +1,4665 @@
+
+<!doctype html>
+<html lang="th" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="คอร์ส QA & Automation Testing ภาษาไทย">
+      
+      
+      
+        <link rel="canonical" href="https://pornchok.github.io/Claude-Code-for-document/jmeter-performance-testing/08-running-reports/">
+      
+      
+        <link rel="prev" href="../07-assertions/">
+      
+      
+        <link rel="next" href="../09-distributed-testing/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>บทที่ 8 - Reports - QA Learning Hub</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#8-running-tests-html-dashboard-reports" class="md-skip">
+          ข้ามไปที่เนื้อหา
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="หัวข้อ">
+    <a href="../.." title="QA Learning Hub" class="md-header__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            QA Learning Hub
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              บทที่ 8 - Reports
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="ค้นหา" placeholder="ค้นหา" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="ค้นหา">
+        
+        <button type="reset" class="md-search__icon md-icon" title="ล้าง" aria-label="ล้าง" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            กำลังเริ่มต้นการค้นหา
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="แท็บ" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../playwright-typescript/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Playwright TypeScript
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../robot-framework-for-qa/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../robot-framework-control-flow/00-overview/" class="md-tabs__link">
+          
+  
+  
+  Robot Framework Control Flow
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../rf-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  RF Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../wdio-mobile-testing/00-overview/" class="md-tabs__link">
+          
+  
+  
+  WebdriverIO Mobile Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-overview/" class="md-tabs__link">
+          
+  
+  
+  JMeter Performance Testing
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../english-for-beginners/00-overview/" class="md-tabs__link">
+          
+  
+  
+  English for QA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-tabs__link">
+          
+  
+  
+  Claude Code Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="ตัวนำทาง" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="QA Learning Hub" class="md-nav__button md-logo" aria-label="QA Learning Hub" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    QA Learning Hub
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/pornchok/Claude-Code-for-document" title="ไปที่พื้นที่เก็บข้อมูล" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    pornchok/Claude-Code-for-document
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Playwright TypeScript
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Playwright TypeScript
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/01-why-playwright/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - ทำไมต้อง Playwright
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/02-setup-typescript/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup + TypeScript
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/03-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/04-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/05-actions-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Actions & Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/06-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Debugging
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/07-fixtures/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Fixtures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/08-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/09-test-organization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Test Organization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/10-configuration-projects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Configuration & Projects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/11-parallelism-sharding-reporting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 11 - Parallelism & Sharding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/12-mocking-network-time-browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 12 - Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/13-authentication-storage-state/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 13 - Authentication
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/14-advanced-browser-emulation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 14 - Advanced Browser Emulation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/15-api-testing-hybrid/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 15 - API Testing & Hybrid
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/16-visual-accessibility-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 16 - Visual & Accessibility
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/17-cicd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 17 - CI/CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/18-production-patterns/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 18 - Production Patterns
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/19-db-verification/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 19 - DB Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/20-professional-project-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 20 - Professional Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../playwright-typescript/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/01-what-is-robot-framework/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is RF
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/03-test-structure-syntax/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/04-keywords-and-resource-files/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Keywords & Resources
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/05-web-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Web Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/06-data-driven-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Data Driven
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/07-reports-and-debugging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Reports & Debug
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/08-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-for-qa/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robot Framework Control Flow
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Robot Framework Control Flow
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/01-if-else/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - If/Else
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/02-for-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - For Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/03-while-loop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - While Loop
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../robot-framework-control-flow/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RF Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    RF Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/01-mobile-testing-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mobile Landscape
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/02-setup-environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/03-appium-capabilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Capabilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/04-appiumlibrary-keywords/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - AppiumLibrary Keywords
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/05-mobile-locators/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Mobile Locators
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/06-gestures-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Gestures
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/07-page-object-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Page Object Model
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../rf-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WebdriverIO Mobile Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    WebdriverIO Mobile Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/01-what-is-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - What is WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/02-setup-wdio-project/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/03-wdio-appium-config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Appium Config
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/04-writing-tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Writing Tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/05-selectors-interactions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Selectors
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/06-page-objects-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Page Objects
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/07-comparing-rf-wdio/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - RF vs WDIO
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../wdio-mobile-testing/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    JMeter Performance Testing
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    JMeter Performance Testing
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-performance-testing-fundamentals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Fundamentals
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-installation-setup/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Installation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-ui-test-plan-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Test Plan Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-first-test-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - First Test Plan
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-thread-group-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - Thread Group
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-parameterization/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Parameterization
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-assertions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Assertions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Reports
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-chapter-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⏰ Pre-chapter Retrieval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. วัตถุประสงค์
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. ทำไมต้องรู้?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-analogy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Analogy: รายงานผลการแข่งขันวิ่งมาราธอน
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. เนื้อหาหลัก
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. เนื้อหาหลัก">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-cli-mode-load-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 CLI Mode: วิธีที่ถูกต้องในการรัน Load Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-aggregate-report-column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Aggregate Report: อ่านทุก Column
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-90th-percentile-average" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 ทำไม 90th Percentile สำคัญกว่า Average
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-html-dashboard-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 HTML Dashboard Report: ส่วนประกอบหลัก
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-error-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 การอ่านผล: Error% &gt; 1% หมายถึงอะไร?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ตัวอย่าง 3 ระดับ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. ตัวอย่าง 3 ระดับ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beginner-jmeter-cli-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ระดับ Beginner: รัน JMeter CLI Mode และผลที่ควรเห็น
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-aggregate-report-healthcare-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ระดับ Intermediate: วิเคราะห์ Aggregate Report ของ Healthcare System
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-baseline-vs-after-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ระดับ Advanced: เปรียบเทียบ Baseline vs After Optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Common Mistakes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Common Mistakes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-load-test-gui-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (a) รัน Load Test ด้วย GUI Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-average-percentile-sla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (b) ดู Average แทน Percentile ในการตัดสิน SLA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-output-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (c) Output Directory มีอยู่แล้ว
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-e-o-generate-html-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (d) ลืม -e -o ทำให้ไม่ Generate HTML Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. สรุปบท
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-distributed-testing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 9 - Distributed Testing
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-anti-patterns-best-practices/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 10 - Best Practices
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    English for QA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    English for QA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/01-mindset/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 1 - Mindset
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/02-phonics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 2 - Phonics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/03-vocabulary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 3 - Vocabulary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/04-sentence-structure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 4 - Sentence Structure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/05-to-be-present-simple/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 5 - To Be & Present Simple
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/06-questions-negatives/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 6 - Questions & Negatives
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/07-numbers-time-days/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 7 - Numbers, Time & Days
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/08-phrases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    บทที่ 8 - Phrases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/exercises/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exercises
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../english-for-beginners/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Claude Code Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Claude Code Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="สารบัญ">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      สารบัญ
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pre-chapter-retrieval" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ⏰ Pre-chapter Retrieval
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. วัตถุประสงค์
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. ทำไมต้องรู้?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-analogy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Analogy: รายงานผลการแข่งขันวิ่งมาราธอน
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. เนื้อหาหลัก
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. เนื้อหาหลัก">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-cli-mode-load-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 CLI Mode: วิธีที่ถูกต้องในการรัน Load Test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-aggregate-report-column" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Aggregate Report: อ่านทุก Column
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-90th-percentile-average" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 ทำไม 90th Percentile สำคัญกว่า Average
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-html-dashboard-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 HTML Dashboard Report: ส่วนประกอบหลัก
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#45-error-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.5 การอ่านผล: Error% &gt; 1% หมายถึงอะไร?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. ตัวอย่าง 3 ระดับ
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. ตัวอย่าง 3 ระดับ">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#beginner-jmeter-cli-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ระดับ Beginner: รัน JMeter CLI Mode และผลที่ควรเห็น
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intermediate-aggregate-report-healthcare-system" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ระดับ Intermediate: วิเคราะห์ Aggregate Report ของ Healthcare System
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#advanced-baseline-vs-after-optimization" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ระดับ Advanced: เปรียบเทียบ Baseline vs After Optimization
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-common-mistakes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Common Mistakes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Common Mistakes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a-load-test-gui-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (a) รัน Load Test ด้วย GUI Mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b-average-percentile-sla" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (b) ดู Average แทน Percentile ในการตัดสิน SLA
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#c-output-directory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (c) Output Directory มีอยู่แล้ว
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#d-e-o-generate-html-report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ❌ (d) ลืม -e -o ทำให้ไม่ Generate HTML Report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. สรุปบท
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="8-running-tests-html-dashboard-reports">บทที่ 8: Running Tests &amp; HTML Dashboard Reports<a class="headerlink" href="#8-running-tests-html-dashboard-reports" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>เวลาโดยประมาณ: 45–60 นาที</p>
+</blockquote>
+<hr />
+<h2 id="pre-chapter-retrieval">⏰ Pre-chapter Retrieval<a class="headerlink" href="#pre-chapter-retrieval" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>แนะนำ: อ่านบทนี้หลังจากผ่านไปอย่างน้อย 1 วันหลังบทที่ 7</p>
+</blockquote>
+<p><strong>ก่อนอ่านบทนี้ ลองตอบ:</strong></p>
+<p>ตอนนี้คุณมี test plan ที่สมบูรณ์แล้ว — มี Thread Group, HTTP Requests, CSV Data Set Config สำหรับ parameterization, และ Assertions ตรวจ response ครบทุก critical request</p>
+<p><strong>คำถาม 2 ข้อ:</strong></p>
+<ol>
+<li>
+<p>ถ้าจะรัน load test จริง (ไม่ใช่แค่ debug script) คุณควรรันจาก JMeter GUI หรือ command line? ทำไม?</p>
+</li>
+<li>
+<p>หลังจาก test รันเสร็จ คุณจะรู้ได้อย่างไรว่าระบบ "ผ่าน" หรือ "ไม่ผ่าน"? ตัวเลขไหนที่ดูก่อน?</p>
+</li>
+</ol>
+<p>เขียนคำตอบลงกระดาษ — อย่า scroll ข้ามเฉลยก่อน และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น</p>
+<hr />
+<blockquote>
+<p><strong>เฉลย:</strong></p>
+<ol>
+<li>
+<p>ควรรันจาก <strong>command line (CLI mode)</strong> เสมอ เพราะ JMeter official docs ระบุชัดเจนว่า: <em>"GUI mode should only be used for creating the test script, CLI mode (NON GUI) must be used for load testing"</em> — GUI ใช้ memory และ CPU ส่วนหนึ่งในการ render UI ทำให้ JMeter engine มี resource น้อยลงสำหรับสร้าง load จริง ผลที่ได้จาก GUI mode จึงไม่น่าเชื่อถือ</p>
+</li>
+<li>
+<p>ดู <strong>Error%</strong> ก่อน — ถ้า error rate สูงกว่า threshold ที่กำหนด (เช่น &gt; 1%) ระบบยังไม่พร้อม หลังจากนั้นดู <strong>90th percentile</strong> เพราะบอกว่า 90% ของ users ได้รับ response ภายในกี่ ms — ตัวเลขนี้สะท้อนประสบการณ์จริงของ users ได้ดีกว่า Average</p>
+</li>
+</ol>
+<p><strong>Generation effect:</strong> ก่อนอ่านต่อ ลองเขียนด้วยคำของตัวเองว่า "ทำไม Average response time ถึงอาจทำให้เข้าใจผิด" ในหนึ่งประโยค — เขียนก่อนอ่าน section 4 เพื่อ activate prior knowledge</p>
+<p><strong>Remediation path:</strong> ถ้าตอบข้อ 1 ว่า "GUI ได้เพราะสะดวกกว่า" — อ่าน section 4.1 แรก แล้วกลับมาอธิบายใหม่ว่าทำไมถึงไม่ใช่คำตอบที่ถูก</p>
+</blockquote>
+<hr />
+<h2 id="1">1. วัตถุประสงค์<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>เมื่ออ่านบทนี้จบ คุณจะสามารถ:</p>
+<ul>
+<li><strong>รัน</strong> JMeter test ด้วย CLI mode และอธิบายความหมายของทุก flag ในคำสั่ง</li>
+<li><strong>Generate</strong> HTML Dashboard Report ทั้งแบบ during test run และ from existing results file</li>
+<li><strong>อ่าน</strong> Aggregate Report ได้ครบทุกคอลัมน์ รวมถึง 90th/95th/99th percentile, Error%, และ Throughput</li>
+<li><strong>อธิบาย</strong> ทำไม 90th percentile ถึงสำคัญกว่า Average และ Average ซ่อนข้อมูลอะไร</li>
+<li><strong>ตีความ</strong> APDEX score และผลจาก HTML Dashboard เพื่อระบุว่าระบบ "ผ่าน" หรือ "ไม่ผ่าน" SLA ได้</li>
+<li><strong>เปรียบเทียบ</strong> ผลจาก 2 test runs เพื่อ detect regression และ validate optimization</li>
+</ul>
+<hr />
+<h2 id="2">2. ทำไมต้องรู้?<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>ลองนึกภาพว่าคุณเป็น QA engineer ที่รัน load test เสร็จแล้ว — ข้อมูลหลายพันบรรทัดอยู่ใน log file คำถามคือ: <strong>คุณจะสรุปผลให้ทีมฟังอย่างไรใน 2 นาที?</strong></p>
+<p>ถ้าดูแค่ตัวเลขส่วนตัว เช่น "average 300ms รู้สึกว่าโอเค" — คุณอาจพลาดว่า 10% ของ users รอนาน 3 วินาที ซึ่งในระบบที่มี 10,000 requests นั่นคือ 1,000 users ที่ได้ประสบการณ์ที่แย่</p>
+<p>บทนี้จะให้คุณอ่าน report ได้อย่างมืออาชีพ — ไม่ใช่แค่ "ตัวเลขดูดี" แต่เข้าใจจริงว่าแต่ละตัวเลขบอกอะไร และ trade-off ที่ต้องตัดสินใจคืออะไร</p>
+<hr />
+<h2 id="3-analogy">3. Analogy: รายงานผลการแข่งขันวิ่งมาราธอน<a class="headerlink" href="#3-analogy" title="Permanent link">&para;</a></h2>
+<p>ลองนึกภาพว่าคุณเป็น coach ดูแลนักวิ่ง 1,000 คนในการแข่งมาราธอน</p>
+<p><strong>Aggregate Report</strong> = ตารางสรุปผลทุกคน ระบุ เวลาเร็วสุด เวลาช้าสุด เวลาเฉลี่ย และที่สำคัญกว่า — <strong>"90% ของนักวิ่งเข้าเส้นชัยก่อน 4 ชั่วโมง 30 นาที"</strong> (90th percentile)</p>
+<p><strong>Average</strong> เฉลี่ยอาจดูดี แต่ถ้านักวิ่ง 50 คนล้มกลางทาง (DNF) แต่อีก 950 คนวิ่งเร็ว Average อาจยังอยู่ในเกณฑ์ดี — ทั้งที่จริงๆ 5% fail ไปแล้ว <strong>Error%</strong> จะจับตรงนี้</p>
+<p><strong>HTML Dashboard</strong> = วิดีโอ replay ทั้งการแข่ง ไม่ใช่แค่ตาราง — เห็นว่า speed ลดลงช่วงไหน (Over Time charts) มีนักวิ่งตะคริวที่กิโลเมตรที่ 30 ไหม (latency spike)</p>
+<p><strong>APDEX</strong> = คะแนนความพึงพอใจนักวิ่ง: วิ่งเสร็จได้เวลาตามเป้าหรือเปล่า — 1.0 คือทุกคนพอใจ, ต่ำกว่า 0.5 คือเกินครึ่งไม่พอใจ</p>
+<p>⚠️ <strong>ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:</strong> 90th percentile = ค่าเฉลี่ยของ 90% นักวิ่งที่เร็วที่สุด — ผิด 90th percentile คือค่าที่ <strong>90% ของ samples มีค่าต่ำกว่า</strong> หรือพูดง่ายๆ ว่า "ช้ากว่านี้มีแค่ 10%" — ตัวอย่าง: p90 = 500ms หมายถึง 90% ของ requests ตอบภายใน 500ms และอีก 10% ช้ากว่านั้น — ถ้าเข้าใจผิดว่าเป็นค่าเฉลี่ยจะอ่าน SLA report ผิดและตัดสินใจผิด</p>
+<hr />
+<h2 id="4">4. เนื้อหาหลัก<a class="headerlink" href="#4" title="Permanent link">&para;</a></h2>
+<h3 id="41-cli-mode-load-test">4.1 CLI Mode: วิธีที่ถูกต้องในการรัน Load Test<a class="headerlink" href="#41-cli-mode-load-test" title="Permanent link">&para;</a></h3>
+<p>✅ <strong>Best practice: รัน load test ด้วย CLI mode เสมอ ไม่ใช่ GUI mode</strong></p>
+<blockquote>
+<p><em>"GUI mode should only be used for creating the test script, CLI mode (NON GUI) must be used for load testing"</em>
+<em>(source: https://jmeter.apache.org/usermanual/get-started.html)</em></p>
+</blockquote>
+<p>เหตุผลที่ GUI mode ไม่เหมาะสำหรับ load test:</p>
+<ol>
+<li><strong>Resource overhead:</strong> GUI ต้องใช้ CPU และ memory ในการ render charts, tables, และ real-time updates — resource เหล่านี้ถูกแย่งจาก JMeter engine ที่ต้องสร้าง virtual users</li>
+<li><strong>Memory leak เสี่ยงกว่า:</strong> View Results Tree และ Listeners ใน GUI mode เก็บ response data ทั้งหมดไว้ใน memory — ถ้า test รันนาน memory จะเต็มและ JMeter จะ crash</li>
+<li><strong>ผลไม่น่าเชื่อถือ:</strong> เวลา response อาจสูงขึ้นเพราะ JMeter machine เองช้า ไม่ใช่เพราะ server ช้า</li>
+</ol>
+<p><strong>คำสั่ง CLI mode มาตรฐาน:</strong></p>
+<blockquote>
+<p><em>"Use CLI mode: jmeter -n -t test.jmx -l test.jtl"</em>
+<em>(source: https://jmeter.apache.org/usermanual/best-practices.html)</em></p>
+<p><em>"jmeter -n -t <test JMX file> -l <test log file> -e -o <Path to output folder>"</em>
+<em>(source: https://jmeter.apache.org/usermanual/generating-dashboard.html)</em></p>
+</blockquote>
+<p><strong>คำสั่งเต็มพร้อมอธิบาย flag:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># ยังไม่ได้ทดสอบ — ต้องการ JMeter 5.6.3</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>test.jmx<span class="w"> </span>-l<span class="w"> </span>results.jtl<span class="w"> </span>-e<span class="w"> </span>-o<span class="w"> </span>./output-report
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>ความหมาย</th>
+<th>ตัวอย่าง</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-n</code></td>
+<td>Non-GUI mode — รัน JMeter โดยไม่เปิด GUI</td>
+<td>(ไม่มี argument)</td>
+</tr>
+<tr>
+<td><code>-t</code></td>
+<td>Test file — path ของ .jmx file ที่ต้องการรัน</td>
+<td><code>-t my-api-test.jmx</code></td>
+</tr>
+<tr>
+<td><code>-l</code></td>
+<td>Log file — path สำหรับ save ผล (ไฟล์ .jtl)</td>
+<td><code>-l results-20260317.jtl</code></td>
+</tr>
+<tr>
+<td><code>-e</code></td>
+<td>Generate dashboard — สร้าง HTML report หลัง test จบ</td>
+<td>(ต้องใช้คู่กับ <code>-o</code>)</td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td>Output folder — folder สำหรับ HTML report</td>
+<td><code>-o ./reports/run-001</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>CLI flags ที่ verify ได้: <code>-n</code>, <code>-t</code>, <code>-l</code> มาจาก source:
+<em>"-n: This specifies JMeter is to run in cli mode" / "-t [name of JMX file that contains the Test Plan]" / "-l [name of JTL file to log sample results to]"</em>
+<em>(source: https://jmeter.apache.org/usermanual/get-started.html)</em></p>
+<p><code>-e</code> และ <code>-o</code> มาจาก:
+<em>"jmeter -n -t <test JMX file> -l <test log file> -e -o <Path to output folder>"</em>
+<em>(source: https://jmeter.apache.org/usermanual/generating-dashboard.html)</em></p>
+</blockquote>
+<p><strong>วิธี generate report จาก existing results file (รัน test แยกต่างหาก):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># ยังไม่ได้ทดสอบ — ต้องการ JMeter 5.6.3</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1"># Generate HTML report จาก .jtl ที่มีอยู่แล้ว</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>jmeter<span class="w"> </span>-g<span class="w"> </span>results.jtl<span class="w"> </span>-o<span class="w"> </span>./output-report
+</code></pre></div>
+<blockquote>
+<p><em>"jmeter -g <log file> -o <Path to output folder>"</em>
+<em>(source: https://jmeter.apache.org/usermanual/generating-dashboard.html)</em></p>
+</blockquote>
+<hr />
+<h3 id="42-aggregate-report-column">4.2 Aggregate Report: อ่านทุก Column<a class="headerlink" href="#42-aggregate-report-column" title="Permanent link">&para;</a></h3>
+<p>Aggregate Report แสดงสถิติสรุปของทุก HTTP Request ใน test plan — เป็น listener ที่ประหยัด memory กว่า View Results Tree เพราะ:</p>
+<blockquote>
+<p><em>"samples with the same elapsed time are aggregated. Less memory is now needed."</em>
+<em>(source: https://jmeter.apache.org/usermanual/listeners.html)</em></p>
+</blockquote>
+<p><strong>ตัวอย่าง Aggregate Report:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Samples</th>
+<th>Average</th>
+<th>Median</th>
+<th>90th%ile</th>
+<th>95th%ile</th>
+<th>99th%ile</th>
+<th>Min</th>
+<th>Max</th>
+<th>Error%</th>
+<th>Throughput</th>
+<th>KB/sec</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET /api/products</td>
+<td>5000</td>
+<td>245</td>
+<td>198</td>
+<td>520</td>
+<td>780</td>
+<td>1450</td>
+<td>12</td>
+<td>2340</td>
+<td>0.24%</td>
+<td>83.3/sec</td>
+<td>412.5</td>
+</tr>
+<tr>
+<td>POST /api/orders</td>
+<td>2500</td>
+<td>380</td>
+<td>310</td>
+<td>820</td>
+<td>1100</td>
+<td>1980</td>
+<td>45</td>
+<td>3210</td>
+<td>1.20%</td>
+<td>41.6/sec</td>
+<td>85.2</td>
+</tr>
+</tbody>
+</table>
+<p><strong>คำอธิบายแต่ละ column:</strong></p>
+<p><strong>Samples</strong> — จำนวน requests ทั้งหมดที่ส่งไป
+<em>(source: Apache JMeter GitHub — <code>messages.properties</code>: <code>aggregate_report_count=# Samples</code>; implementation: <code>getCount()</code> ใน <code>StatCalculator.java</code> — accumulates total sample count)</em></p>
+<p><strong>Average</strong> — response time เฉลี่ยทุก request (ms)
+<em>(source: Apache JMeter GitHub — <code>messages.properties</code>: <code>average=Average</code>; implementation: <code>getMeanAsNumber()</code> = <code>(long)(sum / count)</code> ใน <code>StatCalculator.java</code>)</em></p>
+<p><strong>Median</strong> — response time ที่ 50th percentile</p>
+<blockquote>
+<p><em>"Median is a number which divides the samples into two equal halves. The Median is the same as the 50th Percentile"</em>
+<em>(source: https://jmeter.apache.org/usermanual/glossary.html)</em></p>
+</blockquote>
+<p><strong>90th%ile / 95th%ile / 99th%ile</strong> — response time ที่ X% ของ requests อยู่ต่ำกว่า</p>
+<blockquote>
+<p><em>"Get the value which %percent% of the values are less than. This works just like median (where median represents the 50% point)."</em>
+<em>(source: https://jmeter.apache.org/api/org/apache/jorphan/math/StatCalculator.html)</em></p>
+</blockquote>
+<p>สำหรับ <strong>90th%ile</strong> โดยเฉพาะ:</p>
+<blockquote>
+<p><em>"The value below which 90% of the samples fall. The remaining samples take at least as long as this value."</em>
+<em>(source: https://jmeter.apache.org/usermanual/glossary.html)</em></p>
+</blockquote>
+<p><strong>Min</strong> — response time เร็วที่สุด (ms)
+<em>(source: Apache JMeter GitHub — <code>messages.properties</code>: <code>aggregate_report_min=Min</code>; implementation: <code>getMin()</code> ใน <code>StatCalculator.java</code> — minimum observed value, returns 0 if negative)</em></p>
+<p><strong>Max</strong> — response time ช้าที่สุด (ms)
+<em>(source: Apache JMeter GitHub — <code>messages.properties</code>: <code>aggregate_report_max=Max</code>; implementation: <code>getMax()</code> ใน <code>StatCalculator.java</code> — maximum observed response time)</em></p>
+<p><strong>Error%</strong> — สัดส่วน requests ที่ fail</p>
+<p><code>Error% = (HTTP errors + Assertion failures) / Total requests × 100</code> — นับทั้ง HTTP error (4xx, 5xx) และ Assertion failures ที่ตั้งไว้ในบทที่ 7 ดังนั้นถ้า server return 200 แต่ Assertion fail → request นั้นนับเป็น error ด้วย</p>
+<blockquote>
+<p><em>"Returns the raw double value of the percentage of samples with errors that were recorded. (Between 0.0 and 1.0)"</em>
+<em>(source: https://jmeter.apache.org/api/org/apache/jmeter/util/Calculator.html)</em></p>
+</blockquote>
+<p><strong>Throughput</strong> — จำนวน requests ต่อหน่วยเวลา</p>
+<blockquote>
+<p><em>"Throughput is calculated as requests/unit of time. The time is calculated from the start of the first sample to the end of the last sample. The formula is: Throughput = (number of requests) / (total time)."</em>
+<em>(source: https://jmeter.apache.org/usermanual/glossary.html)</em></p>
+</blockquote>
+<p><strong>KB/sec</strong> — ปริมาณข้อมูลที่รับ/ส่งต่อวินาที</p>
+<blockquote>
+<p><em>"Sent bytes throughput in kilobytes / second"</em>
+<em>(source: https://jmeter.apache.org/api/org/apache/jmeter/util/Calculator.html)</em></p>
+</blockquote>
+<hr />
+<h3 id="43-90th-percentile-average">4.3 ทำไม 90th Percentile สำคัญกว่า Average<a class="headerlink" href="#43-90th-percentile-average" title="Permanent link">&para;</a></h3>
+<p>✅ <strong>Best practice: ดู 90th/95th percentile แทน Average เพราะ Average ซ่อน outliers</strong></p>
+<p>ลองดูตัวอย่างนี้ — test มี 10 requests:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Response times (ms): 100, 105, 98, 102, 110, 99, 104, 108, 95, 2000
+</code></pre></div>
+<ul>
+<li><strong>Average</strong> = (100+105+98+102+110+99+104+108+95+2000) / 10 = <strong>292ms</strong> ← ดูเหมือนช้าพอสมควร</li>
+<li><strong>Median (50th%ile)</strong> = 103ms ← 50% ของ users ได้รับในเวลานี้</li>
+<li><strong>90th%ile</strong> = ประมาณ 200ms ← 90% ของ users ได้รับภายใน 200ms</li>
+<li><strong>99th%ile</strong> = 2000ms ← มี request หนึ่งที่ช้ามาก</li>
+</ul>
+<p>Average "ถูกดึง" ขึ้นไปเป็น 292ms เพราะ outlier 1 ตัว (2000ms) — ทั้งที่จริงๆ 9 ใน 10 requests เสร็จใน ~100ms</p>
+<p>ในระบบที่มี 10,000 requests ถ้า 1% (100 requests) ใช้เวลา 10 วินาที Average อาจดูยอมรับได้ แต่นั่นหมายถึง 100 users ต้องรอ 10 วินาที — ประสบการณ์ที่แย่มากสำหรับ users เหล่านั้น</p>
+<p><strong>ที่ใช้กัน:</strong> SLA มักกำหนดเป็น percentile เช่น "p90 ต้องไม่เกิน 1000ms" ไม่ใช่ "average ต้องไม่เกิน 1000ms"</p>
+<hr />
+<h3 id="44-html-dashboard-report">4.4 HTML Dashboard Report: ส่วนประกอบหลัก<a class="headerlink" href="#44-html-dashboard-report" title="Permanent link">&para;</a></h3>
+<p>เมื่อรัน test ด้วย <code>-e -o</code> JMeter จะ generate folder ที่มีไฟล์ HTML — เปิด <code>index.html</code> ในนั้น</p>
+<blockquote>
+<p><em>"request summary graph showing the Success and failed requests percentage" / "Statistics table providing in one table a summary of all metrics per transaction" / "error table providing a summary of all errors"</em>
+<em>(source: https://jmeter.apache.org/usermanual/generating-dashboard.html)</em></p>
+</blockquote>
+<p><strong>ส่วนประกอบหลัก 4 ส่วน:</strong></p>
+<p><strong>1. Statistics Table</strong> — ตาราง summary เหมือน Aggregate Report แต่ interactive มี sorting และ filtering ได้</p>
+<p><strong>2. APDEX Table</strong> — Application Performance Index score ต่อแต่ละ transaction</p>
+<blockquote>
+<p><em>"APDEX (Application Performance Index) table that computes for every transaction the APDEX based on configurable values for tolerated and satisfied thresholds"</em>
+<em>(source: https://jmeter.apache.org/usermanual/generating-dashboard.html)</em></p>
+</blockquote>
+<p>APDEX score อยู่ระหว่าง 0–1.0:
+- <strong>1.0</strong> = ทุก request อยู่ใน "Satisfied" threshold
+- <strong>0.7–0.85</strong> = acceptable
+- <strong>&lt; 0.5</strong> = มากกว่าครึ่งของ users ได้รับประสบการณ์ที่ไม่ดี</p>
+<p>Default thresholds:</p>
+<blockquote>
+<p><em>"apdex_satisfied_threshold: Sets the satisfaction threshold for the APDEX calculation (in ms). Default: 500"</em>
+<em>(source: https://jmeter.apache.org/usermanual/generating-dashboard.html)</em></p>
+<p><em>"apdex_tolerated_threshold: Sets the tolerance threshold for the APDEX calculation (in ms). Default: 1500"</em>
+<em>(source: https://jmeter.apache.org/usermanual/generating-dashboard.html)</em></p>
+</blockquote>
+<p>หมายความว่า:
+- Response &lt; 500ms = <strong>Satisfied</strong> (นับเต็ม)
+- 500ms–1500ms = <strong>Tolerated</strong> (นับครึ่ง)
+- Response &gt; 1500ms = <strong>Frustrated</strong> (ไม่นับ)</p>
+<p><strong>3. Over Time Charts</strong> — กราฟแสดง response time, active threads, throughput ตามเวลา — ช่วยดูว่ามี degradation หรือ spike เกิดขึ้นตอนไหนระหว่าง test</p>
+<p><strong>4. Error Table</strong> — สรุป error ทุกประเภท จำนวน และ % ของ total — ช่วยระบุว่า error มาจาก assertion fail, network timeout, หรือ server error</p>
+<hr />
+<h3 id="45-error-1">4.5 การอ่านผล: Error% &gt; 1% หมายถึงอะไร?<a class="headerlink" href="#45-error-1" title="Permanent link">&para;</a></h3>
+<p>ไม่มีเกณฑ์สากลที่ตายตัว ขึ้นอยู่กับ system requirement แต่ rule of thumb ทั่วไป:</p>
+<table>
+<thead>
+<tr>
+<th>Error%</th>
+<th>ความหมาย</th>
+<th>action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0%</td>
+<td>สมบูรณ์แบบหรือ assertions ไม่ครอบคลุมพอ</td>
+<td>ตรวจว่า assertions ครอบคลุมจริง</td>
+</tr>
+<tr>
+<td>&lt; 0.1%</td>
+<td>ยอมรับได้สำหรับระบบ high-availability</td>
+<td>Monitor ต่อ</td>
+</tr>
+<tr>
+<td>0.1–1%</td>
+<td>ต้องสืบสวน — อาจเป็น intermittent issue หรือ timeout</td>
+<td>ดู error type ใน Error Table</td>
+</tr>
+<tr>
+<td>&gt; 1%</td>
+<td>ปัญหาชัดเจน — ไม่ควร go-live</td>
+<td>Fix ก่อน retest</td>
+</tr>
+<tr>
+<td>&gt; 5%</td>
+<td>Critical — ระบบไม่พร้อม</td>
+<td>Stop deployment</td>
+</tr>
+</tbody>
+</table>
+<p><strong>การอ่าน Error Table:</strong> ดูว่า error ส่วนใหญ่เป็น type อะไร
+- "Non HTTP response code" = network issue, timeout
+- "500 Internal Server Error" = application bug
+- Assertion failure message = logic error ใน response</p>
+<p>⏸ <strong>หยุดคิด (backward retrieval):</strong> ถ้า Aggregate Report แสดง Error% = 3% สำหรับ POST /checkout แต่ Error Table แสดงว่าทุก error เป็น "Duration Assertion failed" — นั่นหมายความว่าอะไร? ระบบมีปัญหาอะไรและควรทำอะไรต่อ? เขียนคำตอบลงกระดาษก่อน — และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น — แล้วค่อยอ่านต่อ</p>
+<blockquote>
+<p><strong>เฉลย:</strong> 3% ของ /checkout requests ใช้เวลาเกิน Duration threshold ที่ตั้งไว้ (เช่น 3000ms) — server ไม่ได้ return error แต่ตอบช้าเกิน SLA ขั้นตอนต่อไป: ดู 90th/99th percentile ของ /checkout ว่าช้าแค่ไหน, ดู Over Time charts ว่าเกิดช้าตลอดหรือแค่บางช่วง (spike), จากนั้นสืบสวน bottleneck ใน application (database query, external API call, etc.)</p>
+</blockquote>
+<p>⏸ <strong>หยุดคิด (Bloom's L4 — Analysis):</strong> ระบบมี SLA กำหนดว่า p90 ต้องไม่เกิน 800ms และ error rate ต้องไม่เกิน 0.5% — Aggregate Report แสดง p90 = 650ms แต่ error rate = 0.8% — คุณจะ report ผลนี้ต่อ manager อย่างไร? ผ่านหรือไม่ผ่าน? และขั้นตอนถัดไปคืออะไร?</p>
+<blockquote>
+<p><strong>เฉลย:</strong> <strong>ไม่ผ่าน SLA</strong> — p90 ผ่าน (650ms &lt; 800ms) แต่ error rate ไม่ผ่าน (0.8% &gt; 0.5%) SLA ทั้งสองเงื่อนไขต้องผ่านพร้อมกัน ขั้นตอนถัดไป: ดู error table เพื่อหา root cause ของ error 0.8%, fix แล้ว retest — อย่า go-live จนกว่าทั้งสอง criteria จะผ่านพร้อมกัน</p>
+</blockquote>
+<hr />
+<h2 id="5-3">5. ตัวอย่าง 3 ระดับ<a class="headerlink" href="#5-3" title="Permanent link">&para;</a></h2>
+<h3 id="beginner-jmeter-cli-mode">ระดับ Beginner: รัน JMeter CLI Mode และผลที่ควรเห็น<a class="headerlink" href="#beginner-jmeter-cli-mode" title="Permanent link">&para;</a></h3>
+<p>สถานการณ์: test plan ชื่อ <code>api-test.jmx</code> มี Thread Group 50 users, Ramp-Up 30 วินาที, Loop 10 ครั้ง</p>
+<p><strong>คำสั่งรัน:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># ยังไม่ได้ทดสอบ — ต้องการ JMeter 5.6.3</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>jmeter<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>-n<span class="w"> </span><span class="se">\ </span><span class="w">         </span><span class="c1"># Non-GUI mode (จำเป็น)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>-t<span class="w"> </span>api-test.jmx<span class="w"> </span><span class="se">\ </span><span class="w"> </span><span class="c1"># test plan file</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span>-l<span class="w"> </span>results-<span class="k">$(</span>date<span class="w"> </span>+%Y%m%d-%H%M%S<span class="k">)</span>.jtl<span class="w"> </span><span class="se">\ </span><span class="w"> </span><span class="c1"># timestamp ใน filename ช่วย version tracking</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span>-e<span class="w"> </span><span class="se">\ </span><span class="w">         </span><span class="c1"># enable HTML report generation</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">  </span>-o<span class="w"> </span>./reports/run-001<span class="w">  </span><span class="c1"># output folder (ต้องไม่มีอยู่ก่อน — ถ้ามีแล้ว JMeter จะ error)</span>
+</code></pre></div>
+<p>หรือแบบบรรทัดเดียว:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># ยังไม่ได้ทดสอบ — ต้องการ JMeter 5.6.3</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>api-test.jmx<span class="w"> </span>-l<span class="w"> </span>results-20260317-103045.jtl<span class="w"> </span>-e<span class="w"> </span>-o<span class="w"> </span>./reports/run-001
+</code></pre></div>
+<p><strong>Terminal output ที่ควรเห็น (ตัวอย่าง):</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Creating summariser &lt;summary&gt;
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>Created the tree successfully using api-test.jmx
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>Starting standalone test @ 2026-03-17 10:30:45 (1742200245)
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>Waiting for possible Shutdown/StopTestNow/HeapDump/ThreadDump message on port 4445
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>Warning: Nashorn engine is planned to be removed from a future JDK release
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>summary +    500 in 00:00:30 = 16.7/s Err:     0 (0.00%) Active: 50 Started: 50 Finished: 0
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>summary +    800 in 00:00:30 = 26.7/s Err:     2 (0.25%) Active: 50 Started: 50 Finished: 0
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>summary =   1300 in 00:01:00 = 21.7/s Err:     2 (0.15%) Active: 50 Started: 50 Finished: 0
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>summary +   2200 in 00:01:30 = 49.4/s Err:     0 (0.00%) Active: 50 Started: 50 Finished: 500
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>summary =   3500 in 00:02:00 = 29.2/s Err:     2 (0.06%) Active: 0 Started: 50 Finished: 50
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>Tidying up ...    @ 2026-03-17 10:32:45 (1742200365)
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>... end of run
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>Generating Dashboard
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>dashboard generated
+</code></pre></div>
+<p><strong>อ่าน output อย่างไร:</strong>
+- <code>summary +</code> = สถิติในช่วงเวลานั้น, <code>summary =</code> = สถิติสะสมทั้งหมด
+- <code>16.7/s</code> = throughput ณ ขณะนั้น
+- <code>Err: 0 (0.00%)</code> = จำนวน error และ %
+- <code>Active: 50</code> = threads ที่กำลัง run อยู่</p>
+<p><strong>HTML Report ที่ generate:</strong></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>./reports/run-001/
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>├── index.html          ← เปิดไฟล์นี้ใน browser
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>├── content/
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>│   ├── js/
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>│   └── pages/
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>│       ├── Overview.html
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>│       └── ...
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>└── sbadmin2-1.0.7/    ← CSS/JS framework ของ dashboard
+</code></pre></div>
+<hr />
+<h3 id="intermediate-aggregate-report-healthcare-system">ระดับ Intermediate: วิเคราะห์ Aggregate Report ของ Healthcare System<a class="headerlink" href="#intermediate-aggregate-report-healthcare-system" title="Permanent link">&para;</a></h3>
+<p>สถานการณ์: ระบบ hospital management มี SLA กำหนดว่า:
+- <code>GET /api/patient-records</code>: p90 ≤ 1000ms, error rate ≤ 0.1%
+- <code>POST /api/appointments</code>: p90 ≤ 1500ms, error rate ≤ 0.5%</p>
+<p><strong>Aggregate Report หลัง load test (100 concurrent users, 30 นาที):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Samples</th>
+<th>Average</th>
+<th>Median</th>
+<th>90th%ile</th>
+<th>95th%ile</th>
+<th>99th%ile</th>
+<th>Min</th>
+<th>Max</th>
+<th>Error%</th>
+<th>Throughput</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET /api/patient-records</td>
+<td>45,000</td>
+<td>612</td>
+<td>480</td>
+<td><strong>1,240</strong></td>
+<td>1,890</td>
+<td>3,450</td>
+<td>45</td>
+<td>6,230</td>
+<td><strong>0.08%</strong></td>
+<td>25.0/sec</td>
+</tr>
+<tr>
+<td>POST /api/appointments</td>
+<td>18,000</td>
+<td>890</td>
+<td>720</td>
+<td><strong>1,380</strong></td>
+<td>2,100</td>
+<td>4,100</td>
+<td>120</td>
+<td>8,900</td>
+<td><strong>2.50%</strong></td>
+<td>10.0/sec</td>
+</tr>
+</tbody>
+</table>
+<p><strong>การวิเคราะห์:</strong></p>
+<p><strong>GET /api/patient-records:</strong>
+- p90 = 1,240ms &gt; SLA 1,000ms → ❌ <strong>ไม่ผ่าน p90 SLA</strong>
+- Error rate = 0.08% &lt; 0.1% → ✅ ผ่าน error SLA
+- แม้ error rate ผ่าน แต่ latency ไม่ผ่าน ถือว่า <strong>fail overall</strong></p>
+<p>สังเกต: Average = 612ms ดูเหมือนยอมรับได้ แต่ p90 = 1,240ms บอกว่า 10% ของ records access ช้ากว่า 1.2 วินาที — ในระบบ healthcare ที่หมอต้องดูข้อมูลผู้ป่วยอย่างรวดเร็ว นี่คือปัญหาจริง</p>
+<p><strong>POST /api/appointments:</strong>
+- p90 = 1,380ms &lt; SLA 1,500ms → ✅ ผ่าน p90 SLA
+- Error rate = 2.50% &gt; 0.5% → ❌ <strong>ไม่ผ่าน error SLA</strong>
+- ผล: <strong>fail overall</strong> — error rate สูงมาก ต้องสืบสวน error type</p>
+<p><strong>ขั้นตอนถัดไป:</strong>
+1. <strong>GET /patient-records:</strong> ตรวจ database query plan — อาจมี missing index, N+1 query, หรือ cache miss ทำให้ slow
+2. <strong>POST /appointments:</strong> ดู Error Table ว่า 2.5% error มาจากอะไร — ถ้าเป็น "500 Internal Server Error" อาจมี concurrency bug (race condition ใน appointment booking logic)
+3. Fix + retest ก่อน go-live</p>
+<hr />
+<h3 id="advanced-baseline-vs-after-optimization">ระดับ Advanced: เปรียบเทียบ Baseline vs After Optimization<a class="headerlink" href="#advanced-baseline-vs-after-optimization" title="Permanent link">&para;</a></h3>
+<p>สถานการณ์: ทีมทำ database optimization (เพิ่ม index และ query caching) แล้วรัน test ซ้ำเพื่อ validate</p>
+<p><strong>Test Run 1 (Baseline — ก่อน optimize):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Samples</th>
+<th>Average</th>
+<th>90th%ile</th>
+<th>99th%ile</th>
+<th>Error%</th>
+<th>Throughput</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET /products</td>
+<td>30,000</td>
+<td>480</td>
+<td>1,150</td>
+<td>3,200</td>
+<td>0.15%</td>
+<td>50.0/sec</td>
+</tr>
+<tr>
+<td>POST /orders</td>
+<td>15,000</td>
+<td>620</td>
+<td>1,800</td>
+<td>5,400</td>
+<td>0.80%</td>
+<td>25.0/sec</td>
+</tr>
+<tr>
+<td>GET /inventory</td>
+<td>20,000</td>
+<td>890</td>
+<td>2,400</td>
+<td>7,100</td>
+<td>1.20%</td>
+<td>33.3/sec</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Test Run 2 (After Optimization):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Label</th>
+<th>Samples</th>
+<th>Average</th>
+<th>90th%ile</th>
+<th>99th%ile</th>
+<th>Error%</th>
+<th>Throughput</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET /products</td>
+<td>30,000</td>
+<td>185</td>
+<td>380</td>
+<td>820</td>
+<td>0.06%</td>
+<td>52.1/sec</td>
+</tr>
+<tr>
+<td>POST /orders</td>
+<td>15,000</td>
+<td>310</td>
+<td>680</td>
+<td>1,450</td>
+<td>0.25%</td>
+<td>26.8/sec</td>
+</tr>
+<tr>
+<td>GET /inventory</td>
+<td>20,000</td>
+<td>920</td>
+<td>2,600</td>
+<td>7,400</td>
+<td>1.35%</td>
+<td>33.0/sec</td>
+</tr>
+</tbody>
+</table>
+<p><strong>การอ่านผลเปรียบเทียบ:</strong></p>
+<p><strong>GET /products</strong> — <strong>ปรับปรุงชัดเจน:</strong>
+- Average: 480ms → 185ms (-61%)
+- p90: 1,150ms → 380ms (-67%)
+- Error%: 0.15% → 0.06% ดีขึ้น
+- Optimization ได้ผลดีมาก</p>
+<p><strong>POST /orders</strong> — <strong>ปรับปรุงได้ผล:</strong>
+- p90: 1,800ms → 680ms (-62%)
+- Error%: 0.80% → 0.25% ดีขึ้น แต่ยังอาจต้องตรวจ SLA</p>
+<p><strong>GET /inventory</strong> — <strong>⚠️ Regression Sign:</strong>
+- Average: 890ms → 920ms (+3%)
+- p90: 2,400ms → 2,600ms (+8%)
+- Error%: 1.20% → 1.35% แย่ลง
+- Throughput ลดเล็กน้อย: 33.3 → 33.0/sec</p>
+<p>GET /inventory <strong>แย่ลง</strong> หลัง optimization — นี่คือ regression sign</p>
+<p><strong>การสืบสวน regression:</strong>
+1. ตรวจว่า optimization ใดที่ทำ — อาจมี side effect กับ inventory queries
+2. ดู Over Time charts เปรียบเทียบ 2 runs — inventory latency เพิ่มขึ้นตลอดหรือมี spike ช่วงใดช่วงหนึ่ง
+3. ตรวจว่า database index ที่เพิ่มสำหรับ products ทำให้ inventory queries ช้าลงไหม (index overhead ต่อ write operations)
+4. ตรวจ query execution plan ของ inventory queries หลัง optimization</p>
+<p><strong>หลักการ:</strong> ต้องรัน test ทั้ง 2 runs ด้วย <strong>เงื่อนไขเดียวกัน</strong> ทุกอย่าง — thread count, ramp-up, duration, data set, target server — ถ้า environment ต่างกันผลเปรียบเทียบไม่ valid</p>
+<hr />
+<h2 id="6-common-mistakes">6. Common Mistakes<a class="headerlink" href="#6-common-mistakes" title="Permanent link">&para;</a></h2>
+<h3 id="a-load-test-gui-mode">❌ (a) รัน Load Test ด้วย GUI Mode<a class="headerlink" href="#a-load-test-gui-mode" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong>
+เปิด JMeter GUI แล้วกด Run (หรือ Start) เพื่อรัน test plan ที่มี 500+ threads</p>
+<p><strong>แบบถูก:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># ยังไม่ได้ทดสอบ — ต้องการ JMeter 5.6.3</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>test.jmx<span class="w"> </span>-l<span class="w"> </span>results.jtl<span class="w"> </span>-e<span class="w"> </span>-o<span class="w"> </span>./output
+</code></pre></div></p>
+<p>🔍 <strong>สิ่งที่เกิดขึ้น:</strong> GUI mode ใช้ CPU และ memory ส่วนหนึ่งในการ render UI — JMeter machine มี resource น้อยลงสำหรับสร้าง virtual users ผลที่ได้คือ throughput ต่ำกว่าจริง response time สูงกว่าจริง และ report ที่ได้ไม่สะท้อนความสามารถจริงของ server</p>
+<p>🤔 <strong>เหตุผล:</strong> JMeter เป็น Java application ที่ต้องแย่ง resource กันระหว่าง rendering engine และ load testing engine</p>
+<p><em>(source: https://jmeter.apache.org/usermanual/get-started.html — "GUI mode should only be used for creating the test script, CLI mode (NON GUI) must be used for load testing")</em></p>
+<hr />
+<h3 id="b-average-percentile-sla">❌ (b) ดู Average แทน Percentile ในการตัดสิน SLA<a class="headerlink" href="#b-average-percentile-sla" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong>
+"Average response time = 400ms, SLA กำหนด 500ms — ผ่าน!"</p>
+<p><strong>แบบถูก:</strong>
+"p90 = 950ms, SLA กำหนด p90 ≤ 800ms — ไม่ผ่าน แม้ Average จะดูโอเค"</p>
+<p>🔍 <strong>สิ่งที่เกิดขึ้น:</strong> Average ถูก distort โดย distribution — ถ้า 80% ของ requests เสร็จใน 200ms แต่ 20% ใช้เวลา 2000ms, Average อาจได้ 560ms ซึ่งดูเหมือนยอมรับได้ แต่ 20% คือ users 1 ใน 5 ที่ได้รับ experience ที่แย่</p>
+<p>🤔 <strong>เหตุผล:</strong> SLA ที่ดีกำหนดด้วย percentile เพราะสะท้อนประสบการณ์ของ users จริงๆ ได้ดีกว่า Average ที่ถูก outlier ดึงให้เบี่ยงเบน</p>
+<p><em>(source: https://jmeter.apache.org/usermanual/glossary.html — "The value below which 90% of the samples fall.")</em></p>
+<hr />
+<h3 id="c-output-directory">❌ (c) Output Directory มีอยู่แล้ว<a class="headerlink" href="#c-output-directory" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># รัน command นี้ 2 ครั้งด้วย -o folder เดิม</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>test.jmx<span class="w"> </span>-l<span class="w"> </span>results.jtl<span class="w"> </span>-e<span class="w"> </span>-o<span class="w"> </span>./reports/run-001
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>test.jmx<span class="w"> </span>-l<span class="w"> </span>results.jtl<span class="w"> </span>-e<span class="w"> </span>-o<span class="w"> </span>./reports/run-001<span class="w">  </span><span class="c1"># ← ERROR</span>
+</code></pre></div></p>
+<p>Error message ที่จะเห็น:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>An error occurred: Cannot write to &#39;/path/to/reports/run-001&#39; as folder is not empty
+</code></pre></div></p>
+<p><strong>แบบถูก:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># ยังไม่ได้ทดสอบ — ต้องการ JMeter 5.6.3</span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="c1"># Option 1: ใช้ folder ชื่อใหม่ทุกครั้ง (แนะนำ — เก็บ history ไว้เปรียบเทียบ)</span>
+<a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>test.jmx<span class="w"> </span>-l<span class="w"> </span>results.jtl<span class="w"> </span>-e<span class="w"> </span>-o<span class="w"> </span>./reports/run-<span class="k">$(</span>date<span class="w"> </span>+%Y%m%d-%H%M%S<span class="k">)</span>
+<a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a>
+<a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># Option 2: ลบ folder เก่าก่อน (ถ้าไม่ต้องการ history)</span>
+<a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>rm<span class="w"> </span>-rf<span class="w"> </span>./reports/run-001<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>test.jmx<span class="w"> </span>-l<span class="w"> </span>results.jtl<span class="w"> </span>-e<span class="w"> </span>-o<span class="w"> </span>./reports/run-001
+</code></pre></div></p>
+<p>🔍 <strong>สิ่งที่เกิดขึ้น:</strong> JMeter ไม่ overwrite output folder — ถ้า folder มีอยู่แล้ว test จะรันสำเร็จ แต่ HTML report จะไม่ถูก generate และจะแสดง error ใน terminal</p>
+<p>🤔 <strong>เหตุผล:</strong> การไม่ overwrite เป็น safety feature ป้องกันการสูญเสีย historical reports โดยไม่ตั้งใจ</p>
+<p><em>(source: https://jmeter.apache.org/usermanual/generating-dashboard.html)</em></p>
+<hr />
+<h3 id="d-e-o-generate-html-report">❌ (d) ลืม <code>-e -o</code> ทำให้ไม่ Generate HTML Report<a class="headerlink" href="#d-e-o-generate-html-report" title="Permanent link">&para;</a></h3>
+<p><strong>แบบผิด:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>test.jmx<span class="w"> </span>-l<span class="w"> </span>results.jtl
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="c1"># รันได้ผ่าน แต่ไม่มี HTML report ให้ดู</span>
+</code></pre></div></p>
+<p><strong>แบบถูก:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># ยังไม่ได้ทดสอบ — ต้องการ JMeter 5.6.3</span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="c1"># Option 1: generate during test run</span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>test.jmx<span class="w"> </span>-l<span class="w"> </span>results.jtl<span class="w"> </span>-e<span class="w"> </span>-o<span class="w"> </span>./output-report
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="c1"># Option 2: generate after จาก .jtl file ที่มีอยู่</span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>jmeter<span class="w"> </span>-g<span class="w"> </span>results.jtl<span class="w"> </span>-o<span class="w"> </span>./output-report
+</code></pre></div></p>
+<p>🔍 <strong>สิ่งที่เกิดขึ้น:</strong> ถ้าลืม <code>-e -o</code> จะมีแค่ไฟล์ .jtl ซึ่งเป็น raw data ในรูปแบบ CSV หรือ XML — อ่านด้วยมือได้ยาก และไม่มี charts หรือ APDEX score ให้ดู</p>
+<p>🤔 <strong>เหตุผล:</strong> HTML report ต้องการ flag 2 ตัวทำงานร่วมกัน: <code>-e</code> บอก "generate report" และ <code>-o</code> บอก "save ไว้ที่ไหน" — ขาดตัวใดตัวหนึ่งไม่ได้</p>
+<p><em>(source: https://jmeter.apache.org/usermanual/generating-dashboard.html — "jmeter -n -t <test JMX file> -l <test log file> -e -o <Path to output folder>")</em></p>
+<hr />
+<h2 id="7">7. สรุปบท<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<p><strong>คำถาม Retrieval — ตอบก่อนดูเฉลย:</strong></p>
+<p>หยุดอ่าน เขียนคำตอบลงกระดาษก่อน อย่างน้อย 30 วินาทีต่อข้อ — และเขียนเหตุผลสั้นๆ 1–2 ประโยคว่าทำไมถึงตอบแบบนั้น ก่อนดูเฉลย</p>
+<hr />
+<p><strong>คำถามที่ 1 (Code-based):</strong> ดู command นี้:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>load-test.jmx<span class="w"> </span>-l<span class="w"> </span>output.jtl<span class="w"> </span>-o<span class="w"> </span>./results
+</code></pre></div>
+<p>มีปัญหา 2 จุด — ระบุปัญหาแต่ละจุดและเขียน command ที่ถูกต้อง</p>
+<p>เขียนคำตอบก่อนดูเฉลย</p>
+<hr />
+<blockquote>
+<p><strong>เฉลย:</strong></p>
+<p><strong>ปัญหาที่ 1:</strong> ขาด flag <code>-e</code> — ไม่มี <code>-e</code> ทำให้ <code>-o</code> ถูก ignore และ HTML report จะไม่ถูก generate</p>
+<p><strong>ปัญหาที่ 2:</strong> <code>-o ./results</code> ถ้า folder <code>./results</code> มีอยู่แล้ว JMeter จะ error และ report ไม่ถูก generate</p>
+<p><strong>Command ที่ถูกต้อง:</strong>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># ยังไม่ได้ทดสอบ — ต้องการ JMeter 5.6.3</span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>jmeter<span class="w"> </span>-n<span class="w"> </span>-t<span class="w"> </span>load-test.jmx<span class="w"> </span>-l<span class="w"> </span>output.jtl<span class="w"> </span>-e<span class="w"> </span>-o<span class="w"> </span>./results-<span class="k">$(</span>date<span class="w"> </span>+%Y%m%d-%H%M%S<span class="k">)</span>
+</code></pre></div></p>
+</blockquote>
+<hr />
+<p><strong>คำถามที่ 2 (Elaborative Interrogation):</strong> ทำไม JMeter ถึงไม่ให้รัน load test ด้วย GUI mode? ถ้าจะอธิบายให้ manager ที่ไม่ technical เข้าใจ คุณจะใช้ analogy อะไร?</p>
+<hr />
+<blockquote>
+<p><strong>เฉลย (ตัวอย่าง):</strong> GUI mode เหมือนนักวิ่งที่ต้องถือกล้องถ่ายรูปตัวเองพร้อมกับวิ่ง — กล้อง (GUI) ต้องใช้แขนและพลังงาน ทำให้วิ่งได้ช้ากว่าความเป็นจริง ผล report ก็จะบอกว่าตัวเองวิ่งช้าทั้งที่จริงๆ ปัญหาอยู่ที่การถือกล้อง — ไม่ใช่ความเร็ววิ่ง</p>
+<p>CLI mode = วิ่งโดยให้คนอื่นถ่ายรูป ผลที่ได้สะท้อนความเร็วที่แท้จริง</p>
+</blockquote>
+<hr />
+<p><strong>Generation effect:</strong> ก่อนปิดบท ลองเขียนด้วยคำของตัวเองว่า "ความแตกต่างระหว่าง Median, Average, และ 90th percentile คืออะไร และเมื่อไหรควรดูตัวเลขแต่ละตัว" — เขียนโดยไม่เปิดเอกสาร แล้วเปรียบเทียบกับสิ่งที่อ่านในบทนี้ หาจุดที่ยังไม่ครบหรือผิด</p>
+<p><strong>Remediation path:</strong>
+- ยังสับสน Average vs Percentile → ลองสร้าง spreadsheet ด้วย response times ที่มี outlier แล้วคำนวณทั้งสามค่าด้วยมือ
+- ยังสับสน <code>-e</code> vs <code>-g</code> → จำง่ายๆ: <code>-e</code> = "enable dashboard during test", <code>-g</code> = "generate from existing log"
+- APDEX ยังไม่ชัดเจน → เปลี่ยน default threshold ใน <code>user.properties</code> แล้วรัน test ซ้ำเพื่อดูว่า score เปลี่ยนอย่างไร — การทดลองเองทำให้จำได้นานกว่าการอ่าน</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  กลับไปด้านบนสุด
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="ส่วนท้าย" >
+        
+          
+          <a href="../07-assertions/" class="md-footer__link md-footer__link--prev" aria-label="ก่อนหน้า: บทที่ 7 - Assertions">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                ก่อนหน้า
+              </span>
+              <div class="md-ellipsis">
+                บทที่ 7 - Assertions
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../09-distributed-testing/" class="md-footer__link md-footer__link--next" aria-label="ต่อไป: บทที่ 9 - Distributed Testing">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                ต่อไป
+              </span>
+              <div class="md-ellipsis">
+                บทที่ 9 - Distributed Testing
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "navigation.footer", "search.highlight", "search.suggest", "content.code.copy", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01\u0e41\u0e25\u0e49\u0e27", "clipboard.copy": "\u0e04\u0e31\u0e14\u0e25\u0e2d\u0e01", "search.result.more.one": "\u0e2d\u0e35\u0e01\u0e2b\u0e19\u0e36\u0e48\u0e07\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.more.other": "# \u0e40\u0e1e\u0e34\u0e48\u0e21\u0e40\u0e15\u0e34\u0e21\u0e43\u0e19\u0e2b\u0e19\u0e49\u0e32\u0e19\u0e35\u0e49", "search.result.none": "\u0e44\u0e21\u0e48\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.one": "\u0e1e\u0e1a\u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.other": "\u0e1e\u0e1a # \u0e40\u0e2d\u0e01\u0e2a\u0e32\u0e23\u0e17\u0e35\u0e48\u0e15\u0e23\u0e07\u0e01\u0e31\u0e19", "search.result.placeholder": "\u0e1e\u0e34\u0e21\u0e1e\u0e4c\u0e40\u0e1e\u0e37\u0e48\u0e2d\u0e40\u0e23\u0e34\u0e48\u0e21\u0e04\u0e49\u0e19\u0e2b\u0e32", "search.result.term.missing": "\u0e44\u0e21\u0e48\u0e1e\u0e1a", "select.version": "\u0e40\u0e25\u0e37\u0e2d\u0e01\u0e40\u0e27\u0e2d\u0e23\u0e4c\u0e0a\u0e31\u0e19"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
