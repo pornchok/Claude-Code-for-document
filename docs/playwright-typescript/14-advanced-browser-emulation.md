@@ -47,24 +47,7 @@ web app จริงในชีวิตจริงไม่ได้มีแ
 
 ---
 
-## 3. Analogy
-
-**Advanced browser features คือ special effects บนเวที performance** — actor หลักคือ `page` แต่บางฉากต้องใช้ technique พิเศษ:
-
-- **Popup** = actor เปิดประตูไปห้องข้างๆ (new window) — คุณต้องวางคนไว้ฟังเสียงประตูเปิดก่อนที่ actor จะเดินไปเปิด ไม่งั้นคุณจะพลาดช่วงเปิดประตู
-- **iframe** = actor อีกคนซ้อมอยู่บนเวทีที่ 2 ภายในเวทีหลัก — คุณต้องเดินเข้าไปในเวทีที่ 2 ก่อนจะสั่งให้ actor คนนั้นทำอะไร (แต่ Playwright ทำให้ง่ายกว่า Selenium มาก — ไม่ต้อง "switch context" แค่ระบุ `frameLocator`)
-- **Dialog** = stage manager วิ่งเข้ามาขัดจังหวะการแสดง — คุณต้องบอก stage manager ล่วงหน้าว่าให้ตอบว่าอะไร ไม่งั้นเขาจะยืนค้างอยู่กลางเวทีไม่ยอมออก
-- **Mobile emulation** = เปลี่ยนชุดฉากจาก desktop studio เป็น mobile studio — ขนาดเวที, camera angle, และ touch controls เปลี่ยนทั้งหมด แต่ script การทดสอบยังเหมือนเดิม
-
-⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:
-
-- **iframe content เข้าถึงได้เหมือน page ธรรมดาเสมอ** — จริงๆ cross-origin iframe (iframe จาก domain อื่น เช่น embed Google Maps ใน site ของคุณ) Playwright ไม่สามารถ inspect หรือ interact กับ DOM ภายในได้ เพราะ browser same-origin policy ป้องกันอยู่ — ทำได้เฉพาะ same-origin iframe เท่านั้น
-- **`devices['iPhone 15 Pro']` emulate hardware จริง** — จริงๆ emulate แค่ viewport size, user-agent string, touch events, device pixel ratio — ไม่ใช่ CPU speed หรือ GPU ของ iPhone จริง benchmark performance จะยังเป็นค่าของเครื่อง host ที่รัน test
-- **dialog handler ลงทะเบียนได้ตอนไหนก็ได้** — ต้อง register ก่อน action ที่ trigger dialog เสมอ เพราะ dialog เกิดขึ้นพร้อมกับ (หรือหลัง) action ทันที ถ้า register ช้าจะพลาด
-
----
-
-## 4. เนื้อหาหลัก
+## 3. เนื้อหาหลัก
 
 ### 4.1 Popup Windows และ New Tabs
 
@@ -440,7 +423,7 @@ await page.locator('#source').dragTo(page.locator('#target'));
 
 ---
 
-## 5. ตัวอย่าง 3 ระดับ
+## 4. ตัวอย่าง 3 ระดับ
 
 ### Beginner — Popup + Dialog จาก `/advanced`
 
@@ -700,7 +683,7 @@ test('HR document signing flow — iframe + shadow DOM + download', async ({ pag
 
 ---
 
-## 6. Common Mistakes
+## 5. Common Mistakes
 
 ❌ **ไม่ register dialog handler ก่อน trigger action ที่เปิด dialog**
 
@@ -794,7 +777,7 @@ await frame.getByRole('button').click(); // Error: cross-origin frame
 
 ---
 
-## 7. สรุปบท
+## 6. สรุปบท
 
 ก่อนดูเฉลย ลองตอบ 3 คำถามนี้ด้วยตัวเองก่อน:
 
@@ -824,7 +807,7 @@ await frame.getByRole('button').click(); // Error: cross-origin frame
 
 ---
 
-## 8. Pre-chapter Retrieval สำหรับบทถัดไป
+## 7. Pre-chapter Retrieval สำหรับบทถัดไป
 
 บทที่ 15 จะพูดถึง CI/CD Integration และ Reporting — ก่อนอ่าน ลองนึกดูว่า:
 

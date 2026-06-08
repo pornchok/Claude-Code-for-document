@@ -51,26 +51,7 @@ await page.locator('[data-testid="btn-submit"]').click();
 
 ---
 
-## 3. Analogy: เมนูร้านอาหาร
-
-ลองนึกถึงการสั่งอาหารที่ร้าน:
-
-**ถ้าไม่มีเมนู** คุณต้องบอก waiter ทุกรายละเอียด: "เอาก๋วยเตี๋ยวเส้นเล็ก ผัดกับน้ำมัน ใส่กุ้ง หมู ไข่ไก่ ถั่วงอก ต้นหอม มะนาว น้ำตาล น้ำปลา พริกป่น ถั่วบดแล้วโรยหน้า..." — waiter แต่ละคนจะจำได้ไม่เหมือนกัน และถ้าสูตรเปลี่ยนคุณต้องบอกใหม่ทุกครั้ง
-
-**ถ้ามีเมนู** คุณแค่บอก "ผัดไทยกุ้งสด เบอร์ 12" — waiter รู้ procedure ทั้งหมดแล้ว และถ้าเชฟปรับสูตร (เพิ่มถั่วลิสง) เมนูแค่อัปเดตครั้งเดียว ลูกค้าไม่ต้องรู้ว่าข้างในเปลี่ยนอะไร
-
-**Page Object Model คือเมนู** — แทนที่ test จะบอกทุก step ตั้งแต่ locator ถึง action คุณแค่เรียก `loginPage.login('admin', 'admin123')` แล้ว Page Object รู้ว่าต้องทำอะไรบ้าง
-
----
-
-⚠️ **ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:**
-
-- **POM ต้องมี 1 class ต่อ 1 page เสมอ** — เมนูในร้านอาหารแบ่งเป็นหน้าๆ แต่ POM แบ่งได้ละเอียดกว่านั้น Component Object Pattern ช่วยให้แยก NavBar, TodoItem, หรือ SearchBar ออกมาเป็น class ต่างหากได้ ไม่ต้องยัดทุกอย่างลง LoginPage class เดียว
-- **POM ทำให้ code น้อยลง** — จริงๆ แล้ว code รวมทั้งหมดในโปรเจคอาจ**มากขึ้น** เพราะต้องสร้าง class แยกต่างหาก แต่ที่ดีขึ้นคือ **maintainability** และ **readability** ของ test ไม่ใช่จำนวนบรรทัด
-
----
-
-## 4. เนื้อหาหลัก
+## 3. เนื้อหาหลัก
 
 ### 4.1 ปัญหาที่ POM แก้ได้
 
@@ -360,7 +341,7 @@ test('add a todo after login', async ({ loginPage, todosPage }) => {
 
 ---
 
-## 5. ตัวอย่าง 3 ระดับ
+## 4. ตัวอย่าง 3 ระดับ
 
 ### Beginner: LoginPage พื้นฐาน — สร้างและใช้งานครั้งแรก
 
@@ -599,7 +580,7 @@ class LoginPage {
 
 ---
 
-## 6. Common Mistakes
+## 5. Common Mistakes
 
 **❌ Locator เป็น method แทนที่จะเป็น property:**
 ```typescript
@@ -690,7 +671,7 @@ async fillForm(u: string, p: string) {
 
 ---
 
-## 7. สรุปบท
+## 6. สรุปบท
 
 POM คือ design pattern ที่รวม locators และ actions ที่เกี่ยวกับหน้า (หรือ component) ไว้ใน TypeScript class เดียว แก้ปัญหา locator กระจาย, action ซ้ำ, และ test อ่านยาก
 

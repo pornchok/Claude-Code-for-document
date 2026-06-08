@@ -46,21 +46,7 @@ Playwright แก้ทั้งสองปัญหานี้ด้วย **
 
 ---
 
-## 3. Analogy
-
-**storageState เหมือน stamp ที่ร้านประทับให้คุณที่มือหลังจ่ายค่าเข้า** — แทนที่จะต้องแสดงบัตรประชาชนและซื้อตั๋วใหม่ทุกครั้งที่เข้า-ออกห้อง แค่โชว์ stamp ที่ข้อมือก็เข้าได้ทันที
-
-ใน Playwright: "ซื้อตั๋วครั้งแรก" = login ผ่าน UI ปกติ, "stamp ที่มือ" = ไฟล์ `user.json` ที่เก็บ cookies + localStorage, "โชว์ stamp" = `use: { storageState: 'playwright/.auth/user.json' }` ใน config
-
-⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:
-
-- **storageState capture ทุก state ของ browser** — จริงๆ capture **cookies, localStorage, และ IndexedDB** (ต้องเปิดใช้ด้วย `{ indexedDB: true }`) แต่ **ไม่ capture sessionStorage** โดยอัตโนมัติ เพราะ sessionStorage ผูกกับ session และ tab เดียว ถ้า app ใช้ sessionStorage เก็บ auth token จะต้องใช้ `page.evaluate()` + `addInitScript()` inject ค่าเองแยกต่างหาก
-- **storageState ใช้ได้ข้าม domains ทุกอย่าง** — sessionStorage ผูกกับ origin (domain + protocol + port) และ session เดียว ถ้า navigate ไป domain อื่นหรือเปิด tab ใหม่ sessionStorage จะว่างเปล่า — cookies ถึงจะข้าม page navigation ได้ แต่ก็ผูกกับ domain configuration ที่กำหนดไว้
-- **stamp ไม่มีวันหมดอายุ** — จริงๆ cookies มี expiration, JWT tokens มี expiry — storageState ที่ save ไว้อาจ expire ได้ ต้อง re-generate เป็นระยะ
-
----
-
-## 4. เนื้อหาหลัก
+## 3. เนื้อหาหลัก
 
 ### 4.1 storageState คืออะไร
 
@@ -463,7 +449,7 @@ test('login page แสดงผลถูกต้องสำหรับ unaut
 
 ---
 
-## 5. ตัวอย่างโค้ด 3 ระดับ
+## 4. ตัวอย่างโค้ด 3 ระดับ
 
 ### Beginner: Auth Setup + Project Dependency แบบสมบูรณ์
 
@@ -789,7 +775,7 @@ Running 4 setups and 40 tests using 4 workers
 
 ---
 
-## 6. Common Mistakes
+## 5. Common Mistakes
 
 ❌ **Login ใน `beforeEach` ทุก test** — login 100 ครั้งสำหรับ 100 tests:
 
@@ -885,7 +871,7 @@ await page.context().storageState({ path: authFile, indexedDB: true });
 
 ---
 
-## 7. สรุปบท
+## 6. สรุปบท
 
 ก่อนดูเฉลย ลองตอบคำถามเหล่านี้ด้วยตัวเองก่อน:
 
@@ -928,7 +914,7 @@ await page.context().storageState({ path: authFile, indexedDB: true });
 
 ---
 
-## 8. สิ่งที่ต้องรู้ก่อนบทถัดไป
+## 7. สิ่งที่ต้องรู้ก่อนบทถัดไป
 
 บทที่ 14 จะพูดถึง **Visual Testing & Screenshots** — การ capture หน้าจอ, เปรียบเทียบ pixel-by-pixel และ visual regression testing
 

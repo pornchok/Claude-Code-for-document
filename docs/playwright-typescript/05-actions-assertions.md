@@ -56,27 +56,7 @@ await expect(page.locator('.success-msg')).toBeVisible();
 
 ---
 
-## 3. Analogy: Auto-waiting คือ Waiter ที่รอให้อาหารพร้อมก่อนเสิร์ฟ
-
-ลองนึกภาพคุณนั่งในร้านอาหารระดับดี
-
-**Waiter แบบเก่า (Selenium style):** ทันทีที่คุณสั่ง เขาก็เดินไปหยิบจานจากครัวในวินาทีนั้นเลย — ถ้าอาหารยังไม่พร้อม ได้จานเปล่ากลับมา หรือพ่อครัวบอกว่า "ยังไม่มี" แล้วรายงานว่า error
-
-**Waiter แบบ Playwright:** เขา "รู้" ว่าต้องรอให้อาหารอยู่บนจาน จานวางนิ่งบนโต๊ะแล้ว และจานเย็นพอให้หยิบจับได้ — ทุก criteria ผ่านก่อน จึงค่อยเสิร์ฟ
-
-ใน Playwright ทุกครั้งที่เรียก `click()` หรือ `fill()` Playwright จะรอจนกว่า element จะ "actionable" ตาม criteria ที่กำหนดก่อน — ไม่ใช่แค่ "อยู่ใน DOM แล้ว" แต่ต้องพร้อมจริงๆ
-
----
-
-⚠️ **ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:**
-
-- **Auto-waiting รอทุกอย่างได้จนกว่า business logic จะเสร็จ** — จริงๆ แล้ว auto-waiting รอเฉพาะ "actionability" ของ element ตาม criteria ที่กำหนด (visible, stable, enabled, editable, receives events) เท่านั้น ไม่ได้รอว่า API call จะ return, ว่า animation transition จะสมบูรณ์ 100%, หรือว่า database จะ commit — ถ้าต้องรอสิ่งเหล่านั้น ต้องใช้ assertion web-first เพิ่มเติม เช่น `await expect(page.getByText('Saved')).toBeVisible()`
-
-- **`expect(await locator.isVisible()).toBe(true)` กับ `expect(locator).toBeVisible()` เหมือนกัน** — ต่างกันมาก: แบบแรกเรียก `isVisible()` ณ วินาทีนั้นแล้วได้ค่า boolean มา — ถ้า element ยังไม่ปรากฏก็ได้ `false` ทันที ไม่ retry เลย แบบที่สองคือ web-first assertion ที่ Playwright จะ retry การตรวจซ้ำจนครบ timeout (default 5 วินาที) — ต่างกันอย่างสิ้นเชิง
-
----
-
-## 4. เนื้อหาหลัก
+## 3. เนื้อหาหลัก
 
 ### 4.1 Actionability Checks — สิ่งที่ Playwright ตรวจก่อนทุก action
 
@@ -384,7 +364,7 @@ await expect(page).not.toBeLoggedIn();
 
 ---
 
-## 5. ตัวอย่าง 3 ระดับ
+## 4. ตัวอย่าง 3 ระดับ
 
 ### Beginner: เพิ่ม Todo item และ assert ผลลัพธ์
 
@@ -525,7 +505,7 @@ test.describe('actionability checks in practice', () => {
 
 ---
 
-## 6. Common Mistakes ❌→✅
+## 5. Common Mistakes ❌→✅
 
 **1. ใช้ isVisible() แทน web-first assertion**
 
@@ -625,7 +605,7 @@ await expect.soft(page.getByTestId('error-phone')).toBeVisible();
 
 ---
 
-## 7. สรุปบท + Retrieval Questions
+## 6. สรุปบท + Retrieval Questions
 
 ในบทนี้คุณได้เรียน:
 

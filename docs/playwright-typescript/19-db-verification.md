@@ -51,29 +51,7 @@ Test ที่ครอบคลุมต้องตรวจทั้ง 3 ช
 
 ---
 
-## 3. Analogy
-
-**การตรวจ DB หลัง action เหมือนระบบตรวจสอบของธนาคาร 3 ชั้น**
-
-ลองนึกภาพคุณโอนเงิน 50,000 บาทผ่าน ATM:
-
-- **ATM screen (UI Layer)** แสดง "โอนเงินสำเร็จ! Transaction ID: TXN-9981" — คุณเห็นข้อความนี้และเชื่อว่าเสร็จแล้ว
-- **Transaction API (API Layer)** รับ request, สร้าง transaction record, return HTTP 200 พร้อม transaction ID — ดูเหมือนทุกอย่างถูกต้อง
-- **Core Banking System (DB Layer)** ตัดยอดจริงจากบัญชีคุณและเพิ่มยอดในบัญชีปลายทาง — นี่คือสิ่งที่เกิดขึ้น "จริงๆ"
-
-ธนาคารไม่ได้เชื่อแค่ ATM screen — ระบบ reconciliation รัน batch job ตรวจสอบทุก transaction ว่า ATM บอกว่าโอนแล้ว, API มี record ตรงกัน, **และ Core Banking ตัดยอดจริงหรือเปล่า** ถ้า 3 ชั้นไม่ตรงกัน → flag เป็น exception ทันที
-
-การทำ DB verification ใน Playwright test คือการสร้าง "reconciliation layer" เดียวกันนี้ให้กับ automated test ของคุณ — ไม่ไว้ใจแค่ UI บอกว่าสำเร็จ แต่ตรวจว่า "Core Banking (DB)" บันทึกจริงหรือเปล่า
-
-⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:
-
-- **"ถ้า API return HTTP 200 แสดงว่า DB ถูกต้องเสมอ"** — ไม่จริง เหมือนธนาคารที่ API ตอบรับ request แล้ว แต่ส่งต่อไปให้ async job เขียน DB ซึ่งอาจ fail ทีหลัง HTTP 200 ส่งออกไปแล้ว หรือเกิด DB transaction rollback หลัง response — API บอกสำเร็จแต่ Core Banking ไม่มีข้อมูล
-
-- **"UI แสดงข้อมูลถูกต้องแปลว่า DB มีข้อมูลนั้น"** — ไม่จริง เหมือน ATM screen แสดงยอดเงินจาก cache ที่ยังไม่ sync กับ Core Banking — UI อาจแสดงจาก optimistic update (แสดงผลล่วงหน้าก่อน DB จะ confirm) หรือจาก in-memory state ที่ยังไม่ได้ persist จริง
-
----
-
-## 4. เนื้อหาหลัก
+## 3. เนื้อหาหลัก
 
 ### 4.1 Pattern 1: API Read-back — ยืนยันผ่าน GET หลัง Action
 
@@ -346,7 +324,7 @@ pattern นี้ถือเป็น best practice สำหรับ integrat
 
 ---
 
-## 5. ตัวอย่าง
+## 4. ตัวอย่าง
 
 ### Beginner
 
@@ -582,7 +560,7 @@ test('order created via API is persisted correctly in db.json', async ({
 
 ---
 
-## 6. Common Mistakes
+## 5. Common Mistakes
 
 ### Mistake 1: Verify UI แล้วไม่ตรวจ DB
 
@@ -718,7 +696,7 @@ expect(new Date(todo!.createdAt).toISOString()).toBe(todo!.createdAt); // valid 
 
 ---
 
-## 7. สรุปบท
+## 6. สรุปบท
 
 บทนี้สอน pattern สำคัญสำหรับการ verify ว่า data ถึง DB จริงหลังจาก user action:
 

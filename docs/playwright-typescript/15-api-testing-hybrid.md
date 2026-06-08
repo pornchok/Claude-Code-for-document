@@ -44,21 +44,7 @@
 
 ---
 
-## 3. Analogy
-
-**Hybrid test คือเชฟที่ใช้ microwave (API) เตรียม base แล้วตกแต่งด้วยมือ (UI)**
-
-เชฟต้องทำ roast chicken 50 จาน สำหรับงาน party ใหญ่ ถ้าทุกอย่างทำด้วยมือตั้งแต่ต้น — ล้างไก่, ปรุงรส, มัด, ใส่เตา, ตรวจอุณหภูมิ — จะใช้เวลามหาศาล แต่เชฟฉลาดจะ prepare base เนื้อไก่ด้วย sous vide machine (API) ที่ทำงานอัตโนมัติเป็น batch แล้วนำมาตกแต่ง, ปรุง sauce, จัดจาน (UI) ก่อนเสิร์ฟเท่านั้น — ผลลัพธ์คุณภาพเดิม แต่เร็วกว่ามาก
-
-ใน Playwright: เตรียม test data ผ่าน API (sous vide), แล้ว verify presentation และ UX ผ่าน browser (จัดจาน)
-
-⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:
-- **API test ใน Playwright เหมือนกับการใช้ `fetch()` หรือ `axios` ใน code ทั่วไป** — จริงๆ `request` fixture คือ `APIRequestContext` ที่มี context management, base URL, cookies, TLS certificate handling, และ `extraHTTPHeaders` built-in มาให้ — ไม่ใช่แค่ HTTP client ธรรมดา
-- **Hybrid test ที่ setup ผ่าน API แต่ verify ผ่าน UI จะ slow เสมอเพราะต้องรอ browser** — ส่วน API calls ใช้เวลา ~50ms ต่อ call ซึ่งเร็วมาก เทียบกับ UI form fill ที่ใช้ ~2-3 วินาทีต่อ field — hybrid test จึงเร็วกว่า full UI test มาก
-
----
-
-## 4. เนื้อหาหลัก
+## 3. เนื้อหาหลัก
 
 ### 4.1 `request` Fixture คืออะไร
 
@@ -260,7 +246,7 @@ expect(todos).toContainEqual(
 
 ---
 
-## 5. ตัวอย่าง 3 ระดับ
+## 4. ตัวอย่าง 3 ระดับ
 
 ### Beginner — CRUD Todos API
 
@@ -535,7 +521,7 @@ test.describe('Hybrid UI+API: Todo Workflow', () => {
 
 ---
 
-## 6. Common Mistakes
+## 5. Common Mistakes
 
 ❌ **ลืม `await` ก่อน `res.json()`**
 
@@ -631,7 +617,7 @@ Config-level `extraHTTPHeaders` ส่งไปทุก request จากทุ
 
 ---
 
-## 7. สรุปบท
+## 6. สรุปบท
 
 ก่อนดูเฉลย ลองตอบ 3 คำถามนี้ด้วยตัวเองก่อน:
 
@@ -658,7 +644,7 @@ Config-level `extraHTTPHeaders` ส่งไปทุก request จากทุ
 
 ---
 
-## 8. Pre-chapter Retrieval สำหรับบทถัดไป
+## 7. Pre-chapter Retrieval สำหรับบทถัดไป
 
 บทที่ 16 จะพูดถึง Visual Regression Testing — ก่อนอ่าน ลองนึกดูว่า:
 

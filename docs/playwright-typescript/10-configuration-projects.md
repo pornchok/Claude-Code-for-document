@@ -40,21 +40,7 @@
 
 ---
 
-## 3. Analogy
-
-**`playwright.config.ts` เหมือน ระเบียบการสอบ** ที่ทางมหาวิทยาลัยออกให้นักศึกษาทุกคน
-
-ระเบียบการสอบกำหนดว่า: ทุกห้องสอบต้องเริ่มพร้อมกัน (timeout เท่ากัน), ห้ามใช้ตำรา (forbidOnly), ถ้าเขียนผิดแก้ได้ 2 ครั้ง (retries: 2), กระดาษคำตอบมี format เดียวกัน (reporter) — นักศึกษาไม่ต้องถามกฎซ้ำในทุกห้อง เพราะกฎถูกบังคับใช้โดยอัตโนมัติ
-
-**Projects** เหมือนการจัดสอบให้นักศึกษา **3 หลักสูตรที่แตกต่างกัน** ด้วย **ข้อสอบชุดเดียวกัน** — สอบปกติ, สอบภาษาอังกฤษ, สอบ international program ต่างใช้ข้อสอบเดิม แต่บริบท (browser/environment) ต่างกัน
-
-⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:
-- **Config เป็นแค่ "setting ภายนอก" ที่ไม่กระทบ logic** — จริงๆ config กำหนด behavior ของ test lifecycle ด้วย: timeout ทำให้ test หยุดกลางคัน, retries ทำให้ test รัน 3 รอบ, parallel ทำให้ tests รันพร้อมกัน ทั้งหมดนี้เปลี่ยน behavior จริง ไม่ใช่แค่ appearance
-- **Projects คือ test files ที่แยกกัน** — จริงๆ Projects คือ **configurations ที่ต่างกัน** ที่รัน **test files ชุดเดียวกัน** ซ้ำ Project `chromium` กับ `firefox` รัน `tests/login.spec.ts` ไฟล์เดียวกัน แค่ browser ต่างกัน
-
----
-
-## 4. เนื้อหาหลัก
+## 3. เนื้อหาหลัก
 
 ### `defineConfig()` — Blueprint ของ Test Suite
 
@@ -329,7 +315,7 @@ export default defineConfig({
 
 ---
 
-## 5. ตัวอย่าง 3 ระดับ
+## 4. ตัวอย่าง 3 ระดับ
 
 ### Beginner: Minimal Config ที่ใช้งานได้จริง
 
@@ -584,7 +570,7 @@ Running 1 test using 1 worker
 
 ---
 
-## 6. Common Mistakes
+## 5. Common Mistakes
 
 ❌ **Hardcode URL ใน test files แทนใช้ `baseURL`**
 ```typescript
@@ -676,7 +662,7 @@ export default defineConfig({
 
 ---
 
-## 7. สรุปบท
+## 6. สรุปบท
 
 ลองตอบคำถามต่อไปนี้ก่อนดูเฉลย — เพื่อ consolidate ความเข้าใจ:
 
@@ -705,7 +691,7 @@ export default defineConfig({
 
 ---
 
-## 8. Pre-chapter Retrieval สำหรับบทถัดไป
+## 7. Pre-chapter Retrieval สำหรับบทถัดไป
 
 บทที่ 11 จะพูดถึง **Parallelism, Sharding & Reporting** — ลองนึกดูก่อน:
 

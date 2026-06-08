@@ -53,21 +53,7 @@
 
 ---
 
-## 3. Analogy
-
-**Visual testing คือช่างภาพที่ถ่าย reference photo แล้วเปรียบเทียบกับรูปจริงทีละ pixel — Aria snapshot คือผู้อ่าน screen reader ที่ตรวจว่า app เข้าถึงได้จริง**
-
-จินตนาการว่าคุณเป็นช่างภาพประกันภัยที่ถ่ายภาพรถลูกค้าก่อนเช่า แล้วตรวจเทียบตอนคืน — คุณวางรูปสองรูปซ้อนกันแล้วดูว่ามี pixel ไหนที่เปลี่ยนไปบ้าง ถ้ารอยขีดข่วนใหม่ปรากฏแม้แต่ 1 จุด คุณจะจับได้ทันที นั่นคือ `toHaveScreenshot()` — เปรียบเทียบ baseline กับ actual ทีละ pixel
-
-ส่วนการตรวจ accessibility คล้ายกับ inspector ที่ตรวจว่าอาคารมี ramp สำหรับ wheelchair ไหม มี Braille sign ไหม มี emergency exit ที่ทุกคนเข้าถึงได้ไหม — inspector ไม่สนใจว่าอาคารสวยแค่ไหน แต่สนใจว่าทุกคนใช้ได้จริงไหม นั่นคือ `@axe-core` + `toMatchAriaSnapshot()`
-
-⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:
-- **Visual snapshot ตรวจ logic ได้** — ตรวจเฉพาะ visual appearance ไม่ใช่ behavior ถ้าปุ่มมีสีถูกแต่ไม่ทำงาน visual test จะผ่านแต่ functional test จะ fail
-- **Accessibility test รัน OS ไหนก็ได้เหมือนกัน** — ครึ่งจริง: `toMatchAriaSnapshot()` ไม่ขึ้นกับ OS แต่ `toHaveScreenshot()` ต่างกันระหว่าง macOS/Linux/Windows เพราะ font rendering และ anti-aliasing ต่างกัน
-
----
-
-## 4. เนื้อหาหลัก
+## 3. เนื้อหาหลัก
 
 ### 4.1 Visual Testing ด้วย `toHaveScreenshot()`
 
@@ -339,7 +325,7 @@ await expect(page.getByRole('checkbox')).toMatchAriaSnapshot(`
 
 ---
 
-## 5. ตัวอย่าง 3 ระดับ
+## 4. ตัวอย่าง 3 ระดับ
 
 ### Beginner — Visual Screenshot + Aria Snapshot พื้นฐาน
 
@@ -598,7 +584,7 @@ test.describe('Accessibility Audit: Full Coverage', () => {
 
 ---
 
-## 6. Common Mistakes
+## 5. Common Mistakes
 
 ❌ **สร้าง baseline บน macOS แล้วรัน test ใน Linux CI**
 
@@ -709,7 +695,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 ---
 
-## 7. สรุปบท
+## 6. สรุปบท
 
 ก่อนดูเฉลย ลองตอบ 3 คำถามนี้ด้วยตัวเองก่อน:
 

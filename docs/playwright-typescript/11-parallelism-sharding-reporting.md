@@ -41,21 +41,7 @@ Playwright มีสองเครื่องมือหลักแก้ป
 
 ---
 
-## 3. Analogy
-
-**Sharding เหมือนการแบ่งกระดาษข้อสอบให้ผู้คุมสอบหลายคนตรวจพร้อมกัน** — ถ้ามีข้อสอบ 200 ฉบับ และผู้คุม 4 คน แต่ละคนรับกอง 50 ฉบับ ตรวจพร้อมกัน แล้วรวมผลคะแนนทีเดียวตอนท้าย
-
-**Workers** เหมือน **ผู้คุมสอบ 1 คน ที่อ่านข้อสอบได้หลายฉบับพร้อมกันด้วยสายตาหลายคู่** — เป็น parallelism ภายในตัวคนเดียว
-
-⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:
-
-- **Sharding ทำให้เร็วขึ้น 4x โดยอัตโนมัติ** — จริงๆ ความเร็วขึ้นอยู่กับ distribution ของ tests ถ้า test files มีขนาดไม่เท่ากัน (ไม่ได้ใช้ `fullyParallel`) shard หนึ่งอาจได้งานเยอะกว่าอีก shard ทำให้ bottleneck อยู่ที่ shard นั้น
-- **Workers ใน config เดียวกับ shards** — Workers คือ parallel processes **ภายใน machine เดียว** ควบคุมด้วย `workers: N` ใน config | Shards คือ parallel **ข้าม machines** ควบคุมด้วย `--shard=N/M` ใน CLI ทั้งสองทำงานร่วมกัน: แต่ละ shard ยังมี workers ของตัวเองอีกชั้น
-- **ผู้คุมสอบตรวจได้ทุกฉบับอย่างอิสระ** — จริงๆ parallel tests ที่แชร์ resource เดียวกัน (เช่น database เดียว) จะ interfere กัน เหมือนผู้คุมสอบสองคนแย่งปากกาแดงอันเดียวกัน
-
----
-
-## 4. เนื้อหาหลัก
+## 3. เนื้อหาหลัก
 
 ### 4.1 Parallelism — รัน Tests หลายตัวพร้อมกันบน Machine เดียว
 
@@ -366,7 +352,7 @@ export default defineConfig({
 
 ---
 
-## 5. ตัวอย่าง 3 ระดับ
+## 4. ตัวอย่าง 3 ระดับ
 
 ### Beginner: Parallel Tests ที่มี Shared State Problem และวิธีแก้
 
@@ -722,7 +708,7 @@ export default defineConfig({
 
 ---
 
-## 6. Common Mistakes
+## 5. Common Mistakes
 
 ❌ ใช้ `test.serial()` โดยตรง
 ```typescript
@@ -803,7 +789,7 @@ export default defineConfig({
 
 ---
 
-## 7. สรุปบท
+## 6. สรุปบท
 
 ก่อนดูเฉลย ลองตอบคำถามเหล่านี้ด้วยตัวเองก่อน:
 
@@ -856,7 +842,7 @@ npx playwright merge-reports --reporter html ./all-blob-reports
 
 ---
 
-## 8. สิ่งที่ต้องรู้ก่อนบทถัดไป
+## 7. สิ่งที่ต้องรู้ก่อนบทถัดไป
 
 บทที่ 12 จะพูดถึง **API Testing & Request Interception** — การทดสอบ API โดยตรงและการ mock/intercept network requests ใน Playwright
 

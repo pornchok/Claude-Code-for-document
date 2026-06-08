@@ -45,23 +45,7 @@ Playwright มีเครื่องมือแก้ปัญหาทั้
 
 ---
 
-## 3. Analogy: Sticky Notes กับ Label Folders
-
-ลองนึกถึงห้องจัดเก็บเอกสาร:
-
-**Annotations เหมือน sticky note ที่ติดบนเอกสาร** — sticky note แต่ละสีมีความหมายต่างกัน: สีเหลืองคือ "รอ review", สีแดงคือ "ห้ามส่งออก", สีน้ำเงินคือ "รู้ว่าผิด จะแก้ทีหลัง" Sticky note เหล่านี้เปลี่ยน **พฤติกรรม** ของเอกสารนั้น — HR จะจัดการมันต่างกันขึ้นอยู่กับสีที่ติด
-
-**Tags เหมือน label บนแฟ้ม** — label ไม่เปลี่ยนว่าจะทำอะไรกับเอกสาร แค่บอกว่า "เอกสารนี้อยู่ใน category ไหน" เพื่อให้ค้นหาหรือ filter ได้ง่าย ถ้าบอสบอก "เอาแฟ้มที่ label ว่า Q1-2025 มาให้หมด" ก็แค่ filter ตาม label
-
-⚠️ **ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:**
-
-- **Annotation กับ tag เป็นแค่ metadata เหมือนกัน** — จริงๆ annotations เปลี่ยน behavior ของ test โดยตรง (`test.skip` ทำให้ Playwright ไม่รัน test นั้น, `test.fail` เปลี่ยน expectation ว่า test ควร fail) ส่วน tags เป็นแค่ category label ที่ไม่มีผลต่อ behavior
-- **`test.fixme()` ทำให้ test ผ่าน** — fixme ไม่ได้แก้ test ให้ผ่าน มันแค่ skip test นั้นพร้อม mark ว่า "รู้ว่าพัง ต้องกลับมาแก้" — test ยังพังอยู่ แค่ไม่ถูกรัน
-- **Tags ต้องขึ้นต้นด้วย @** — ใน Playwright tags ต้องมี `@` นำหน้าเสมอ (`@smoke` ไม่ใช่ `smoke`) ไม่งั้น `--grep @smoke` จะไม่เจอ
-
----
-
-## 4. เนื้อหาหลัก
+## 3. เนื้อหาหลัก
 
 ### 4.1 Annotations — เปลี่ยน Behavior ของ Test
 
@@ -380,7 +364,7 @@ test('example', async ({ page }, testInfo) => {
 
 ---
 
-## 5. ตัวอย่าง 3 ระดับ
+## 4. ตัวอย่าง 3 ระดับ
 
 ### Beginner: Annotations พื้นฐาน
 
@@ -601,7 +585,7 @@ Test: Full session lifecycle...
 
 ---
 
-## 6. Common Mistakes
+## 5. Common Mistakes
 
 **❌ `test.skip()` โดยไม่มี condition → test skip เสมอโดยไม่ตั้งใจ:**
 ```typescript
@@ -689,7 +673,7 @@ test.describe('my tests', () => {
 
 ---
 
-## 7. สรุปบท
+## 6. สรุปบท
 
 Annotations, Tags, Parameterize และ Steps เป็นเครื่องมือสำหรับ **จัดระเบียบ test suite** ให้ maintainable:
 

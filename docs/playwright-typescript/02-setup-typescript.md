@@ -44,21 +44,7 @@ TypeScript ช่วยให้:
 
 ---
 
-## 3. Analogy: แผนที่กับ GPS
-
-TypeScript กับ Playwright เหมือนแผนที่กับ GPS
-
-TypeScript คือแผนที่ — บอกว่าทุกถนน (API) มีทิศทางอะไรบ้าง ไปได้ที่ไหน มีข้อจำกัดอะไร Playwright คือ GPS — ใช้แผนที่นั้นนำทาง (autocomplete, type checking) บอกได้ล่วงหน้าว่าเส้นทางนั้นถูกหรือไม่ก่อนที่คุณจะขับออกไปจริง
-
-ถ้าขับโดยไม่มีแผนที่ (JavaScript) ยังไปถึงปลายทางได้ แต่หลงทางง่ายกว่า และรู้ว่าหลงก็ต่อเมื่อขับไปแล้ว
-
-⚠️ **ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:**
-- TypeScript ทำให้ code รันช้าลง — จริงๆ TypeScript compile เป็น JavaScript ก่อนรัน runtime performance เหมือนกันทุกประการ Playwright จัดการ compilation ให้โดยอัตโนมัติ *(source: "You just write tests in TypeScript, and Playwright will read them, transform to JavaScript and run.")*
-- TypeScript เป็น layer แยกต่างหาก — จริงๆ `@playwright/test` รวม TypeScript types ไว้ใน package เดียวกัน ไม่ต้องติดตั้งแยก
-
----
-
-## 4. เนื้อหาหลัก
+## 3. เนื้อหาหลัก
 
 ### 4.1 ติดตั้ง Playwright
 
@@ -234,7 +220,7 @@ await page.click('button');
 
 ---
 
-## 5. ตัวอย่าง 3 ระดับ
+## 4. ตัวอย่าง 3 ระดับ
 
 ### Beginner — First Test: ตรวจ title และ heading
 
@@ -345,7 +331,7 @@ test('unauthenticated user sees Login link in nav', async ({ page }) => {
 
 ---
 
-## 6. Common Mistakes
+## 5. Common Mistakes
 
 ❌ **เลือก JavaScript แทน TypeScript ตอน `npm init playwright@latest`**
 → ไม่มี type checking, autocomplete ไม่สมบูรณ์, ต้องแปลง project ทีหลัง
@@ -388,7 +374,7 @@ page.click('[data-testid="submit"]');
 
 ---
 
-## 7. สรุปบท
+## 6. สรุปบท
 
 บทนี้ครอบคลุม 4 จุดสำคัญ:
 

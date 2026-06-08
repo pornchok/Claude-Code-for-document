@@ -48,26 +48,7 @@
 
 ---
 
-## 3. Analogy
-
-**Production test suite เหมือนร้านอาหาร Michelin — ไม่ใช่แค่อาหารอร่อย แต่ทุก process ต้องสม่ำเสมอ, ทำซ้ำได้, และกู้คืนได้เมื่อเกิดปัญหา**
-
-ร้านอาหาร Michelin ไม่ได้ดีเพราะ chef ฝีมือเก่งคนเดียว — แต่เพราะมี **system** ที่ทำให้ทุก service ออกมาเหมือนกัน ไม่ว่าจะเป็นคืนไหน chef คนไหนทำ:
-
-- **Recipe ที่ precise** = test ที่เขียนชัดเจน ไม่ขึ้นกับ state จากภายนอก
-- **Mise en place** (เตรียมวัตถุดิบก่อนปรุง) = Test Data Factory — เตรียม data สะอาดให้ทุก test ก่อนรัน
-- **Station แยกกัน** (pastry, grill, sauce) = feature folders แยกตาม domain ไม่ใช่ layer
-- **ระบบ QC ทุก plate ก่อนออก** = retry + trace เพื่อจับ error ก่อนถึง customer
-- **Incident log** เมื่อมีของหาย = `test.info().attach()` บันทึก artifact เมื่อ test fail
-
-⚠️ ถ้าเชื่อ analogy นี้ 100% จะเข้าใจผิดว่า:
-
-- **retry แก้ flaky test ได้** — retry เหมือน chef ทำจาน 2 ถ้าจานแรกไม่ผ่าน QC แต่ถ้า ingredient เน่า ทำกี่จานก็เน่าเหมือนกัน — retry ช่วยให้ CI ผ่านชั่วคราว แต่ไม่ได้แก้ root cause จริง ต้องหาว่า "ingredient" (เช่น timing, shared state, external dependency) ไหนที่ทำให้ test ไม่ stable
-- **code coverage = test quality** — ร้านที่ test taste ทุกจาน แต่แค่ลิ้มดูว่า "กินได้" ไม่ใช่ Michelin quality 100% coverage ด้วย bad tests (ไม่มี assertion จริง, แค่ไม่ throw error) แย่กว่า 60% coverage ด้วย tests ที่ verify behavior จริงๆ
-
----
-
-## 4. เนื้อหาหลัก
+## 3. เนื้อหาหลัก
 
 ### 4.1 Flaky Test Strategies
 
@@ -546,7 +527,7 @@ test.describe.parallel('independent feature tests', () => {
 
 ---
 
-## 5. ตัวอย่าง 3 ระดับ
+## 4. ตัวอย่าง 3 ระดับ
 
 ### Beginner — TodoFactory + Cleanup Fixture
 
@@ -823,7 +804,7 @@ export { expect } from '@playwright/test';
 
 ---
 
-## 6. Common Mistakes
+## 5. Common Mistakes
 
 ❌ **ใส่หลาย action ใน test เดียว — เมื่อ fail ไม่รู้ว่าส่วนไหนพัง**
 
@@ -958,7 +939,7 @@ test('checkout', async ({ page }) => {
 
 ---
 
-## 7. สรุปบท
+## 6. สรุปบท
 
 ก่อนดูเฉลย ลองตอบคำถามเหล่านี้ด้วยตัวเองก่อน:
 
