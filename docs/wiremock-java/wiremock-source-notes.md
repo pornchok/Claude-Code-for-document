@@ -80,3 +80,89 @@ SOURCE: https://wiremock.org/docs/verifying/
 VERSION: WireMock 3.13.2 / fetched 2026-06-10
 CONCEPT: Count-based verify example
 QUOTE: "verify(moreThan(5), postRequestedFor(urlEqualTo(\"/many\")));"
+
+---
+
+## บทที่ 5 — Request Matching: POST Body
+
+SOURCE: https://wiremock.org/docs/request-matching/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: equalToJson basic usage
+QUOTE: ".withRequestBody(equalToJson(\"{ \\\"total_results\\\": 4 }\"))"
+
+SOURCE: https://wiremock.org/docs/request-matching/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: equalToJson with ignoreArrayOrder and ignoreExtraElements
+QUOTE: ".withRequestBody(equalToJson(\"{ \\\"total_results\\\": 4 }\", true, true))"
+
+SOURCE: https://wiremock.org/docs/request-matching/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: ignoreArrayOrder meaning
+QUOTE: "First boolean (ignoreArrayOrder): Treats [1,2] and [2,1] as equivalent"
+
+SOURCE: https://wiremock.org/docs/request-matching/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: ignoreExtraElements meaning
+QUOTE: "Second boolean (ignoreExtraElements): Permits additional object properties in actual requests beyond expected fields"
+
+---
+
+## บทที่ 6 — Request Matching: Headers & Query Params
+
+SOURCE: https://wiremock.org/docs/request-matching/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: withHeader matching
+QUOTE: ".withHeader(\"Content-Type\", equalTo(\"application/json\"))"
+
+SOURCE: https://wiremock.org/docs/request-matching/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: withQueryParam matching
+QUOTE: ".withQueryParam(\"search_term\", equalTo(\"WireMock\"))"
+
+SOURCE: https://wiremock.org/docs/request-matching/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: urlEqualTo vs urlPathEqualTo
+QUOTE: "urlEqualTo(\"/your/url?and=query\") — Matches complete URL including query string | urlPathEqualTo(\"/your/url\") — Matches path only; ignores query parameters"
+
+---
+
+## บทที่ 7 — Response Templating
+
+SOURCE: https://wiremock.org/docs/response-templating/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: Enable templating globally
+QUOTE: "WireMockServer wm = new WireMockServer(options().globalTemplating(true));"
+
+SOURCE: https://wiremock.org/docs/response-templating/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: Enable per-stub with withTransformers
+QUOTE: "wm.stubFor(get(urlPathEqualTo(\"/templated\")).willReturn(aResponse().withBody(\"{{request.path.[0]}}\").withTransformers(\"response-template\")));"
+
+SOURCE: https://wiremock.org/docs/response-templating/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: Template helpers — path segments
+QUOTE: "{{request.pathSegments.[0]}} - access by index | {{request.path.[0]}} - alternative syntax"
+
+SOURCE: https://wiremock.org/docs/response-templating/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: Template helpers — headers and body
+QUOTE: "{{request.headers.X-Request-Id}} - first value | {{request.body}} - full body text"
+
+---
+
+## บทที่ 8 — Scenarios (Stateful Behaviour)
+
+SOURCE: https://wiremock.org/docs/stateful-behaviour/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: How scenarios work
+QUOTE: "WireMock implements stateful behavior through scenarios, which function as state machines. Each scenario begins in the Scenario.STARTED state and can transition to custom states based on stub configurations."
+
+SOURCE: https://wiremock.org/docs/stateful-behaviour/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: Key methods
+QUOTE: "inScenario(String name) — Associates a stub with a named scenario | whenScenarioStateIs(String state) — Matches stubs to specific scenario states | willSetStateTo(String newState) — Transitions the scenario to a new state after matching"
+
+SOURCE: https://wiremock.org/docs/stateful-behaviour/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: Reset scenarios
+QUOTE: "Reset all: POST /__admin/scenarios/reset | Reset one: PUT /__admin/scenarios/{name}/state"
