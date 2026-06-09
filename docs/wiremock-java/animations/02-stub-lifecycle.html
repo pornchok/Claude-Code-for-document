@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>WireMock Stub Lifecycle</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+  h1 { font-size: 1.5rem; color: #7dd3fc; margin-bottom: 0.3rem; }
+  .subtitle { color: #94a3b8; font-size: 0.9rem; margin-bottom: 2rem; }
+
+  .timeline { display: flex; flex-direction: column; gap: 0; width: 100%; max-width: 700px; }
+  .step { display: flex; gap: 1rem; align-items: flex-start; padding: 1rem; border-radius: 8px; border: 1px solid #1e293b; transition: all 0.4s ease; opacity: 0.4; }
+  .step.active { opacity: 1; border-color: #3b82f6; background: #1e293b; transform: scale(1.01); }
+  .step.done { opacity: 0.7; border-color: #22c55e; background: #0f2818; }
+
+  .step-num { width: 32px; height: 32px; border-radius: 50%; background: #334155; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; margin-top: 2px; }
+  .step.active .step-num { background: #3b82f6; }
+  .step.done .step-num { background: #22c55e; }
+
+  .step-content { flex: 1; }
+  .step-title { font-weight: 600; margin-bottom: 0.3rem; }
+  .step.active .step-title { color: #7dd3fc; }
+  .step.done .step-title { color: #4ade80; }
+  .step-desc { font-size: 0.85rem; color: #94a3b8; }
+  .step.active .step-desc { color: #cbd5e1; }
+
+  .code-block { background: #0a0f1e; border: 1px solid #1e3a5f; border-radius: 6px; padding: 0.7rem 1rem; margin-top: 0.5rem; font-family: 'Consolas', monospace; font-size: 0.8rem; color: #93c5fd; display: none; }
+  .step.active .code-block { display: block; }
+
+  .connector { width: 2px; height: 20px; background: #1e293b; margin-left: 2rem; }
+  .connector.done { background: #22c55e; }
+
+  .nav { display: flex; gap: 1rem; margin-top: 2rem; }
+  .btn { padding: 0.6rem 1.5rem; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+  .btn-primary { background: #3b82f6; color: white; }
+  .btn-primary:hover { background: #2563eb; }
+  .btn-secondary { background: #334155; color: #e2e8f0; }
+  .btn-secondary:hover { background: #475569; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .progress-text { color: #64748b; font-size: 0.85rem; margin-top: 1rem; }
+</style>
+</head>
+<body>
+<h1>WireMock Stub Lifecycle</h1>
+<p class="subtitle">ลำดับขั้นตอนที่ถูกต้องในการใช้ WireMock</p>
+
+<div class="timeline" id="timeline"></div>
+<div class="progress-text" id="progressText">ขั้นตอนที่ 1 จาก 6</div>
+
+<div class="nav">
+  <button class="btn btn-secondary" id="prevBtn" onclick="navigate(-1)" disabled>← ก่อนหน้า</button>
+  <button class="btn btn-primary" id="nextBtn" onclick="navigate(1)">ถัดไป →</button>
+</div>
+
+<script>
+const steps = [
+  {
+    title: "① start() — เปิด Server",
+    desc: "สร้าง WireMockServer และ start() ก่อนเสมอ ทำใน @BeforeEach",
+    code: "WireMockServer wireMock = new WireMockServer(wireMockConfig().port(8080));\nwireMock.start(); // เปิด fake HTTP server ที่ port 8080"
+  },
+  {
+    title: "② stubFor() — กำหนด Response",
+    desc: "บอก WireMock ว่า 'ถ้าได้รับ request แบบนี้ ให้ตอบกลับแบบนี้'",
+    code: "wireMock.stubFor(get(\"/payments/123\")\n  .willReturn(okJson(\"{\\\"id\\\":\\\"123\\\",\\\"status\\\":\\\"success\\\"}\")));"
+  },
+  {
+    title: "③ HTTP Call — Client เรียก WireMock",
+    desc: "Code จริงที่กำลัง test เรียก localhost:8080 — WireMock รับแล้วตอบตาม stub",
+    code: "// PaymentClient ชี้ไปที่ localhost:8080\nPaymentResponse response = paymentClient.getPayment(\"123\");\n// WireMock ตอบกลับ fake response ทันที"
+  },
+  {
+    title: "④ verify() — ตรวจการเรียก",
+    desc: "ยืนยันว่า client เรียก API ถูก URL, method, และ payload จริงๆ",
+    code: "wireMock.verify(getRequestedFor(urlEqualTo(\"/payments/123\")));\n// ถ้า client ไม่ได้เรียก → test fails ทันที"
+  },
+  {
+    title: "⑤ reset() — ล้าง Stubs",
+    desc: "ล้าง stubs ทั้งหมดหลังแต่ละ test เพื่อป้องกัน stubs รั่วไปยัง test ถัดไป",
+    code: "wireMock.resetAll(); // ล้างทั้ง stubs และ request history\n// ทำใน @AfterEach เสมอ (ถ้าใช้ WireMockServer โดยตรง)"
+  },
+  {
+    title: "⑥ stop() — ปิด Server",
+    desc: "หยุด WireMock server หลัง test suite จบ เพื่อ free port",
+    code: "wireMock.stop(); // ทำใน @AfterAll หรือ @AfterEach\n// ถ้าลืม → ครั้งต่อไปจะ fail ด้วย 'port already in use'"
+  }
+];
+
+let current = 0;
+
+function render() {
+  const timeline = document.getElementById('timeline');
+  timeline.innerHTML = '';
+  steps.forEach((s, i) => {
+    const stepDiv = document.createElement('div');
+    stepDiv.className = 'step' + (i === current ? ' active' : i < current ? ' done' : '');
+    stepDiv.innerHTML = `
+      <div class="step-num">${i < current ? '✓' : i + 1}</div>
+      <div class="step-content">
+        <div class="step-title">${s.title}</div>
+        <div class="step-desc">${s.desc}</div>
+        <div class="code-block">${s.code}</div>
+      </div>`;
+    timeline.appendChild(stepDiv);
+    if (i < steps.length - 1) {
+      const conn = document.createElement('div');
+      conn.className = 'connector' + (i < current ? ' done' : '');
+      timeline.appendChild(conn);
+    }
+  });
+  document.getElementById('progressText').textContent = `ขั้นตอนที่ ${current + 1} จาก ${steps.length}`;
+  document.getElementById('prevBtn').disabled = current === 0;
+  document.getElementById('nextBtn').disabled = current === steps.length - 1;
+  document.getElementById('nextBtn').textContent = current === steps.length - 1 ? '✓ เสร็จ' : 'ถัดไป →';
+}
+
+function navigate(dir) {
+  current = Math.max(0, Math.min(steps.length - 1, current + dir));
+  render();
+}
+
+render();
+</script>
+</body>
+</html>

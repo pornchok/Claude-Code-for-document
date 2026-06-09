@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<title>WireMock Scenarios</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; padding: 2rem; display: flex; flex-direction: column; align-items: center; }
+  h1 { font-size: 1.5rem; color: #7dd3fc; margin-bottom: 0.3rem; }
+  .subtitle { color: #94a3b8; font-size: 0.9rem; margin-bottom: 2rem; }
+
+  .diagram { display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin: 2rem 0; flex-wrap: wrap; }
+  .state { width: 130px; height: 80px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid #334155; background: #1e293b; transition: all 0.4s; }
+  .state.active { border-color: #3b82f6; background: #1e3a5f; box-shadow: 0 0 20px #3b82f640; transform: scale(1.05); }
+  .state.done { border-color: #22c55e; background: #0f2818; }
+  .state-name { font-weight: 700; font-size: 0.9rem; }
+  .state-label { font-size: 0.72rem; color: #94a3b8; margin-top: 0.2rem; }
+  .state.active .state-label { color: #93c5fd; }
+
+  .transition { display: flex; flex-direction: column; align-items: center; gap: 0.3rem; }
+  .arrow-h { display: flex; align-items: center; }
+  .line-h { width: 60px; height: 2px; background: #334155; transition: background 0.4s; }
+  .line-h.active { background: #3b82f6; }
+  .line-h.done { background: #22c55e; }
+  .arrowhead { border-left: 8px solid #334155; border-top: 5px solid transparent; border-bottom: 5px solid transparent; transition: border-color 0.4s; }
+  .arrowhead.active { border-left-color: #3b82f6; }
+  .arrowhead.done { border-left-color: #22c55e; }
+  .t-label { font-size: 0.7rem; color: #94a3b8; white-space: nowrap; text-align: center; }
+  .t-label.active { color: #93c5fd; }
+
+  .log { background: #0a0f1e; border: 1px solid #1e293b; border-radius: 8px; padding: 1rem; width: 100%; max-width: 700px; min-height: 120px; font-family: 'Consolas', monospace; font-size: 0.82rem; }
+  .log-line { margin-bottom: 0.3rem; }
+  .log-line.req { color: #93c5fd; }
+  .log-line.res-ok { color: #4ade80; }
+  .log-line.res-err { color: #f87171; }
+  .log-line.state-change { color: #fbbf24; }
+
+  .nav { display: flex; gap: 1rem; margin-top: 1.5rem; }
+  .btn { padding: 0.6rem 1.5rem; border-radius: 6px; border: none; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+  .btn-primary { background: #3b82f6; color: white; }
+  .btn-primary:hover { background: #2563eb; }
+  .btn-secondary { background: #334155; color: #e2e8f0; }
+  .btn-secondary:hover { background: #475569; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .reset-btn { background: #7c3aed; color: white; }
+  .reset-btn:hover { background: #6d28d9; }
+</style>
+</head>
+<body>
+<h1>WireMock Scenarios — Stateful Mock</h1>
+<p class="subtitle">จำลอง "Payment API pending ก่อน แล้วค่อย success" แบบ retry pattern</p>
+
+<div class="diagram">
+  <div class="state" id="s0">
+    <div class="state-name">STARTED</div>
+    <div class="state-label">State เริ่มต้น</div>
+  </div>
+  <div class="transition">
+    <div class="arrow-h">
+      <div class="line-h" id="line1"></div>
+      <div class="arrowhead" id="head1"></div>
+    </div>
+    <div class="t-label" id="label1">Call #1<br>GET /payments/123</div>
+  </div>
+  <div class="state" id="s1">
+    <div class="state-name">PENDING</div>
+    <div class="state-label">ยังรอ confirm</div>
+  </div>
+  <div class="transition">
+    <div class="arrow-h">
+      <div class="line-h" id="line2"></div>
+      <div class="arrowhead" id="head2"></div>
+    </div>
+    <div class="t-label" id="label2">Call #2<br>GET /payments/123</div>
+  </div>
+  <div class="state" id="s2">
+    <div class="state-name">SUCCESS</div>
+    <div class="state-label">Payment ผ่านแล้ว</div>
+  </div>
+</div>
+
+<div class="log" id="log">
+  <div style="color:#64748b">// กด "ส่ง Request" เพื่อจำลอง client เรียก API...</div>
+</div>
+
+<div class="nav">
+  <button class="btn btn-primary" id="callBtn" onclick="sendRequest()">📤 ส่ง Request</button>
+  <button class="btn reset-btn" onclick="resetSim()">↺ Reset</button>
+</div>
+
+<script>
+let callCount = 0;
+const logs = [];
+
+const responses = [
+  { status: 202, body: '{"id":"123","status":"pending","message":"Payment is being processed"}', stateChange: 'STARTED → PENDING' },
+  { status: 200, body: '{"id":"123","status":"success","amount":500,"currency":"THB"}', stateChange: 'PENDING → SUCCESS' }
+];
+
+function addLog(text, cls) {
+  logs.push(`<div class="log-line ${cls}">${text}</div>`);
+  document.getElementById('log').innerHTML = logs.join('');
+}
+
+function sendRequest() {
+  if (callCount >= 2) return;
+  const r = responses[callCount];
+  addLog(`→ GET /payments/123 (Call #${callCount + 1})`, 'req');
+  if (r.status === 202) {
+    addLog(`← 202 Accepted: ${r.body}`, 'res-err');
+  } else {
+    addLog(`← 200 OK: ${r.body}`, 'res-ok');
+  }
+  addLog(`⚡ State: ${r.stateChange}`, 'state-change');
+
+  // Update diagram
+  document.getElementById('s' + callCount).classList.add('done');
+  document.getElementById('line' + (callCount + 1)).classList.add(callCount === 0 ? 'active' : 'done');
+  document.getElementById('head' + (callCount + 1)).classList.add(callCount === 0 ? 'active' : 'done');
+  document.getElementById('label' + (callCount + 1)).classList.add('active');
+  callCount++;
+  document.getElementById('s' + callCount).classList.add(callCount === 2 ? 'done' : 'active');
+  if (callCount >= 2) {
+    document.getElementById('callBtn').disabled = true;
+    document.getElementById('callBtn').textContent = '✓ ครบ 2 Calls แล้ว';
+    addLog('', '');
+    addLog('// Scenario เสร็จสิ้น — test ผ่าน retry logic ได้', 'state-change');
+  }
+}
+
+function resetSim() {
+  callCount = 0;
+  logs.length = 0;
+  document.getElementById('log').innerHTML = '<div style="color:#64748b">// กด "ส่ง Request" เพื่อจำลอง client เรียก API...</div>';
+  ['s0','s1','s2'].forEach(id => { document.getElementById(id).className = 'state'; });
+  ['line1','line2'].forEach(id => { document.getElementById(id).className = 'line-h'; });
+  ['head1','head2'].forEach(id => { document.getElementById(id).className = 'arrowhead'; });
+  ['label1','label2'].forEach(id => { document.getElementById(id).className = 't-label'; });
+  document.getElementById('s0').classList.add('active');
+  document.getElementById('callBtn').disabled = false;
+  document.getElementById('callBtn').textContent = '📤 ส่ง Request';
+}
+
+document.getElementById('s0').classList.add('active');
+</script>
+</body>
+</html>
