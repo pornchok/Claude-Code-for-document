@@ -166,3 +166,46 @@ SOURCE: https://wiremock.org/docs/stateful-behaviour/
 VERSION: WireMock 3.13.2 / fetched 2026-06-10
 CONCEPT: Reset scenarios
 QUOTE: "Reset all: POST /__admin/scenarios/reset | Reset one: PUT /__admin/scenarios/{name}/state"
+
+---
+
+## บทที่ 9 — Spring Boot Integration
+
+SOURCE: https://wiremock.org/docs/junit-jupiter/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: WireMockExtension @RegisterExtension
+QUOTE: "Invoking the extension programmatically with @RegisterExtension allows you to run any number of WireMock instances and provides full control over configuration."
+
+SOURCE: https://wiremock.org/docs/junit-jupiter/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: Static vs instance WireMockExtension scope
+QUOTE: "Static fields: Server starts before first test method, stops after last method, resets before each test. Instance fields: Server created and started before each test method, stopped after completion."
+
+SOURCE: https://wiremock.org/docs/junit-jupiter/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: Builder API
+QUOTE: "newInstance() - Creates new extension builder | .options(wireMockConfig()) - Configures WireMock server settings | .build() - Finalizes and returns extension instance | .resetOnEachTest(false) - Disables reset between tests"
+
+---
+
+## บทที่ 10 — Error Simulation
+
+SOURCE: https://wiremock.org/docs/simulating-faults/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: withFixedDelay
+QUOTE: "aResponse().withFixedDelay(2000)"
+
+SOURCE: https://wiremock.org/docs/simulating-faults/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: Fault enum values
+QUOTE: "EMPTY_RESPONSE - Completely empty response | MALFORMED_RESPONSE_CHUNK - Send an OK status header, then garbage, then close the connection | RANDOM_DATA_THEN_CLOSE - Garbage data followed by connection closure | CONNECTION_RESET_BY_PEER - Close the connection, setting SO_LINGER to 0"
+
+SOURCE: https://wiremock.org/docs/simulating-faults/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: withFault usage
+QUOTE: "aResponse().withFault(Fault.MALFORMED_RESPONSE_CHUNK)"
+
+SOURCE: https://wiremock.org/docs/simulating-faults/
+VERSION: WireMock 3.13.2 / fetched 2026-06-10
+CONCEPT: withLogNormalRandomDelay
+QUOTE: "A lognormal distribution is a pretty good approximation of long tailed latencies centered on the 50th percentile."
