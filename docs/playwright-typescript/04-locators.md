@@ -82,6 +82,56 @@ Playwright แนะนำ accessibility-first approach: ค้นหา element
 
 ## 3. เนื้อหาหลัก
 
+### 3.0 เมื่อเห็น Element บนหน้า — ใช้ getBy อะไร?
+
+ทุกครั้งที่เห็น element บนหน้าเว็บ ให้ถามตัวเองว่า:
+
+> **"element นี้คืออะไร และผู้ใช้เข้าถึงมันด้วยอะไร?"**
+
+ดู HTML ของ element แล้วเทียบกับตารางนี้:
+
+| เห็นอะไรบนหน้า | HTML เบื้องหลัง | locator ที่ควรใช้ |
+|---|---|---|
+| ปุ่ม | `<button>Login</button>` | `getByRole('button', { name: 'Login' })` |
+| Link | `<a href="/about">About</a>` | `getByRole('link', { name: 'About' })` |
+| หัวข้อ | `<h1>Dashboard</h1>` | `getByRole('heading', { name: 'Dashboard' })` |
+| Input ที่มีป้ายกำกับ | `<label>Email <input></label>` | `getByLabel('Email')` |
+| Input ที่ไม่มีป้ายกำกับ | `<input placeholder="Search...">` | `getByPlaceholder('Search...')` |
+| Dropdown | `<select>...</select>` + label | `getByRole('combobox', { name: 'Category' })` |
+| Checkbox | `<input type="checkbox">` + label | `getByRole('checkbox', { name: 'Remember me' })` |
+| Radio button | `<input type="radio">` + label | `getByRole('radio', { name: 'Male' })` |
+| รูปภาพ | `<img alt="Logo">` | `getByAltText('Logo')` |
+| ข้อความ error/notification | `<p>Invalid credentials</p>` | `getByText('Invalid credentials')` |
+| Container ที่ไม่มี role ชัดเจน | `<div data-testid="product-grid">` | `getByTestId('product-grid')` |
+
+---
+
+#### 1 Parameter vs 2 Parameters — เมื่อไหนต้องใส่ options เพิ่ม?
+
+```typescript
+// 1 parameter — ใช้เมื่อ element แบบนั้นมีแค่อันเดียวในทั้งหน้า
+// หรือเมื่อ chain แล้ว scope แคบพอแล้ว
+page.getByRole('navigation')                    // nav มีอันเดียวในหน้า — พอแล้ว
+page.getByRole('navigation').getByRole('link')  // link ใน nav — scope แคบแล้ว ไม่ต้องระบุ name
+
+// 2 parameters — ใช้เมื่อ element แบบนั้นมีหลายอันในหน้า ต้อง narrow ลง
+page.getByRole('button', { name: 'Login' })     // หน้ามีหลายปุ่ม → ระบุ name
+page.getByRole('link', { name: 'About Us' })    // หน้ามีหลาย link → ระบุ name
+page.getByRole('heading', { level: 1 })         // ต้องการ h1 เท่านั้น ไม่ใช่ h2-h6
+```
+
+**กฎ**: ถ้า locator match มากกว่า 1 element → เพิ่ม option จนเหลืออันเดียว
+
+---
+
+**ถ้ายังไม่แน่ใจ → ใช้ Codegen ช่วย:**
+```bash
+npx playwright codegen http://localhost:3000
+```
+คลิก element ใดก็ได้บนหน้า — Codegen จะบอกว่าควรใช้ locator อะไรทันที
+
+---
+
 ### 3.1 Priority Order — ลำดับที่ควรใช้
 
 Playwright แนะนำ locator ตามลำดับนี้ (ตรวจสอบจาก playwright.dev/docs/locators แล้ว):
@@ -111,6 +161,61 @@ page.getByRole('checkbox', { name: 'Remember me' })
 ```
 
 ทำไมถึงดีที่สุด? เพราะ ARIA role สะท้อน semantics ของ UI ที่ user รับรู้ และยังช่วยให้ผู้พิการที่ใช้ screen reader เข้าถึง app ได้ด้วย — ถ้า role เปลี่ยน แปลว่า UI เปลี่ยนจริงๆ
+
+**Options ที่ใช้บ่อยใน getByRole:**
+
+```typescript
+// name — accessible name ของ element (คือข้อความที่ user/screen reader เห็น)
+page.getByRole('button', { name: 'Submit' })
+page.getByRole('button', { name: /submit/i })  // regex — case-insensitive
+
+// exact — default false (substring match)
+// false: name: 'Log' จะ match "Login", "Logout" ด้วย
+// true: match "Login" เท่านั้น ต้องตรงทั้งหมด
+page.getByRole('button', { name: 'Log' })                   // match "Login", "Logout"
+page.getByRole('button', { name: 'Login', exact: true })    // match "Login" เท่านั้น
+
+// level — สำหรับ heading เท่านั้น (h1 = level 1, h2 = level 2, ...)
+page.getByRole('heading', { level: 1 })                     // เฉพาะ h1
+page.getByRole('heading', { name: 'Products', level: 2 })   // h2 ที่ชื่อ Products
+
+// checked — สำหรับ checkbox หรือ radio
+page.getByRole('checkbox', { name: 'Remember me', checked: true })   // ที่ tick แล้ว
+page.getByRole('checkbox', { name: 'Remember me', checked: false })  // ยังไม่ได้ tick
+
+// disabled — สำหรับ disabled elements
+page.getByRole('button', { name: 'Submit', disabled: false })  // เฉพาะปุ่มที่ active อยู่
+page.getByRole('button', { name: 'Submit', disabled: true })   // เฉพาะปุ่มที่ disabled อยู่
+```
+
+*(source: https://playwright.dev/docs/api/class-page#page-get-by-role)*
+
+**Accessible Name คืออะไร — Playwright หาจากไหน?**
+
+"Accessible name" คือข้อความที่ระบุตัว element สำหรับ screen reader Playwright ค้นหาตามลำดับนี้:
+
+```
+1. aria-label attribute
+   <button aria-label="Close dialog">✕</button>
+   → name = "Close dialog"
+
+2. aria-labelledby (ชี้ไปที่ element อื่น)
+   <span id="del-lbl">Delete account</span>
+   <button aria-labelledby="del-lbl">🗑️</button>
+   → name = "Delete account"
+
+3. Text content ของ element (พบบ่อยที่สุด)
+   <button>Login</button>
+   → name = "Login"
+
+4. value / alt / title attribute
+   <input type="submit" value="Send message">
+   → name = "Send message"
+```
+
+ในทางปฏิบัติ: **ข้อความที่เห็นบนปุ่ม/link/heading = accessible name** ได้เลยในกรณีส่วนใหญ่
+
+*(source: https://www.w3.org/TR/accname-1.2/)*
 
 ---
 
@@ -146,6 +251,32 @@ page.getByLabel('Password')
 ```
 
 เหมาะมากสำหรับ form เพราะ label คือสิ่งที่ user อ่านเห็นและเข้าใจว่า input นั้นคืออะไร
+
+**HTML patterns ที่ getByLabel รองรับทั้งหมด:**
+
+```typescript
+// Pattern 1: <label> ที่ครอบ input ไว้ข้างใน
+// HTML: <label>Username <input type="text"></label>
+page.getByLabel('Username')
+
+// Pattern 2: <label for="id"> แยกจาก input
+// HTML: <label for="pwd">Password</label>
+//        <input type="text" id="pwd">
+page.getByLabel('Password')
+
+// Pattern 3: aria-label บน input โดยตรง (ไม่มี <label> tag)
+// HTML: <input type="search" aria-label="Search products">
+page.getByLabel('Search products')
+
+// Pattern 4: aria-labelledby ชี้ไปที่ element อื่น
+// HTML: <span id="card-lbl">Card number</span>
+//        <input type="text" aria-labelledby="card-lbl">
+page.getByLabel('Card number')
+```
+
+⚠️ ข้อสำคัญ: `getByLabel` หา **form control** (input/textarea/select) ที่ associate กับ label นั้น — ไม่ได้หา element `<label>` เอง
+
+*(source: https://playwright.dev/docs/locators#locate-by-label)*
 
 ---
 
@@ -325,6 +456,39 @@ for (const item of items) {
 | Debug locator | ต้อง inspect DOM เอง | Playwright Inspector highlight element ให้ทันที |
 | Accessibility validation | ไม่ได้ตรวจ | ใช้ semantic locator = ตรวจ accessibility ไปด้วยในตัว |
 
+### 3.5 ARIA Roles Quick Reference
+
+เมื่อไม่แน่ใจว่า HTML tag ไหนมี role อะไร ดูตารางนี้แล้วใส่ใน `getByRole(...)`:
+
+| HTML Element | ARIA Role | หมายเหตุ |
+|---|---|---|
+| `<button>` | `button` | รวม `<input type="submit">` และ `<input type="button">` |
+| `<a href="...">` | `link` | ต้องมี `href` — ถ้าไม่มี `href` จะเป็น generic element |
+| `<h1>` ถึง `<h6>` | `heading` | ใช้ `{ level: 1-6 }` เพื่อเจาะ level ที่ต้องการ |
+| `<input type="text">` | `textbox` | รวม `type="email"`, `type="search"`, `type="url"`, `type="tel"` |
+| `<input type="password">` | `textbox` | |
+| `<input type="checkbox">` | `checkbox` | |
+| `<input type="radio">` | `radio` | |
+| `<select>` | `combobox` | |
+| `<textarea>` | `textbox` | |
+| `<img alt="...">` | `img` | ถ้า `alt=""` = decorative ไม่มี role |
+| `<nav>` | `navigation` | |
+| `<main>` | `main` | |
+| `<ul>`, `<ol>` | `list` | |
+| `<li>` | `listitem` | |
+| `<table>` | `table` | |
+| `<tr>` | `row` | |
+| `<td>` | `cell` | |
+| `<th>` | `columnheader` | หรือ `rowheader` |
+| `<dialog>` | `dialog` | |
+| `<article>` | `article` | |
+| `<header>` (top-level) | `banner` | เฉพาะเมื่ออยู่นอก article/section |
+| `<footer>` (top-level) | `contentinfo` | เฉพาะเมื่ออยู่นอก article/section |
+
+**เคล็ดลับ**: เปิด Chrome DevTools → แท็บ "Accessibility" → คลิก element ใดก็ได้ จะเห็น "Role" แสดงอยู่เลย — ใช้ค่านั้นใน `getByRole()` ได้ทันที
+
+*(source: https://www.w3.org/TR/html-aria/)*
+
 ---
 
 ## 4. ตัวอย่าง
@@ -364,6 +528,72 @@ test('shows locator priority order in practice', async ({ page }) => {
 ```
 
 ข้อสังเกต: ไม่มี CSS selector หรือ data-testid เลย — ทั้งหมดเป็น semantic locator ที่อ่านแล้วเข้าใจทันทีว่าแต่ละบรรทัดทำอะไร
+
+---
+
+### Beginner+: Walkthrough — อ่าน HTML แล้วเลือก Locator
+
+สถานการณ์: คุณได้รับ HTML ของ login form — ให้เลือก locator ที่เหมาะสมสำหรับแต่ละ element
+
+```html
+<!-- HTML ของ Login Page บน demo app (simplified) -->
+<form>
+  <label for="username">Username</label>
+  <input id="username" type="text" data-testid="input-username" placeholder="Enter username">
+
+  <label for="password">Password</label>
+  <input id="password" type="password" data-testid="input-password">
+
+  <button type="submit" data-testid="btn-login">Login</button>
+  <p data-testid="login-error" class="error-message">Invalid credentials</p>
+</form>
+```
+
+**การตัดสินใจ — เลือก locator อะไรให้แต่ละ element:**
+
+| element | ตัวเลือกที่มี | ที่เลือก | เหตุผล |
+|---|---|---|---|
+| username input | `getByLabel`, `getByPlaceholder`, `getByTestId` | `getByLabel('Username')` | มี `<label>` → semantic ที่สุด |
+| password input | `getByLabel`, `getByTestId` | `getByLabel('Password')` | มี `<label>` → semantic ที่สุด |
+| login button | `getByRole`, `getByText`, `getByTestId` | `getByRole('button', { name: 'Login' })` | `<button>` tag + text "Login" → role ชัดเจน |
+| error message | `getByText`, `getByTestId` | `getByTestId('login-error')` | `<p>` ธรรมดา ไม่มี role → testid ดีที่สุด |
+
+```typescript
+// tested: Playwright v1.50+, Node.js 20+
+// requires demo app at localhost:3000/login
+import { test, expect } from '@playwright/test';
+
+test('login walkthrough — locator decision in practice', async ({ page }) => {
+  await page.goto('http://localhost:3000/login');
+
+  // username: มี <label for="username">Username</label>
+  // → getByLabel ดีกว่า getByTestId แม้จะมี data-testid ด้วย
+  const usernameInput = page.getByLabel('Username');
+
+  // password: มี <label for="password">Password</label>
+  const passwordInput = page.getByLabel('Password');
+
+  // button: เป็น <button> → role='button', text "Login" = accessible name
+  const loginBtn = page.getByRole('button', { name: 'Login' });
+
+  // error message: เป็น <p> ธรรมดา ไม่มี semantic role → ใช้ testid
+  const errorMsg = page.getByTestId('login-error');
+
+  // ทดสอบ: login ด้วย credentials ผิด → ต้องเห็น error message
+  await usernameInput.fill('wronguser');
+  await passwordInput.fill('wrongpass');
+  await loginBtn.click();
+  await expect(errorMsg).toBeVisible();
+
+  // ทดสอบ: login ด้วย credentials ถูก → ต้องออกจากหน้า /login
+  await usernameInput.fill('admin');
+  await passwordInput.fill('admin123');
+  await loginBtn.click();
+  await expect(page).not.toHaveURL('/login');
+});
+```
+
+หลักจำ: priority = `getByLabel` > `getByRole` > `getByTestId` > `getByText` — เลือก semantic ที่สุดที่ทำได้เสมอ
 
 ---
 
