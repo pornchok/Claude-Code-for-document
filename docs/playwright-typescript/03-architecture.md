@@ -310,19 +310,36 @@ test('admin sees dashboard, testuser sees access denied — same browser, differ
 
 ---
 
-### Advanced: Diagnosis — วิเคราะห์ Flaky Test จาก State Leak
+### Advanced: Diagnosis — วิเคราะห์ Fragile Test จาก State Leak
 
-สถานการณ์: Junior test engineer ส่ง test มาให้ดู บอกว่า "test 2 บางครั้งผ่าน บางครั้งพัง ไม่รู้ทำไม"
+**พื้นฐานที่ต้องรู้ก่อน — Playwright รัน test ยังไง?**
+
+```
+default behavior (fullyParallel: false):
+
+  tests-auth.spec.ts  → test A → test B → test C   (sequential ภายใน file)
+                                                      ↑ สอง file รันพร้อมกัน
+  tests-shop.spec.ts  → test 1 → test 2 → test 3   (sequential ภายใน file)
+```
+
+- **ภายใน file เดียวกัน** → รันตามลำดับจากบนลงล่าง รับประกัน A → B → C เสมอ
+- **ข้าม file** → รัน parallel พร้อมกัน
+- **`fullyParallel: true`** → แม้แต่ภายใน file เดียวกัน tests ก็รัน parallel ได้ ไม่รับประกัน order
+
+---
+
+สถานการณ์: Junior test engineer ส่ง test มาให้ดู บอกว่า "ไม่แน่ใจว่า code นี้ปลอดภัยไหม รันผ่านทุกครั้งในเครื่องตัวเอง"
 
 ```typescript
 // ⚠️ ตัวอย่างนี้จงใจเขียนผิด เพื่อแสดง anti-pattern — ห้าม copy
-// tested: Playwright v1.50+, Node.js 20+ (requires demo app at localhost:3000)
 // ⚠️ CODE ที่มีปัญหา — ให้วิเคราะห์หาสาเหตุก่อนดูเฉลย
 import { test, expect } from '@playwright/test';
 
 let sharedPage: any;
+//  ↑ ตัวแปร module-level ที่ tests ทุกตัว share กัน
 
 test.beforeAll(async ({ browser }) => {
+  // login ครั้งเดียว เก็บ page ไว้ใช้ร่วมกันทุก test
   const context = await browser.newContext();
   sharedPage = await context.newPage();
   await sharedPage.goto('http://localhost:3000/login');
@@ -331,17 +348,17 @@ test.beforeAll(async ({ browser }) => {
   await sharedPage.click('[data-testid="btn-login"]');
 });
 
-test('test A — check admin dashboard', async () => {
-  await sharedPage.goto('http://localhost:3000/dashboard');
-  await expect(sharedPage.locator('[data-testid="session-badge"]')).toContainText('admin');
-});
-
-test('test B — check homepage', async () => {
+test('test A — check admin badge', async () => {
   await sharedPage.goto('http://localhost:3000');
   await expect(sharedPage.locator('[data-testid="session-badge"]')).toContainText('admin');
 });
 
-test('test C — logout then check guest view', async () => {
+test('test B — check admin badge again', async () => {
+  await sharedPage.goto('http://localhost:3000');
+  await expect(sharedPage.locator('[data-testid="session-badge"]')).toContainText('admin');
+});
+
+test('test C — logout', async () => {
   await sharedPage.click('[data-testid="nav-logout"]');
   await expect(sharedPage.locator('[data-testid="session-badge"]')).toContainText('Not logged in');
 });
@@ -350,61 +367,67 @@ test('test C — logout then check guest view', async () => {
 **Exercise: วิเคราะห์ก่อนดูเฉลย**
 
 ลองตอบคำถามเหล่านี้ก่อน scroll ต่อ:
-1. ปัญหาหลักของ code นี้คืออะไร?
-2. ทำไม test B ถึง "บางครั้งผ่านบางครั้งพัง"?
-3. ถ้ารัน test แบบ parallel จะเกิดอะไรขึ้น?
+1. ด้วย default settings (sequential ภายใน file) — code นี้จะผ่านหรือพัง? เพราะอะไร?
+2. code นี้มีความเสี่ยงอะไร แม้ตอนนี้จะผ่านอยู่?
+3. ถ้าเปิด `fullyParallel: true` จะเกิดอะไรขึ้น?
 
 ---
 
 **เฉลย:**
 
-**ปัญหาหลัก: State Sharing ผ่าน `sharedPage`**
+**ข้อ 1 — ด้วย default settings: ผ่านทุกครั้ง**
 
-`sharedPage` เป็น variable ระดับ module ที่ tests ทุกตัว share กัน นี่คือการทำลาย isolation โดยตั้งใจ แต่ทำให้เกิดปัญหาหลายอย่าง:
+tests อยู่ใน file เดียวกัน รันตามลำดับ A → B → C เสมอ:
+- test A: เข้า homepage → เห็น admin badge ✅
+- test B: เข้า homepage → ยัง login อยู่ → เห็น admin badge ✅
+- test C: logout → badge เปลี่ยนเป็น "Not logged in" ✅
 
-**ปัญหาที่ 1 — Test Order Dependency**
+**ข้อ 2 — ความเสี่ยง 3 ข้อแม้ตอนนี้ผ่าน**
 
-ถ้า test C (logout) รันก่อน test A หรือ B — test A และ B จะเห็น session ว่าง (user logout ไปแล้ว) แล้วพัง Playwright ไม่รับประกัน order ของ test ถ้ารัน parallel
+**ความเสี่ยงที่ 1 — เปราะบางต่อการเปลี่ยน order**
 
-**ปัญหาที่ 2 — Parallel Execution Race Condition**
+ถ้าใครย้าย test C ขึ้นไปอยู่เหนือ A และ B — test A และ B จะพังทันที เพราะ `sharedPage` logout ไปแล้ว code ที่ดีต้องรันได้ไม่ว่า order จะเป็นอะไร
 
-ถ้า test A กับ test B รันพร้อมกัน ทั้งสองใช้ `sharedPage` ตัวเดียวกัน test A อาจกำลัง navigate ไป `/dashboard` ขณะที่ test B กำลัง `goto('/') ` — page จะ navigate ไปที่ URL ล่าสุดที่สั่ง ทำให้ทั้งสอง assert บน URL ผิด
+**ความเสี่ยงที่ 2 — พังทันทีถ้าเปิด fullyParallel**
 
-**ปัญหาที่ 3 — `any` type ซ่อน error**
+ถ้าทีมเปิด `fullyParallel: true` ในอนาคต tests A, B, C อาจรันพร้อมกัน ทั้งสามใช้ `sharedPage` ตัวเดียวกัน อาจเกิด **race condition** — คือสถานการณ์ที่ผลลัพธ์ขึ้นอยู่กับว่า test ไหนรันถึงบรรทัดไหนก่อน เช่น test A กำลัง assert ว่าเห็น "admin" แต่ test C รัน logout ไปพอดี → test A พัง
 
-`let sharedPage: any` ทำให้ TypeScript ไม่เตือนถ้าคุณใช้ method ผิด เช่น `sharedPage.fillll()` จะผ่าน compile แต่พัง runtime
+**ความเสี่ยงที่ 3 — `any` type ซ่อน typo**
+
+`let sharedPage: any` ทำให้ TypeScript ไม่ตรวจให้ เช่น `sharedPage.fillll()` ผ่าน compile แต่พัง runtime โดยไม่มีคำเตือน
+
+**ข้อ 3 — ถ้าเปิด fullyParallel: true**
+
+tests รัน parallel พร้อมกัน ทั้งสามแย่งใช้ `sharedPage` ตัวเดียว ผลลัพธ์ขึ้นอยู่กับ timing — บางรอบผ่าน บางรอบพัง ไม่สามารถ reproduce ได้แน่นอน นี่คือที่มาของ "flaky test"
 
 **วิธีแก้ที่ถูกต้อง:**
 
 ```typescript
-// ✅ แก้ไข: ให้แต่ละ test จัดการ login ของตัวเอง
-// หรือใช้ storageState เพื่อ reuse auth (ดู Ch13)
+// ✅ แต่ละ test จัดการ login ของตัวเอง — isolated สมบูรณ์
 // tested: Playwright v1.50+, Node.js 20+ (requires demo app at localhost:3000)
 import { test, expect } from '@playwright/test';
 
-// Option 1: แยก login ทุก test (ง่ายที่สุด, isolated ที่สุด)
-test('test A — check admin dashboard', async ({ page }) => {
+test('test A — check admin badge', async ({ page }) => {
+  // page fixture = context ใหม่สะอาด ไม่ share กับ test อื่น
   await page.goto('http://localhost:3000/login');
   await page.fill('[data-testid="input-username"]', 'admin');
   await page.fill('[data-testid="input-password"]', 'admin123');
   await page.click('[data-testid="btn-login"]');
-  await page.goto('http://localhost:3000/dashboard');
   await expect(page.locator('[data-testid="session-badge"]')).toContainText('admin');
 });
 
-test('test C — logout then check guest view', async ({ page }) => {
-  // Login ก่อน แล้วค่อย test logout
+test('test C — logout', async ({ page }) => {
+  // login ก่อนในทุก test ที่ต้องการ — ไม่พึ่ง state จาก test อื่น
   await page.goto('http://localhost:3000/login');
   await page.fill('[data-testid="input-username"]', 'admin');
   await page.fill('[data-testid="input-password"]', 'admin123');
   await page.click('[data-testid="btn-login"]');
-  // ตอนนี้ logout
   await page.click('[data-testid="nav-logout"]');
   await expect(page.locator('[data-testid="session-badge"]')).toContainText('Not logged in');
 });
 ```
 
-**Key Insight:** ถ้า test ของคุณ sensitive ต่อ order การรัน — นั่นคือสัญญาณว่า state leak มักเกิดจาก shared object ที่ไม่ควร share
+**Key Insight:** code ที่ "ผ่านอยู่ในตอนนี้" ไม่ได้แปลว่า "ถูกต้อง" — test ที่ดีต้องรันได้อิสระ ไม่ว่า order จะเป็นอะไร ถ้าพลิก order แล้วพัง = มี state leak
 
 ---
 
