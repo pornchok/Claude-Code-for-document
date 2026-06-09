@@ -1,0 +1,5 @@
+com\example\wiremock\AppConfig.class
+com\example\wiremock\WireMockCourseApplication.class
+com\example\wiremock\PaymentResponse.class
+com\example\wiremock\PaymentClient.class
+com\example\wiremock\PaymentRequest.class
