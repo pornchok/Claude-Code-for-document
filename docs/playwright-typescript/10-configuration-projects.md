@@ -77,6 +77,16 @@ workers: 4, fullyParallel: false → 4 files รันพร้อมกัน, 
 workers: 4, fullyParallel: true  → tests ทั้งหมดรัน parallel สูงสุดพร้อมกัน 4 test
 ```
 
+**`process.env.CI` คืออะไร?**
+
+`process.env` คือ object ใน Node.js ที่เก็บ environment variables — ตัวแปรที่ set ก่อนรัน program ระบบ CI (เช่น GitHub Actions, Jenkins) จะ set `CI=true` โดยอัตโนมัติ ทำให้ `process.env.CI` มีค่าเป็น `"true"` เมื่อรันบน CI และเป็น `undefined` เมื่อรันบนเครื่องตัวเอง
+
+```typescript
+process.env.CI          // → "true" ใน CI, undefined ใน local
+process.env.CI ? 2 : 0  // → 2 ใน CI, 0 ใน local
+!!process.env.CI        // → true ใน CI, false ใน local
+```
+
 **`forbidOnly` — Guard สำหรับ CI**
 
 ถ้า dev ลืม `test.only` ทิ้งไว้ใน code แล้ว push ขึ้น CI — Playwright จะรันแค่ test นั้นเดียว ทั้ง suite ผ่านเพราะรันแค่ test เดียว! `forbidOnly: !!process.env.CI` บังคับให้ exit error ถ้าเจอ `.only` ใน CI

@@ -65,7 +65,7 @@ Fixtures แก้ปัญหาทั้งสามนี้: เขียน
 
 ## 3. เนื้อหาหลัก
 
-### 4.1 Built-in Fixtures
+### 3.1 Built-in Fixtures
 
 Playwright Test มาพร้อม fixtures ที่ใช้ได้ทันทีโดยไม่ต้องสร้างเอง *(source: https://playwright.dev/docs/test-fixtures)*
 
@@ -80,7 +80,7 @@ Playwright Test มาพร้อม fixtures ที่ใช้ได้ทั
 
 สังเกตว่า `browser` เป็น worker-scoped เพราะการเปิด browser instance ใหม่แต่ละครั้งกิน resource มาก แต่ `page` และ `context` เป็น test-scoped เพราะต้องการ isolation ระหว่าง tests
 
-### 4.2 สร้าง Custom Fixture ด้วย `test.extend<T>()`
+### 3.2 สร้าง Custom Fixture ด้วย `test.extend<T>()`
 
 Custom fixture คือการขยาย `test` object ด้วย fixtures ใหม่ที่คุณกำหนดเอง *(source: https://playwright.dev/docs/test-fixtures)*
 
@@ -128,7 +128,7 @@ export { expect };
 
 **Pattern หลักที่ต้องจำ:** setup อยู่ก่อน `await use()` และ teardown อยู่หลัง `await use()` — Playwright รับประกันว่า teardown จะรันเสมอ ไม่ว่า test จะ pass หรือ fail *(source: https://playwright.dev/docs/test-fixtures)*
 
-### 4.3 Fixture Scope
+### 3.3 Fixture Scope
 
 **Test-scoped (default):** สร้างและ destroy ต่อ test หนึ่ง เหมาะกับ:
 - State ที่ต้องการ fresh ทุก test (`page`, `context`)
@@ -163,7 +163,7 @@ export const test = base.extend<{}, WorkerFixtures>({
 
 "Note the tuple-like syntax for the worker fixture — we have to pass `{scope: 'worker'}` so that test runner sets this fixture up once per worker." *(source: https://playwright.dev/docs/test-fixtures)*
 
-### 4.4 Automatic Fixture (`auto: true`)
+### 3.4 Automatic Fixture (`auto: true`)
 
 Automatic fixture รันทุก test โดยไม่ต้องประกาศใน test function เหมาะกับ cross-cutting concerns เช่น cleanup หรือ logging *(source: https://playwright.dev/docs/test-fixtures)*
 
@@ -188,7 +188,7 @@ export const test = base.extend<{ autoCleanDb: void }>({
 });
 ```
 
-### 4.5 Fixture Composition — Dependency Injection
+### 3.5 Fixture Composition — Dependency Injection
 
 Fixtures สามารถ depend on fixtures อื่นได้ Playwright จัดการลำดับ setup/teardown อัตโนมัติ: "When fixture A depends on fixture B: B is always set up before A and torn down after A." *(source: https://playwright.dev/docs/test-fixtures)*
 
@@ -225,7 +225,7 @@ export const test = base.extend<ComposedFixtures>({
 
 สังเกตว่า `todoPage` ประกาศ `cleanDb` ใน parameter — แค่นั้นพอ Playwright รู้ว่าต้อง setup `cleanDb` ก่อน
 
-### 4.6 `mergeTests()` — รวม Fixtures จากหลายไฟล์
+### 3.6 `mergeTests()` — รวม Fixtures จากหลายไฟล์
 
 เมื่อ test suite ใหญ่ขึ้น คุณจะแยก fixtures ออกเป็นหลายไฟล์ `mergeTests()` รวมพวกมันเข้าด้วยกันโดยไม่ conflict *(source: https://playwright.dev/docs/test-fixtures)*
 
@@ -283,7 +283,7 @@ test('verify auth status and todo count', async ({ page }) => {
 
 `mergeExpects()` ต้องใช้คู่กับ `mergeTests()` เสมอ เพื่อให้ test objects และ matchers อยู่ในการควบคุมเดียวกัน
 
-### 4.7 เปรียบเทียบกับ Robot Framework + Selenium
+### 3.7 เปรียบเทียบกับ Robot Framework + Selenium
 
 | สิ่งที่ต้องการ | Robot Framework + Selenium | Playwright Fixtures |
 |----------------|---------------------------|---------------------|

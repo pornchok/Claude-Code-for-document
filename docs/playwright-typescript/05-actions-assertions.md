@@ -58,7 +58,7 @@ await expect(page.locator('.success-msg')).toBeVisible();
 
 ## 3. เนื้อหาหลัก
 
-### 4.1 Actionability Checks — สิ่งที่ Playwright ตรวจก่อนทุก action
+### 3.1 Actionability Checks — สิ่งที่ Playwright ตรวจก่อนทุก action
 
 ก่อน Playwright จะ click, fill, หรือทำ action ใดๆ มันตรวจ criteria เหล่านี้โดยอัตโนมัติ:
 
@@ -84,7 +84,7 @@ await expect(page.locator('.success-msg')).toBeVisible();
 
 ---
 
-### 4.2 Actions — การกระทำบน Element
+### 3.2 Actions — การกระทำบน Element
 
 #### click() และ dblclick()
 
@@ -117,7 +117,7 @@ await page.getByText('Item').click({ modifiers: ['Shift'] }); // Shift+click
 
 **`pressSequentially(text)`** — จำลอง keystroke ทีละตัว:
 - emit keydown, keypress, keyup ต่อทุกตัวอักษร
-- เหมาะกับ input ที่มี mask (เช่น phone number `(___) ___-____`), autocomplete dropdown, หรือ real-time validation ขณะพิมพ์
+- เหมาะกับ input ที่มี **mask** — คือ input ที่มี library คอยจัดรูปแบบตัวเลขให้อัตโนมัติขณะพิมพ์ เช่น phone number `(___) ___-____` ที่พอพิมพ์ `0812345678` แล้วแสดงเป็น `(081) 234-5678` ให้เอง — รวมถึง autocomplete dropdown และ real-time validation ขณะพิมพ์
 - ช้ากว่า แต่ simulate user จริงกว่า
 
 ```typescript
@@ -190,7 +190,7 @@ await page.keyboard.press('Escape');                  // global keypress
 
 ---
 
-### 4.3 Page-level Navigation
+### 3.3 Page-level Navigation
 
 ```typescript
 // partial example — see Section 5 for runnable version
@@ -214,7 +214,7 @@ const count = await page.evaluate(() => {
 
 ---
 
-### 4.4 Web-First Assertions — assert แบบ Playwright
+### 3.4 Web-First Assertions — assert แบบ Playwright
 
 Playwright มี assertion เฉพาะที่ทำงานต่างจาก Jest/Jasmine ทั่วไป — เรียกว่า "web-first assertions"
 
@@ -288,7 +288,7 @@ await expect(page.locator('.loader')).toHaveRole('progressbar');
 
 ---
 
-### 4.5 Soft Assertions — เก็บทุก error ก่อน report
+### 3.5 Soft Assertions — เก็บทุก error ก่อน report
 
 ปกติ test หยุดที่ assertion แรกที่ fail:
 
@@ -315,7 +315,7 @@ await expect.soft(page.getByTestId('email')).toHaveValue('john@x.com');
 
 ---
 
-### 4.6 Custom Matchers — expect.extend()
+### 3.6 Custom Matchers — expect.extend()
 
 ถ้า assertion เดิมซ้ำในหลายที่ สร้าง custom matcher ได้:
 
@@ -345,7 +345,7 @@ await expect(page).not.toBeLoggedIn();
 
 ---
 
-### 4.7 RF/Selenium vs Playwright — Comparison Table
+### 3.7 RF/Selenium vs Playwright — Comparison Table
 
 | กรณีใช้งาน | Robot Framework + Selenium | Playwright |
 |------------|---------------------------|------------|

@@ -50,7 +50,7 @@
 
 ## 3. เนื้อหาหลัก
 
-### 4.1 Flaky Test Strategies
+### 3.1 Flaky Test Strategies
 
 **Flaky test** คือ test ที่บางครั้งผ่าน บางครั้งไม่ผ่านโดยไม่มี code เปลี่ยน สาเหตุหลักมี 3 อย่าง:
 
@@ -131,7 +131,7 @@ test('create order', async ({ page, cleanDatabase }) => {
 // tested: Playwright v1.50+, Node.js 20+
 ```
 
-### 4.2 test.fixme() และ test.fail()
+### 3.2 test.fixme() และ test.fail()
 
 Playwright มี annotation สำหรับจัดการ tests ที่ยังมีปัญหา:
 
@@ -162,7 +162,7 @@ test.fail('admin redirect should go to clean /login (known: URL has extra query 
 
 `test.fail()` เหมาะสำหรับ document known bug ที่ยังไม่ได้แก้ — เมื่อ bug แก้แล้ว Playwright จะแจ้งเตือนให้ลบ annotation นี้ออก
 
-### 4.3 test.info().attach() — เพิ่ม Artifact เมื่อ Test Fail
+### 3.3 test.info().attach() — เพิ่ม Artifact เมื่อ Test Fail
 
 เมื่อ test fail บน CI วิธีเดียวที่จะรู้ว่าเกิดอะไรขึ้นคือ artifact — screenshot, log, หรือ response body Playwright documentation ระบุว่า `attach()` "automatically takes care of copying attached files to a location that is accessible to reporters" *(source: https://playwright.dev/docs/api/class-testinfo)*
 
@@ -191,7 +191,7 @@ test('critical checkout flow', async ({ page }) => {
 
 **สำคัญ**: ต้อง re-throw error เสมอ ไม่งั้น test จะ pass ทั้งที่เกิดปัญหา
 
-### 4.4 Test Data Factory Pattern
+### 3.4 Test Data Factory Pattern
 
 ปัญหาที่พบบ่อยใน parallel testing: tests แชร์ data กัน → state ปนกัน → flaky tests
 
@@ -287,7 +287,7 @@ test('filter completed todos', async ({ page, todoFactory }) => {
 });
 ```
 
-### 4.5 Large Suite Organization
+### 3.5 Large Suite Organization
 
 เมื่อ test suite เติบโตถึง 100+ tests วิธี organize มีผลต่อ maintainability มาก
 
@@ -391,7 +391,7 @@ export default defineConfig({
 });
 ```
 
-### 4.6 Reporting & Monitoring
+### 3.6 Reporting & Monitoring
 
 **ตรวจ test result ใน afterEach fixture:**
 
@@ -480,7 +480,7 @@ export default defineConfig({
 });
 ```
 
-### 4.7 Performance Patterns
+### 3.7 Performance Patterns
 
 **ใช้ API สำหรับ setup/teardown แทน UI:**
 
@@ -513,7 +513,7 @@ test.describe.parallel('independent feature tests', () => {
 });
 ```
 
-### 4.8 เปรียบเทียบกับ Robot Framework + Selenium
+### 3.8 เปรียบเทียบกับ Robot Framework + Selenium
 
 | หัวข้อ | Robot Framework + Selenium | Playwright |
 |--------|---------------------------|------------|

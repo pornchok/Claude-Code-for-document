@@ -46,7 +46,7 @@
 
 ## 3. เนื้อหาหลัก
 
-### 4.1 `request` Fixture คืออะไร
+### 3.1 `request` Fixture คืออะไร
 
 Playwright Test comes with a built-in `request` fixture ที่ `respects configuration options like baseURL or extraHTTPHeaders` (docs) และพร้อม inject เข้า test เหมือนกับ `page` fixture ทุกประการ ไม่ต้องติดตั้งอะไรเพิ่ม
 
@@ -60,7 +60,7 @@ test('example', async ({ request }) => {
 
 ข้อสำคัญ: `request` fixture เป็น isolated instance ต่อ test เหมือนกัน — state (cookies, headers) ไม่ carry over ระหว่าง tests
 
-### 4.2 HTTP Methods
+### 3.2 HTTP Methods
 
 `APIRequestContext` รองรับทุก HTTP method หลัก:
 
@@ -93,7 +93,7 @@ const res = await request.patch(`http://localhost:3000/api/todos/${id}`, {
 - `headers: { ... }` — custom headers เพิ่มเติม
 - `params: { page: 1, limit: 20 }` — query string (`?page=1&limit=20`)
 
-### 4.3 Response Methods
+### 3.3 Response Methods
 
 ทุก method return `APIResponse` object:
 
@@ -111,7 +111,7 @@ res.url()       // URL จริงที่ request ไป (หลัง redire
 
 ⚠️ **`res.json()` เป็น async** — ต้อง `await` เสมอ มือใหม่ลืมบ่อยมาก
 
-### 4.4 Assertions
+### 3.4 Assertions
 
 ```typescript
 // partial example — see Section 5 for runnable version
@@ -136,7 +136,7 @@ expect(body).toContainEqual(
 
 **ทำไมต้อง `toBeOK()` ก่อน?** เพราะถ้า status ผิด (เช่น 500) แล้วคุณ assert body ต่อ error message จะมาจากการ parse JSON ของ error response — ทำให้ debug ยาก ถ้า `toBeOK()` fail ก่อนจะได้รู้ทันทีว่าปัญหาคือ status code
 
-### 4.5 Auth Headers
+### 3.5 Auth Headers
 
 **Per-request** — ส่ง header ในแต่ละ call เลย:
 
@@ -170,7 +170,7 @@ await authRequest.dispose();
 
 **ความแตกต่างจาก `extraHTTPHeaders` ใน `playwright.config.ts`**: ถ้าตั้งใน config `use:` block จะส่ง header ไปทุก request จากทุก context ใน project — อาจ leak auth header ไปยัง external API โดยไม่ตั้งใจ ใช้ `newContext()` สำหรับ scoped auth แทน
 
-### 4.6 Hybrid Test Pattern (ทรงพลังที่สุด)
+### 3.6 Hybrid Test Pattern (ทรงพลังที่สุด)
 
 Playwright สามารถ inject ทั้ง `request` และ `page` ใน test เดียวกัน ทำให้เขียน hybrid test ได้ง่ายมาก:
 
@@ -194,7 +194,7 @@ test('todo created via API appears in UI', async ({ request, page }) => {
 
 Pattern นี้ verify ว่า backend API ทำงานถูกต้อง + UI render ข้อมูลถูกต้อง ในคราวเดียว — เป็น integration test ที่ครอบคลุมจริง
 
-### 4.7 Response Schema Validation
+### 3.7 Response Schema Validation
 
 ใช้ `toMatchObject()` ตรวจ shape ของ response:
 
@@ -218,7 +218,7 @@ expect(todos).toContainEqual(
 
 `expect.any(Number)` บอกว่า field `id` ต้องมี type เป็น number แต่ไม่ต้องระบุค่า exact — ใช้เมื่อ id ถูก generate โดย server
 
-### 4.8 Demo App Endpoints
+### 3.8 Demo App Endpoints
 
 สำหรับ course นี้ใช้ demo app ที่มี endpoints ดังนี้:
 
@@ -233,7 +233,7 @@ expect(todos).toContainEqual(
 | GET | `/api/admin` | — | Bearer token + admin role | admin-only (403 for regular user) |
 | POST | `/api/reset` | — | ไม่ต้อง | reset todos ทั้งหมด |
 
-### 4.9 RF/Selenium Comparison
+### 3.9 RF/Selenium Comparison
 
 | | Robot Framework + Selenium | Playwright |
 |-|--------------------------|------------|

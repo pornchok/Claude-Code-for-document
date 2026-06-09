@@ -55,7 +55,7 @@
 
 ## 3. เนื้อหาหลัก
 
-### 4.1 Visual Testing ด้วย `toHaveScreenshot()`
+### 3.1 Visual Testing ด้วย `toHaveScreenshot()`
 
 Playwright มี visual regression testing built-in ผ่าน `toHaveScreenshot()` ซึ่งเป็นส่วนหนึ่งของ `expect` API ไม่ต้องติดตั้งอะไรเพิ่ม
 
@@ -102,7 +102,7 @@ export default defineConfig({
 npx playwright test --update-snapshots
 ```
 
-### 4.2 Platform Gotcha — เรื่องสำคัญที่สุดใน Visual Testing
+### 3.2 Platform Gotcha — เรื่องสำคัญที่สุดใน Visual Testing
 
 นี่คือเรื่องที่คนเพิ่งเริ่มใช้ Visual Testing พลาดบ่อยที่สุด:
 
@@ -141,7 +141,7 @@ docker run --rm -v $(pwd):/work -w /work \
 
 Baseline สำหรับ CI ควร commit เข้า git ร่วมกับ code เพื่อให้ทุก environment ใช้ตัวเดียวกัน
 
-### 4.3 Accessibility Testing ด้วย `@axe-core/playwright`
+### 3.3 Accessibility Testing ด้วย `@axe-core/playwright`
 
 Axe เป็น accessibility testing engine ที่ใช้กันแพร่หลายที่สุด — มี integration กับ Playwright โดยตรง
 
@@ -215,7 +215,7 @@ const results = await new AxeBuilder({ page })
 | Interactive element no accessible name | `<button>` ไม่มี text หรือ `aria-label` | เพิ่ม text content หรือ `aria-label` |
 | Missing focus indicator | กด Tab แล้วไม่เห็น focus outline | อย่า remove CSS `:focus` outline |
 
-### 4.4 `toMatchAriaSnapshot()` — Deep Dive
+### 3.4 `toMatchAriaSnapshot()` — Deep Dive
 
 `toMatchAriaSnapshot()` เป็น Playwright built-in API (v1.49+) ที่ตรวจ accessibility tree ของ page แทนที่จะเปรียบเทียบ pixel — ข้อดีคือไม่ขึ้นกับ OS เลย
 
@@ -299,7 +299,7 @@ await expect(page.getByRole('checkbox')).toMatchAriaSnapshot(`
 `);
 ```
 
-### 4.5 เปรียบเทียบ Visual Screenshot vs Aria Snapshot
+### 3.5 เปรียบเทียบ Visual Screenshot vs Aria Snapshot
 
 | | `toHaveScreenshot()` | `toMatchAriaSnapshot()` |
 |-|---------------------|------------------------|
@@ -313,7 +313,7 @@ await expect(page.getByRole('checkbox')).toMatchAriaSnapshot(`
 
 ทั้งสองอย่างเสริมกัน — ใช้ `toHaveScreenshot()` เพื่อตรวจ visual regression และ `toMatchAriaSnapshot()` เพื่อตรวจ accessibility structure
 
-### 4.6 เปรียบเทียบกับ Robot Framework + Selenium
+### 3.6 เปรียบเทียบกับ Robot Framework + Selenium
 
 | | Robot Framework + Selenium | Playwright |
 |-|--------------------------|------------|

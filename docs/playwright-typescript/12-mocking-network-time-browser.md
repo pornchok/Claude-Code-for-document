@@ -44,7 +44,7 @@
 
 ## 3. เนื้อหาหลัก
 
-### 4.1 Network Interception ด้วย `page.route()`
+### 3.1 Network Interception ด้วย `page.route()`
 
 `page.route(urlPattern, handler)` บอก Playwright ว่า "ถ้า browser เรียก URL ที่ match pattern นี้ ให้เรียก handler แทนที่จะส่ง request จริง"
 
@@ -107,7 +107,7 @@ await page.route('**/api/products*', async route => {
 });
 ```
 
-### 4.2 Spy on Network Traffic
+### 3.2 Spy on Network Traffic
 
 นอกจาก intercept ยังดู traffic ได้โดยไม่ต้อง block:
 
@@ -133,7 +133,7 @@ page.on('request', req => console.log(req.url(), req.method()));
 page.on('response', res => console.log(res.url(), res.status()));
 ```
 
-### 4.3 HAR Recording และ Playback
+### 3.3 HAR Recording และ Playback
 
 HAR (HTTP Archive) คือไฟล์ที่บันทึก network traffic ทั้งหมด — ใช้สำหรับ offline testing หรือ replay สถานการณ์เดิมซ้ำ:
 
@@ -166,7 +166,7 @@ await page.routeFromHAR('recording.har', {
 await page.goto('http://localhost:3000/shop'); // ไม่มี real network requests
 ```
 
-### 4.4 WebSocket Interception (v1.48+)
+### 3.4 WebSocket Interception (v1.48+)
 
 `page.routeWebSocket()` เพิ่มใน v1.48 สำหรับ intercept WebSocket connections:
 
@@ -187,7 +187,7 @@ WebSocketRoute methods:
 - `ws.connectToServer()` — เชื่อมต่อ real server ด้วยเพื่อ intercept แบบ transparent
 - `ws.close({ code, reason })` — ปิด connection
 
-### 4.5 Clock API (v1.45+)
+### 3.5 Clock API (v1.45+)
 
 Clock API override เวลาใน browser — ทดสอบ countdown timers, session timeout, date display โดยไม่ต้องรอเวลาจริง
 
@@ -225,7 +225,7 @@ await page.goto('http://localhost:3000');
 await page.clock.install({ time: new Date('2030-01-01') }); // สาย
 ```
 
-### 4.6 Mock Browser APIs ด้วย `addInitScript()`
+### 3.6 Mock Browser APIs ด้วย `addInitScript()`
 
 `addInitScript()` inject JavaScript ก่อนที่ page scripts จะรัน — ใช้ override browser APIs เช่น geolocation, battery, permissions
 
@@ -270,7 +270,7 @@ await page.addInitScript(() => {
 });
 ```
 
-### 4.7 เปรียบเทียบกับ Robot Framework + Selenium
+### 3.7 เปรียบเทียบกับ Robot Framework + Selenium
 
 | ความสามารถ | Robot Framework + Selenium | Playwright |
 |-----------|--------------------------|------------|

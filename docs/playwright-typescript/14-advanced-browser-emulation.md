@@ -49,7 +49,7 @@ web app จริงในชีวิตจริงไม่ได้มีแ
 
 ## 3. เนื้อหาหลัก
 
-### 4.1 Popup Windows และ New Tabs
+### 3.1 Popup Windows และ New Tabs
 
 **Popup** คือ window หรือ tab ใหม่ที่เปิดจาก JavaScript (`window.open()`) หรือ link ที่มี `target="_blank"`
 
@@ -101,7 +101,7 @@ test('popup opens and has correct title', async ({ page }) => {
 
 ---
 
-### 4.2 iFrames กับ frameLocator
+### 3.2 iFrames กับ frameLocator
 
 **frameLocator** คือวิธีที่ Playwright แนะนำในการ interact กับ iframe — แทนที่จะต้อง "switch context" แบบ Selenium, `frameLocator()` return object ที่ scoped ภายใน iframe นั้นเลย
 
@@ -147,7 +147,7 @@ const iframeElement = frameLocator.owner(); // กลับเป็น Locator 
 
 ---
 
-### 4.3 Dialogs (alert/confirm/prompt)
+### 3.3 Dialogs (alert/confirm/prompt)
 
 Browser-native dialogs คือ `window.alert()`, `window.confirm()`, `window.prompt()` — เป็น blocking UI ที่หยุด JavaScript execution จนกว่าจะ dismiss
 
@@ -187,7 +187,7 @@ await page.click('[data-testid="btn-prompt"]');
 
 ---
 
-### 4.4 File Upload
+### 3.4 File Upload
 
 Playwright ใช้ `setInputFiles()` กับ `<input type="file">` โดยตรง — ไม่ต้องเปิด OS file picker
 
@@ -221,7 +221,7 @@ await page.locator('input[type="file"]').setInputFiles({
 
 ---
 
-### 4.5 File Download
+### 3.5 File Download
 
 Pattern เดียวกับ popup — **start listening before click**:
 
@@ -245,7 +245,7 @@ await download.saveAs(`/tmp/downloads/${filename}`);
 
 ---
 
-### 4.6 Shadow DOM
+### 3.6 Shadow DOM
 
 Shadow DOM เป็น web component ที่มี DOM tree แยกออกมา — เข้าถึงผ่าน JavaScript ทั่วไปยาก แต่ **Playwright pierce through open shadow roots อัตโนมัติ** ไม่ต้อง workaround ใดๆ
 
@@ -264,7 +264,7 @@ await page.getByRole('button', { name: 'Increment' }).click();
 
 ---
 
-### 4.7 Device Emulation
+### 3.7 Device Emulation
 
 **`devices`** คือ registry ของ device configurations ที่ Playwright ship มาให้ — เมื่อ spread เข้า context จะ set viewport, userAgent, deviceScaleFactor, isMobile, hasTouch ให้อัตโนมัติ
 
@@ -326,7 +326,7 @@ test('mobile geolocation', async ({ browser }) => {
 
 ---
 
-### 4.8 `page.emulateMedia()`
+### 3.8 `page.emulateMedia()`
 
 ใช้เปลี่ยน media type หรือ color scheme ระหว่าง test — มีประโยชน์สำหรับ:
 
@@ -362,7 +362,7 @@ test('dark mode shows correct background color', async ({ page }) => {
 
 ---
 
-### 4.9 Low-Level Mouse และ Keyboard
+### 3.9 Low-Level Mouse และ Keyboard
 
 ส่วนใหญ่ใช้ `locator.click()`, `locator.type()` ก็พอ แต่บางกรณีต้องการ low-level control:
 
@@ -408,7 +408,7 @@ await page.locator('#source').dragTo(page.locator('#target'));
 
 ---
 
-### 4.10 RF/Selenium vs Playwright: เปรียบเทียบ
+### 3.10 RF/Selenium vs Playwright: เปรียบเทียบ
 
 | Feature | Robot Framework + Selenium | Playwright |
 |---------|---------------------------|------------|

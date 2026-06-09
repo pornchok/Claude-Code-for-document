@@ -46,7 +46,7 @@ TypeScript ช่วยให้:
 
 ## 3. เนื้อหาหลัก
 
-### 4.1 ติดตั้ง Playwright
+### 3.1 ติดตั้ง Playwright
 
 ก่อนเริ่ม ตรวจ Node.js version:
 
@@ -77,7 +77,7 @@ npm init playwright@latest
 
 Playwright จะดาวน์โหลด browser binaries (Chromium, Firefox, WebKit) และสร้างไฟล์ scaffold ให้ครบ
 
-### 4.2 โครงสร้างไฟล์ที่ได้
+### 3.2 โครงสร้างไฟล์ที่ได้
 
 ```
 my-playwright-tests/
@@ -97,7 +97,7 @@ my-playwright-tests/
 
 **`tests/example.spec.ts`** — `.spec.ts` คือ naming convention ของ test files Playwright จะค้นหาไฟล์ที่ลงท้ายด้วย `.spec.ts` หรือ `.test.ts` โดยอัตโนมัติ
 
-### 4.3 TypeScript Types ที่ต้องรู้ 4 ตัว
+### 3.3 TypeScript Types ที่ต้องรู้ 4 ตัว
 
 Playwright มี types หลักที่ใช้บ่อยใน test ดังนี้:
 
@@ -135,7 +135,7 @@ test('my test', async ({ page }) => {
 });
 ```
 
-### 4.4 ทำไม async/await ต้องมีทุก action
+### 3.4 ทำไม async/await ต้องมีทุก action
 
 นี่คือจุดสำคัญที่สุดในบทนี้ และเป็นแหล่งที่มาของ bug ที่ตามหาได้ยากที่สุด
 
@@ -159,7 +159,7 @@ test('correct example', async ({ page }) => {
 
 กฎง่ายๆ: **ทุกบรรทัดที่เรียก `page.*()` หรือ `locator.*()` ต้องมี `await` นำหน้าเสมอ**
 
-### 4.5 playwright.config.ts — โครงสร้างพื้นฐาน
+### 3.5 playwright.config.ts — โครงสร้างพื้นฐาน
 
 ```typescript
 // partial example — see Section 5 for runnable version
@@ -184,7 +184,7 @@ export default defineConfig({
 
 `defineConfig()` ไม่ต้องใส่ generic `<T>` สำหรับ config ทั่วไป TypeScript จะ infer types ให้อัตโนมัติ
 
-### 4.6 tsc --noEmit — ตรวจ TypeScript ก่อน Run
+### 3.6 tsc --noEmit — ตรวจ TypeScript ก่อน Run
 
 Playwright จัดการ compilation ให้อัตโนมัติตอนรัน test แต่ถ้าต้องการตรวจ TypeScript errors แยกต่างหาก (เช่น ใน CI pipeline ก่อนรัน test จริง) ใช้:
 
@@ -201,7 +201,7 @@ npx tsc -p tsconfig.json --noEmit -w
 
 `--noEmit` หมายความว่า "compile เพื่อตรวจ แต่ไม่สร้างไฟล์ `.js`" — เป็น type-checking step ที่ไม่ทำให้เกิด output ไฟล์
 
-### 4.7 no-floating-promises — ESLint Rule ที่ควรเปิด
+### 3.7 no-floating-promises — ESLint Rule ที่ควรเปิด
 
 `await` ที่หายไปเป็น silent bug ที่อันตรายมาก เพราะ test อาจผ่านโดยที่ action ไม่ได้รันจริง ESLint rule `@typescript-eslint/no-floating-promises` จะตรวจจับ pattern นี้:
 

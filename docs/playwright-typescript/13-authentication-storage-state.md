@@ -48,13 +48,13 @@ Playwright แก้ทั้งสองปัญหานี้ด้วย **
 
 ## 3. เนื้อหาหลัก
 
-### 4.1 storageState คืออะไร
+### 3.1 storageState คืออะไร
 
 `storageState` คือ snapshot ของ browser state ณ เวลาที่เรียก — เก็บ:
 
 - **Cookies** ทั้งหมดที่ browser มี ณ ขณะนั้น
-- **localStorage** ของทุก origin ที่ page เยือน
-- **IndexedDB** ของทุก origin (ต้องระบุ `{ indexedDB: true }` ตอนเรียก `storageState()`)
+- **localStorage** ของทุก origin ที่ page เยือน — storage ใน browser ที่ JavaScript ใช้เก็บข้อมูลแบบ key-value
+- **IndexedDB** ของทุก origin (ต้องระบุ `{ indexedDB: true }` ตอนเรียก `storageState()`) — database ใน browser สำหรับเก็บข้อมูลปริมาณมาก เช่น offline cache หรือ auth token ของ Firebase พบบ่อยใน PWA
 
 **sessionStorage ไม่ถูก capture** เพราะผูกกับ tab และ session เดียว ไม่สามารถ serialize ข้ามหน้าหรือ context ใหม่ได้อย่างมีความหมาย
 
@@ -92,7 +92,7 @@ Playwright จะ inject cookies และ localStorage ก่อนที่ te
 
 ---
 
-### 4.2 Setup ด้วย Project Dependencies (Modern Approach)
+### 3.2 Setup ด้วย Project Dependencies (Modern Approach)
 
 วิธีที่ Playwright แนะนำปัจจุบันคือใช้ **setup project** ที่รันก่อน test project ด้วย `dependencies`:
 
@@ -168,7 +168,7 @@ playwright/.auth/
 
 ---
 
-### 4.3 Multiple Roles (Admin + User)
+### 3.3 Multiple Roles (Admin + User)
 
 สถานการณ์จริงที่พบบ่อย: app มี admin ที่เห็น `/admin` dashboard และ user ทั่วไปที่เข้าไม่ได้ — ต้อง test ทั้งสอง role
 
@@ -264,7 +264,7 @@ test.describe('user ไม่ควรเข้า admin', () => {
 
 ---
 
-### 4.4 Login ผ่าน API (เร็วกว่า UI)
+### 3.4 Login ผ่าน API (เร็วกว่า UI)
 
 UI login ช้าเพราะต้อง render หน้า fill form รอ animation และรอ redirect เฉลี่ย 2-4 วินาที — ถ้า login endpoint เป็น REST API เรียกตรงๆ ได้เลย ใช้เวลาแค่ ~200-400ms
 
@@ -319,7 +319,7 @@ await context.addCookies([{
 
 ---
 
-### 4.5 Per-Worker Auth (สำหรับ Parallel Tests ที่ Modify State)
+### 3.5 Per-Worker Auth (สำหรับ Parallel Tests ที่ Modify State)
 
 ปัญหาที่เกิดขึ้นเมื่อ tests ทำงาน parallel และ **modify server-side state**: สมมติมี 4 workers แชร์ admin account เดียว แต่ test A ลบ order #1 ขณะที่ test B พยายาม update order #1 เดียวกัน — race condition
 
@@ -393,7 +393,7 @@ test('สร้าง order และ verify (isolated per worker)', async ({ pa
 
 ---
 
-### 4.6 Gotchas ที่ต้องรู้
+### 3.6 Gotchas ที่ต้องรู้
 
 **IndexedDB ต้องเปิดใช้ด้วย `{ indexedDB: true }`:**
 
@@ -436,7 +436,7 @@ test('login page แสดงผลถูกต้องสำหรับ unaut
 
 ---
 
-### 4.7 เปรียบเทียบ RF/Selenium vs Playwright
+### 3.7 เปรียบเทียบ RF/Selenium vs Playwright
 
 | สถานการณ์ | Robot Framework + Selenium | Playwright |
 |-----------|---------------------------|------------|

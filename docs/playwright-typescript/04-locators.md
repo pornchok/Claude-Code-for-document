@@ -54,7 +54,7 @@ Playwright แนะนำ accessibility-first approach: ค้นหา element
 
 ## 3. เนื้อหาหลัก
 
-### 4.1 Priority Order — ลำดับที่ควรใช้
+### 3.1 Priority Order — ลำดับที่ควรใช้
 
 Playwright แนะนำ locator ตามลำดับนี้ (ตรวจสอบจาก playwright.dev/docs/locators แล้ว):
 
@@ -193,7 +193,7 @@ page.locator('xpath=//button[@type="submit"]')  // XPath
 
 ---
 
-### 4.2 Chaining & Filtering
+### 3.2 Chaining & Filtering
 
 เมื่อ locator simple ไม่เพียงพอ ใช้ method เหล่านี้:
 
@@ -248,7 +248,7 @@ const action = page.getByRole('button', { name: 'Continue' }).or(
 
 ---
 
-### 4.3 Strict Mode — เมื่อ locator match หลาย element
+### 3.3 Strict Mode — เมื่อ locator match หลาย element
 
 Playwright บังคับ strict mode: ถ้า locator match มากกว่า 1 element และคุณสั่ง action หรือ assertion — จะ throw `StrictModeViolationError`
 
@@ -286,7 +286,7 @@ for (const item of items) {
 
 ---
 
-### 4.4 เปรียบเทียบกับ Robot Framework + Selenium
+### 3.4 เปรียบเทียบกับ Robot Framework + Selenium
 
 | หัวข้อ | Robot Framework + Selenium | Playwright |
 |--------|---------------------------|------------|

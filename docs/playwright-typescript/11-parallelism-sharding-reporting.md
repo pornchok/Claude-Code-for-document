@@ -43,7 +43,7 @@ Playwright มีสองเครื่องมือหลักแก้ป
 
 ## 3. เนื้อหาหลัก
 
-### 4.1 Parallelism — รัน Tests หลายตัวพร้อมกันบน Machine เดียว
+### 3.1 Parallelism — รัน Tests หลายตัวพร้อมกันบน Machine เดียว
 
 #### `workers`: กี่ Processes รันพร้อมกัน
 
@@ -156,7 +156,7 @@ test('isolated test', async ({ page }, testInfo) => {
 
 ---
 
-### 4.2 Sharding — แบ่ง Tests ข้าม CI Machines
+### 3.2 Sharding — แบ่ง Tests ข้าม CI Machines
 
 #### Syntax พื้นฐาน
 
@@ -233,7 +233,7 @@ jobs:
 
 ---
 
-### 4.3 CLI Flags ที่มีประโยชน์
+### 3.3 CLI Flags ที่มีประโยชน์
 
 ทั้งหมดนี้ verify จาก official docs แล้ว:
 
@@ -256,7 +256,7 @@ npx playwright test --forbid-only             # CI safety check
 
 ---
 
-### 4.4 Reporters — รายงานผล Test
+### 3.4 Reporters — รายงานผล Test
 
 #### Built-in Reporters
 
@@ -337,7 +337,7 @@ export default defineConfig({
 
 ---
 
-### 4.5 เปรียบเทียบ Robot Framework + Selenium vs Playwright
+### 3.5 เปรียบเทียบ Robot Framework + Selenium vs Playwright
 
 | | Robot Framework + Selenium | Playwright |
 |--|--------------------------|------------|
