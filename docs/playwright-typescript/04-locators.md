@@ -24,6 +24,34 @@
 
 ---
 
+## ⚙️ เตรียมก่อนเริ่ม — รัน demo app และ Playwright
+
+บทนี้มีตัวอย่างที่รันได้จริง ควรเปิด demo app ทิ้งไว้ระหว่างอ่านเพื่อลองได้เลย
+
+**Terminal 1 — รัน demo app:**
+```bash
+cd path/to/docs/playwright-typescript/playwright-course-app
+npm install   # ครั้งแรกเท่านั้น
+npm start
+# → เว็บพร้อมที่ http://localhost:3000
+```
+
+**Terminal 2 — สร้าง Playwright project (ถ้ายังไม่มี):**
+```bash
+mkdir playwright-practice
+cd playwright-practice
+npm init playwright@latest
+# → เลือก TypeScript, กด Enter ทุกข้อ
+```
+
+**ลองรัน Codegen ดู element บนหน้าเว็บ:**
+```bash
+npx playwright codegen http://localhost:3000
+```
+คลิก element ต่างๆ แล้วดู locator ที่ generate ให้ — ใช้ระหว่างอ่านบทนี้ได้เลย
+
+---
+
 ## 2. ทำไมต้องรู้? (Why)
 
 ลองนึกภาพสถานการณ์นี้:
