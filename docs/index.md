@@ -13,4 +13,5 @@
 | [WebdriverIO Mobile Testing](wdio-mobile-testing/00-overview.md) | Mobile Testing ด้วย WDIO + Appium | ปานกลาง |
 | [JMeter Performance Testing](jmeter-performance-testing/00-overview.md) | Performance & Load Testing ด้วย JMeter | เริ่มต้น–ปานกลาง |
 | [English for QA](english-for-beginners/00-overview.md) | ภาษาอังกฤษสำหรับ QA Engineer | เริ่มต้น |
+| [WireMock สำหรับ QA](wiremock-standalone/00-overview.md) | Mock API ด้วย WireMock Standalone สำหรับ QA ที่ไม่เขียน Java | เริ่มต้น–ปานกลาง |
 | [Claude Code Guide](Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide.md) | คู่มือการใช้ Claude Code | ทุกระดับ |
