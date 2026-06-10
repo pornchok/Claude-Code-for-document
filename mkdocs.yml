@@ -151,5 +151,21 @@ nav:
     - Exercises: english-for-beginners/exercises.md
     - Glossary: english-for-beginners/glossary.md
 
+  - WireMock Java:
+    - Overview: wiremock-java/00-overview.md
+    - บทที่ 1 - Why Mock API: wiremock-java/01-why-mock-api.md
+    - บทที่ 2 - Setup: wiremock-java/02-setup.md
+    - บทที่ 3 - Basic Stub GET: wiremock-java/03-basic-stub-get.md
+    - บทที่ 4 - Verify: wiremock-java/04-verify.md
+    - บทที่ 5 - Request Matching POST Body: wiremock-java/05-request-matching-post-body.md
+    - บทที่ 6 - Request Matching Headers & Query: wiremock-java/06-request-matching-headers-query.md
+    - บทที่ 7 - Response Templating: wiremock-java/07-response-templating.md
+    - บทที่ 8 - Scenarios & Stateful: wiremock-java/08-scenarios-stateful.md
+    - บทที่ 9 - Spring Boot Integration: wiremock-java/09-spring-boot-integration.md
+    - บทที่ 10 - Error Simulation: wiremock-java/10-error-simulation.md
+    - บทที่ 11 - Best Practices: wiremock-java/11-best-practices.md
+    - Exercises: wiremock-java/exercises.md
+    - Glossary: wiremock-java/glossary.md
+
   - Claude Code Guide:
     - Guide: Claude-Code-Complete-Training-Guide/Claude-Code-Complete-Training-Guide.md
