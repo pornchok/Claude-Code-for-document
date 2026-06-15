@@ -115,7 +115,8 @@ res.url()       // URL จริงที่ request ไป (หลัง redire
 
 ```typescript
 // partial example — see Section 5 for runnable version
-// ตรวจว่า status 2xx (แนะนำทำก่อน assert อื่นๆ เสมอ)
+// ตรวจว่า status 2xx (status code 200-299) แนะนำทำก่อน assert อื่นๆ เสมอ
+// toBeOK() = shorthand สำหรับ expect(response.ok()).toBe(true)
 expect(response).toBeOK();
 
 // ตรวจ exact status code

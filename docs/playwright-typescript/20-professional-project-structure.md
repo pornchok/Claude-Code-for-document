@@ -261,7 +261,9 @@ interface Db {
 }
 
 export function readDb(): Db {
-  // path สัมพัทธ์จาก project root
+  // path สัมพัทธ์จาก project root (process.cwd() คือที่ที่รัน npx playwright test)
+  // ถ้ารันจาก docs/playwright-typescript/ ให้ใช้ 'playwright-course-app/data/db.json'
+  // ถ้ารันจาก repo root ให้ใช้ 'docs/playwright-typescript/playwright-course-app/data/db.json'
   const dbPath = join(process.cwd(), 'playwright-course-app/data/db.json');
   return JSON.parse(readFileSync(dbPath, 'utf-8'));
 }

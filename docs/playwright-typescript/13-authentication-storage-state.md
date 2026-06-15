@@ -75,7 +75,7 @@ await page.context().storageState({ path: 'playwright/.auth/user.json' });
     {
       "origin": "http://localhost:3000",
       "localStorage": [
-        { "name": "authToken", "value": "eyJhbGciOi..." }
+        { "name": "jwt_token", "value": "eyJhbGciOi..." }
       ]
     }
   ]
@@ -255,9 +255,12 @@ test('admin เห็น admin panel', async ({ page }) => {
 test.describe('user ไม่ควรเข้า admin', () => {
   test.use({ storageState: 'playwright/.auth/user.json' });
 
-  test('GET /admin returns 403', async ({ page }) => {
-    const response = await page.goto('http://localhost:3000/admin');
-    expect(response?.status()).toBe(403);
+  test('user เห็น access-denied เมื่อเข้า /admin', async ({ page }) => {
+    // /admin page ส่ง HTTP 200 เสมอ (เป็น static HTML)
+    // access control ทำฝั่ง JavaScript — ถ้าไม่ใช่ admin API จะ return 403
+    // และ page จะแสดง access-denied element แทน admin content
+    await page.goto('http://localhost:3000/admin');
+    await expect(page.getByTestId('access-denied')).toBeVisible();
   });
 });
 ```
@@ -288,8 +291,9 @@ setup('authenticate via API', async ({ request, browser }) => {
   const page = await context.newPage();
 
   // Inject token ก่อน navigate — ใช้ addInitScript
+  // demo app เก็บ token ใน localStorage key 'jwt_token' (ดู client.js: Auth.setToken)
   await context.addInitScript((authToken: string) => {
-    window.localStorage.setItem('authToken', authToken);
+    window.localStorage.setItem('jwt_token', authToken);
   }, token);
 
   // Step 3: Navigate เพื่อยืนยันว่า app รับ token แล้ว
@@ -518,22 +522,38 @@ setup('authenticate as testuser', async ({ page }) => {
 ```typescript
 // tested: Playwright v1.50+, Node.js 20+
 import { test, expect } from '@playwright/test';
+import { readFileSync } from 'fs';
 
 // ไม่ต้อง login ที่นี่ — config inject storageState ให้แล้ว
 
-test('เข้า /api/me ได้หลัง authenticate', async ({ request }) => {
-  const res = await request.get('/api/me');
+// ⚠️ ข้อสำคัญเรื่อง request fixture กับ JWT ใน localStorage:
+// demo app เก็บ token ใน localStorage (ไม่ใช่ cookie)
+// request fixture ส่ง cookie จาก storageState อัตโนมัติ แต่ไม่อ่าน localStorage
+// ดังนั้น request.get('/api/me') จะได้ 401 ถ้าไม่ส่ง Authorization header เอง
+
+test('เห็น session badge บน dashboard', async ({ page }) => {
+  // page (browser) อ่าน localStorage อัตโนมัติและ add Authorization header
+  await page.goto('/');
+  await expect(page.getByTestId('session-badge')).toContainText('testuser');
+});
+
+test('ยืนยัน identity ผ่าน /api/me — อ่าน JWT จาก storageState file', async ({ request }) => {
+  // สำหรับ JWT-based auth: ต้องอ่าน token จาก storageState file แล้วส่งเอง
+  const authData = JSON.parse(readFileSync('playwright/.auth/user.json', 'utf-8'));
+  const jwtToken = authData.origins?.[0]?.localStorage?.find(
+    (item: { name: string }) => item.name === 'jwt_token'
+  )?.value;
+
+  const res = await request.get('/api/me', {
+    headers: { 'Authorization': `Bearer ${jwtToken}` }
+  });
   expect(res.ok()).toBeTruthy();
   const body = await res.json();
   expect(body.username).toBe('testuser');
 });
 
-test('เห็น session badge บน dashboard', async ({ page }) => {
-  await page.goto('/');
-  await expect(page.getByTestId('session-badge')).toContainText('testuser');
-});
-
-test('เข้า /api/todos ได้ (protected endpoint)', async ({ request }) => {
+test('เข้า /api/todos ได้ (public endpoint — ไม่ต้อง auth)', async ({ request }) => {
+  // /api/todos ไม่ต้องการ auth — ทุกคน request ได้
   const res = await request.get('/api/todos');
   expect(res.ok()).toBeTruthy();
 });
@@ -545,9 +565,9 @@ Output เมื่อรัน:
 Running 1 setup and 3 tests using 1 worker
 
   ✓  1 [setup] › tests/auth.setup.ts:7:1 › authenticate as testuser (1.8s)
-  ✓  2 [chromium] › tests/protected-pages.spec.ts:6:1 › เข้า /api/me ได้หลัง authenticate (0.3s)
-  ✓  3 [chromium] › tests/protected-pages.spec.ts:12:1 › เห็น session badge บน dashboard (0.6s)
-  ✓  4 [chromium] › tests/protected-pages.spec.ts:18:1 › เข้า /api/todos ได้ (protected endpoint) (0.2s)
+  ✓  2 [chromium] › tests/protected-pages.spec.ts:5:1 › เห็น session badge บน dashboard (0.6s)
+  ✓  3 [chromium] › tests/protected-pages.spec.ts:11:1 › ยืนยัน identity ผ่าน /api/me (0.3s)
+  ✓  4 [chromium] › tests/protected-pages.spec.ts:24:1 › เข้า /api/todos ได้ (0.2s)
 
   4 passed (3.1s)
 ```
@@ -569,51 +589,62 @@ import { test, expect } from '@playwright/test';
 // แต่ test เหล่านี้ทดสอบ state หลัง logout — ต้องล้าง auth state เอง
 
 test.describe('logout invalidates session', () => {
-  test('หลัง logout: GET /api/me ต้อง return 401', async ({ page, request }) => {
+  test('หลัง logout: session badge เปลี่ยน และ /admin redirect ไป login', async ({ page }) => {
     // ขั้นตอน 1: ยืนยันว่า login อยู่ (storageState จาก config)
     await page.goto('http://localhost:3000/');
     await expect(page.getByTestId('session-badge')).toContainText('testuser');
 
     // ขั้นตอน 2: Logout ผ่าน UI
+    // nav-logout onclick เรียก Auth.removeToken() แล้ว redirect ไป '/'
     await page.click('[data-testid="nav-logout"]');
 
-    // ขั้นตอน 3: ตรวจว่า redirect ไป login page
+    // ขั้นตอน 3: หลัง logout redirect ไป '/' (home) ไม่ใช่ '/login'
+    await expect(page).toHaveURL('http://localhost:3000/');
+    // session badge เปลี่ยนเป็น "Not logged in" และ Login link ปรากฏ
+    await expect(page.getByTestId('session-badge')).toContainText('Not logged in');
+    await expect(page.getByTestId('nav-login')).toBeVisible();
+
+    // ขั้นตอน 4: ลองเข้า /admin — admin.html เช็ค Auth.getToken() → null → redirect ไป /login
+    await page.goto('http://localhost:3000/admin');
     await expect(page).toHaveURL(/\/login/);
     await expect(page.getByTestId('btn-login')).toBeVisible();
 
-    // ขั้นตอน 4: ลองเข้า protected page โดยตรง — ต้อง redirect กลับ login
-    await page.goto('http://localhost:3000/admin');
-    await expect(page).toHaveURL(/\/login/);
-
-    // ขั้นตอน 5: ตรวจ API ด้วย request context (ยังมี cookies จาก logout อยู่)
-    const meRes = await request.get('http://localhost:3000/api/me');
-    expect(meRes.status()).toBe(401);
+    // ขั้นตอน 5: verify ผ่าน browser fetch (page ไม่มี token แล้ว)
+    const apiStatus = await page.evaluate(async () => {
+      const res = await fetch('/api/me', {
+        headers: { 'Content-Type': 'application/json' }
+        // ไม่มี Authorization header เพราะ localStorage ว่างแล้ว
+      });
+      return res.status;
+    });
+    expect(apiStatus).toBe(401);
   });
 
-  test('หลัง logout: storageState เก่าที่ inject ใหม่ใช้งานไม่ได้ ถ้า server revoke session', async ({ browser }) => {
-    // จำลอง scenario: เอา storageState เก่ามา inject หลังจาก logout ไปแล้ว
-    // ถ้า app ใช้ server-side session (revoked ทันทีที่ logout) → ต้อง fail
-    // ถ้า app ใช้ JWT (stateless) → อาจยังใช้ได้จนกว่า token จะ expire
+  test('storageState เก่ายังใช้ได้ถ้า JWT ยังไม่ expire (stateless auth)', async ({ browser }) => {
+    // JWT เป็น stateless auth — token ยังใช้ได้จนกว่าจะ expire (demo app ตั้ง 24h)
+    // ต่างจาก server-side session ที่ revoke ได้ทันที
 
     const staleContext = await browser.newContext({
-      storageState: 'playwright/.auth/user.json', // state เก่า
+      storageState: 'playwright/.auth/user.json', // state จาก auth setup
     });
     const stalePage = await staleContext.newPage();
 
-    // Navigate ไป protected page ด้วย stale state
-    const response = await stalePage.goto('http://localhost:3000/api/me');
+    // Navigate ไปหน้าที่ JavaScript อ่าน localStorage → add Authorization header
+    await stalePage.goto('http://localhost:3000/');
 
-    // Demo app ใช้ JWT — stale token ยังใช้ได้จนกว่าจะ expire
-    // ถ้าเปลี่ยนเป็น server-side session test นี้ต้อง expect 401
-    // การทดสอบนี้ document behavior ของ app ว่าใช้ stateless หรือ stateful auth
-    if (response?.status() === 401) {
-      // Server-side session: revoked ทันทีที่ logout
-      console.log('App uses server-side session — stale token rejected correctly');
-    } else {
-      // JWT: stateless — token ยังใช้ได้จนกว่าจะ expire
-      console.log('App uses JWT — stale token still valid until expiry');
-      expect(response?.status()).toBe(200);
-    }
+    // ใช้ page.evaluate เพื่อให้ browser JavaScript อ่าน jwt_token จาก localStorage
+    // แล้วส่ง Authorization header ไปกับ fetch request
+    const apiStatus = await stalePage.evaluate(async () => {
+      const token = localStorage.getItem('jwt_token');
+      if (!token) return 401;
+      const res = await fetch('/api/me', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      return res.status;
+    });
+
+    // JWT ยังไม่ expire → API ยอมรับ token → 200
+    expect(apiStatus).toBe(200);
 
     await staleContext.close();
   });
@@ -675,8 +706,9 @@ setup('authenticate per worker via API', async ({ request, browser }, testInfo) 
   const context = await browser.newContext();
 
   // Inject token ก่อน page load ใดๆ
+  // demo app เก็บ token ใน localStorage key 'jwt_token' (ดู client.js: Auth.setToken)
   await context.addInitScript((authToken: string) => {
-    window.localStorage.setItem('authToken', authToken);
+    window.localStorage.setItem('jwt_token', authToken);
   }, token);
 
   const page = await context.newPage();

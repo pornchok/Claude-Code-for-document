@@ -177,8 +177,9 @@ test('should not have any automatically detectable accessibility issues', async 
 `results.violations` เป็น array ของ issue ที่พบ ถ้า empty คือผ่านทั้งหมด
 
 **WCAG Tags ที่ใช้ได้:**
+WCAG (Web Content Accessibility Guidelines) คือมาตรฐานสากลสำหรับ accessibility ของเว็บไซต์ Level A = พื้นฐานสุด, Level AA = มาตรฐานที่ธุรกิจส่วนใหญ่ต้องทำตาม:
 - `wcag2a` — WCAG 2.0 Level A (พื้นฐาน)
-- `wcag2aa` — WCAG 2.0 Level AA (มาตรฐานทั่วไป)
+- `wcag2aa` — WCAG 2.0 Level AA (มาตรฐานทั่วไป — แนะนำใช้เป็น baseline)
 - `wcag21a` — WCAG 2.1 Level A
 - `wcag21aa` — WCAG 2.1 Level AA
 
@@ -500,11 +501,13 @@ test.describe('Accessibility Audit: Full Coverage', () => {
 
     // ─── Aria snapshot: ตรวจโครงสร้าง product list ───
     // ใช้ first() เพื่อ snapshot แค่ card แรก ไม่ขึ้นกับจำนวน products
+    // product-card มี role="listitem" และ img alt="Product: {name}"
     const firstCard = page.locator('[data-testid^="product-card-"]').first();
     await expect(firstCard).toMatchAriaSnapshot(`
-      - article:
-        - img "Product image"
-        - heading "T-Shirt"
+      - listitem:
+        - img "Product: iPhone 15 Pro"
+        - text: /Electronics/
+        - heading "iPhone 15 Pro"
         - text: /\$[\d.]+/
         - button "Add to Cart"
     `);
@@ -534,12 +537,13 @@ test.describe('Accessibility Audit: Full Coverage', () => {
     await page.waitForSelector('[data-testid^="todo-item-"]');
 
     // verify todo list structure — completed item ควรมี checked state
+    // checkbox aria-label จาก todos.html: "Mark '${text}' as completed"
     await expect(page.locator('[data-testid="todo-list"]')).toMatchAriaSnapshot(`
       - list:
         - listitem:
-          - checkbox "Write tests" [checked]
+          - checkbox "Mark 'Write tests' as completed" [checked]
         - listitem:
-          - checkbox "Deploy to staging"
+          - checkbox "Mark 'Deploy to staging' as completed"
     `);
 
     // ─── Visual snapshot: ตรวจ visual state ของ completed todo ───

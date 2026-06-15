@@ -61,7 +61,7 @@ Playwright มีแนวทางที่ต่างออกไปสิ้
 
 ### 3.1 Playwright Inspector — Step-Through Debugging
 
-Inspector คือ GUI tool ที่เปิด browser ให้เห็นและ highlight element ที่ test กำลัง interact ด้วย พร้อม log ของ action แต่ละขั้น
+Inspector คือ GUI tool (หน้าต่างพิเศษที่ Playwright เปิดขึ้นมาให้) ที่เปิด browser ให้เห็นและ highlight element ที่ test กำลัง interact ด้วย พร้อม log ของ action แต่ละขั้น — เหมือนมีใครนั่งชี้ให้ดูว่า "ตอนนี้กำลังทำอะไรอยู่"
 
 **วิธีเปิด:**
 
@@ -81,9 +81,9 @@ npx playwright test --project=chromium --debug
 เมื่อเปิด Inspector คุณจะเห็น:
 - Browser window ที่ highlight element ที่กำลัง interact
 - Inspector panel ด้านขวาที่แสดง action ถัดไปและ locator ที่ใช้
-- ActionLog ที่บอกว่า Playwright รอ actionability check อะไรอยู่
-- ปุ่ม "Step over" เพื่อทำ action ถัดไปทีละขั้น
-- "Pick locator" เพื่อคลิก element บน browser แล้ว Inspector สร้าง locator ให้
+- ActionLog ที่บอกว่า Playwright รอ actionability check อะไรอยู่ (เช่น "waiting for element to be visible" — แสดงว่า element ยังโหลดไม่เสร็จ)
+- ปุ่ม "Step over" เพื่อทำ action ถัดไปทีละขั้น (เหมือน F10 ใน debugger ของ IDE)
+- "Pick locator" เพื่อคลิก element บน browser แล้ว Inspector สร้าง locator ที่เหมาะสมที่สุดให้อัตโนมัติ
 
 ---
 
@@ -109,7 +109,7 @@ test('debug ณ จุดสำคัญ', async ({ page }) => {
 
 ### 3.3 Trace Viewer — Timeline Forensics
 
-Trace Viewer คือเครื่องมือหลักสำหรับ debug CI failure เพราะ test ในสภาพแวดล้อม CI มักจะ reproduce ไม่ได้ใน local
+Trace Viewer คือเครื่องมือหลักสำหรับ debug CI failure เพราะ test ในสภาพแวดล้อม CI มักจะ reproduce ไม่ได้ใน local — ลองนึกภาพว่ามัน "อัดวิดีโอ" ทุก action พร้อม network request และ DOM snapshot ไว้ให้ย้อนดูได้ทีหลัง แทนที่จะต้องนั่งเดาว่าพังตรงไหน
 
 **ขั้นที่ 1: เปิด trace collection ใน config**
 
@@ -282,7 +282,7 @@ test จะ re-run ทุกครั้งที่ save file ใดๆ ใน 
 
 ### 3.10 PWDEBUG=console — DevTools Integration
 
-สำหรับ debug locator โดยตรงใน browser console:
+สำหรับ debug locator โดยตรงใน browser console (DevTools คือหน้าต่าง F12 ที่ developer ใช้ inspect เว็บ):
 
 ```bash
 PWDEBUG=console npx playwright test

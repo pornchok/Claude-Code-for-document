@@ -195,7 +195,7 @@ test('critical checkout flow', async ({ page }) => {
 
 ปัญหาที่พบบ่อยใน parallel testing: tests แชร์ data กัน → state ปนกัน → flaky tests
 
-**Test Data Factory** แก้ปัญหานี้ด้วยการให้แต่ละ test สร้าง data ของตัวเองผ่าน API (เร็วกว่า UI) และ cleanup หลังเสร็จ:
+**Test Data Factory** คือ pattern ที่สร้าง class สำหรับ create/cleanup test data โดยเฉพาะ — แต่ละ test เรียก factory เพื่อสร้าง data ของตัวเอง และ factory จะ cleanup อัตโนมัติหลัง test จบ ไม่ต้องกังวลว่า data จาก test A จะปนกับ test B:
 
 ```typescript
 // tests/factories/todo.factory.ts

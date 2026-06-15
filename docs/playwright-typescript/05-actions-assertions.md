@@ -1,13 +1,13 @@
 ## ก่อนอ่านบทนี้ ลองตอบ:
 
-1. Locator ใน Playwright "lazy" หมายความว่าอะไร — และนี่ทำให้ auto-retry ทำงานได้อย่างไร?
+1. `page.getByRole('button', { name: 'Submit' })` กับ `locator.click()` — อะไรที่ทำให้เกิดการ query DOM จริงๆ และทำไมความแตกต่างนี้ถึงสำคัญ?
 2. ถ้าหน้า web มีปุ่ม "Delete" 5 ตัว (ทุก todo item มีปุ่มตัวเอง) และคุณต้องการลบเฉพาะ item ที่ชื่อ "Buy groceries" — คุณจะ locate ปุ่มนั้นอย่างไรโดยไม่ใช้ `nth()`?
 
 ---
 
 เฉลย:
 
-1. "Lazy" หมายความว่า Locator คือ description ของ element ยังไม่ได้ query DOM เลยจนกว่าจะมี action (`click()`, `fill()`) หรือ assertion (`expect().toBeVisible()`) — เมื่อมี action Playwright จะ re-evaluate locator ซ้ำในทุก retry cycle จนครบ timeout ทำให้รองรับ element ที่ยังไม่ปรากฏได้โดยไม่ต้องรอ manual
+1. `getByRole()` แค่สร้าง Locator object ไว้ ยังไม่แตะ DOM เลย — การ query DOM จริงเกิดตอนที่ใช้ `.click()` หรือ `expect().toBeVisible()` ความสำคัญคือ Playwright จะ re-evaluate locator ซ้ำทุกครั้งที่ retry ทำให้รองรับ element ที่ยังโหลดไม่เสร็จได้
 2. ใช้ chaining + filter: `page.getByRole('listitem').filter({ hasText: 'Buy groceries' }).getByRole('button', { name: 'Delete' }).click()` — หา listitem ที่มี text นั้นก่อน แล้วหาปุ่ม Delete ใน scope ของมัน
 
 # บทที่ 5: Actions & Assertions
@@ -60,27 +60,31 @@ await expect(page.locator('.success-msg')).toBeVisible();
 
 ### 3.1 Actionability Checks — สิ่งที่ Playwright ตรวจก่อนทุก action
 
-ก่อน Playwright จะ click, fill, หรือทำ action ใดๆ มันตรวจ criteria เหล่านี้โดยอัตโนมัติ:
+ก่อน Playwright จะ click หรือ fill ทุกครั้ง มันจะตรวจก่อนว่า element "พร้อม" จริงๆ — เพราะถ้าคลิกปุ่มที่ยังโหลดอยู่ หรือกรอก input ที่ disabled อยู่ มันก็ไม่มีประโยชน์
 
-| Check | ความหมาย |
-|-------|-----------|
-| **Visible** | element มี bounding box ที่ไม่ว่างเปล่า และไม่มี `visibility:hidden` |
-| **Stable** | element ไม่ขยับ — bounding box เดิมสองรอบติดกัน (animation เสร็จแล้ว) |
-| **Receives Events** | element รับ pointer event ได้ — ไม่ถูก element อื่นบัง |
-| **Enabled** | element ไม่ถูก disable (`disabled` attribute) |
-| **Editable** | element enabled และไม่ readonly |
+Playwright เรียกการตรวจนี้ว่า **actionability checks** *(source: https://playwright.dev/docs/actionability)*
 
-**ไม่ใช่ทุก action ต้องผ่านทุก check:**
+| Check | ความหมาย | ตัวอย่างที่ "ยังไม่ผ่าน" |
+|-------|-----------|------------------------|
+| **Visible** | element มองเห็นได้จริง ไม่ซ่อนอยู่ | ปุ่มที่ `display: none` หรือ `opacity: 0` |
+| **Stable** | element ไม่กำลังขยับหรือ animate | ปุ่มที่กำลัง slide เข้ามา ยัง animate อยู่ |
+| **Receives Events** | ไม่มีอะไรทับอยู่ข้างบน ทำให้ click ผ่านไปไม่ได้ | loading overlay หรือ modal ที่ขึ้นทับ |
+| **Enabled** | ไม่ถูก disable — ใช้งานได้ | ปุ่ม "Submit" ที่สีเทา กดไม่ได้ |
+| **Editable** | เป็น input ที่แก้ไขได้ ไม่ใช่ read-only | input ที่ `readonly` อ่านได้แต่พิมพ์ไม่ได้ |
 
-| Action | Checks ที่ต้องผ่าน |
-|--------|------------------|
-| `click()`, `dblclick()`, `check()`, `uncheck()` | ทั้ง 5: visible + stable + receives events + enabled + (editable ไม่นับ) |
+**ไม่ใช่ทุก action ต้องผ่านทุก check — ขึ้นอยู่กับว่าทำอะไร:**
+
+| Action | ต้องผ่าน check อะไรบ้าง |
+|--------|------------------------|
+| `click()`, `dblclick()`, `check()`, `uncheck()` | visible + stable + receives events + enabled |
 | `hover()`, `dragTo()` | visible + stable + receives events |
 | `fill()`, `clear()` | visible + enabled + editable |
 | `selectOption()` | visible + enabled |
-| `press()`, `pressSequentially()` | ไม่มี check — ทำงานทันที |
+| `press()`, `pressSequentially()` | ไม่มี — ทำงานทันที |
 
-ข้อมูลนี้มาจาก playwright.dev/docs/actionability โดยตรง — ทำให้เข้าใจว่าทำไม `pressSequentially()` ถึงใช้กับ hidden input ได้ แต่ `fill()` ไม่ได้
+**ทำไมต้องรู้เรื่องนี้?**
+
+เวลา test ค้างอยู่นานผิดปกติ ส่วนใหญ่มาจาก actionability check ที่รอ element "พร้อม" เช่น รอ loading overlay หายไปก่อน click — Playwright จัดการให้อัตโนมัติ ไม่ต้องเพิ่ม `waitForTimeout` เอง
 
 ---
 
@@ -109,16 +113,18 @@ await page.getByText('Item').click({ modifiers: ['Shift'] }); // Shift+click
 
 นี่คือความแตกต่างที่สำคัญ — เลือกผิดทำให้ test พังหรือได้ผลลัพธ์ผิด:
 
-**`fill(value)`** — แทนที่ content ทั้งหมดทันที:
-- ล้าง input เดิมออกก่อน แล้วใส่ค่าใหม่ในครั้งเดียว
-- ไม่ emit keydown/keypress/keyup events ทีละตัว
-- เหมาะกับ input ทั่วไปที่ไม่มี validation ขณะพิมพ์
-- เร็วกว่ามาก
+**`fill(value)`** — เหมือน copy-paste ใส่ค่าทั้งหมดทีเดียว:
+- ล้าง input เดิมออก แล้วใส่ค่าใหม่ในครั้งเดียวเลย
+- เหมาะกับ input ทั่วไป เช่น email, ชื่อ, ที่อยู่
+- เร็วมาก
 
-**`pressSequentially(text)`** — จำลอง keystroke ทีละตัว:
-- emit keydown, keypress, keyup ต่อทุกตัวอักษร
-- เหมาะกับ input ที่มี **mask** — คือ input ที่มี library คอยจัดรูปแบบตัวเลขให้อัตโนมัติขณะพิมพ์ เช่น phone number `(___) ___-____` ที่พอพิมพ์ `0812345678` แล้วแสดงเป็น `(081) 234-5678` ให้เอง — รวมถึง autocomplete dropdown และ real-time validation ขณะพิมพ์
-- ช้ากว่า แต่ simulate user จริงกว่า
+**`pressSequentially(text)`** — เหมือนพิมพ์จริงๆ ทีละตัวอักษร:
+- จำลองการกดแป้นพิมพ์ทีละตัว เหมือนผู้ใช้นั่งพิมพ์จริงๆ
+- เหมาะกับ input ที่ "ฟัง" การพิมพ์ระหว่างทาง เช่น:
+  - **masked input** — phone number ที่พอพิมพ์ `0812345678` แล้วจัดรูปแบบเป็น `(081) 234-5678` ให้เองอัตโนมัติ — ถ้าใช้ `fill()` ค่าจะเป็น `0812345678` เฉยๆ เพราะ library ไม่รู้ว่าผู้ใช้พิมพ์
+  - **autocomplete** — search box ที่ต้องพิมพ์ก่อนถึงจะโชว์ dropdown
+  - **real-time validation** — form ที่แสดง error ขณะพิมพ์
+- ช้ากว่า `fill()` แต่ simulate พฤติกรรมผู้ใช้จริงได้
 
 ```typescript
 // partial example — see Section 5 for runnable version
@@ -194,9 +200,8 @@ await page.keyboard.press('Escape');                  // global keypress
 
 ```typescript
 // partial example — see Section 5 for runnable version
-// ไปยัง URL
+// ไปยัง URL — default รอ load event (HTML + CSS + JS โหลดครบ)
 await page.goto('http://localhost:3000/todos');
-await page.goto('http://localhost:3000/login', { waitUntil: 'networkidle' });
 
 // navigation ย้อนหน้า
 await page.goBack();
@@ -210,17 +215,47 @@ const count = await page.evaluate(() => {
 });
 ```
 
-`page.goto()` รอ `load` event โดย default — แปลว่ารอให้ HTML, CSS, JS โหลดครบก่อน return *(source: https://playwright.dev/docs/navigations)*
+`page.goto()` รอ `load` event โดย default — แปลว่ารอให้ HTML, CSS, JS โหลดครบก่อน return หลังจากนั้นถ้าต้องการรอ element เฉพาะให้ใช้ `expect(locator).toBeVisible()` แทนการระบุ `waitUntil` *(source: https://playwright.dev/docs/navigations)*
+
+**`waitUntil` option** มีไว้สำหรับกรณีพิเศษเท่านั้น:
+
+| option | ใช้เมื่อ |
+|--------|---------|
+| `'domcontentloaded'` | ต้องการ start interact เร็วที่สุด ก่อน JS โหลดเสร็จ |
+| `'networkidle'` | SPA ที่ fetch API data หลัง load event และไม่มี WebSocket |
+
+```typescript
+// ❌ อย่าใช้บน demo app — มี WebSocket เปิดอยู่ตลอด ทำให้ networkidle ไม่มีวันครบ
+await page.goto('/login', { waitUntil: 'networkidle' });
+
+// ✅ วิธีที่ถูกต้อง — รอ element ที่ต้องการโดยตรง
+await page.goto('/login');
+await expect(page.getByTestId('btn-login')).toBeVisible();
+```
 
 ---
 
 ### 3.4 Web-First Assertions — assert แบบ Playwright
 
-Playwright มี assertion เฉพาะที่ทำงานต่างจาก Jest/Jasmine ทั่วไป — เรียกว่า "web-first assertions"
+ใน Playwright มี assertion สองแบบ — ความแตกต่างคือ "รอไหม":
 
-ความต่างหลัก:
-- **Regular assertion** (`expect(value).toBe(...)`) — ตรวจ ณ วินาทีที่ call ทันที ถ้าไม่ผ่าน = fail
-- **Web-first assertion** (`expect(locator).toBeVisible()`) — retry จนครบ timeout (default 5 วินาที) แล้วค่อย fail ถ้ายังไม่ผ่าน
+**แบบที่ 1 — Regular assertion** (ไม่รอ ตรวจทันที):
+```typescript
+expect(isVisible).toBe(true)
+// ตรวจค่า ณ วินาทีนั้น — ถ้าไม่ผ่านก็ fail ทันที
+```
+
+**แบบที่ 2 — Web-first assertion** (รอและ retry อัตโนมัติ):
+```typescript
+expect(page.locator('.success-msg')).toBeVisible()
+// ตรวจซ้ำทุก 100ms จนกว่าจะผ่าน หรือจนครบ 5 วินาที แล้วค่อย fail
+```
+
+ทำไม Playwright ต้องมีแบบที่ 2 — เพราะ web ทำงาน async เสมอ element ไม่ได้โผล่ทันทีหลัง click มักมี network call, animation, หรือ JavaScript ที่ต้องรันก่อน ถ้าตรวจทันทีแบบที่ 1 test จะ fail บ่อยทั้งที่ไม่ควรพัง
+
+**กฎง่ายๆ: ถ้าส่ง Locator เข้า `expect()` → retry อัตโนมัติ**
+
+*(source: https://playwright.dev/docs/test-assertions)*
 
 #### Visibility & State
 
@@ -290,16 +325,17 @@ await expect(page.locator('.loader')).toHaveRole('progressbar');
 
 ### 3.5 Soft Assertions — เก็บทุก error ก่อน report
 
-ปกติ test หยุดที่ assertion แรกที่ fail:
+ปกติถ้า assertion แรก fail — test หยุดทันที ไม่รู้ว่า assertion ที่เหลือจะผ่านหรือเปล่า:
 
 ```typescript
-// ❌ แบบ regular — หยุดที่ error แรก ไม่รู้ว่า error ที่เหลือมีอะไรบ้าง
-await expect(page.getByTestId('first-name')).toHaveValue('John');   // fail → หยุด
-await expect(page.getByTestId('last-name')).toHaveValue('Doe');      // ไม่ได้รัน
-await expect(page.getByTestId('email')).toHaveValue('john@x.com');   // ไม่ได้รัน
+// ❌ แบบปกติ — หยุดที่ error แรก
+await expect(page.getByTestId('first-name')).toHaveValue('John');  // fail → หยุดเลย
+await expect(page.getByTestId('last-name')).toHaveValue('Doe');    // ไม่ได้รัน
+await expect(page.getByTestId('email')).toHaveValue('john@x.com'); // ไม่ได้รัน
+// รู้แค่ว่า first-name ผิด ไม่รู้ field อื่น
 ```
 
-Soft assertion ใช้ `expect.soft()` — ถ้า fail จะ **บันทึก error ไว้แต่ไม่หยุด** test ยังรันต่อ แล้วรายงานทุก error ตอนจบ:
+**Soft assertion** แก้ปัญหานี้ — ถ้า fail จะ **จดไว้แต่ไม่หยุด** รัน assertion ต่อจนครบ แล้วรายงานทุก error รวมกันตอนจบ:
 
 ```typescript
 // ✅ Soft assertions — รัน assertion ทุกข้อ แล้ว report ทุก error รวมกัน

@@ -67,14 +67,14 @@ Fixtures แก้ปัญหาทั้งสามนี้: เขียน
 
 ### 3.1 Built-in Fixtures
 
-Playwright Test มาพร้อม fixtures ที่ใช้ได้ทันทีโดยไม่ต้องสร้างเอง *(source: https://playwright.dev/docs/test-fixtures)*
+Playwright Test มาพร้อม fixtures ที่ใช้ได้ทันทีโดยไม่ต้องสร้างเอง — เหมือน "ของที่แถมมาในกล่อง" *(source: https://playwright.dev/docs/test-fixtures)*
 
 | Fixture | Type | Scope | คำอธิบาย |
 |---------|------|-------|-----------|
-| `page` | Page | test | "Isolated page for this test run." |
-| `context` | BrowserContext | test | "Isolated context for this test run." |
-| `browser` | Browser | worker | "Browsers are shared across tests to optimize resources." |
-| `request` | APIRequestContext | test | "Isolated APIRequestContext instance for this test run." |
+| `page` | Page | test | browser tab ที่แยกต่างหากสำหรับ test นี้โดยเฉพาะ (ไม่ share กับ test อื่น) |
+| `context` | BrowserContext | test | browser session ที่แยกต่างหาก — cookie, localStorage ของ test นี้ไม่ปนกับ test อื่น |
+| `browser` | Browser | worker | browser process ทั้งหมด (Chrome/Firefox/WebKit) — share ระหว่าง tests เพื่อประหยัด RAM |
+| `request` | APIRequestContext | test | HTTP client สำหรับเรียก API โดยตรงโดยไม่ต้องเปิด browser |
 | `browserName` | string | worker | ชื่อ browser ที่รันอยู่: `chromium`, `firefox`, `webkit` |
 | `baseURL` | string | worker | URL จาก `use.baseURL` ใน playwright.config.ts |
 
@@ -82,7 +82,7 @@ Playwright Test มาพร้อม fixtures ที่ใช้ได้ทั
 
 ### 3.2 สร้าง Custom Fixture ด้วย `test.extend<T>()`
 
-Custom fixture คือการขยาย `test` object ด้วย fixtures ใหม่ที่คุณกำหนดเอง *(source: https://playwright.dev/docs/test-fixtures)*
+Custom fixture คือการขยาย `test` object ด้วย fixtures ใหม่ที่คุณกำหนดเอง — เหมือน "เพิ่มของแถมเข้าไปในกล่อง" เพื่อให้ tests ของคุณใช้ได้ *(source: https://playwright.dev/docs/test-fixtures)*
 
 ```typescript
 // fixtures/todo.fixtures.ts
@@ -126,15 +126,17 @@ export const test = base.extend<MyFixtures>({
 export { expect };
 ```
 
-**Pattern หลักที่ต้องจำ:** setup อยู่ก่อน `await use()` และ teardown อยู่หลัง `await use()` — Playwright รับประกันว่า teardown จะรันเสมอ ไม่ว่า test จะ pass หรือ fail *(source: https://playwright.dev/docs/test-fixtures)*
+**Pattern หลักที่ต้องจำ:** setup อยู่ก่อน `await use()` และ teardown อยู่หลัง `await use()` — `await use(tp)` คือจุดที่ test จริงๆ รัน ทุกอย่างก่อน = setup, ทุกอย่างหลัง = teardown Playwright รับประกันว่า teardown จะรันเสมอ ไม่ว่า test จะ pass หรือ fail *(source: https://playwright.dev/docs/test-fixtures)*
 
 ### 3.3 Fixture Scope
+
+Scope หมายถึง "fixture นี้มีชีวิตอยู่นานแค่ไหน" — ถ้าใน Robot Framework คิดว่า test-scoped = `Test Setup/Teardown` ส่วน worker-scoped = `Suite Setup/Teardown`
 
 **Test-scoped (default):** สร้างและ destroy ต่อ test หนึ่ง เหมาะกับ:
 - State ที่ต้องการ fresh ทุก test (`page`, `context`)
 - Data ที่อาจถูกแก้ไขโดย test
 
-**Worker-scoped:** สร้างครั้งเดียวต่อ worker process และ share กับทุก tests ใน worker นั้น เหมาะกับ:
+**Worker-scoped:** สร้างครั้งเดียวต่อ worker process (process ที่ Playwright ใช้รัน tests แบบ parallel) และ share กับทุก tests ใน worker นั้น เหมาะกับ:
 - Expensive setup ที่ไม่เปลี่ยนระหว่าง tests เช่น database connection
 - Static data ที่ tests ไม่แก้ไข
 
@@ -401,8 +403,8 @@ export const test = base.extend<CheckoutFixtures>({
     await page.getByTestId('input-password').fill('admin123');
     await page.getByTestId('btn-login').click();
 
-    // รอให้ login เสร็จ
-    await expect(page.getByTestId('session-badge')).toBeVisible();
+    // รอให้ login เสร็จ — badge จะเปลี่ยนจาก "Not logged in" เป็น "Logged in as: admin"
+    await expect(page.getByTestId('session-badge')).toContainText('Logged in as: admin');
 
     await use(page);
   },

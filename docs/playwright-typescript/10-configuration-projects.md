@@ -196,7 +196,7 @@ setup('authenticate admin user', async ({ page }) => {
 
 ### Timeout — 7 ประเภทที่ต้องรู้
 
-Playwright แยก timeout ละเอียดกว่า testing framework อื่น ทำให้ debug ง่ายขึ้นมาก เพราะรู้ว่า timeout ไหนเกิดที่ขั้นตอนไหน:
+Playwright แยก timeout ละเอียดกว่า testing framework อื่น ทำให้ debug ง่ายขึ้นมาก เพราะรู้ว่า timeout ไหนเกิดที่ขั้นตอนไหน — ถ้าใน Robot Framework คุณเจอแค่ `timeout` ระดับเดียว ใน Playwright มีถึง 7 ระดับที่แต่ละตัวควบคุมส่วนที่แตกต่างกัน:
 
 | Timeout | Default | ตั้งค่าที่ | ควบคุมอะไร |
 |---------|---------|-----------|------------|
@@ -464,8 +464,8 @@ setup('authenticate as admin', async ({ page }) => {
   await page.fill('[data-testid="input-password"]', process.env.ADMIN_PASSWORD ?? 'admin123');
   await page.click('[data-testid="btn-login"]');
 
-  // ยืนยันว่า login สำเร็จก่อน save state
-  await expect(page.getByTestId('session-badge')).toBeVisible();
+  // ยืนยันว่า login สำเร็จก่อน save state — badge ต้องแสดง "Logged in as: admin"
+  await expect(page.getByTestId('session-badge')).toContainText('Logged in as: admin');
 
   // บันทึก cookies + localStorage ให้ tests ใช้ต่อ
   await page.context().storageState({ path: authFile });

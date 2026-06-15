@@ -103,7 +103,7 @@ export class LoginPage {
 ```
 
 **ทำไม Locator เป็น property ไม่ใช่ method:**
-Playwright Locator เป็น "lazy reference" — ไม่ได้ query DOM ทันทีที่สร้าง แต่จะ query เมื่อถูกเรียกใช้จริง (เช่น `.click()`, `.fill()`) ดังนั้นการประกาศเป็น property ระดับ class ไม่มีผลด้านประสิทธิภาพ และทำให้ใช้ใน test ได้สะดวกโดยตรง (`loginPage.loginButton`) โดยไม่ต้องเรียก method ก่อน
+Playwright Locator เป็น "lazy reference" — หมายถึงมันเป็น "คำอธิบายวิธีหา element" ไม่ใช่ "element ตัวจริง" ดังนั้นจะไม่ไปค้นหา element ใน DOM จนกว่าจะเรียกใช้จริง (เช่น `.click()`, `.fill()`) ดังนั้นการประกาศเป็น property ระดับ class ไม่มีผลด้านประสิทธิภาพ และทำให้ใช้ใน test ได้สะดวกโดยตรง (`loginPage.loginButton`) โดยไม่ต้องเรียก method ก่อน
 
 **ทำไมใช้ `private readonly page` แทน `public page`:**
 `private` ป้องกัน test file เข้าถึง `page` โดยตรง บังคับให้ใช้ผ่าน methods ของ Page Object เท่านั้น TypeScript จะ error ทันทีถ้า test พยายาม `loginPage.page.goto(...)` โดยตรง
@@ -201,11 +201,13 @@ export class NavBarComponent {
   readonly loginLink:    Locator = this.page.getByTestId('nav-login');
 
   async isLoggedIn(): Promise<boolean> {
-    return this.sessionBadge.isVisible();
+    // session-badge มีอยู่เสมอ — แต่ text ต่างกัน ("Logged in as: ..." vs "Not logged in")
+    const text = await this.sessionBadge.textContent();
+    return (text ?? '').startsWith('Logged in as:');
   }
 
   async getLoggedInUser(): Promise<string> {
-    return this.sessionBadge.textContent() ?? '';
+    return (await this.sessionBadge.textContent()) ?? '';
   }
 
   async logout() {
@@ -429,7 +431,9 @@ class NavBarComponent {
   readonly logoutLink   = this.page.getByTestId('nav-logout');
 
   async isLoggedIn(): Promise<boolean> {
-    return this.sessionBadge.isVisible();
+    // session-badge มีอยู่เสมอ — ต้อง check text ไม่ใช่ isVisible()
+    const text = await this.sessionBadge.textContent();
+    return (text ?? '').startsWith('Logged in as:');
   }
 
   async getLoggedInUser(): Promise<string> {
